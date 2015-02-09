@@ -63,9 +63,13 @@ namespace Grabacr07.KanColleViewer.Views.Behaviors
 			this.AssociatedObject.Width = 800 / dpi.ScaleX;
 			this.AssociatedObject.Height = 480 / dpi.ScaleY;
 
-			if (window != null)
-			{
-				window.Width = this.AssociatedObject.Width;
+			if (window != null) {
+                if(App.ViewModelRoot.LRSplit) {
+                    window.Height = this.AssociatedObject.Height + 60;
+                    window.Width = Math.Min(window.MaxWidth, this.AssociatedObject.Width + 768);
+                } else {
+                    window.Width = this.AssociatedObject.Width;
+                }
 			}
 		}
 	}

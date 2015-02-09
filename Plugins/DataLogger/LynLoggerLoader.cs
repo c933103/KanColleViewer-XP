@@ -19,8 +19,8 @@ namespace DataLogger
     {
         public LynLoggerLoader()
         {
-            KanColleClient.Current.Proxy.api_start2.Subscribe(_ => Logger.DataHolder.Init());
-            KanColleClient.Current.Proxy.api_port.TryParse<kcsapi_port>().Subscribe(new Logger.Observers.APIPortObserver());
+            //KanColleClient.Current.Proxy.api_start2.Subscribe(_ => Logger.DataHolder.Init());
+            //KanColleClient.Current.Proxy.api_port.TryParse<kcsapi_port>().Subscribe(new Logger.Observers.APIPortObserver());
             //KanColleClient.Current.Homeport.Materials.
         }
 

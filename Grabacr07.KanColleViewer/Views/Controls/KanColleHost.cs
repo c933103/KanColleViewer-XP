@@ -172,9 +172,13 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 			this.Update();
 
 			var window = Window.GetWindow(this.WebBrowser);
-			if (window != null)
-			{
-				window.Width = this.WebBrowser.Width;
+			if (window != null) {
+                if(App.ViewModelRoot.LRSplit) {
+                    window.Height = this.WebBrowser.Height + 60;
+                    window.Width = Math.Min(window.MaxWidth, this.WebBrowser.Width + 768);
+                } else {
+                    window.Width = this.WebBrowser.Width;
+                }
 			}
 		}
 

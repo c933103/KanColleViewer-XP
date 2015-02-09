@@ -136,7 +136,7 @@
                                                                   SharedSizeGroup="ShipHoge" />
                                             </Grid.ColumnDefinitions>
 
-                                            <StackPanel>
+                                            <StackPanel Grid.Column="0" Grid.Row="0">
                                                 <TextBlock x:Name="HPText">
 														<Run Text="HP:" />
 														<Run Text="{Binding Ship.HP.Current, Mode=OneWay}"
@@ -146,9 +146,48 @@
                                                 </TextBlock>
                                                 <controls:ColorIndicator x:Name="HPIndicator"
                                                                          Height="7"
-                                                                         Margin="1,3,0,0"
+                                                                         Margin="0,2,0,0"
                                                                          LimitedValue="{Binding Ship.HP, Mode=OneWay}" />
                                             </StackPanel>
+                                            
+                                            <Grid x:Name="RepairIndicator"
+                                                  Grid.Column="0"
+                                                  Grid.Row="0"
+                                                  Visibility="Collapsed">
+                                                <Border Background="{DynamicResource FleetRepairingBrushKey}"
+                                                        Opacity=".4"
+                                                        Margin="0,0" />
+                                                <TextBlock Text="入渠中"
+                                                   Style="{DynamicResource EmphaticTextStyleKey}"
+                                                   HorizontalAlignment="Center" />
+                                            </Grid>
+
+                                            <TextBlock Grid.Column="2" Grid.Row="0">
+										        <InlineUIContainer>
+											        <controls:ConditionIcon ConditionType="{Binding Ship.ConditionType, Mode=OneWay}" />
+										        </InlineUIContainer>
+										        <Run Text="{Binding Ship.Condition, Mode=OneWay}"
+                                                    Style="{DynamicResource EmphaticTextElementStyleKey}" />
+                                            </TextBlock>
+                                        </Grid>
+                                        
+                                        <Grid Grid.Row="2" Margin="0,10,0,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="0.5*" />
+                                                <ColumnDefinition Width="0.5*" />
+                                            </Grid.ColumnDefinitions>
+                                            <controls:ColorIndicator Grid.Column="0"
+                                                             Grid.Row="0"
+                                                             Width="Auto"
+                                                             LimitedValue="{Binding Ship.Fuel, Mode=OneWay}"
+                                                             Height="5"
+                                                             Margin="0,0,5,0" />
+                                            <controls:ColorIndicator Grid.Column="1"
+                                                             Grid.Row="1"
+                                                             Width="Auto"
+                                                             LimitedValue="{Binding Ship.Bull, Mode=OneWay}"
+                                                             Height="5"
+                                                             Margin="5,0,0,0" />
                                         </Grid>
 
                                         <ItemsControl Grid.Row="0"
@@ -194,7 +233,6 @@
                                                                    Text="{Binding Maximum}"
                                                                    HorizontalAlignment="Right"
                                                                    Style="{DynamicResource DefaultTextStyleKey}" />
-
                                                     </Grid>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
@@ -203,189 +241,16 @@
                                 </Border>
                             </StackPanel>
 
-                            <DataTemplate.Triggers>
-                            </DataTemplate.Triggers>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
-                <ItemsControl ItemsSource="{Binding Ships}"
-                              Margin="0,0,0,10"
-                              Grid.IsSharedSizeScope="True"
-                              Visibility="Hidden">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <StackPanel.Resources>
-                                    <Style TargetType="{x:Type TextBlock}"
-                                           BasedOn="{StaticResource DefaultTextStyleKey}">
-                                        <Setter Property="Margin"
-                                                Value="10,0" />
-                                        <Setter Property="VerticalAlignment"
-                                                Value="Bottom" />
-                                    </Style>
-                                </StackPanel.Resources>
-                                <Grid HorizontalAlignment="Left"
-                                      Margin="0,5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition SharedSizeGroup="Type"
-                                                          Width="Auto" />
-                                        <ColumnDefinition SharedSizeGroup="Name" />
-                                        <ColumnDefinition Width="Auto"
-                                                          SharedSizeGroup="Level" />
-                                        <ColumnDefinition Width="Auto"
-                                                          SharedSizeGroup="HP" />
-                                        <ColumnDefinition Width="Auto"
-                                                          SharedSizeGroup="Condition" />
-                                        <ColumnDefinition Width="Auto"
-                                                          SharedSizeGroup="Resources" />
-                                        <ColumnDefinition Width="Auto"
-                                                          SharedSizeGroup="SlotItems" />
-                                    </Grid.ColumnDefinitions>
-
-
-                                    <TextBlock Grid.Column="1"
-                                               Grid.Row="0"
-                                               Grid.RowSpan="2"
-                                               HorizontalAlignment="Right"
-                                               Margin="10,0,0,0">
-										<Run Text="{Binding Ship.Info.ShipType.Name, Mode=OneWay}"
-                                             FontSize="14" />
-										<Run Text=""
-                                             FontSize="22"
-                                             Style="{DynamicResource EmphaticTextElementStyleKey}" />
-                                    </TextBlock>
-
-                                    <TextBlock Grid.Column="2"
-                                               Grid.Row="0"
-                                               Grid.RowSpan="2"
-                                               Margin="4,0,10,0">
-										<Run Text="{Binding Ship.Info.Name, Mode=OneWay}"
-                                             FontSize="22"
-                                             Style="{DynamicResource EmphaticTextElementStyleKey}" />
-                                    </TextBlock>
-
-                                    <TextBlock Grid.Column="3"
-                                               Grid.Row="0"
-                                               Margin="10,0,10,10"
-                                               Grid.RowSpan="2">
-										<Run Text="Lv." />
-										<Run Text="{Binding Ship.Level, Mode=OneWay}"
-                                             Style="{DynamicResource EmphaticTextElementStyleKey}" />
-                                    </TextBlock>
-                                    <TextBlock Grid.Column="3"
-                                               Grid.Row="1"
-                                               Margin="10,0,10,-1">
-										<Run Text="Next:"
-                                             FontSize="9" />
-										<Run Text="{Binding Ship.ExpForNextLevel, Mode=OneWay}"
-                                             FontSize="9" />
-										<!--<Run Text="&#x9;" />-->
-                                    </TextBlock>
-
-                                    <TextBlock x:Name="HPText"
-                                               Grid.Column="4"
-                                               Grid.Row="0"
-                                               Margin="10,0,10,10"
-                                               Grid.RowSpan="2">
-										<Run Text="HP:" />
-										<Run Text="{Binding Ship.HP.Current, Mode=OneWay}"
-                                             Style="{DynamicResource EmphaticTextElementStyleKey}" />
-										<Run Text="/" />
-										<Run Text="{Binding Ship.HP.Maximum, Mode=OneWay}" />
-                                    </TextBlock>
-                                    <controls:ColorIndicator x:Name="HPIndicator"
-                                                             Grid.Row="1"
-                                                             Grid.Column="4"
-                                                             Height="6"
-                                                             VerticalAlignment="Bottom"
-                                                             Margin="10,0,10,2"
-                                                             LimitedValue="{Binding Ship.HP, Mode=OneWay}" />
-
-                                    <Grid x:Name="RepairIndicator"
-                                          Grid.Column="4"
-                                          Grid.Row="0"
-                                          Grid.RowSpan="2"
-                                          Visibility="Collapsed">
-                                        <Border Background="{DynamicResource FleetRepairingBrushKey}"
-                                                Opacity=".4"
-                                                Margin="5,0" />
-                                        <TextBlock Text="入渠中"
-                                                   Style="{DynamicResource EmphaticTextStyleKey}"
-                                                   HorizontalAlignment="Center" />
-                                    </Grid>
-
-                                    <TextBlock Grid.Column="5"
-                                               Grid.Row="0"
-                                               Margin="10,0,10,10"
-                                               Grid.RowSpan="2">
-										<InlineUIContainer>
-											<controls:ConditionIcon ConditionType="{Binding Ship.ConditionType, Mode=OneWay}" />
-										</InlineUIContainer>
-										<Run Text="{Binding Ship.Condition, Mode=OneWay}"
-                                             Style="{DynamicResource EmphaticTextElementStyleKey}" />
-                                    </TextBlock>
-                                    <TextBlock Grid.Column="5"
-                                               Grid.Row="1"
-                                               Margin="10,0,10,-1">
-										<Run Text="condition"
-                                             FontSize="9" />
-                                    </TextBlock>
-
-                                    <controls:ColorIndicator Grid.Column="6"
-                                                             Grid.Row="0"
-                                                             Width="55"
-                                                             LimitedValue="{Binding Ship.Fuel, Mode=OneWay}"
-                                                             Height="6"
-                                                             Margin="0,6,0,7" />
-                                    <controls:ColorIndicator Grid.Column="6"
-                                                             Grid.Row="1"
-                                                             Width="55"
-                                                             LimitedValue="{Binding Ship.Bull, Mode=OneWay}"
-                                                             Height="6"
-                                                             VerticalAlignment="Top" />
-
-                                    <ItemsControl Grid.Column="7"
-                                                  Grid.Row="0"
-                                                  Grid.RowSpan="2"
-                                                  ItemsSource="{Binding Ship.SlotItems}"
-                                                  Margin="7,0">
-                                        <ItemsControl.Template>
-                                            <ControlTemplate TargetType="{x:Type ItemsControl}">
-                                                <StackPanel IsItemsHost="True"
-                                                            Orientation="Horizontal" />
-                                            </ControlTemplate>
-                                        </ItemsControl.Template>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border ToolTip="{Binding Info.Name}"
-                                                        Background="Transparent">
-                                                    <controls:SlotItemIcon Type="{Binding Info.IconType}"
-                                                                           Margin="3,0" />
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </Grid>
-                                <Rectangle Height="1"
-                                           Style="{DynamicResource SeparatorRectangleStyleKey}"
-                                           Margin="10,0" />
-                            </StackPanel>
 
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding Ship.IsInRepairing}"
                                              Value="True">
                                     <Setter TargetName="HPText"
                                             Property="Opacity"
-                                            Value=".2" />
+                                            Value=".25" />
                                     <Setter TargetName="HPIndicator"
                                             Property="Opacity"
-                                            Value=".2" />
+                                            Value=".25" />
                                     <Setter TargetName="RepairIndicator"
                                             Property="Visibility"
                                             Value="Visible" />
