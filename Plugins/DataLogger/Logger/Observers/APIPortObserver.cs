@@ -23,7 +23,7 @@ namespace DataLogger.Logger.Observers
         public void OnNext(SvData<kcsapi_port> value)
         {
             if(!value.IsSuccess) return;
-            value.Data.api_ship
+            //value.Data.api_ship
         }
     }
 }

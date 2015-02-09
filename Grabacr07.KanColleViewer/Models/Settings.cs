@@ -368,7 +368,18 @@ namespace Grabacr07.KanColleViewer.Models
 		}
 
 		#endregion
-		
+
+        private bool _LRSplit = false;
+        public bool LRSplit
+        {
+            get { return _LRSplit; }
+            set
+            {
+                if(value == _LRSplit) return;
+                _LRSplit = value;
+                this.RaisePropertyChanged();
+            }
+        }
 
 		public void Save()
 		{

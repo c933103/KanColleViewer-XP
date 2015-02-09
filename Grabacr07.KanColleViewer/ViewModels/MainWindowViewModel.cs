@@ -127,6 +127,17 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
 		#endregion
 
+        public bool LRSplit
+        {
+            get { return Models.Settings.Current.LRSplit; }
+            set
+            {
+                if(Models.Settings.Current.LRSplit != value) {
+                    Models.Settings.Current.LRSplit = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
 
 		public MainWindowViewModel()
 		{
@@ -145,6 +156,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			});
 
 			this.UpdateMode();
+            Models.Settings.Current.PropertyChanged += (_, __) => this.UpdateLayout(Models.Settings.Current.LRSplit);
 		}
 
 		public void TakeScreenshot()
@@ -178,5 +190,24 @@ namespace Grabacr07.KanColleViewer.ViewModels
 					: Mode.Started
 				: Mode.NotStarted;
 		}
+
+        internal void UpdateLayout(bool LR)
+        {
+            if(LR) {
+                System.Windows.Controls.Grid.SetColumn(((Views.MainWindow)App.Instance.MainWindow).MainContentGrid, 1);
+                System.Windows.Controls.Grid.SetRow(((Views.MainWindow)App.Instance.MainWindow).MainContentGrid, 0);
+                ((Views.MainWindow)App.Instance.MainWindow).Row0Height.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
+                ((Views.MainWindow)App.Instance.MainWindow).Row1Height.Height = System.Windows.GridLength.Auto;
+                ((Views.MainWindow)App.Instance.MainWindow).Col0Width.Width = System.Windows.GridLength.Auto;
+                ((Views.MainWindow)App.Instance.MainWindow).Col1Width.Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
+            } else {
+                System.Windows.Controls.Grid.SetRow(((Views.MainWindow)App.Instance.MainWindow).MainContentGrid, 1);
+                System.Windows.Controls.Grid.SetColumn(((Views.MainWindow)App.Instance.MainWindow).MainContentGrid, 0);
+                ((Views.MainWindow)App.Instance.MainWindow).Row0Height.Height = System.Windows.GridLength.Auto;
+                ((Views.MainWindow)App.Instance.MainWindow).Row1Height.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
+                ((Views.MainWindow)App.Instance.MainWindow).Col0Width.Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
+                ((Views.MainWindow)App.Instance.MainWindow).Col1Width.Width = System.Windows.GridLength.Auto;
+            }
+        }
 	}
 }

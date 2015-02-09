@@ -21,6 +21,7 @@ namespace Grabacr07.KanColleViewer
 	{
 		public static ProductInfo ProductInfo { get; private set; }
 		public static MainWindowViewModel ViewModelRoot { get; private set; }
+        public static App Instance { get; private set; }
 
 		static App()
 		{
@@ -47,8 +48,10 @@ namespace Grabacr07.KanColleViewer
 			ResourceService.Current.ChangeCulture(Settings.Current.Culture);
 			ThemeService.Current.Initialize(this, Theme.Dark, Accent.Purple);
 
-			ViewModelRoot = new MainWindowViewModel();
-			this.MainWindow = new MainWindow { DataContext = ViewModelRoot };
+            ViewModelRoot = new MainWindowViewModel();
+            this.MainWindow = new MainWindow { DataContext = ViewModelRoot };
+            Instance = this;
+            ViewModelRoot.UpdateLayout(Models.Settings.Current.LRSplit);
 			this.MainWindow.Show();
 		}
 

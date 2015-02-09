@@ -21,7 +21,7 @@ namespace DataLogger
         {
             KanColleClient.Current.Proxy.api_start2.Subscribe(_ => Logger.DataHolder.Init());
             KanColleClient.Current.Proxy.api_port.TryParse<kcsapi_port>().Subscribe(new Logger.Observers.APIPortObserver());
-            KanColleClient.Current.Homeport.Materials.
+            //KanColleClient.Current.Homeport.Materials.
         }
 
         public string ToolName
