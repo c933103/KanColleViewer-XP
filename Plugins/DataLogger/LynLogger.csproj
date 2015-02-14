@@ -106,6 +106,7 @@
     <Compile Include="Models\DataStore.cs" />
     <Compile Include="Models\BasicInfo.cs" />
     <Compile Include="Models\EquipSlot.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Ship.cs" />
     <Compile Include="Observers\ApiMemberBasicObserver.cs" />
     <Compile Include="Observers\ApiPortObserver.cs" />
@@ -120,6 +121,10 @@
     <Compile Include="Settings\AboutModel.cs" />
     <Compile Include="Settings\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\LogSettingsModel.cs" />
+    <Compile Include="Settings\LogSettingsView.xaml.cs">
+      <DependentUpon>LogSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\TelemetryModel.cs" />
     <Compile Include="Settings\TelemetryView.xaml.cs">
@@ -161,6 +166,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Settings\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\LogSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

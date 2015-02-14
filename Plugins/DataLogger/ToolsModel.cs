@@ -33,7 +33,7 @@ namespace LynLogger
         {
             var listPages = new List<TabItemViewModel>() {
                 new Viewer.DummyModel(),
-                new Settings.TelemetryModel(),
+                //new Settings.TelemetryModel(),
                 new Settings.AboutModel()
             };
             listPages.ForEach(x => x.IsSelected = false);

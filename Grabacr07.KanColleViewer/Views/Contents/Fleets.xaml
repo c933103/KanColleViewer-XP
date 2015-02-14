@@ -234,6 +234,7 @@
 																   Text="{Binding Maximum}"
 																   HorizontalAlignment="Right"
 																   Style="{DynamicResource DefaultTextStyleKey}" />
+
 													</Grid>
 												</DataTemplate>
 											</ItemsControl.ItemTemplate>
