@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataLogger.Properties {
+namespace LynLogger.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace DataLogger.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DataLogger.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LynLogger.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -75,6 +75,15 @@ namespace DataLogger.Properties {
         internal static string TelemetryTabName {
             get {
                 return ResourceManager.GetString("TelemetryTabName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 LynLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null LynLogger.DataStore &gt;k__BackingField System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[LynLogger.Models.Ship, LynLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] LynLogger.Models.BasicInfo Comparer HashSize System.Collections.Generic.GenericEqualityComparer`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e08 [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        /// </summary>
+        internal static string TrainningString {
+            get {
+                return ResourceManager.GetString("TrainningString", resourceCulture);
             }
         }
     }

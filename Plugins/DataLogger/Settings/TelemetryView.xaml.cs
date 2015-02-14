@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DataLogger.Settings
+namespace LynLogger.Settings
 {
     /// <summary>
     /// TelemetryView.xaml 的交互逻辑

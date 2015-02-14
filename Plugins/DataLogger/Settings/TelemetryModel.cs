@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grabacr07.KanColleViewer.ViewModels;
-using DataLogger.Properties;
+using LynLogger.Properties;
 
-namespace DataLogger.Settings
+namespace LynLogger.Settings
 {
     public class TelemetryModel : TabItemViewModel
     {

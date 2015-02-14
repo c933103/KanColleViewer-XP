@@ -1,14 +1,14 @@
-﻿using Grabacr07.KanColleWrapper.Models;
-using Grabacr07.KanColleWrapper.Models.Raw;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grabacr07.KanColleWrapper.Models;
+using Grabacr07.KanColleWrapper.Models.Raw;
 
-namespace DataLogger.Logger.Observers
+namespace LynLogger.Observers
 {
-    class APIPortObserver : IObserver<SvData<kcsapi_port>>
+    class ApiStart2Observer : IObserver<SvData<kcsapi_start2>>
     {
         public void OnCompleted()
         {
@@ -20,10 +20,9 @@ namespace DataLogger.Logger.Observers
             return;
         }
 
-        public void OnNext(SvData<kcsapi_port> value)
+        public void OnNext(SvData<kcsapi_start2> value)
         {
             if(!value.IsSuccess) return;
-            //value.Data.api_ship
         }
     }
 }

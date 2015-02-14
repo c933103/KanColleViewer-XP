@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DataLogger.Settings" x:Class="DataLogger.Settings.AboutView" 
+             xmlns:local="clr-namespace:LynLogger.Settings" x:Class="LynLogger.Settings.AboutView" 
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="300">
     <Grid Margin="0,0,0,0">

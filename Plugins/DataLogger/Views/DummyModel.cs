@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Grabacr07.KanColleViewer.ViewModels;
 
-namespace DataLogger.Viewer
+namespace LynLogger.Viewer
 {
     public class DummyModel : TabItemViewModel
     {

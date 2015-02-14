@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Grabacr07.KanColleViewer.ViewModels;
 using Livet;
 
-namespace DataLogger
+namespace LynLogger
 {
     public class ToolsModel : ViewModel
     {
