@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LynLogger.Viewer
+namespace LynLogger.Views
 {
     /// <summary>
-    /// DummyView.xaml 的交互逻辑
+    /// GradeEvaluationView.xaml 的交互逻辑
     /// </summary>
-    public partial class DummyView : UserControl
+    public partial class GradeEvaluationView : UserControl
     {
-        public DummyView()
+        public GradeEvaluationView()
         {
             InitializeComponent();
         }

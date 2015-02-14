@@ -117,7 +117,8 @@
 				</WebBrowser>
 			</controls:KanColleHost>
 
-            <ContentControl Name="MainContentGrid"
+            <ContentControl Grid.Column="{Binding LRSplit, ConverterParameter=1:0, Converter={StaticResource BoolToIntSelector}, Mode=OneWay}"
+                            Grid.Row="{Binding LRSplit, ConverterParameter=0:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay}"
 							Content="{Binding Content}">
 				<ContentControl.Resources>
 					<DataTemplate DataType="{x:Type viewModels:StartContentViewModel}">

@@ -255,9 +255,11 @@ namespace Grabacr07.KanColleWrapper.Models
 			get { return ConditionTypeHelper.ToConditionType(this.RawData.api_cond); }
 		}
 
-		public ShipSlot[] Slots { get; private set; }
+        public ShipSlot[] Slots { get; private set; }
 
-		public ShipSlot[] EquippedSlots { get; private set; }
+        public ShipSlot[] EquippedSlots { get; private set; }
+
+        public ShipSlot[] EquiptableSlots { get; private set; }
 
 		#region IsInRepairing 変更通知プロパティ
 
@@ -315,10 +317,11 @@ namespace Grabacr07.KanColleWrapper.Models
 				this.Luck = new ModernizableStatus(this.Info.RawData.api_luck, this.RawData.api_kyouka[4]);
 			}
 
-			this.Slots = this.RawData.api_slot
-				.Select(id => this.homeport.Itemyard.SlotItems[id])
-				.Select((t, i) => new ShipSlot(t, this.Info.RawData.api_maxeq.Get(i) ?? 0, this.RawData.api_onslot.Get(i) ?? 0))
-				.ToArray();
+            this.Slots = this.RawData.api_slot
+                .Select(id => this.homeport.Itemyard.SlotItems[id])
+                .Select((t, i) => new ShipSlot(t, this.Info.RawData.api_maxeq.Get(i) ?? 0, this.RawData.api_onslot.Get(i) ?? 0))
+                .ToArray();
+            this.EquiptableSlots = this.Slots.Take(rawData.api_slotnum).ToArray();
 			this.EquippedSlots = this.Slots.Where(x => x.Equipped).ToArray();
 		}
 

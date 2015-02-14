@@ -3,17 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:LynLogger.Settings" x:Class="LynLogger.Settings.AboutView" 
+             xmlns:local="clr-namespace:LynLogger.Views" x:Class="LynLogger.Views.GradeEvaluationView" 
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.DataContext>
+        <local:GradeEvaluationModel/>
+    </UserControl.DataContext>
     <Grid Margin="10,10,0,0">
         <TextBlock>
-            <Run Text="这是一个闲的无聊的人做给闲的无聊的人用的插件" />
+            <Run Text="评分：" /><Run Text="{Binding Score, Mode=OneWay}" />
             <LineBreak />
-            <LineBreak />
-            <Run Text="By 某蠢琳" />
-            <LineBreak />
-            <Run Text="版本：鬼知道" />
+            <Run Text="等级：" /><Run Text="{Binding Grade, Mode=OneWay}" />
         </TextBlock>
     </Grid>
 </UserControl>

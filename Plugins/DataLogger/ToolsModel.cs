@@ -29,16 +29,25 @@ namespace LynLogger
             }
         }
 
+        public DataStore CurrentActiveDs
+        {
+            get { return DataStore.Instance; }
+        }
+
         public ToolsModel()
         {
             var listPages = new List<TabItemViewModel>() {
-                new Viewer.DummyModel(),
+                new Views.GradeEvaluationModel(),
                 //new Settings.TelemetryModel(),
                 new Settings.AboutModel()
             };
             listPages.ForEach(x => x.IsSelected = false);
             Pages = listPages;
             SelectedPage = Pages.First();
+
+            DataStore.OnDataStoreCreate += (_, ds) => {
+                ds.BasicInfoChanged += () => this.RaisePropertyChanged("CurrentActiveDs");
+            };
         }
     }
 }

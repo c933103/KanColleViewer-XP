@@ -6,7 +6,7 @@
 			 xmlns:vm="clr-namespace:Grabacr07.KanColleViewer.ViewModels;assembly=KanColleViewer"
 			 xmlns:local="clr-namespace:LynLogger"
 			 xmlns:localSettings="clr-namespace:LynLogger.Settings"
-			 xmlns:localViews="clr-namespace:LynLogger.Viewer"
+			 xmlns:localViews="clr-namespace:LynLogger.Views"
              xmlns:Custom="http://schemes.grabacr.net/winfx/2014/controls" x:Class="LynLogger.ToolsView" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400">
@@ -16,52 +16,71 @@
     <UserControl.DataContext>
         <local:ToolsModel/>
     </UserControl.DataContext>
-    <Grid Grid.Row="2">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="0,0,25,0">
+                <Run Text="{Binding Mode=OneWay,Path=CurrentActiveDs.BasicInfo.Name}" />
+                <Run Text=" (" />
+                <Run Text="{Binding Mode=OneWay,Path=CurrentActiveDs.MemberId}" />
+                <Run Text=")" />
+            </TextBlock>
+            <TextBlock Grid.Column="1">
+                <Run Text="记录文件：LynLogger /" />
+                <Run Text="{Binding Mode=OneWay,Path=CurrentActiveDs.InternalMemberId}" />
+            </TextBlock>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto" PanningMode="Both">
-            <Grid MinWidth="80">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" PanningMode="Both">
+                <Grid MinWidth="80">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-                <Custom:TabView SelectedItem="{Binding SelectedPage}" ItemsSource="{Binding Pages}" Background="{x:Null}" />
-            </Grid>
-        </ScrollViewer>
+                    <Custom:TabView SelectedItem="{Binding SelectedPage}" ItemsSource="{Binding Pages}" Background="{x:Null}" />
+                </Grid>
+            </ScrollViewer>
 
-        <Grid Grid.Column="1">
+            <Grid Grid.Column="1">
 
-            <Grid.Resources>
-                <DataTemplate DataType="{x:Type localSettings:AboutModel}">
-                    <localSettings:AboutView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type localSettings:TelemetryModel}">
-                    <localSettings:TelemetryView/>
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type localViews:DummyModel}">
-                    <localViews:DummyView/>
-                </DataTemplate>
-            </Grid.Resources>
-            <ItemsControl ItemsSource="{Binding Pages}">
-                <ItemsControl.Background>
-                    <SolidColorBrush Color="#33007FFF"/>
-                </ItemsControl.Background>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Grid />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
-                        <ContentControl Content="{Binding}"
-							Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Grid.Resources>
+                    <DataTemplate DataType="{x:Type localSettings:AboutModel}">
+                        <localSettings:AboutView />
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                    <DataTemplate DataType="{x:Type localSettings:TelemetryModel}">
+                        <localSettings:TelemetryView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type localViews:GradeEvaluationModel}">
+                        <localViews:GradeEvaluationView/>
+                    </DataTemplate>
+                </Grid.Resources>
+                <ItemsControl ItemsSource="{Binding Pages}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
+                            <ContentControl Content="{Binding}"
+							    Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

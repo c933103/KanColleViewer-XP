@@ -24,6 +24,15 @@ namespace LynLogger.Models
         public int DevMaterial { get; internal set; }
         public int ModMaterial { get; internal set; }
 
+        public int ExerWins { get; internal set; }
+        public int ExerLose { get; internal set; }
+        public int OperWins { get; internal set; }
+        public int OperLose { get; internal set; }
+        public int ExpeWins { get; internal set; }
+        public int ExpeLose { get; internal set; }
+
+        public string Name { get; internal set; }
+
         private bool _dirty = false;
 
         internal BasicInfo()
@@ -75,16 +84,30 @@ namespace LynLogger.Models
 
         internal void Update(kcsapi_basic data, bool noUpdateEvent = false)
         {
-            if(!_dirty) {
-                if(data.api_experience == Experience) return;
-                if(data.api_fcoin == FurnitureCoin) return;
-                if(data.api_level == Level) return;
-            }
+            if(!_dirty
+                && (data.api_experience == Experience) 
+                && (data.api_fcoin == FurnitureCoin) 
+                && (data.api_level == Level) 
+                && (data.api_st_lose == OperLose)
+                && (data.api_st_win == OperWins)
+                && (data.api_pt_lose == ExerLose)
+                && (data.api_pt_win == ExerWins)
+                && (data.api_ms_count == ExpeWins+ExpeLose)
+                && (data.api_ms_success == ExpeWins)
+                && (data.api_nickname == Name))
+                    return;
 
             _dirty = true;
             Experience = data.api_experience;
             FurnitureCoin = data.api_fcoin;
             Level = data.api_level;
+            OperWins = data.api_st_win;
+            OperLose = data.api_st_lose;
+            ExerWins = data.api_pt_win;
+            ExerLose = data.api_pt_lose;
+            ExpeWins = data.api_ms_success;
+            ExpeLose = data.api_ms_count - data.api_ms_success;
+            Name = data.api_nickname;
 
             if(!_dirty || noUpdateEvent) return;
             DataStore.Instance.RaiseBasicInfoChange();

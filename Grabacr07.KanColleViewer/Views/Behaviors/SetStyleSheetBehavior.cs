@@ -68,6 +68,7 @@ namespace Grabacr07.KanColleViewer.Views.Behaviors
                     window.Height = this.AssociatedObject.Height + 60;
                     window.Width = Math.Min(window.MaxWidth, this.AssociatedObject.Width + 768);
                 } else {
+                    window.Height = Math.Min(window.MaxHeight, this.AssociatedObject.Height + 450);
                     window.Width = this.AssociatedObject.Width;
                 }
 			}

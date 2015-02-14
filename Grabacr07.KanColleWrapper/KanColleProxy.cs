@@ -62,7 +62,7 @@ namespace Grabacr07.KanColleWrapper
 
 		public void Startup(int proxy = 37564)
 		{
-			FiddlerApplication.Startup(proxy, false, true);
+			FiddlerApplication.Startup(proxy, false, false);
 			FiddlerApplication.BeforeRequest += this.SetUpstreamProxyHandler;
 
 			SetIESettings("localhost:" + proxy);
@@ -97,6 +97,8 @@ namespace Grabacr07.KanColleWrapper
 			Marshal.StructureToPtr(proxyInfo, proxyInfoPtr, true);
 
 			NativeMethods.InternetSetOption(IntPtr.Zero, INTERNET_OPTION_PROXY, proxyInfoPtr, proxyInfoSize);
+
+            Marshal.FreeCoTaskMem(proxyInfoPtr);
 		}
 
 		/// <summary>

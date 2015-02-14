@@ -26,8 +26,6 @@ namespace LynLogger
         private static readonly string _dataDir = Path.Combine(Environment.CurrentDirectory, "LynLogger");
 
         private static readonly System.Runtime.Serialization.Formatters.Binary.BinaryFormatter Serializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-        private static readonly SevenZip.Compression.LZMA.Encoder Compressor = new SevenZip.Compression.LZMA.Encoder();
-        private static readonly SevenZip.Compression.LZMA.Decoder Decompressor = new SevenZip.Compression.LZMA.Decoder();
         private static readonly byte[] _trainningData = Encoding.UTF8.GetBytes(Properties.Resources.TrainningString);
 
         public static event Action<string, DataStore> OnDataStoreCreate;
@@ -56,6 +54,8 @@ namespace LynLogger
                     _ds[_memberId] = (DataStore)Serializer.Deserialize(input);
                 }
             }
+            _ds[_memberId].MemberId = memberId;
+            _ds[_memberId].InternalMemberId = _memberId;
 
             if(OnDataStoreCreate != null) {
                 OnDataStoreCreate(_memberId, _ds[_memberId]);
@@ -82,14 +82,8 @@ namespace LynLogger
             }
         }
 
-        private static int DetermineDictionarySize(long dataLen)
-        {
-            var totalLen = _trainningData.Length + dataLen;
-            for(int i = 10; i < 24; i++) {
-                if(totalLen < (1 << i)) return i;
-            }
-            return 24;
-        }
+        public string MemberId { get; private set; }
+        public string InternalMemberId { get; private set; }
 
         public IReadOnlyDictionary<int, Models.Ship> Ships { get { return i_Ships; } }
         internal Dictionary<int, Models.Ship> i_Ships { get; private set; }
