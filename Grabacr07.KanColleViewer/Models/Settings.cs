@@ -380,6 +380,25 @@ namespace Grabacr07.KanColleViewer.Models
                 this.RaisePropertyChanged();
             }
         }
+		#region ViewRangeCalcType 変更通知プロパティ
+
+		private string _ViewRangeCalcType;
+
+		public string ViewRangeCalcType
+		{
+			get { return this._ViewRangeCalcType; }
+			set
+			{
+				if (this._ViewRangeCalcType != value)
+				{
+					this._ViewRangeCalcType = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
 
 		public void Save()
 		{

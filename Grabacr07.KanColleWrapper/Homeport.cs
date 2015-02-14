@@ -32,7 +32,7 @@ namespace Grabacr07.KanColleWrapper
 		/// <summary>
 		/// 複数の建造ドックを持つ工廠を取得します。
 		/// </summary>
-		public Dockyard Dockyard { get; private set; }
+        public Dockyard Dockyard { get; private set; }
 
 		/// <summary>
 		/// 複数の入渠ドックを持つ工廠を取得します。
@@ -89,7 +89,7 @@ namespace Grabacr07.KanColleWrapper
 				this.Organization.Update(x.Data.api_ship);
 				this.Repairyard.Update(x.Data.api_ndock);
 				this.Organization.Update(x.Data.api_deck_port);
-				this.Organization.Combined = x.Data.api_combined_flag == 1;
+				this.Organization.Combined = x.Data.api_combined_flag != 0;
 				this.Materials.Update(x.Data.api_material);
 			});
 			proxy.api_get_member_basic.TryParse<kcsapi_basic>().Subscribe(x => this.UpdateAdmiral(x.Data));

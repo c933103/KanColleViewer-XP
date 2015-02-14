@@ -14,6 +14,7 @@ namespace Grabacr07.KanColleWrapper.Models
 	/// </summary>
 	public class SlotItemInfo : RawDataWrapper<kcsapi_mst_slotitem>, IIdentifiable
 	{
+        private SlotItemType? type;
 		private SlotItemIconType? iconType;
 		private int? categoryId;
 
@@ -25,6 +26,11 @@ namespace Grabacr07.KanColleWrapper.Models
 		public string Name
 		{
 			get { return this.RawData.api_name; }
+		}
+		
+		public SlotItemType Type
+		{
+			get { return this.type ?? (SlotItemType)(this.type = (SlotItemType)(this.RawData.api_type.Get(2) ?? 0)); }
 		}
 
 		public SlotItemIconType IconType
