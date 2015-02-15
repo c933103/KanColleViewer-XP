@@ -15,12 +15,12 @@ namespace LynLogger
     [ExportMetadata("Description", "Test")]
     [ExportMetadata("Version", "1.0")]
     [ExportMetadata("Author", "@Linnaea")]
-    public class LynLogger : IToolPlugin, IDisposable
+    public class LynLoggerMain : IToolPlugin, IDisposable
     {
         private HashSet<IDisposable> _disposables = new HashSet<IDisposable>();
         private ToolsModel model = new ToolsModel();
 
-        public LynLogger()
+        public LynLoggerMain()
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             _disposables.Add(KanColleClient.Current.Proxy.api_start2.TryParse<kcsapi_start2>().Subscribe(new Observers.ApiStart2Observer()));
@@ -30,8 +30,8 @@ namespace LynLogger
 
         System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            if(args.Name == typeof(LynLogger).Assembly.FullName) {
-                return typeof(LynLogger).Assembly;
+            if(args.Name == typeof(LynLoggerMain).Assembly.FullName) {
+                return typeof(LynLoggerMain).Assembly;
             }
             return null;
         }
@@ -51,7 +51,7 @@ namespace LynLogger
             return null;
         }
 
-        ~LynLogger()
+        ~LynLoggerMain()
         {
             Dispose(false);
         }

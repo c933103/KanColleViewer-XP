@@ -33,6 +33,18 @@ namespace LynLogger.Models
 
         public string Name { get; internal set; }
 
+        public double Score
+        {
+            get
+            {
+                if(Level > 99) {
+                    return (1.0 * OperWins + OperLose + (ExpeLose + ExpeWins) / 4.0) / (Level / 100.0 * (ExerLose + ExerWins));
+                } else {
+                    return (1.0 * OperWins + OperLose + (ExpeLose + ExpeWins) / 4.0) / (Math.Sqrt(Level) / 10 * (ExerLose + ExerWins));
+                }
+            }
+        }
+
         private bool _dirty = false;
 
         internal BasicInfo()

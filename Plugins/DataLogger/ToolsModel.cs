@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Grabacr07.KanColleViewer.ViewModels;
-using Livet;
+using LynLogger.Models;
+using LynLogger.Views;
 
 namespace LynLogger
 {
-    public class ToolsModel : ViewModel
+    public class ToolsModel : NotificationSourceObject
     {
-        public IReadOnlyList<TabItemViewModel> Pages { get; private set; }
+        public IReadOnlyList<TabViewItem> Pages { get; private set; }
 
-        private TabItemViewModel _page;
-        public TabItemViewModel SelectedPage
+        private TabViewItem _page;
+        public TabViewItem SelectedPage
         {
             get { return _page; }
             set
@@ -36,10 +36,9 @@ namespace LynLogger
 
         public ToolsModel()
         {
-            var listPages = new List<TabItemViewModel>() {
-                new Views.GradeEvaluationModel(),
-                //new Settings.TelemetryModel(),
-                new Settings.AboutModel()
+            var listPages = new List<TabViewItem>() {
+                new TabViewItem("肝度", new Views.GradeEvaluationView(){DataContext=new Views.GradeEvaluationModel()}),
+                new TabViewItem("关于", new Settings.AboutView())
             };
             listPages.ForEach(x => x.IsSelected = false);
             Pages = listPages;
