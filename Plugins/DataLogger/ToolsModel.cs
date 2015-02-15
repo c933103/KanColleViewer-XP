@@ -46,7 +46,9 @@ namespace LynLogger
             SelectedPage = Pages.First();
 
             DataStore.OnDataStoreCreate += (_, ds) => {
-                ds.BasicInfoChanged += () => this.RaisePropertyChanged("CurrentActiveDs");
+                ds.BasicInfoChanged += () => {
+                    this.RaisePropertyChanged("CurrentActiveDs");
+                };
             };
         }
     }

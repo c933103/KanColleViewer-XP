@@ -154,6 +154,18 @@
 														HorizontalAlignment="Center" />
                                                 </Grid>
 
+                                                <Grid x:Name="EvacuationIndicator"
+													Grid.Column="0"
+													Grid.Row="0"
+													Visibility="Collapsed">
+                                                    <Border Background="{DynamicResource FleetRepairingBrushKey}"
+														Opacity=".4"
+														Margin="0,0" />
+                                                    <TextBlock Text="退避済"
+														Style="{DynamicResource EmphaticTextStyleKey}"
+														HorizontalAlignment="Center" />
+                                                </Grid>
+
                                                 <TextBlock Grid.Column="1" Grid.Row="0" Margin="8,0,0,0"><InlineUIContainer>
 														<controls:ConditionIcon ConditionType="{Binding Ship.ConditionType, Mode=OneWay}" />
 													</InlineUIContainer><Run Text=" "/><Run Text="{Binding Ship.Condition, Mode=OneWay}"
@@ -237,15 +249,27 @@
 
 
                             <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding Ship.IsInRepairing}"
-									Value="True">
+                                <DataTrigger Binding="{Binding Ship.Status}"
+									Value="Repair">
                                     <Setter TargetName="HPText"
 										Property="Opacity"
-										Value=".25" />
+										Value=".2" />
                                     <Setter TargetName="HPIndicator"
 										Property="Opacity"
-										Value=".25" />
+										Value=".2" />
                                     <Setter TargetName="RepairIndicator"
+										Property="Visibility"
+										Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Ship.Status}"
+									Value="Evacuation,Tow">
+                                    <Setter TargetName="HPText"
+										Property="Opacity"
+										Value=".2" />
+                                    <Setter TargetName="HPIndicator"
+										Property="Opacity"
+										Value=".2" />
+                                    <Setter TargetName="EvacuationIndicator"
 										Property="Visibility"
 										Value="Visible" />
                                 </DataTrigger>

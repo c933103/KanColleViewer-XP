@@ -22,6 +22,7 @@ namespace LynLogger.Views
                     return (1.0 * info.OperWins + info.OperLose + (info.ExpeLose + info.ExpeWins) / 4.0) / (Math.Sqrt(info.Level) / 10 * (info.ExerLose + info.ExerWins));
                 }
             }
+            set { }
         }
 
         public string Grade
@@ -34,6 +35,7 @@ namespace LynLogger.Views
                 if(s < 15) return "甘地";
                 return "超神";
             }
+            set { }
         }
 
         public DataStore CurrentActiveDs
@@ -44,7 +46,10 @@ namespace LynLogger.Views
         public GradeEvaluationModel()
         {
             DataStore.OnDataStoreCreate += (_, ds) => {
-                ds.BasicInfoChanged += () => this.RaisePropertyChanged();
+                ds.BasicInfoChanged += () => {
+                    RaisePropertyChanged("Score");
+                    RaisePropertyChanged("Grade");
+                };
             };
         }
     }
