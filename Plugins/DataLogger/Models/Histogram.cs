@@ -22,13 +22,18 @@ namespace LynLogger.Models
             }
             set
             {
-                if(backend.LastOrDefault().Value.Value.Equals(value)) return;
+                if((backend.Count != 0) && backend.Last().Value.Value.Equals(value)) {
+                    return;
+                }
                 backend[seq] = new Record(Helpers.UnixTimestamp, value);
             }
         }
 
         public void Append(T val)
         {
+            if((backend.Count != 0) && backend.Last().Value.Value.Equals(val)) {
+                return;
+            }
             this[backend.Keys.LastOrDefault()+1] = val;
         }
 

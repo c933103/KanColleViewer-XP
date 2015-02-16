@@ -117,13 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutTabName" xml:space="preserve">
-    <value>关于</value>
-  </data>
-  <data name="TelemetryTabName" xml:space="preserve">
-    <value>遥测</value>
-  </data>
-  <data name="TrainningString" xml:space="preserve">
-    <value>LynLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null LynLogger.DataStore &gt;k__BackingField System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[LynLogger.Models.Ship, LynLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] LynLogger.Models.BasicInfo Comparer HashSize System.Collections.Generic.GenericEqualityComparer`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] System.Collections.Generic.KeyValuePair`2[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[LynLogger.Models.Ship, LynLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]][]e LynLogger.Models.BasicInfo _dirty LynLogger.Models.EquipSlot</value>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="TrainningData" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TrainningData;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

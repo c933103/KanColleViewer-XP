@@ -61,29 +61,12 @@ namespace LynLogger.Properties {
         }
         
         /// <summary>
-        ///   查找类似 关于 的本地化字符串。
+        ///   查找 System.Byte[] 类型的本地化资源。
         /// </summary>
-        internal static string AboutTabName {
+        internal static byte[] TrainningData {
             get {
-                return ResourceManager.GetString("AboutTabName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 遥测 的本地化字符串。
-        /// </summary>
-        internal static string TelemetryTabName {
-            get {
-                return ResourceManager.GetString("TelemetryTabName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 LynLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null LynLogger.DataStore &gt;k__BackingField System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[LynLogger.Models.Ship, LynLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] LynLogger.Models.BasicInfo Comparer HashSize System.Collections.Generic.GenericEqualityComparer`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e08 [字符串的其余部分被截断]&quot;; 的本地化字符串。
-        /// </summary>
-        internal static string TrainningString {
-            get {
-                return ResourceManager.GetString("TrainningString", resourceCulture);
+                object obj = ResourceManager.GetObject("TrainningData", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

@@ -12,6 +12,8 @@ namespace LynLogger
     [Serializable]
     public class DataStore
     {
+        public static event Action<string, DataStore> OnDataStoreCreate;
+
         public static DataStore Instance
         {
             get
@@ -26,9 +28,10 @@ namespace LynLogger
         private static readonly string _dataDir = Path.Combine(Environment.CurrentDirectory, "LynLogger");
 
         private static readonly System.Runtime.Serialization.Formatters.Binary.BinaryFormatter Serializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-        private static readonly byte[] _trainningData = Encoding.UTF8.GetBytes(Properties.Resources.TrainningString);
+        private static readonly byte[] _trainningData = Properties.Resources.TrainningData;
 
-        public static event Action<string, DataStore> OnDataStoreCreate;
+        private static readonly Logger.BasicInfoLogger bil = new Logger.BasicInfoLogger();
+        private static readonly Logger.ShipDataLogger sdl = new Logger.ShipDataLogger();
 
         internal static void SwitchMember(string memberId)
         {
@@ -84,15 +87,20 @@ namespace LynLogger
 
         public string MemberId { get; private set; }
         public string InternalMemberId { get; private set; }
+        public int RecordVersion { get; private set; }
 
         public IReadOnlyDictionary<int, Models.Ship> Ships { get { return i_Ships; } }
+        public IReadOnlyDictionary<int, Models.ShipHistory> ShipHistories { get { return i_ShipHistories; } }
+
         internal Dictionary<int, Models.Ship> i_Ships { get; private set; }
+        internal Dictionary<int, Models.ShipHistory> i_ShipHistories { get; private set; }
 
         [NonSerialized] private Action<int> _shipDataChanged;
         public event Action<int> ShipDataChanged { add { _shipDataChanged += value; } remove { _shipDataChanged -= value; } }
         internal void RaiseShipDataChange(int id) { if(_shipDataChanged != null) _shipDataChanged(id); }
 
         public Models.BasicInfo BasicInfo { get; private set; }
+        public Models.BasicInfoHistory BasicInfoHistory { get; private set; }
 
         [NonSerialized] private Action _basicInfoChanged;
         public event Action BasicInfoChanged { add { _basicInfoChanged += value; } remove { _basicInfoChanged -= value; } }
@@ -102,6 +110,11 @@ namespace LynLogger
         {
             i_Ships = new Dictionary<int, Models.Ship>();
             BasicInfo = new Models.BasicInfo();
+
+            i_ShipHistories = new Dictionary<int, Models.ShipHistory>();
+            BasicInfoHistory = new Models.BasicInfoHistory();
+
+            RecordVersion = 1;
         }
     }
 }

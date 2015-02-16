@@ -65,7 +65,7 @@ namespace Grabacr07.KanColleViewer.Views.Behaviors
 
 			if (window != null) {
                 if(App.ViewModelRoot.LRSplit) {
-                    window.Height = this.AssociatedObject.Height + 60;
+                    window.Height = this.AssociatedObject.Height + 110;
                     window.Width = Math.Min(window.MaxWidth, this.AssociatedObject.Width + 768);
                 } else {
                     window.Height = Math.Min(window.MaxHeight, this.AssociatedObject.Height + 450);

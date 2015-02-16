@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,8 +19,10 @@ namespace LynLogger.Views
     /// <summary>
     /// TabViewControl.xaml 的交互逻辑
     /// </summary>
-    public partial class TabViewControl : UserControl
+    public partial class TabViewControl : UserControl, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public TabViewControl()
         {
             InitializeComponent();
@@ -31,13 +34,23 @@ namespace LynLogger.Views
         public IList<TabViewItem> TabViewItems
         {
             get { return (IList<TabViewItem>)GetValue(dpTabViewItems); }
-            set { SetValue(dpTabViewItems, value); }
+            set
+            {
+                SetValue(dpTabViewItems, value);
+                if(PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("TabViewItems"));
+            }
         }
 
         public TabViewItem TabViewSelected
         {
             get { return (TabViewItem)GetValue(dpTabViewSelected); }
-            set { SetValue(dpTabViewSelected, value);  }
+            set
+            {
+                SetValue(dpTabViewSelected, value);
+                if(PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("TabViewSelected"));
+            }
         }
 
         private void Grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers.cs" />
+    <Compile Include="Logger\BasicInfoLogger.cs" />
     <Compile Include="Logger\ShipDataLogger.cs" />
     <Compile Include="LZMA\Common\CRC.cs" />
     <Compile Include="LZMA\Common\InBuffer.cs" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="TrainningData" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
