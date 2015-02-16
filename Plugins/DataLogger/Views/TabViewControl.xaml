@@ -23,13 +23,20 @@
                 <ItemsControl ItemsSource="{Binding TabViewItems, Mode=OneWay}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Name="Tab">
-                                <TextBlock Name="TabText" Text="{Binding TabName, Mode=OneWay}" FontSize="16" Margin="10,10,10,10" MouseLeftButtonUp="TextBlock_MouseLeftButtonUp" />
+                            <Grid>
+                                <Grid Name="Tab" MouseLeftButtonUp="Grid_MouseLeftButtonUp" Grid.Row="0" Grid.Column="0">
+                                    <TextBlock Name="TabText" Text="{Binding TabName, Mode=OneWay}" FontSize="16" Margin="10,10,10,10" />
+                                </Grid>
+                                <Grid Name="TabMask" MouseLeftButtonUp="Grid_MouseLeftButtonUp" Grid.Row="0" Grid.Column="0" Background="#00FFFFFF">
+                                </Grid>
                             </Grid>
                             <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding IsSelected}" Value="True" >
+                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
                                     <Setter TargetName="Tab" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                                 </DataTrigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="TabMask" Property="Background" Value="#3FFFFFFF" />
+                                </Trigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

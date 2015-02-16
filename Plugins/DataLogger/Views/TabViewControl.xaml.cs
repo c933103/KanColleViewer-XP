@@ -40,9 +40,9 @@ namespace LynLogger.Views
             set { SetValue(dpTabViewSelected, value);  }
         }
 
-        private void TextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void Grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            TabViewSelected = (TabViewItem)((TextBlock)sender).DataContext;
+            TabViewSelected = (TabViewItem)((Grid)sender).DataContext;
         }
     }
 

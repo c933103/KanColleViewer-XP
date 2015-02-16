@@ -44,7 +44,10 @@ namespace Grabacr07.KanColleWrapper.Models
 			get { return shipType ?? (shipType = KanColleClient.Current.Master.ShipTypes[this.RawData.api_stype]) ?? ShipType.Dummy; }
 		}
 
-        public int[] Slots { get { return this.RawData.api_maxeq; } }
+        public int[] Slots
+        {
+            get { return this.RawData.api_maxeq; }
+        }
 
 		#region 用意したけど使わないっぽい？
 
@@ -118,9 +121,9 @@ namespace Grabacr07.KanColleWrapper.Models
 		/// <summary>
 		/// 速力を取得します。
 		/// </summary>
-		public Speed Speed
+        public ShipSpeed Speed
 		{
-			get { return (Speed)this.RawData.api_soku; }
+            get { return (ShipSpeed)this.RawData.api_soku; }
 		}
 
 		/// <summary>

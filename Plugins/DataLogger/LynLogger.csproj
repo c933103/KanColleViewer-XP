@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers.cs" />
+    <Compile Include="Logger\ShipDataLogger.cs" />
     <Compile Include="LZMA\Common\CRC.cs" />
     <Compile Include="LZMA\Common\InBuffer.cs" />
     <Compile Include="LZMA\Common\OutBuffer.cs" />
@@ -82,12 +83,15 @@
     <Compile Include="LZMA\Compress\RangeCoder\RangeCoderBitTree.cs" />
     <Compile Include="LZMA\DoubleStream.cs" />
     <Compile Include="LZMA\ICoder.cs" />
+    <Compile Include="Models\BasicInfoHistory.cs" />
     <Compile Include="Models\DataStore.cs" />
     <Compile Include="Models\BasicInfo.cs" />
     <Compile Include="Models\EquipSlot.cs" />
+    <Compile Include="Models\Histogram.cs" />
     <Compile Include="Models\NotificationSourceObject.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Ship.cs" />
+    <Compile Include="Models\ShipHistory.cs" />
     <Compile Include="Observers\ApiMemberBasicObserver.cs" />
     <Compile Include="Observers\ApiPortObserver.cs" />
     <Compile Include="Observers\ApiStart2Observer.cs" />
@@ -135,9 +139,7 @@
       <Name>MetroRadiance</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Logger\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Settings\AboutView.xaml">
       <SubType>Designer</SubType>
