@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Fiddler;
 using Grabacr07.KanColleWrapper.Internal;
 using Grabacr07.KanColleWrapper.Models.Raw;
-using Livet;
 
 namespace Grabacr07.KanColleWrapper.Models
 {
@@ -83,6 +82,15 @@ namespace Grabacr07.KanColleWrapper.Models
 			{
 				this._HP = value;
 				this.RaisePropertyChanged();
+
+				if (value.IsHeavilyDamage())
+				{
+					this.Situation |= ShipSituation.HeavilyDamaged;
+				}
+				else
+				{
+					this.Situation &= ~ShipSituation.HeavilyDamaged;
+				}
 			}
 		}
 
@@ -323,7 +331,6 @@ namespace Grabacr07.KanColleWrapper.Models
 
 		#endregion
 
-
 		internal Ship(Homeport parent, kcsapi_ship2 rawData)
 			: base(rawData)
 		{
@@ -355,6 +362,15 @@ namespace Grabacr07.KanColleWrapper.Models
                 .ToArray();
             this.EquiptableSlots = this.Slots.Take(rawData.api_slotnum).ToArray();
 			this.EquippedSlots = this.Slots.Where(x => x.Equipped).ToArray();
+
+			if (this.EquippedSlots.Any(x => x.Item.Info.Type == SlotItemType.応急修理要員))
+			{
+				this.Situation |= ShipSituation.DamageControlled;
+			}
+			else
+			{
+				this.Situation &= ~ShipSituation.DamageControlled;
+			}
 		}
 
 
@@ -374,45 +390,6 @@ namespace Grabacr07.KanColleWrapper.Models
 		public override string ToString()
 		{
 			return string.Format("ID = {0}, Name = \"{1}\", ShipType = \"{2}\", Level = {3}", this.Id, this.Info.Name, this.Info.ShipType.Name, this.Level);
-		}
-	}
-
-
-	public class ShipSlot : NotificationObject
-	{
-		public SlotItem Item { get; private set; }
-
-		public int Maximum { get; private set; }
-
-		public bool Equipped
-		{
-			get { return this.Item != null; }
-		}
-
-		#region Current 変更通知プロパティ
-
-		private int _Current;
-
-		public int Current
-		{
-			get { return this._Current; }
-			set
-			{
-				if (this._Current != value)
-				{
-					this._Current = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		#endregion
-
-		public ShipSlot(SlotItem item, int maximum, int current)
-		{
-			this.Item = item;
-			this.Maximum = maximum;
-			this.Current = current;
 		}
 	}
 }

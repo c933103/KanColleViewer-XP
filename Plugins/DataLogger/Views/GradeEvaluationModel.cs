@@ -9,7 +9,14 @@ namespace LynLogger.Views
 {
     class GradeEvaluationModel : NotificationSourceObject
     {
-        public double Score { get { return DataStore.Instance.BasicInfo.Score; } }
+        public double Score
+        {
+            get
+            {
+                if(DataStore.Instance == null) return 0;
+                return DataStore.Instance.BasicInfo.Score;
+            }
+        }
 
         public string Grade
         {

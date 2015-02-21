@@ -179,6 +179,7 @@
     <Compile Include="ViewModels\Dev\DebugTabViewModel.cs" />
     <Compile Include="ViewModels\CultureViewModel.cs" />
     <Compile Include="ViewModels\FleetWindowViewModel.cs" />
+    <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainContentViewModel.cs" />
     <Compile Include="Models\INavigator.cs" />
     <Compile Include="ViewModels\Contents\MaterialsViewModel.cs" />
@@ -248,6 +249,7 @@
       <DependentUpon>ZoomFactorSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Converters\BoolToIntSelector.cs" />
+    <Compile Include="Views\Converters\HasFlagConverter.cs" />
     <Compile Include="Views\Converters\QuestCategoryToColorConverter.cs" />
     <Compile Include="Views\Dev\DebugTab.xaml.cs">
       <DependentUpon>DebugTab.xaml</DependentUpon>
@@ -605,11 +607,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <DesignData Include="SampleData\ShipyardViewModelSampleData.xaml">
-      <SubType>Designer</SubType>
-    </DesignData>
+    <DesignData Include="SampleData\ShipyardViewModelSampleData.xaml" />
     <DesignData Include="SampleData\FleetsViewModelSampleData.xaml" />
     <DesignData Include="SampleData\FleetViewModelSampleData.xaml" />
+    <DesignData Include="SampleData\ShipViewModelSampleData.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\app.ico" />

@@ -14,7 +14,7 @@ namespace Grabacr07.KanColleWrapper.Models
 	/// </summary>
 	public class SlotItemInfo : RawDataWrapper<kcsapi_mst_slotitem>, IIdentifiable
 	{
-        private SlotItemType? type;
+		private SlotItemType? type;
 		private SlotItemIconType? iconType;
 		private int? categoryId;
 
@@ -27,7 +27,7 @@ namespace Grabacr07.KanColleWrapper.Models
 		{
 			get { return this.RawData.api_name; }
 		}
-		
+
 		public SlotItemType Type
 		{
 			get { return this.type ?? (SlotItemType)(this.type = (SlotItemType)(this.RawData.api_type.Get(2) ?? 0)); }
@@ -58,19 +58,25 @@ namespace Grabacr07.KanColleWrapper.Models
 		{
 			get
 			{
-				var type = this.RawData.api_type.Get(2);
-				return type.HasValue && (type == 6 || type == 7 || type == 8 || type == 11);
+				return this.Type == SlotItemType.艦上戦闘機
+					|| this.Type == SlotItemType.艦上攻撃機
+					|| this.Type == SlotItemType.艦上爆撃機
+					|| this.Type == SlotItemType.水上爆撃機;
 			}
 		}
 
-	    public bool IsNumerable
-        {
-            get
-            {
-                var type = this.RawData.api_type.Get(2);
-                return type.HasValue && (type == 6 || type == 7 || type == 8 || type == 11);
-            }
-        }
+		public bool IsNumerable
+		{
+			get
+			{
+				return this.Type == SlotItemType.艦上偵察機
+					|| this.Type == SlotItemType.艦上戦闘機
+					|| this.Type == SlotItemType.艦上攻撃機
+					|| this.Type == SlotItemType.艦上爆撃機
+					|| this.Type == SlotItemType.水上偵察機
+					|| this.Type == SlotItemType.水上爆撃機;
+			}
+		}
 
 		internal SlotItemInfo(kcsapi_mst_slotitem rawData) : base(rawData) { }
 
