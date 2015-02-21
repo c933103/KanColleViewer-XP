@@ -54,10 +54,8 @@
 	</i:Interaction.Triggers>
 
 	<Window.Resources>
-		<ResourceDictionary>
-			<converters:HasFlagConverter x:Key="HasFlagConverter" />
-
-			<DataTemplate x:Key="ShipLineViewKey"
+        <ResourceDictionary>
+            <DataTemplate x:Key="ShipLineViewKey"
 						  DataType="{x:Type wrapper:Ship}">
 				<Border BorderThickness="0,0,0,1"
 						BorderBrush="{DynamicResource BorderBrushKey}"

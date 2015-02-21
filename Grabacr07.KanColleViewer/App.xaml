@@ -22,6 +22,7 @@
 			<converters:UniversalBooleanToVisibilityConverter x:Key="UniversalBooleanToVisibilityConverter" />
 			<converters:StringToVisiblityConverter x:Key="StringToVisiblityConverter" />
             <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+            <Converters:HasFlagConverter x:Key="HasFlagConverter" />
             <Converters:BoolToIntSelector x:Key="BoolToIntSelector"/>
 
 

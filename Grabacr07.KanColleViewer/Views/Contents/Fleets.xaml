@@ -17,7 +17,7 @@
 			 xmlns:Converters="clr-namespace:Grabacr07.KanColleViewer.Views.Converters"
 			 mc:Ignorable="d"
 			 d:DesignWidth="800"
-			 d:DesignHeight="400"
+			 d:DesignHeight="480"
 			 d:DataContext="{d:DesignInstance fleets:FleetsViewModel}">
 
 	<i:Interaction.Triggers>
@@ -102,7 +102,27 @@
 
                                 <Border BorderBrush="{DynamicResource InactiveForegroundBrushKey}"
 									BorderThickness="0,0,1,1"
-									Margin="10,10,0,0">
+									Margin="10,10,0,0"
+                                    DataContext="{Binding Ship}">
+                                    <Border.Style>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Evacuation}" Value="True">
+                                                    <Setter Property="Opacity" Value="0.3" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Tow}" Value="True">
+                                                    <Setter Property="Opacity" Value="0.3" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged}" Value="True">
+                                                    <Setter Property="Background" Value="#14FF0000" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged|DamageControlled}" Value="True">
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" SharedSizeGroup="ShipInfoPanelH" />
@@ -119,8 +139,7 @@
                                                 <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"
-													SharedSizeGroup="ShipInfo" />
+                                                <ColumnDefinition Width="Auto" SharedSizeGroup="ShipInfo" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
 
@@ -135,16 +154,16 @@
 														SharedSizeGroup="ShipLevel" />
                                                 </Grid.ColumnDefinitions>
 
-                                                <TextBlock Style="{DynamicResource DefaultTextStyleKey}"><Run Text="{Binding Ship.Info.Name, Mode=OneWay}"
+                                                <TextBlock Style="{DynamicResource DefaultTextStyleKey}"><Run Text="{Binding Info.Name, Mode=OneWay}"
 														FontSize="18"
-														Style="{DynamicResource EmphaticTextElementStyleKey}" /><LineBreak /><Run Text="{Binding Ship.Info.ShipType.Name, Mode=OneWay}"
+														Style="{DynamicResource EmphaticTextElementStyleKey}" /><LineBreak /><Run Text="{Binding Info.ShipType.Name, Mode=OneWay}"
 														FontSize="14" /></TextBlock>
 
                                                 <TextBlock Grid.Column="2"
-													Style="{DynamicResource DefaultTextStyleKey}"><Run Text="Lv." /><Run Text=" "/><Run Text="{Binding Ship.Level, Mode=OneWay}"
+													Style="{DynamicResource DefaultTextStyleKey}"><Run Text="Lv." /><Run Text=" "/><Run Text="{Binding Level, Mode=OneWay}"
 														FontSize="18"
 														Style="{DynamicResource EmphaticTextElementStyleKey}" /><LineBreak /><Run Text="Next:"
-														FontSize="9" /><Run Text=" "/><Run Text="{Binding Ship.ExpForNextLevel, Mode=OneWay}"
+														FontSize="9" /><Run Text=" "/><Run Text="{Binding ExpForNextLevel, Mode=OneWay}"
 														FontSize="9" /></TextBlock>
                                             </Grid>
 
@@ -158,41 +177,17 @@
                                                 </Grid.ColumnDefinitions>
 
                                                 <StackPanel Grid.Column="0" Grid.Row="0">
-                                                    <TextBlock x:Name="HPText"><Run Text="HP:" /><Run Text=" "/><Run Text="{Binding Ship.HP.Current, Mode=OneWay}"
-															Style="{DynamicResource EmphaticTextElementStyleKey}" /><Run Text=" "/><Run Text="/" /><Run Text=" "/><Run Text="{Binding Ship.HP.Maximum, Mode=OneWay}" /></TextBlock>
+                                                    <TextBlock x:Name="HPText"><Run Text="HP:" /><Run Text=" "/><Run Text="{Binding HP.Current, Mode=OneWay}"
+															Style="{DynamicResource EmphaticTextElementStyleKey}" /><Run Text=" "/><Run Text="/" /><Run Text=" "/><Run Text="{Binding HP.Maximum, Mode=OneWay}" /></TextBlock>
                                                     <controls:ColorIndicator x:Name="HPIndicator"
 														Height="7"
 														Margin="0,3,0,0"
-														LimitedValue="{Binding Ship.HP, Mode=OneWay}" />
+														LimitedValue="{Binding HP, Mode=OneWay}" />
                                                 </StackPanel>
 
-                                                <Grid x:Name="RepairIndicator"
-													Grid.Column="0"
-													Grid.Row="0"
-													Visibility="Collapsed">
-                                                    <Border Background="{DynamicResource FleetRepairingBrushKey}"
-														Opacity=".4"
-														Margin="0,0" />
-                                                    <TextBlock Text="入渠中"
-														Style="{DynamicResource EmphaticTextStyleKey}"
-														HorizontalAlignment="Center" />
-                                                </Grid>
-
-                                                <Grid x:Name="EvacuationIndicator"
-													Grid.Column="0"
-													Grid.Row="0"
-													Visibility="Collapsed">
-                                                    <Border Background="{DynamicResource FleetRepairingBrushKey}"
-														Opacity=".4"
-														Margin="0,0" />
-                                                    <TextBlock Text="退避済"
-														Style="{DynamicResource EmphaticTextStyleKey}"
-														HorizontalAlignment="Center" />
-                                                </Grid>
-
                                                 <TextBlock Grid.Column="1" Grid.Row="0" Margin="8,0,0,0"><InlineUIContainer>
-														<controls:ConditionIcon ConditionType="{Binding Ship.ConditionType, Mode=OneWay}" />
-													</InlineUIContainer><Run Text=" "/><Run Text="{Binding Ship.Condition, Mode=OneWay}"
+														<controls:ConditionIcon ConditionType="{Binding ConditionType, Mode=OneWay}" />
+													</InlineUIContainer><Run Text=" "/><Run Text="{Binding Condition, Mode=OneWay}"
 														Style="{DynamicResource EmphaticTextElementStyleKey}" /></TextBlock>
                                             </Grid>
 
@@ -204,22 +199,100 @@
                                                 <controls:ColorIndicator Grid.Column="0"
 													Grid.Row="0"
 													Width="Auto"
-													LimitedValue="{Binding Ship.Fuel, Mode=OneWay}"
+													LimitedValue="{Binding Fuel, Mode=OneWay}"
 													Height="5"
 													Margin="0,0,5,0" />
                                                 <controls:ColorIndicator Grid.Column="1"
 													Grid.Row="1"
 													Width="Auto"
-													LimitedValue="{Binding Ship.Bull, Mode=OneWay}"
+													LimitedValue="{Binding Bull, Mode=OneWay}"
 													Height="5"
 													Margin="5,0,0,0" />
                                             </Grid>
+
+                                            <controls:NoSizeDecorator Grid.Column="0" Grid.Row="3" IgnoreChildWidthRequest="True">
+                                                <WrapPanel Margin="-3,3,-3,-3" HorizontalAlignment="Center">
+                                                    <TextBlock TextAlignment="Center" Margin="3,3" Padding="6,2">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
+                                                                <Setter Property="Background" Value="#FF084008" />
+                                                                <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                                                <Setter Property="Text" Value="正常" />
+                                                                <Style.Triggers>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=DamageControlled}" Value="True" />
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <Setter Property="Text" Value="正常 / 有损管" />
+                                                                    </MultiDataTrigger>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged}" Value="True" />
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <Setter Property="Text" Value="大破 / 可能轰沉" />
+                                                                        <Setter Property="Foreground" Value="White" />
+                                                                        <Setter Property="Background" Value="#FFA00000" />
+                                                                    </MultiDataTrigger>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged|DamageControlled}" Value="True" />
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <Setter Property="Text" Value="大破 / 有损管" />
+                                                                        <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
+                                                                    </MultiDataTrigger>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Evacuation}" Value="True" />
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <Setter Property="Text" Value="大破 / 已退避" />
+                                                                        <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
+                                                                    </MultiDataTrigger>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Tow}" Value="True" />
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <Setter Property="Text" Value="撤退 / 退避护卫" />
+                                                                        <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
+                                                                    </MultiDataTrigger>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Repair}" Value="True" />
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <Setter Property="Text" Value="入渠中" />
+                                                                        <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
+                                                                    </MultiDataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+
+                                                    <TextBlock TextAlignment="Center" Margin="3,3" Padding="6,2" Visibility="Collapsed">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
+                                                                <Setter Property="Text" Value="弹着观测射击" />
+                                                                <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                                                <Setter Property="Background" Value="#FF084008" />
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+
+                                                    <TextBlock TextAlignment="Center" Margin="3,3" Padding="6,2" Visibility="Collapsed">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
+                                                                <Setter Property="Text" Value="夜战CI" />
+                                                                <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                                                <Setter Property="Background" Value="#FF101060" />
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </WrapPanel>
+                                            </controls:NoSizeDecorator>
 
                                             <ItemsControl Grid.Row="0"
 												Grid.RowSpan="4"
 												Grid.Column="1"
 												Grid.IsSharedSizeScope="True"
-												ItemsSource="{Binding Ship.EquiptableSlots}"
+												ItemsSource="{Binding EquiptableSlots}"
 												Margin="8,0,0,0">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
@@ -270,34 +343,6 @@
                                     </Grid>
                                 </Border>
                             </StackPanel>
-
-
-                            <DataTemplate.Triggers>
-								<DataTrigger Binding="{Binding Ship.Situation}"
-									Value="Repair">
-                                    <Setter TargetName="HPText"
-										Property="Opacity"
-										Value=".2" />
-                                    <Setter TargetName="HPIndicator"
-										Property="Opacity"
-										Value=".2" />
-                                    <Setter TargetName="RepairIndicator"
-										Property="Visibility"
-										Value="Visible" />
-                                </DataTrigger>
-								<DataTrigger Binding="{Binding Ship.Situation}"
-									Value="Evacuation,Tow">
-                                    <Setter TargetName="HPText"
-										Property="Opacity"
-										Value=".2" />
-                                    <Setter TargetName="HPIndicator"
-										Property="Opacity"
-										Value=".2" />
-                                    <Setter TargetName="EvacuationIndicator"
-										Property="Visibility"
-										Value="Visible" />
-                                </DataTrigger>
-                            </DataTemplate.Triggers>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
