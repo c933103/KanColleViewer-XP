@@ -25,7 +25,7 @@ namespace LynLogger.Observers
             try {
                 if(!value.IsSuccess) return;
                 DataStore.SwitchMember(value.Data.api_member_id);
-                DataStore.Instance.BasicInfo.Update(value.Data);
+                DataStore.Instance.BasicInfo.Update(value.Data, true);
             } catch(Exception e) {
                 System.Diagnostics.Debugger.Break();
                 System.Diagnostics.Trace.TraceError(e.ToString());

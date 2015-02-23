@@ -28,14 +28,14 @@ namespace LynLogger.Logger
                 shipHisto.ExistenceLog.Append(Models.ShipExistenceStatus.NonExistence, 0);
                 return;
             }
-            shipHisto.EnhancedAntiAir.Append(ship.EnhancedAntiAir);
-            shipHisto.EnhancedDefense.Append(ship.EnhancedDefense);
-            shipHisto.EnhancedLuck.Append(ship.EnhancedLuck);
-            shipHisto.EnhancedPower.Append(ship.EnhancedPower);
-            shipHisto.EnhancedTorpedo.Append(ship.EnhancedTorpedo);
-            shipHisto.Exp.Append(ship.Exp);
-            shipHisto.Level.Append(ship.Level);
-            shipHisto.SRate.Append(ship.SRate);
+            shipHisto.EnhancedAntiAir.Append(ship.EnhancedAntiAir, ds.Settings.ShipDataLoggingInterval);
+            shipHisto.EnhancedDefense.Append(ship.EnhancedDefense, ds.Settings.ShipDataLoggingInterval);
+            shipHisto.EnhancedLuck.Append(ship.EnhancedLuck, ds.Settings.ShipDataLoggingInterval);
+            shipHisto.EnhancedPower.Append(ship.EnhancedPower, ds.Settings.ShipDataLoggingInterval);
+            shipHisto.EnhancedTorpedo.Append(ship.EnhancedTorpedo, ds.Settings.ShipDataLoggingInterval);
+            shipHisto.Exp.Append(ship.Exp, ds.Settings.ShipDataLoggingInterval);
+            shipHisto.Level.Append(ship.Level, ds.Settings.ShipDataLoggingInterval);
+            shipHisto.SRate.Append(ship.SRate, ds.Settings.ShipDataLoggingInterval);
 
             shipHisto.ShipId.Append(ship.ShipId, 0);
             shipHisto.TypeId.Append(ship.TypeId, 0);

@@ -38,6 +38,7 @@ namespace LynLogger
         {
             var listPages = new List<TabViewItem>() {
                 new TabViewItem("肝度", new Views.GradeEvaluationView(){DataContext=new Views.GradeEvaluationModel()}),
+                new TabViewItem("资源历史", new Views.ResourceHistoryView(){DataContext=new Views.ResourceHistoryModel()}),
                 new TabViewItem("关于", new Settings.AboutView())
             };
             listPages.ForEach(x => x.IsSelected = false);

@@ -90,9 +90,9 @@
 
 		<ScrollViewer Grid.Column="1"
 					  VerticalScrollBarVisibility="Auto"
-					  PanningMode="Both">
-			<ContentControl Content="{Binding SelectedTool.View}"
-							Margin="8,0,8,8" />
+					  PanningMode="Both"
+                      Padding="8,0,8,8">
+			<ContentControl Content="{Binding SelectedTool.View}" />
 		</ScrollViewer>
 	</Grid>
 </UserControl>

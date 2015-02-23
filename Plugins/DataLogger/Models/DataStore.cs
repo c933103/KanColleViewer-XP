@@ -86,7 +86,6 @@ namespace LynLogger
 
         public string MemberId { get; private set; }
         public string InternalMemberId { get; private set; }
-        public int RecordVersion { get; private set; }
 
         public IReadOnlyDictionary<int, Models.Ship> Ships { get { return i_Ships; } }
         public IReadOnlyDictionary<int, Models.ShipHistory> ShipHistories { get { return i_ShipHistories; } }
@@ -94,16 +93,18 @@ namespace LynLogger
         internal Dictionary<int, Models.Ship> i_Ships { get; private set; }
         internal Dictionary<int, Models.ShipHistory> i_ShipHistories { get; private set; }
 
-        [NonSerialized] private Action<int> _shipDataChanged;
-        public event Action<int> ShipDataChanged { add { _shipDataChanged += value; } remove { _shipDataChanged -= value; } }
-        internal void RaiseShipDataChange(int id) { if(_shipDataChanged != null) _shipDataChanged(id); }
+        [field: NonSerialized]
+        public event Action<int> ShipDataChanged;
+        internal void RaiseShipDataChange(int id) { if(ShipDataChanged != null) ShipDataChanged(id); }
 
         public Models.BasicInfo BasicInfo { get; private set; }
         public Models.BasicInfoHistory BasicInfoHistory { get; private set; }
 
-        [NonSerialized] private Action _basicInfoChanged;
-        public event Action BasicInfoChanged { add { _basicInfoChanged += value; } remove { _basicInfoChanged -= value; } }
-        internal void RaiseBasicInfoChange() { if(_basicInfoChanged != null) _basicInfoChanged(); }
+        [field: NonSerialized]
+        public event Action BasicInfoChanged;
+        internal void RaiseBasicInfoChange() { if(BasicInfoChanged != null) BasicInfoChanged(); }
+
+        public Models.Settings Settings { get; private set; }
 
         private DataStore()
         {
@@ -113,7 +114,7 @@ namespace LynLogger
             i_ShipHistories = new Dictionary<int, Models.ShipHistory>();
             BasicInfoHistory = new Models.BasicInfoHistory();
 
-            RecordVersion = 1;
+            Settings = new Models.Settings();
         }
     }
 }

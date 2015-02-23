@@ -6,9 +6,13 @@
 			 xmlns:local="clr-namespace:LynLogger"
 			 xmlns:localSettings="clr-namespace:LynLogger.Settings"
 			 xmlns:localViews="clr-namespace:LynLogger.Views"
-             xmlns:Custom="http://schemes.grabacr.net/winfx/2014/controls" x:Class="LynLogger.ToolsView" 
+             xmlns:Custom="http://schemes.grabacr.net/winfx/2014/controls"
+             x:Class="LynLogger.ToolsView" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="400">
+             d:DesignHeight="480" d:DesignWidth="640"
+             ScrollViewer.VerticalScrollBarVisibility="Hidden"
+             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+             Height="{Binding ViewportHeight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}}">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>

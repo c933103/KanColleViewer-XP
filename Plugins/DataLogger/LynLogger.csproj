@@ -106,12 +106,20 @@
     <Compile Include="Settings\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ToolsModel.cs" />
     <Compile Include="ToolsView.xaml.cs">
       <DependentUpon>ToolsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HistogramPlotter.xaml.cs">
       <DependentUpon>HistogramPlotter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NoSizeDecorator.cs" />
+    <Compile Include="Views\ResourceHistoryModel.cs" />
+    <Compile Include="Views\ResourceHistoryView.xaml.cs">
+      <DependentUpon>ResourceHistoryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TabViewControl.xaml.cs">
       <DependentUpon>TabViewControl.xaml</DependentUpon>
@@ -149,11 +157,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Settings\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ToolsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HistogramPlotter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ResourceHistoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -169,7 +185,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="TrainningData" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

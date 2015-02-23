@@ -45,13 +45,21 @@
         </ScrollViewer>
 
         <Grid Grid.Column="1">
-            <ItemsControl ItemsSource="{Binding TabViewItems, Mode=OneWay}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <ContentControl Content="{Binding TabView, Mode=OneWay}" Visibility="{Binding IsSelected, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding TabViewItems, Mode=OneWay}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ContentControl Content="{Binding TabView, Mode=OneWay}" Visibility="{Binding IsSelected, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
 
     </Grid>

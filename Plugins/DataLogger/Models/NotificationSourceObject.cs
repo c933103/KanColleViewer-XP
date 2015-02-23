@@ -5,15 +5,28 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LynLogger.Models
 {
+    [Serializable]
     public abstract class NotificationSourceObject : INotifyPropertyChanged
     {
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
+
+        [NonSerialized]
+        private Lazy<string[]> allProperties;
+
+        [OnDeserialized]
+        private void Deserialized(StreamingContext context)
+        {
+            allProperties = new Lazy<string[]>(() => {
+                return this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(info => info.Name).ToArray();
+            });
+        }
 
         protected NotificationSourceObject()
         {
@@ -30,7 +43,6 @@ namespace LynLogger.Models
             handler(this, new PropertyChangedEventArgs(property));
         }
 
-        private Lazy<string[]> allProperties;
         protected void RaiseMultiPropertyChanged(params string[] properties)
         {
             PropertyChangedEventHandler handler = PropertyChanged;

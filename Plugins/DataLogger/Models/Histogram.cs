@@ -21,7 +21,8 @@ namespace LynLogger.Models
             }
             if((backend.Count >= 2) && (interval > 0)) {
                 var last = backend.Skip(backend.Count - 2).ToArray();
-                if((last[1].Key - last[0].Key) < interval) {
+                if(((Helpers.UnixTimestamp - last[1].Key) < interval)
+                && ((last[1].Key - last[0].Key) < interval)) {
                     backend.Remove(last[1].Key);
                 }
             }

@@ -17,24 +17,24 @@ namespace LynLogger.Logger
 
         private void ProcBasicInfoChanged(DataStore ds)
         {
-            ds.BasicInfoHistory.Level.Append(ds.BasicInfo.Level);
-            ds.BasicInfoHistory.Experience.Append(ds.BasicInfo.Experience);
-            ds.BasicInfoHistory.FurnitureCoin.Append(ds.BasicInfo.FurnitureCoin);
-            ds.BasicInfoHistory.Fuel.Append(ds.BasicInfo.Fuel);
-            ds.BasicInfoHistory.Ammo.Append(ds.BasicInfo.Ammo);
-            ds.BasicInfoHistory.Steel.Append(ds.BasicInfo.Steel);
-            ds.BasicInfoHistory.Bauxite.Append(ds.BasicInfo.Bauxite);
-            ds.BasicInfoHistory.HsBuild.Append(ds.BasicInfo.HsBuild);
-            ds.BasicInfoHistory.HsRepair.Append(ds.BasicInfo.HsRepair);
-            ds.BasicInfoHistory.DevMaterial.Append(ds.BasicInfo.DevMaterial);
-            ds.BasicInfoHistory.ModMaterial.Append(ds.BasicInfo.ModMaterial);
-            ds.BasicInfoHistory.ExerWins.Append(ds.BasicInfo.ExerWins);
-            ds.BasicInfoHistory.ExerLose.Append(ds.BasicInfo.ExerLose);
-            ds.BasicInfoHistory.OperWins.Append(ds.BasicInfo.OperWins);
-            ds.BasicInfoHistory.OperLose.Append(ds.BasicInfo.OperLose);
-            ds.BasicInfoHistory.ExpeWins.Append(ds.BasicInfo.ExpeWins);
-            ds.BasicInfoHistory.ExpeLose.Append(ds.BasicInfo.ExpeLose);
-            ds.BasicInfoHistory.Score.Append(ds.BasicInfo.Score);
+            ds.BasicInfoHistory.Level.Append(ds.BasicInfo.Level, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.Experience.Append(ds.BasicInfo.Experience, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.FurnitureCoin.Append(ds.BasicInfo.FurnitureCoin, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.Fuel.Append(ds.BasicInfo.Fuel, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.Ammo.Append(ds.BasicInfo.Ammo, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.Steel.Append(ds.BasicInfo.Steel, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.Bauxite.Append(ds.BasicInfo.Bauxite, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.HsBuild.Append(ds.BasicInfo.HsBuild, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.HsRepair.Append(ds.BasicInfo.HsRepair, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.DevMaterial.Append(ds.BasicInfo.DevMaterial, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.ModMaterial.Append(ds.BasicInfo.ModMaterial, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.ExerWins.Append(ds.BasicInfo.ExerWins, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.ExerLose.Append(ds.BasicInfo.ExerLose, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.OperWins.Append(ds.BasicInfo.OperWins, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.OperLose.Append(ds.BasicInfo.OperLose, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.ExpeWins.Append(ds.BasicInfo.ExpeWins, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.ExpeLose.Append(ds.BasicInfo.ExpeLose, ds.Settings.BasicInfoLoggingInterval);
+            ds.BasicInfoHistory.Score.Append(ds.BasicInfo.Score, ds.Settings.BasicInfoLoggingInterval);
         }
     }
 }

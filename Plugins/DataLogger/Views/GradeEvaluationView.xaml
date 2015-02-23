@@ -12,16 +12,20 @@
     <Grid Margin="10,10,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Row="0" Grid.Column="0" Text="评分：" />
         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Score}" />
         <TextBlock Grid.Row="1" Grid.Column="0" Text="等级：" />
         <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Grade}" />
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="历史记录" Margin="0,15,0,0" />
+        <local:HistogramPlotter Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" PlotData="{Binding ScoreHistogram, Mode=OneWay}" AverageDelta="True"/>
     </Grid>
 </UserControl>
