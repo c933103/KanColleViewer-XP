@@ -49,10 +49,11 @@ namespace LynLogger
             return s.ToString();
         }
 
+        private static readonly byte[] _blankByteArray = new byte[0];
         private const int maxDictLogSize = 24;
         public static void CompressData(Stream input, byte[] training, Stream output, int lp = 0, int lc = 3, int pb = 2, int fb = 32, string mf = "BT4")
         {
-            if(training == null) training = new byte[0];
+            if(training == null) training = _blankByteArray;
             using(MemoryStream train = new MemoryStream(training, false)) {
                 using(SevenZip.DoubleStream stream = new SevenZip.DoubleStream()) {
                     stream.s1 = train;

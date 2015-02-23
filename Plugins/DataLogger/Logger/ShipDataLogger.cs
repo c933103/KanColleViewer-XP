@@ -20,30 +20,30 @@ namespace LynLogger.Logger
             var store = ds.i_ShipHistories;
             if(!store.ContainsKey(shipId)) {
                 store[shipId] = new Models.ShipHistory(shipId);
-                store[shipId].ExistenceLog.Append(Models.ShipExistenceStatus.Existing);
+                store[shipId].ExistenceLog.Append(Models.ShipExistenceStatus.Existing, 0);
             }
             var shipHisto = store[shipId];
             var ship = ds.Ships[shipId];
             if(ship == null) {
-                shipHisto.ExistenceLog.Append(Models.ShipExistenceStatus.NonExistence);
+                shipHisto.ExistenceLog.Append(Models.ShipExistenceStatus.NonExistence, 0);
                 return;
             }
-            shipHisto.EnhancedAntiAir[Helpers.UnixTimestamp / 3600] = ship.EnhancedAntiAir;
-            shipHisto.EnhancedDefense[Helpers.UnixTimestamp / 3600] = ship.EnhancedDefense;
-            shipHisto.EnhancedLuck[Helpers.UnixTimestamp / 3600] = ship.EnhancedLuck;
-            shipHisto.EnhancedPower[Helpers.UnixTimestamp / 3600] = ship.EnhancedPower;
-            shipHisto.EnhancedTorpedo[Helpers.UnixTimestamp / 3600] = ship.EnhancedTorpedo;
-            shipHisto.Exp[Helpers.UnixTimestamp / 3600] = ship.Exp;
-            shipHisto.Level[Helpers.UnixTimestamp / 3600] = ship.Level;
-            shipHisto.SRate[Helpers.UnixTimestamp / 3600] = ship.SRate;
+            shipHisto.EnhancedAntiAir.Append(ship.EnhancedAntiAir);
+            shipHisto.EnhancedDefense.Append(ship.EnhancedDefense);
+            shipHisto.EnhancedLuck.Append(ship.EnhancedLuck);
+            shipHisto.EnhancedPower.Append(ship.EnhancedPower);
+            shipHisto.EnhancedTorpedo.Append(ship.EnhancedTorpedo);
+            shipHisto.Exp.Append(ship.Exp);
+            shipHisto.Level.Append(ship.Level);
+            shipHisto.SRate.Append(ship.SRate);
 
-            shipHisto.ShipId.Append(ship.ShipId);
-            shipHisto.TypeId.Append(ship.TypeId);
+            shipHisto.ShipId.Append(ship.ShipId, 0);
+            shipHisto.TypeId.Append(ship.TypeId, 0);
 
             if(ship.Locked) {
-                shipHisto.ExistenceLog.Append(Models.ShipExistenceStatus.Locked);
+                shipHisto.ExistenceLog.Append(Models.ShipExistenceStatus.Locked, 0);
             } else {
-                shipHisto.ExistenceLog.Append(Models.ShipExistenceStatus.Existing);
+                shipHisto.ExistenceLog.Append(Models.ShipExistenceStatus.Existing, 0);
             }
         }
     }

@@ -110,6 +110,9 @@
     <Compile Include="ToolsView.xaml.cs">
       <DependentUpon>ToolsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\HistogramPlotter.xaml.cs">
+      <DependentUpon>HistogramPlotter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TabViewControl.xaml.cs">
       <DependentUpon>TabViewControl.xaml</DependentUpon>
     </Compile>
@@ -147,6 +150,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ToolsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HistogramPlotter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

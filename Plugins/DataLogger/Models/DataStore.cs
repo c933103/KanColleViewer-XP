@@ -28,7 +28,6 @@ namespace LynLogger
         private static readonly string _dataDir = Path.Combine(Environment.CurrentDirectory, "LynLogger");
 
         private static readonly System.Runtime.Serialization.Formatters.Binary.BinaryFormatter Serializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-        private static readonly byte[] _trainningData = Properties.Resources.TrainningData;
 
         private static readonly Logger.BasicInfoLogger bil = new Logger.BasicInfoLogger();
         private static readonly Logger.ShipDataLogger sdl = new Logger.ShipDataLogger();
@@ -46,7 +45,7 @@ namespace LynLogger
                 } else {
                     using(Stream input = File.OpenRead(Path.Combine(_dataDir, _memberId + ".Z"))) {
                         using(MemoryStream buf = new MemoryStream()) {
-                            Helpers.DecompressData(input, _trainningData, buf);
+                            Helpers.DecompressData(input, null, buf);
                             buf.Position = 0;
                             _ds[_memberId] = (DataStore)Serializer.Deserialize(buf);
                         }
@@ -80,7 +79,7 @@ namespace LynLogger
                 }
                 buf.Position = 0;
                 using(Stream output = File.OpenWrite(Path.Combine(_dataDir, _memberId+".Z"))) {
-                    Helpers.CompressData(buf, _trainningData, output);
+                    Helpers.CompressData(buf, null, output);
                 }
             }
         }

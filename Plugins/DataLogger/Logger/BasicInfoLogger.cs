@@ -17,24 +17,24 @@ namespace LynLogger.Logger
 
         private void ProcBasicInfoChanged(DataStore ds)
         {
-            ds.BasicInfoHistory.Level[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.Level;
-            ds.BasicInfoHistory.Experience[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.Experience;
-            ds.BasicInfoHistory.FurnitureCoin[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.FurnitureCoin;
-            ds.BasicInfoHistory.Fuel[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.Fuel;
-            ds.BasicInfoHistory.Ammo[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.Ammo;
-            ds.BasicInfoHistory.Steel[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.Steel;
-            ds.BasicInfoHistory.Bauxite[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.Bauxite;
-            ds.BasicInfoHistory.HsBuild[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.HsBuild;
-            ds.BasicInfoHistory.HsRepair[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.HsRepair;
-            ds.BasicInfoHistory.DevMaterial[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.DevMaterial;
-            ds.BasicInfoHistory.ModMaterial[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.ModMaterial;
-            ds.BasicInfoHistory.ExerWins[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.ExerWins;
-            ds.BasicInfoHistory.ExerLose[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.ExerLose;
-            ds.BasicInfoHistory.OperWins[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.OperWins;
-            ds.BasicInfoHistory.OperLose[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.OperLose;
-            ds.BasicInfoHistory.ExpeWins[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.ExpeWins;
-            ds.BasicInfoHistory.ExpeLose[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.ExpeLose;
-            ds.BasicInfoHistory.Score[Helpers.UnixTimestamp / 3600] = ds.BasicInfo.Score;
+            ds.BasicInfoHistory.Level.Append(ds.BasicInfo.Level);
+            ds.BasicInfoHistory.Experience.Append(ds.BasicInfo.Experience);
+            ds.BasicInfoHistory.FurnitureCoin.Append(ds.BasicInfo.FurnitureCoin);
+            ds.BasicInfoHistory.Fuel.Append(ds.BasicInfo.Fuel);
+            ds.BasicInfoHistory.Ammo.Append(ds.BasicInfo.Ammo);
+            ds.BasicInfoHistory.Steel.Append(ds.BasicInfo.Steel);
+            ds.BasicInfoHistory.Bauxite.Append(ds.BasicInfo.Bauxite);
+            ds.BasicInfoHistory.HsBuild.Append(ds.BasicInfo.HsBuild);
+            ds.BasicInfoHistory.HsRepair.Append(ds.BasicInfo.HsRepair);
+            ds.BasicInfoHistory.DevMaterial.Append(ds.BasicInfo.DevMaterial);
+            ds.BasicInfoHistory.ModMaterial.Append(ds.BasicInfo.ModMaterial);
+            ds.BasicInfoHistory.ExerWins.Append(ds.BasicInfo.ExerWins);
+            ds.BasicInfoHistory.ExerLose.Append(ds.BasicInfo.ExerLose);
+            ds.BasicInfoHistory.OperWins.Append(ds.BasicInfo.OperWins);
+            ds.BasicInfoHistory.OperLose.Append(ds.BasicInfo.OperLose);
+            ds.BasicInfoHistory.ExpeWins.Append(ds.BasicInfo.ExpeWins);
+            ds.BasicInfoHistory.ExpeLose.Append(ds.BasicInfo.ExpeLose);
+            ds.BasicInfoHistory.Score.Append(ds.BasicInfo.Score);
         }
     }
 }
