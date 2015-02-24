@@ -10,12 +10,12 @@ namespace LynLogger.Logger
     {
         public BasicInfoLogger()
         {
-            DataStore.OnDataStoreCreate += (_, ds) => {
+            Models.DataStore.OnDataStoreCreate += (_, ds) => {
                 ds.BasicInfoChanged += () => ProcBasicInfoChanged(ds);
             };
         }
 
-        private void ProcBasicInfoChanged(DataStore ds)
+        private void ProcBasicInfoChanged(Models.DataStore ds)
         {
             ds.BasicInfoHistory.Level.Append(ds.BasicInfo.Level, ds.Settings.BasicInfoLoggingInterval);
             ds.BasicInfoHistory.Experience.Append(ds.BasicInfo.Experience, ds.Settings.BasicInfoLoggingInterval);

@@ -35,7 +35,7 @@ namespace LynLogger.Views
             get
             {
                 if(DataStore.Instance == null) return null;
-                return DataStore.Instance.BasicInfoHistory.Score;
+                return DataStore.Instance.BasicInfoHistory.Score.Select(x => x);
             }
         }
 
@@ -43,7 +43,7 @@ namespace LynLogger.Views
         {
             DataStore.OnDataStoreCreate += (_, ds) => {
                 ds.BasicInfoChanged += () => {
-                    RaisePropertyChanged(o => Grade, o => Score, o => ScoreHistogram);
+                    RaiseMultiPropertyChanged();
                 };
             };
         }

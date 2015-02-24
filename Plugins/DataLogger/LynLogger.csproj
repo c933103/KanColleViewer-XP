@@ -89,6 +89,9 @@
     <Compile Include="Models\BasicInfo.cs" />
     <Compile Include="Models\EquipSlot.cs" />
     <Compile Include="Models\Histogram.cs" />
+    <Compile Include="Models\Migrations\DataStoreLoader.cs" />
+    <Compile Include="Models\Migrations\Versions\V0Binder.cs" />
+    <Compile Include="Models\Migrations\Versions\V0\DataStore.cs" />
     <Compile Include="Models\NotificationSourceObject.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Ship.cs" />
@@ -106,6 +109,7 @@
     <Compile Include="Settings\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\SettingsModel.cs" />
     <Compile Include="Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
@@ -120,6 +124,9 @@
     <Compile Include="Views\ResourceHistoryModel.cs" />
     <Compile Include="Views\ResourceHistoryView.xaml.cs">
       <DependentUpon>ResourceHistoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShipHistoryView.xaml.cs">
+      <DependentUpon>ShipHistoryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TabViewControl.xaml.cs">
       <DependentUpon>TabViewControl.xaml</DependentUpon>
@@ -170,6 +177,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ResourceHistoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ShipHistoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

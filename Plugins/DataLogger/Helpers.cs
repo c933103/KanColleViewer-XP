@@ -49,6 +49,41 @@ namespace LynLogger
             return s.ToString();
         }
 
+        public static void WriteVLCI(this Stream output, ulong val)
+        {
+            for(int i = 0; i < 9; i++) {
+                byte thisByte = (byte)(val & 0x7F);
+                val >>= 7;
+                if(val != 0) {
+                    thisByte |= 0x80;
+                    output.WriteByte(thisByte);
+                } else {
+                    output.WriteByte(thisByte);
+                    break;
+                }
+            }
+        }
+
+        public static ulong ReadVLCI(this Stream input)
+        {
+            ulong val = 0;
+            for(int i = 0; i < 9; i++) {
+                int b = input.ReadByte();
+                if(b < 0)
+                    throw new EndOfStreamException();
+
+                ulong l = (ulong)(b & 0x7F);
+                val |= l << (7*i);
+
+                if((b & 0x80) == 0) break;
+                if(i == 8) {
+                    if((b & 0x80) != 0) val |= 1UL << 63;
+                }
+            }
+
+            return val;
+        }
+
         private static readonly byte[] _blankByteArray = new byte[0];
         private const int maxDictLogSize = 24;
         public static void CompressData(Stream input, byte[] training, Stream output, int lp = 0, int lc = 3, int pb = 2, int fb = 32, string mf = "BT4")
@@ -105,19 +140,7 @@ namespace LynLogger
 
                     output.WriteByte((byte)((pb * 5 + lp) * 9 + lc));
                     output.WriteByte((byte)dictLogSize);
-
-                    ulong len = (ulong)dataLen;
-                    for(int i = 0; i < 9; i++) {
-                        byte thisByte = (byte)(len & 0x7F);
-                        len >>= 7;
-                        if(len != 0) {
-                            thisByte |= 0x80;
-                            output.WriteByte(thisByte);
-                        } else {
-                            output.WriteByte(thisByte);
-                            break;
-                        }
-                    }
+                    output.WriteVLCI((ulong)dataLen);
 
                     comp.Code(stream, output, -1, -1, null);
                 }
@@ -135,25 +158,11 @@ namespace LynLogger
             if(dictLogSize > maxDictLogSize)
                 throw new InvalidDataException();
 
-            ulong len = 0;
-            int i;
-            for(i = 0; i < 9; i++) {
-                int b = input.ReadByte();
-                if(b < 0)
-                    throw new EndOfStreamException();
-
-                ulong l = (ulong)(b & 0x7F);
-                len |= l << (7*i);
-
-                if((b & 0x80) == 0) break;
-                if(i == 8) {
-                    if((b & 0x80) != 0) len |= 1UL << 63;
-                }
-            }
+            ulong len = input.ReadVLCI();
 
             reconsProp[0] = (byte)conf;
             uint dictSize = 1U << dictLogSize;
-            for(i = 0; i < 4; i++) {
+            for(int i = 0; i < 4; i++) {
                 reconsProp[i+1] = (byte)(dictSize >> (i*8));
             }
 

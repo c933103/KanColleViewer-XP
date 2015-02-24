@@ -10,14 +10,14 @@ namespace LynLogger.Logger
     {
         public ShipDataLogger()
         {
-            DataStore.OnDataStoreCreate += (_, ds) => {
+            Models.DataStore.OnDataStoreCreate += (_, ds) => {
                 ds.ShipDataChanged += x => ProcShipDataChanged(ds, x);
             };
         }
 
-        void ProcShipDataChanged(DataStore ds, int shipId)
+        void ProcShipDataChanged(Models.DataStore ds, int shipId)
         {
-            var store = ds.i_ShipHistories;
+            var store = ds.RwShipHistories;
             if(!store.ContainsKey(shipId)) {
                 store[shipId] = new Models.ShipHistory(shipId);
                 store[shipId].ExistenceLog.Append(Models.ShipExistenceStatus.Existing, 0);

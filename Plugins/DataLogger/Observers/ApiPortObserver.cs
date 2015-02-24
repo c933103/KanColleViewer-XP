@@ -24,7 +24,7 @@ namespace LynLogger.Observers
         {
             try {
                 if(!value.IsSuccess) return;
-                var ds = DataStore.Instance.i_Ships;
+                var ds = Models.DataStore.Instance.RwShips;
 
                 //Update ship data with API raw data.
                 var shipIds = ds.Keys.ToList();
@@ -39,13 +39,13 @@ namespace LynLogger.Observers
                 //Remove ships that no longer exists from ds.
                 foreach(var id in shipIds) {
                     ds[id] = null;
-                    DataStore.Instance.RaiseShipDataChange(id);
+                    Models.DataStore.Instance.RaiseShipDataChange(id);
                     ds.Remove(id);
                 }
 
                 //Update basic info.
-                DataStore.Instance.BasicInfo.Update(value.Data.api_material, true);
-                DataStore.Instance.BasicInfo.Update(value.Data.api_basic);
+                Models.DataStore.Instance.BasicInfo.Update(value.Data.api_material, true);
+                Models.DataStore.Instance.BasicInfo.Update(value.Data.api_basic);
             } catch(Exception e) {
                 System.Diagnostics.Debugger.Break();
                 System.Diagnostics.Trace.TraceError(e.ToString());

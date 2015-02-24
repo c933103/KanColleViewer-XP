@@ -6,13 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 
-namespace LynLogger
+namespace LynLogger.Models
 {
     [Serializable]
     public class DataStore
     {
+        public static readonly ulong StructureVersionNumber = 0;
+
         public static event Action<string, DataStore> OnDataStoreCreate;
+        public static event Action<string, DataStore> OnDataStoreSwitch;
 
         public static DataStore Instance
         {
@@ -26,8 +31,8 @@ namespace LynLogger
         private static readonly Dictionary<string, DataStore> _ds = new Dictionary<string, DataStore>() { { "", null } };
         private static string _memberId = "";
         private static readonly string _dataDir = Path.Combine(Environment.CurrentDirectory, "LynLogger");
-
-        private static readonly System.Runtime.Serialization.Formatters.Binary.BinaryFormatter Serializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+        private static readonly byte[] dataFileHeader = new byte[] { 0x48, 0x41, 0x49, 0x49 };
+        private static readonly byte[] compressedDataFileHeader = new byte[] { 0x48, 0x41, 0x49, 0x32 };
 
         private static readonly Logger.BasicInfoLogger bil = new Logger.BasicInfoLogger();
         private static readonly Logger.ShipDataLogger sdl = new Logger.ShipDataLogger();
@@ -37,31 +42,31 @@ namespace LynLogger
             SaveData();
 
             _memberId = Encoding.UTF8.GetBytes(memberId).Base32Encode();
-            if(_ds.ContainsKey(_memberId)) return;
+            if(!_ds.ContainsKey(_memberId)) {
+                _ds[_memberId] = new DataStore();
 
-            if(!File.Exists(Path.Combine(_dataDir, _memberId))) {
-                if(!File.Exists(Path.Combine(_dataDir, _memberId + ".Z"))) {
-                    _ds[_memberId] = new DataStore();
-                } else {
-                    using(Stream input = File.OpenRead(Path.Combine(_dataDir, _memberId + ".Z"))) {
-                        using(MemoryStream buf = new MemoryStream()) {
-                            Helpers.DecompressData(input, null, buf);
-                            buf.Position = 0;
-                            _ds[_memberId] = (DataStore)Serializer.Deserialize(buf);
-                        }
-                    }
+                Stream input = null;
+                if(File.Exists(Path.Combine(_dataDir, _memberId))) {
+                    input = File.OpenRead(Path.Combine(_dataDir, _memberId));
+                } else if(File.Exists(Path.Combine(_dataDir, _memberId + ".Z"))) {
+                    input = File.OpenRead(Path.Combine(_dataDir, _memberId + ".Z"));
                 }
-            } else {
-                using(Stream input = File.OpenRead(Path.Combine(_dataDir, _memberId))) {
-                    _ds[_memberId] = (DataStore)Serializer.Deserialize(input);
+
+                if(input != null) {
+                    try {
+                        _ds[_memberId] = Migrations.DataStoreLoader.LoadFromStream(input);
+                    } catch(IOException) {
+                    } catch(InvalidDataException) { }
+                }
+
+                _ds[_memberId].MemberId = memberId;
+                _ds[_memberId].InternalMemberId = _memberId;
+
+                if(OnDataStoreCreate != null) {
+                    OnDataStoreCreate(_memberId, _ds[_memberId]);
                 }
             }
-            _ds[_memberId].MemberId = memberId;
-            _ds[_memberId].InternalMemberId = _memberId;
-
-            if(OnDataStoreCreate != null) {
-                OnDataStoreCreate(_memberId, _ds[_memberId]);
-            }
+            if(OnDataStoreSwitch != null) OnDataStoreSwitch(_memberId, _ds[_memberId]);
         }
 
         internal static void SaveData()
@@ -72,13 +77,16 @@ namespace LynLogger
 
             if(Instance == null) return;
             using(MemoryStream buf = new MemoryStream()) {
-                Serializer.Serialize(buf, Instance);
+                buf.WriteVLCI(StructureVersionNumber);
+                new BinaryFormatter().Serialize(buf, Instance);
                 buf.Position = 0;
                 using(Stream output = File.OpenWrite(Path.Combine(_dataDir, _memberId))) {
+                    output.Write(dataFileHeader, 0, dataFileHeader.Length);
                     buf.CopyTo(output);
                 }
                 buf.Position = 0;
                 using(Stream output = File.OpenWrite(Path.Combine(_dataDir, _memberId+".Z"))) {
+                    output.Write(compressedDataFileHeader, 0, compressedDataFileHeader.Length);
                     Helpers.CompressData(buf, null, output);
                 }
             }
@@ -87,34 +95,46 @@ namespace LynLogger
         public string MemberId { get; private set; }
         public string InternalMemberId { get; private set; }
 
-        public IReadOnlyDictionary<int, Models.Ship> Ships { get { return i_Ships; } }
-        public IReadOnlyDictionary<int, Models.ShipHistory> ShipHistories { get { return i_ShipHistories; } }
+        internal Dictionary<int, Models.Ship> ZwShips;
+        internal Dictionary<int, Models.Ship> RwShips { get { return ZwShips; } }
+        public IReadOnlyDictionary<int, Models.Ship> Ships { get { return ZwShips; } }
 
-        internal Dictionary<int, Models.Ship> i_Ships { get; private set; }
-        internal Dictionary<int, Models.ShipHistory> i_ShipHistories { get; private set; }
+        internal Dictionary<int, Models.ShipHistory> ZwShipHistories;
+        internal Dictionary<int, Models.ShipHistory> RwShipHistories { get { return ZwShipHistories; } }
+        public IReadOnlyDictionary<int, Models.ShipHistory> ShipHistories { get { return ZwShipHistories; } }
 
         [field: NonSerialized]
         public event Action<int> ShipDataChanged;
         internal void RaiseShipDataChange(int id) { if(ShipDataChanged != null) ShipDataChanged(id); }
 
-        public Models.BasicInfo BasicInfo { get; private set; }
-        public Models.BasicInfoHistory BasicInfoHistory { get; private set; }
+        internal Models.BasicInfo ZwBasicInfo;
+        public Models.BasicInfo BasicInfo { get { return ZwBasicInfo; } }
+
+        internal Models.BasicInfoHistory ZwBasicInfoHistory;
+        public Models.BasicInfoHistory BasicInfoHistory { get { return ZwBasicInfoHistory; } }
 
         [field: NonSerialized]
         public event Action BasicInfoChanged;
         internal void RaiseBasicInfoChange() { if(BasicInfoChanged != null) BasicInfoChanged(); }
 
-        public Models.Settings Settings { get; private set; }
+        internal Models.Settings ZwSettings;
+        public Models.Settings Settings { get { return ZwSettings; } }
 
         private DataStore()
         {
-            i_Ships = new Dictionary<int, Models.Ship>();
-            BasicInfo = new Models.BasicInfo();
+            ZwShips = new Dictionary<int, Models.Ship>();
+            ZwBasicInfo = new Models.BasicInfo();
 
-            i_ShipHistories = new Dictionary<int, Models.ShipHistory>();
-            BasicInfoHistory = new Models.BasicInfoHistory();
+            ZwShipHistories = new Dictionary<int, Models.ShipHistory>();
+            ZwBasicInfoHistory = new Models.BasicInfoHistory();
 
-            Settings = new Models.Settings();
+            ZwSettings = new Models.Settings();
+        }
+
+        internal DataStore(string memberId, string internalMemberId)
+        {
+            MemberId = memberId;
+            InternalMemberId = internalMemberId;
         }
     }
 }

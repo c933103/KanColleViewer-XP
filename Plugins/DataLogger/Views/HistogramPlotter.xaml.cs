@@ -113,10 +113,10 @@ namespace LynLogger.Views
             }
             minTs -= 5;
             maxTs += 5;
-            minVal -= 0.5;
-            maxVal += 0.5;
-            minDelta -= 0.5;
-            maxDelta += 0.5;
+            minVal -= 0.025;
+            maxVal += 0.025;
+            minDelta -= 0.025;
+            maxDelta += 0.025;
 
             //TODO: Prettify the graph by ensuring a 0 appears on the vertical axis if the series has both positive and negative values.
 

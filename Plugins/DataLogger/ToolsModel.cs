@@ -25,7 +25,7 @@ namespace LynLogger
                 if(_page != null) _page.IsSelected = false;
                 _page = value;
                 _page.IsSelected = true;
-                RaisePropertyChanged("SelectedPage");
+                RaisePropertyChanged();
             }
         }
 
@@ -39,16 +39,15 @@ namespace LynLogger
             var listPages = new List<TabViewItem>() {
                 new TabViewItem("肝度", new Views.GradeEvaluationView(){DataContext=new Views.GradeEvaluationModel()}),
                 new TabViewItem("资源历史", new Views.ResourceHistoryView(){DataContext=new Views.ResourceHistoryModel()}),
+                new TabViewItem("设置", new Settings.SettingsView(){DataContext = new Settings.SettingsModel()}),
                 new TabViewItem("关于", new Settings.AboutView())
             };
             listPages.ForEach(x => x.IsSelected = false);
             Pages = listPages;
             SelectedPage = Pages.First();
 
-            DataStore.OnDataStoreCreate += (_, ds) => {
-                ds.BasicInfoChanged += () => {
-                    this.RaisePropertyChanged("CurrentActiveDs");
-                };
+            DataStore.OnDataStoreSwitch += (_, ds) => {
+                this.RaisePropertyChanged(o => CurrentActiveDs);
             };
         }
     }

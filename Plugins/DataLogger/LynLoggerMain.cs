@@ -67,7 +67,7 @@ namespace LynLogger
             foreach(var d in _disposables) {
                 d.Dispose();
             }
-            DataStore.SaveData();
+            Models.DataStore.SaveData();
             GC.SuppressFinalize(this);
         }
     }
