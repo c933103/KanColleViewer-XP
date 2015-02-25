@@ -55,7 +55,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents.Fleets
 					return this.Expedition;
 				}
 
-				return this.State.Homeport;
+				return this.State;
 			}
 		}
 

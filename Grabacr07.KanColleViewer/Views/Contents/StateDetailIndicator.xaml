@@ -10,148 +10,131 @@
 			 xmlns:vm="clr-namespace:Grabacr07.KanColleViewer.ViewModels"
 			 mc:Ignorable="d"
 			 d:DesignWidth="300"
-			 d:DesignHeight="30"
+			 d:DesignHeight="210"
 			 d:DataContext="{d:DesignInstance fleets:FleetViewModel}">
+    <UserControl.Resources>
+        <Style x:Key="IndicatorTextBlockStyleKey" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamilyKey}" />
+            <Setter Property="FontSize" Value="{DynamicResource DefaultFontSizeKey}" />
+            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+            <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="Margin" Value="2" />
+        </Style>
+    </UserControl.Resources>
 
-	<ContentControl Content="{Binding QuickStateView}">
-		<ContentControl.Resources>
-			<DataTemplate DataType="{x:Type fleets:HomeportViewModel}">
-				<Grid>
-					<Border x:Name="Border"
-							Background="#FF5A4020"
-							Padding="8,4">
-						<TextBlock x:Name="Text"
-								   Style="{DynamicResource DefaultTextStyleKey}"
-								   Foreground="{DynamicResource ActiveForegroundBrushKey}">
-							<TextBlock.Text>
-								<MultiBinding StringFormat="疲労回復まで: {0}">
-									<Binding Path="Condition.Remaining" />
-								</MultiBinding>
-							</TextBlock.Text>
-						</TextBlock>
-					</Border>
-				</Grid>
+    <StackPanel>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="Normal"></VisualState>
+                <VisualState x:Name="Blinking">
+                    <Storyboard AutoReverse="True" RepeatBehavior="Forever">
+                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="DamageIndicator" Storyboard.TargetProperty="Background.(SolidColorBrush.Color)">
+                            <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource ThemeColorKey}" />
+                            <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FFB40000" />
+                        </ColorAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
 
-				<DataTemplate.Triggers>
-					<DataTrigger Binding="{Binding Condition.IsRejuvenating}"
-								 Value="False">
-						<Setter TargetName="Text"
-								Property="Text"
-								Value="疲労回復済み" />
-					</DataTrigger>
-					<DataTrigger Binding="{Binding State.IsReady}"
-								 Value="True">
-						<Setter TargetName="Border"
-								Property="Background"
-								Value="#FF286414" />
-						<Setter TargetName="Text"
-								Property="Text"
-								Value="出撃可能！" />
-					</DataTrigger>
-				</DataTemplate.Triggers>
-			</DataTemplate>
+        <TextBlock Text="艦隊は出撃中です！" Background="#FF5A2020">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource IndicatorTextBlockStyleKey}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Source.State.Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Sortie, Mode=OneWay}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Source.State.Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged, Mode=OneWay}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
-			<DataTemplate DataType="{x:Type fleets:SortieViewModel}">
-				<Grid>
-					<VisualStateManager.VisualStateGroups>
-						<VisualStateGroup x:Name="VisualStateGroup">
-							<VisualState x:Name="Normal">
-								<Storyboard>
-									<ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
-																  Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-										<EasingColorKeyFrame KeyTime="0"
-															 Value="#FF5A2020" />
-									</ColorAnimationUsingKeyFrames>
-								</Storyboard>
-							</VisualState>
-							<VisualState x:Name="Blinking">
-								<Storyboard AutoReverse="True"
-											RepeatBehavior="Forever">
-									<ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
-																  Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-										<EasingColorKeyFrame KeyTime="0"
-															 Value="{DynamicResource ThemeColorKey}" />
-										<EasingColorKeyFrame KeyTime="0:0:0.3"
-															 Value="#FFB40000" />
-									</ColorAnimationUsingKeyFrames>
-									<ObjectAnimationUsingKeyFrames Storyboard.TargetName="Text"
-																   Storyboard.TargetProperty="Text">
-										<DiscreteObjectKeyFrame KeyTime="0"
-																Value="大破した艦娘がいます！！！" />
-									</ObjectAnimationUsingKeyFrames>
-								</Storyboard>
-							</VisualState>
-						</VisualStateGroup>
-					</VisualStateManager.VisualStateGroups>
+        <TextBlock Background="{DynamicResource FleetExpeditionBrushKey}">
+            <Run Text="艦隊は遠征中です: "/><Run Text="{Binding Expedition.Remaining, Mode=OneWay}" /><Run Text=" - " /><Run Text="{Binding Expedition.Mission.Title, Mode=OneWay}" />
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource IndicatorTextBlockStyleKey}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Source.State.Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Expedition, Mode=OneWay}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
-					<Border x:Name="Border"
-							Background="Transparent"
-							Padding="8,4">
-						<TextBlock x:Name="Text"
-								   Text="艦隊は出撃中です！"
-								   Style="{DynamicResource DefaultTextStyleKey}"
-								   Foreground="{DynamicResource ActiveForegroundBrushKey}">
-							<i:Interaction.Behaviors>
-								<ei:DataStateBehavior Binding="{Binding State.Situation}"
-													  Value="HeavilyDamaged"
-													  TrueState="Blinking"
-													  FalseState="Normal" />
-							</i:Interaction.Behaviors>
-							<!-- 何故か☝の DataStateBehavior が最初だけ走ってくれない (◞‸◟) -->
-							<!-- ので、☟で最初の GoToState をやっておく -->
-							<i:Interaction.Triggers>
-								<i:EventTrigger EventName="Loaded">
-									<i:Interaction.Behaviors>
-										<ei:ConditionBehavior>
-											<ei:ConditionalExpression>
-												<ei:ComparisonCondition LeftOperand="{Binding State.Situation}"
-																		RightOperand="HeavilyDamaged"
-																		Operator="Equal" />
-											</ei:ConditionalExpression>
-										</ei:ConditionBehavior>
-									</i:Interaction.Behaviors>
-									<ei:GoToStateAction StateName="Blinking" />
-								</i:EventTrigger>
-								<i:EventTrigger EventName="Loaded">
-									<i:Interaction.Behaviors>
-										<ei:ConditionBehavior>
-											<ei:ConditionalExpression>
-												<ei:ComparisonCondition LeftOperand="{Binding State.Situation}"
-																		RightOperand="HeavilyDamaged"
-																		Operator="Equal" />
-											</ei:ConditionalExpression>
-										</ei:ConditionBehavior>
-									</i:Interaction.Behaviors>
-									<ei:GoToStateAction StateName="Normal" />
-								</i:EventTrigger>
-							</i:Interaction.Triggers>
-						</TextBlock>
-					</Border>
-				</Grid>
-			</DataTemplate>
+        <TextBlock x:Name="DamageIndicator" Text="艦隊に大破した艦娘がいます">
+			<i:Interaction.Behaviors>
+				<ei:DataStateBehavior Binding="{Binding Source.State.Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Sortie, Mode=OneWay}"
+										Value="True"
+										TrueState="Blinking"
+										FalseState="Normal" />
+			</i:Interaction.Behaviors>
 
-			<DataTemplate DataType="{x:Type fleets:ExpeditionViewModel}">
-				<Border Padding="8,4"
-						Background="#FF204080">
-					<TextBlock Style="{DynamicResource DefaultTextStyleKey}"
-							   Foreground="{DynamicResource ActiveForegroundBrushKey}">
-						<Run Text="遠征中" />
-						<Run Text=":" />
-						<Run Text="{Binding Mission.Title, Mode=OneWay}" />
-						<Run Text="-" />
-						<Run Text="{Binding Remaining, Mode=OneWay}" />
-					</TextBlock>
-				</Border>
-			</DataTemplate>
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource IndicatorTextBlockStyleKey}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Source.State.Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged, Mode=OneWay}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
-			<DataTemplate DataType="{x:Type vm:NullViewModel}">
-				<Border Padding="8,4"
-						Background="#FF3E3E42">
-					<TextBlock Text="艦隊に艦娘が編成されていません。"
-							   Style="{DynamicResource DefaultTextStyleKey}"
-							   Foreground="{DynamicResource ActiveForegroundBrushKey}" />
-				</Border>
-			</DataTemplate>
-		</ContentControl.Resources>
-	</ContentControl>
+        <TextBlock Text="艦隊に入渠中の艦娘がいます">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource IndicatorTextBlockStyleKey}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Source.State.Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Repairing, Mode=OneWay}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <TextBlock Text="艦隊に未補給の艦娘がいます">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource IndicatorTextBlockStyleKey}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Source.State.Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=InShortSupply, Mode=OneWay}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <TextBlock>
+            <Run Text="疲労回復まで: " /><Run Text="{Binding State.Homeport.Condition.Remaining, Mode=OneWay}" />
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource IndicatorTextBlockStyleKey}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Source.State.Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Homeport, Mode=OneWay}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding State.Homeport.Condition.IsRejuvenating, Mode=OneWay}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <TextBlock Text="出撃可能！" Background="#FF286414" Visibility="{Binding Source.State.IsReady, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource IndicatorTextBlockStyleKey}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Source.State.Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Sortie, Mode=OneWay}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+    </StackPanel>
 </UserControl>

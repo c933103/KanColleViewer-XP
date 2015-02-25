@@ -289,6 +289,11 @@ namespace Grabacr07.KanColleWrapper.Models
 					state |= FleetSituation.InShortSupply;
 					ready = false;
 				}
+
+                var recovering = ships.Any(s => s.Condition < KanColleClient.Current.Settings.ReSortieCondition);
+                if(recovering) {
+                    ready = false;
+                }
 			}
 
 			var heavilyDamaged = ships

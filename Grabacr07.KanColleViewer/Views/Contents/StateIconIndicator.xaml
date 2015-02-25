@@ -9,11 +9,11 @@
 			 d:DataContext="{d:DesignInstance fleets:FleetViewModel}">
 	<ContentControl Content="{Binding QuickStateView}">
 		<ContentControl.Resources>
-			<DataTemplate DataType="{x:Type fleets:HomeportViewModel}">
+            <DataTemplate DataType="{x:Type fleets:FleetStateViewModel}">
 				<Border x:Name="Border"
 						Background="#FFC88232" />
 				<DataTemplate.Triggers>
-					<DataTrigger Binding="{Binding State.IsReady}"
+                    <DataTrigger Binding="{Binding Source.IsReady}"
 								 Value="True">
 						<Setter TargetName="Border"
 								Property="Background"
