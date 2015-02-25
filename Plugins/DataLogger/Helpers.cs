@@ -179,7 +179,7 @@ namespace LynLogger
             dec.Code(input, output, compSize, (long)len, null);
         }
 
-        public static void Terminate(this object dummy) { }
+        //public static void Terminate(this object dummy) { }
 
         public static IEnumerable<TResult> SelectWithPrevious<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TSource, TResult> projection)
         {
@@ -218,6 +218,18 @@ namespace LynLogger
                 return 0;
             }
             return ship.ShipType.Id;
+        }
+
+        public static string ToString(this double val, string format, int targetWidth = 8)
+        {
+            var text = val.ToString(format);
+            if(text.Length > targetWidth) {
+                var trimmed = val.ToString(format + "0");
+                var decPlace = targetWidth - trimmed.Length - 1;
+                if(decPlace < 0) decPlace = 0;
+                text = val.ToString(format + decPlace);
+            }
+            return text;
         }
 
         /*public static string LookupTypeName(int id)

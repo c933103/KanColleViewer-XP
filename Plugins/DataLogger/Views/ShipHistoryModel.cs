@@ -53,7 +53,7 @@ namespace LynLogger.Views
                     SelectedShip.EnhancedPower.SelectWithPrevious((prev, curr) => new KeyValuePair<long, string>(curr.Key, "火力提升了" + (curr.Value - prev.Value))),
                     SelectedShip.EnhancedTorpedo.SelectWithPrevious((prev, curr) => new KeyValuePair<long, string>(curr.Key, "雷装提升了" + (curr.Value - prev.Value))),
                     SelectedShip.EnhancedLuck.SelectWithPrevious((prev, curr) => new KeyValuePair<long, string>(curr.Key, " 运 提升了" + (curr.Value - prev.Value))),
-                    SelectedShip.SRate.Skip(1).Select(x => new KeyValuePair<long, string>(x.Key, string.Format("星级变为 {0} 星", x.Value))),
+                    SelectedShip.SRate.Skip(1).Select(x => new KeyValuePair<long, string>(x.Key, string.Format("星级变为 {0} 星", x.Value+1))),
                     SelectedShip.ExistenceLog.Where(x => x.Value == ShipExistenceStatus.NonExistence).Select(x => new KeyValuePair<long, string>(x.Key, "除籍")),
                 }.SelectMany(x => x).OrderBy(x => x.Key).Select(x => new KeyValuePair<string, string>(Helpers.FromUnixTimestamp(x.Key).LocalDateTime.ToString(), x.Value));
             }

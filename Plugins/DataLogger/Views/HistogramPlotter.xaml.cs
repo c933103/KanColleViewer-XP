@@ -201,8 +201,8 @@ namespace LynLogger.Views
 
             for(int i = 0; i < 5; i++) {
                 tbTime[i].Text = Helpers.FromUnixTimestamp((long)(minTs + tsDiff / 10 * (1+2*i))).LocalDateTime.ToString();
-                tbDelta[i].Text = (minDelta + deltaDiff / 10 * (1+2*i)).ToString("F2");
-                tbVal[i].Text = (minVal + valDiff / 10 * (1+2*i)).ToString("F2");
+                tbDelta[i].Text = (minDelta + deltaDiff / 10 * (1+2*i)).ToString("F", 8);
+                tbVal[i].Text = (minVal + valDiff / 10 * (1+2*i)).ToString("F", 8);
             }
         }
 
