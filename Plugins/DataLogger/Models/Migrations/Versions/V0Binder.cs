@@ -15,6 +15,10 @@ namespace LynLogger.Models.Migrations.Versions
         {
             typeMap = new Dictionary<string, string>();
             typeMap.Add("LynLogger.Models.DataStore", "LynLogger.Models.Migrations.Versions.V0.DataStore");
+            typeMap.Add("LynLogger.Models.ShipHistory", "LynLogger.Models.Migrations.Versions.V0.ShipHistory");
+            typeMap.Add("System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[LynLogger.Models.ShipHistory, LynLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]", "System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[LynLogger.Models.Migrations.Versions.V0.ShipHistory, LynLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]");
+            typeMap.Add("System.Collections.Generic.KeyValuePair`2[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[LynLogger.Models.ShipHistory, LynLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]", "System.Collections.Generic.KeyValuePair`2[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[LynLogger.Models.Migrations.Versions.V0.ShipHistory, LynLogger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]");
+
         }
 
         public override Type BindToType(string assemblyName, string typeName)

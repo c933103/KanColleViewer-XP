@@ -5,44 +5,34 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LynLogger.Views" x:Class="LynLogger.Views.ResourceHistoryView" 
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="300">
+             d:DesignHeight="800" d:DesignWidth="300">
     <UserControl.DataContext>
         <local:ResourceHistoryModel/>
     </UserControl.DataContext>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="油" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="弹" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="钢" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="6" Grid.Column="0" Text="铝" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="8" Grid.Column="0" Text="桶" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="10" Grid.Column="0" Text="高速建造" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="12" Grid.Column="0" Text="开发" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="14" Grid.Column="0" Text="改修" HorizontalAlignment="Center"/>
-        <local:HistogramPlotter Grid.Column="0" Grid.Row="1" PlotData="{Binding FuelHistogram}" AverageDelta="True"/>
-        <local:HistogramPlotter Grid.Column="0" Grid.Row="3" PlotData="{Binding AmmoHistogram}" AverageDelta="True"/>
-        <local:HistogramPlotter Grid.Column="0" Grid.Row="5" PlotData="{Binding SteelHistogram}" AverageDelta="True"/>
-        <local:HistogramPlotter Grid.Column="0" Grid.Row="7" PlotData="{Binding BauxiteHistogram}" AverageDelta="True"/>
-        <local:HistogramPlotter Grid.Column="0" Grid.Row="9" PlotData="{Binding HSRepairHistogram}" AverageDelta="True"/>
-        <local:HistogramPlotter Grid.Column="0" Grid.Row="11" PlotData="{Binding HSBuildHistogram}" AverageDelta="True"/>
-        <local:HistogramPlotter Grid.Column="0" Grid.Row="13" PlotData="{Binding DevMaterialHistogram}" AverageDelta="True"/>
-        <local:HistogramPlotter Grid.Column="0" Grid.Row="15" PlotData="{Binding ModMaterialHistogram}" AverageDelta="True"/>
-    </Grid>
+    <StackPanel>
+        <Expander Header="油" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
+            <local:HistogramPlotter PlotData="{Binding FuelHistogram}" AverageDelta="True"/>
+        </Expander>
+        <Expander Header="弹" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
+            <local:HistogramPlotter PlotData="{Binding AmmoHistogram}" AverageDelta="True"/>
+        </Expander>
+        <Expander Header="钢" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
+            <local:HistogramPlotter PlotData="{Binding SteelHistogram}" AverageDelta="True"/>
+        </Expander>
+        <Expander Header="铝" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
+            <local:HistogramPlotter PlotData="{Binding BauxiteHistogram}" AverageDelta="True"/>
+        </Expander>
+        <Expander Header="桶" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
+            <local:HistogramPlotter PlotData="{Binding HSRepairHistogram}" AverageDelta="True"/>
+        </Expander>
+        <Expander Header="喷火器" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
+            <local:HistogramPlotter PlotData="{Binding HSBuildHistogram}" AverageDelta="True"/>
+        </Expander>
+        <Expander Header="开发" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
+            <local:HistogramPlotter PlotData="{Binding DevMaterialHistogram}" AverageDelta="True"/>
+        </Expander>
+        <Expander Header="改修" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
+            <local:HistogramPlotter PlotData="{Binding ModMaterialHistogram}" AverageDelta="True"/>
+        </Expander>
+    </StackPanel>
 </UserControl>

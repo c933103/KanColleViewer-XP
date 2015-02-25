@@ -14,7 +14,7 @@ namespace LynLogger.Models
     [Serializable]
     public class DataStore
     {
-        public static readonly ulong StructureVersionNumber = 0;
+        public static readonly ulong StructureVersionNumber = 1;
 
         public static event Action<string, DataStore> OnDataStoreCreate;
         public static event Action<string, DataStore> OnDataStoreSwitch;
@@ -40,6 +40,9 @@ namespace LynLogger.Models
         internal static void SwitchMember(string memberId)
         {
             SaveData();
+
+            var internalId = Encoding.UTF8.GetBytes(memberId).Base32Encode();
+            if(_memberId == internalId && _ds.ContainsKey(_memberId)) return;
 
             _memberId = Encoding.UTF8.GetBytes(memberId).Base32Encode();
             if(!_ds.ContainsKey(_memberId)) {

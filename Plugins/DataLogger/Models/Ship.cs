@@ -13,7 +13,6 @@ namespace LynLogger.Models
     {
         public int Id { get; private set; }
         public int ShipId { get; private set; }
-        public int TypeId { get; private set; }
 
         public int Level { get; internal set; }
         public int Exp { get; internal set; }
@@ -60,9 +59,9 @@ namespace LynLogger.Models
 
         private bool _dirty = false;
 
-        internal Ship(int id, int type, int shipId)
+        internal Ship(int id, int shipId)
         {
-            Id = id; TypeId = type; ShipId = shipId;
+            Id = id; ShipId = shipId;
         }
 
         internal void Update(kcsapi_ship2 data, bool noUpdateEvent = false)
@@ -99,6 +98,7 @@ namespace LynLogger.Models
             MaxRawScout = data.api_sakuteki[1];
             Luck = data.api_lucky[0];
             MaxRawLuck = data.api_lucky[1];
+            ShipId = data.api_ship_id;
 
             _equips = new EquipSlot[data.api_slotnum];
             for(int i = 0; i < data.api_slotnum; i++) {
@@ -151,6 +151,7 @@ namespace LynLogger.Models
             if(MaxRawScout != data.api_sakuteki[1]) return true;
             if(Luck != data.api_lucky[0]) return true;
             if(MaxRawLuck != data.api_lucky[1]) return true;
+            if(ShipId != data.api_ship_id) return true;
 
             if(_equips.Length != data.api_slotnum) return true;
             for(int i = 0; i < data.api_slotnum; i++) {

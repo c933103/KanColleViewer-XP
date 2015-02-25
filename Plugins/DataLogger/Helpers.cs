@@ -178,5 +178,55 @@ namespace LynLogger
 
             dec.Code(input, output, compSize, (long)len, null);
         }
+
+        public static void Terminate(this object dummy) { }
+
+        public static IEnumerable<TResult> SelectWithPrevious<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TSource, TResult> projection)
+        {
+            using(var enumerator = source.GetEnumerator()) {
+                if(!enumerator.MoveNext()) yield break;
+                var previous = enumerator.Current;
+                while(enumerator.MoveNext()) {
+                    yield return projection(previous, enumerator.Current);
+                    previous = enumerator.Current;
+                }
+            }
+        }
+
+        public static string LookupShipName(int id)
+        {
+            var ship = Grabacr07.KanColleWrapper.KanColleClient.Current.Master.Ships[id];
+            if(ship == null) {
+                return "Ship" + id;
+            }
+            return ship.Name;
+        }
+
+        public static string LookupShipTypeName(int id)
+        {
+            var ship = Grabacr07.KanColleWrapper.KanColleClient.Current.Master.Ships[id];
+            if(ship == null) {
+                return "Type"+id;
+            }
+            return ship.ShipType.Name;
+        }
+
+        public static int LookupShipTypeId(int id)
+        {
+            var ship = Grabacr07.KanColleWrapper.KanColleClient.Current.Master.Ships[id];
+            if(ship == null) {
+                return 0;
+            }
+            return ship.ShipType.Id;
+        }
+
+        /*public static string LookupTypeName(int id)
+        {
+            var type = Grabacr07.KanColleWrapper.KanColleClient.Current.Master.ShipTypes[id];
+            if(type == null) {
+                return "Type" + id;
+            }
+            return type.Name;
+        }*/
     }
 }

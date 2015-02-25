@@ -61,8 +61,8 @@ namespace LynLogger.Views
 
     public class TabViewItem : LynLogger.Models.NotificationSourceObject
     {
-        public string TabName { get; private set; }
-        public object TabView { get; private set; }
+        public string TabName { get; set; }
+        public object TabView { get; set; }
 
         private bool _selected = false;
         public bool IsSelected

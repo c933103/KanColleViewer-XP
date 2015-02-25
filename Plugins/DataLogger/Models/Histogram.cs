@@ -11,10 +11,16 @@ namespace LynLogger.Models
     {
         private readonly SortedDictionary<long, T> backend = new SortedDictionary<long, T>();
 
-        public void Append(T val, long interval = -1)
+        public Histogram() { }
+        internal Histogram(IEnumerable<KeyValuePair<long, T>> data)
         {
-            if((backend.Count != 0) && backend.Last().Value.Equals(val)) {
-                return;
+            foreach(var ent in data) backend.Add(ent.Key, ent.Value);
+        }
+
+        public bool Append(T val, long interval = -1, bool keepDuplicate = false)
+        {
+            if(!keepDuplicate && (backend.Count != 0) && backend.Last().Value.Equals(val)) {
+                return false;
             }
             if(interval < 0) {
                 interval = 3600;
@@ -27,6 +33,7 @@ namespace LynLogger.Models
                 }
             }
             backend[Helpers.UnixTimestamp] = val;
+            return true;
         }
 
         public IEnumerator<KeyValuePair<long, T>> GetEnumerator()

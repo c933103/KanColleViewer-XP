@@ -24,13 +24,15 @@ namespace LynLogger.Observers
         {
             try {
                 if(!value.IsSuccess) return;
+                Models.DataStore.SwitchMember(value.Data.api_basic.api_member_id);
+
                 var ds = Models.DataStore.Instance.RwShips;
 
                 //Update ship data with API raw data.
                 var shipIds = ds.Keys.ToList();
                 foreach(var ship in value.Data.api_ship) {
                     if(!ds.ContainsKey(ship.api_id)) {
-                        ds[ship.api_id] = new Models.Ship(ship.api_id, ship.api_sortno, ship.api_ship_id);
+                        ds[ship.api_id] = new Models.Ship(ship.api_id, ship.api_ship_id);
                     }
                     ds[ship.api_id].Update(ship);
                     shipIds.Remove(ship.api_id);

@@ -245,8 +245,8 @@ namespace LynLogger.Views
             d.Height += tbTime.Select(x => x.DesiredSize.Height).Max();
             d.Width += tbDelta.Select(x => x.DesiredSize.Width).Max();
             d.Width += tbVal.Select(x => x.DesiredSize.Width).Max();
-            d.Height += 60;
-            d.Width += 70;
+            d.Height += 30;
+            d.Width += 35;
             d.Height = Math.Min(d.Height, constraint.Height);
             d.Width = Math.Min(d.Width, constraint.Width);
             MainGrid.Measure(d);

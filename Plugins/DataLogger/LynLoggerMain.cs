@@ -23,9 +23,7 @@ namespace LynLogger
         public LynLoggerMain()
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-            _disposables.Add(KanColleClient.Current.Proxy.api_start2.TryParse<kcsapi_start2>().Subscribe(new Observers.ApiStart2Observer()));
             _disposables.Add(KanColleClient.Current.Proxy.api_port.TryParse<kcsapi_port>().Subscribe(new Observers.ApiPortObserver()));
-            _disposables.Add(KanColleClient.Current.Proxy.api_get_member_basic.TryParse<kcsapi_basic>().Subscribe(new Observers.ApiMemberBasicObserver()));
         }
 
         System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

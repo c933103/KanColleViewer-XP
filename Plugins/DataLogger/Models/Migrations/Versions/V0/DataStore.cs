@@ -13,7 +13,7 @@ namespace LynLogger.Models.Migrations.Versions.V0
         public string InternalMemberId { get; private set; }
 
         internal Dictionary<int, Models.Ship> ZwShips;
-        internal Dictionary<int, Models.ShipHistory> ZwShipHistories;
+        internal Dictionary<int, ShipHistory> ZwShipHistories;
 
         internal Models.BasicInfo ZwBasicInfo;
         internal Models.BasicInfoHistory ZwBasicInfoHistory;
@@ -25,7 +25,7 @@ namespace LynLogger.Models.Migrations.Versions.V0
             return new Models.DataStore(MemberId, InternalMemberId) {
                 ZwBasicInfo = ZwBasicInfo,
                 ZwBasicInfoHistory = ZwBasicInfoHistory,
-                ZwShipHistories = ZwShipHistories,
+                ZwShipHistories = ZwShipHistories.Select(x => x.Value.Migrate()).ToDictionary(x => x.Id),
                 ZwShips = ZwShips,
                 ZwSettings = ZwSettings
             };

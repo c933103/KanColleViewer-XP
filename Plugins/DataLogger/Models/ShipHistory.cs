@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,14 +10,34 @@ namespace LynLogger.Models
     [Serializable]
     public class ShipHistory
     {
+        public string DisplayName
+        {
+            get
+            {
+                return string.Format("[{0}] {1} {2}", Id, TypeName.Last().Value, ShipName.Last().Value);
+            }
+        }
+
         public int Id { get; private set; }
-        public Histogram<int> ShipId { get; private set; }
-        public Histogram<int> TypeId { get; private set; }
 
-        public Histogram<int> Level { get; private set; }
-        public Histogram<int> Exp { get; private set; }
+        internal Histogram<string> ZwShipName;
+        internal Histogram<string> ZwTypeName;
+        internal Histogram<int> ZwShipId;
+        internal Histogram<int> ZwTypeId;
 
-        public Histogram<int> SRate { get; private set; }
+        public Histogram<string> ShipName { get { return ZwShipName; } }
+        public Histogram<string> TypeName { get { return ZwTypeName; } }
+        public Histogram<int> ShipId { get { return ZwShipId; } }
+        public Histogram<int> TypeId { get { return ZwTypeId; } }
+
+        internal Histogram<int> ZwLevel;
+        internal Histogram<int> ZwExp;
+
+        public Histogram<int> Level { get { return ZwLevel; } }
+        public Histogram<int> Exp { get { return ZwExp; } }
+
+        internal Histogram<int> ZwSRate;
+        public Histogram<int> SRate { get { return ZwSRate; } }
 
         /*
         public Histogram<int> Power { get; private set; }
@@ -29,22 +50,31 @@ namespace LynLogger.Models
         public Histogram<int> Luck { get; private set; }
         */
 
-        public Histogram<int> EnhancedPower { get; private set; }
-        public Histogram<int> EnhancedTorpedo { get; private set; }
-        public Histogram<int> EnhancedAntiAir { get; private set; }
-        public Histogram<int> EnhancedDefense { get; private set; }
-        public Histogram<int> EnhancedLuck { get; private set; }
+        internal Histogram<int> ZwEnhancedPower;
+        internal Histogram<int> ZwEnhancedTorpedo;
+        internal Histogram<int> ZwEnhancedAntiAir;
+        internal Histogram<int> ZwEnhancedDefense;
+        internal Histogram<int> ZwEnhancedLuck;
 
-        public Histogram<ShipExistenceStatus> ExistenceLog { get; private set; }
+        public Histogram<int> EnhancedPower { get { return ZwEnhancedPower; } }
+        public Histogram<int> EnhancedTorpedo { get { return ZwEnhancedTorpedo; } }
+        public Histogram<int> EnhancedAntiAir { get { return ZwEnhancedAntiAir; } }
+        public Histogram<int> EnhancedDefense { get { return ZwEnhancedDefense; } }
+        public Histogram<int> EnhancedLuck { get { return ZwEnhancedLuck; } }
+
+        internal Histogram<ShipExistenceStatus> ZwExistenceLog;
+        public Histogram<ShipExistenceStatus> ExistenceLog { get { return ZwExistenceLog; } }
 
         public ShipHistory(int id)
         {
             Id = id;
-            ShipId = new Histogram<int>();
-            TypeId = new Histogram<int>();
-            Level = new Histogram<int>();
-            Exp = new Histogram<int>();
-            SRate = new Histogram<int>();
+            ZwShipName = new Histogram<string>();
+            ZwTypeName = new Histogram<string>();
+            ZwShipId = new Histogram<int>();
+            ZwTypeId = new Histogram<int>();
+            ZwLevel = new Histogram<int>();
+            ZwExp = new Histogram<int>();
+            ZwSRate = new Histogram<int>();
 
             /*
             Power = new Histogram<int>();
@@ -57,16 +87,24 @@ namespace LynLogger.Models
             Luck = new Histogram<int>();
             */
 
-            EnhancedPower = new Histogram<int>();
-            EnhancedTorpedo = new Histogram<int>();
-            EnhancedAntiAir = new Histogram<int>();
-            EnhancedDefense = new Histogram<int>();
-            EnhancedLuck = new Histogram<int>();
+            ZwEnhancedPower = new Histogram<int>();
+            ZwEnhancedTorpedo = new Histogram<int>();
+            ZwEnhancedAntiAir = new Histogram<int>();
+            ZwEnhancedDefense = new Histogram<int>();
+            ZwEnhancedLuck = new Histogram<int>();
 
-            ExistenceLog = new Histogram<ShipExistenceStatus>();
+            ZwExistenceLog = new Histogram<ShipExistenceStatus>();
         }
     }
 
     [Serializable]
-    public enum ShipExistenceStatus { Existing, Locked, Sunk, Dismantled, Fused, NonExistence }
+    public enum ShipExistenceStatus
+    {
+        Existing,
+        Locked,
+        Sunk,
+        Dismantled,
+        Fused,
+        NonExistence
+    }
 }

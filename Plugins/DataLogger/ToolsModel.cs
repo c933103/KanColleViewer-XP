@@ -39,6 +39,7 @@ namespace LynLogger
             var listPages = new List<TabViewItem>() {
                 new TabViewItem("肝度", new Views.GradeEvaluationView(){DataContext=new Views.GradeEvaluationModel()}),
                 new TabViewItem("资源历史", new Views.ResourceHistoryView(){DataContext=new Views.ResourceHistoryModel()}),
+                new TabViewItem("舰娘履历", new Views.ShipHistoryView(){DataContext=new Views.ShipHistoryModel()}),
                 new TabViewItem("设置", new Settings.SettingsView(){DataContext = new Settings.SettingsModel()}),
                 new TabViewItem("关于", new Settings.AboutView())
             };
