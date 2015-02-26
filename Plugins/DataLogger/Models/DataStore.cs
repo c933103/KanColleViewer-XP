@@ -39,12 +39,12 @@ namespace LynLogger.Models
 
         internal static void SwitchMember(string memberId)
         {
-            SaveData();
-
             var internalId = Encoding.UTF8.GetBytes(memberId).Base32Encode();
             if(_memberId == internalId && _ds.ContainsKey(_memberId)) return;
 
-            _memberId = Encoding.UTF8.GetBytes(memberId).Base32Encode();
+            SaveData();
+
+            _memberId = internalId;
             if(!_ds.ContainsKey(_memberId)) {
                 _ds[_memberId] = new DataStore();
 

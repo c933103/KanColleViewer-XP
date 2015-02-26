@@ -252,11 +252,5 @@ namespace LynLogger.Views
             MainGrid.Measure(d);
             return d;
         }
-
-        protected override Size ArrangeOverride(Size arrangeBounds)
-        {
-            MainGrid.Measure(arrangeBounds);
-            return base.ArrangeOverride(arrangeBounds);
-        }
     }
 }

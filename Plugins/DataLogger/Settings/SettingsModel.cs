@@ -33,6 +33,9 @@ namespace LynLogger.Settings
             }
         }
 
+        public int CleanupKeepDatapointCount { get; set; }
+        //public int CleanupKeepDatapointCount { get; set; }
+
         public SettingsModel()
         {
             DataStore.OnDataStoreSwitch += (_, __) => {

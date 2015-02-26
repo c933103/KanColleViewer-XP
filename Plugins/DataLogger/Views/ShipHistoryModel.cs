@@ -66,6 +66,7 @@ namespace LynLogger.Views
                     if(SelectedShip != null && x == SelectedShip.Id) {
                         RaisePropertyChanged(o => SelectedShip, o => CombinedEventLog, o => SelectedShipExp);
                     }
+                    RaisePropertyChanged(o => Ships);
                 };
             };
             DataStore.OnDataStoreSwitch += (_, ds) => RaisePropertyChanged(o => Ships);

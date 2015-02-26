@@ -10,18 +10,18 @@
     <UserControl.DataContext>
         <local:SettingsModel/>
     </UserControl.DataContext>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto" MinWidth="80"/>
-        </Grid.ColumnDefinitions>
-        <TextBlock Margin="5,5" Text="基本信息记录间隔" Grid.Column="0" Grid.Row="0" />
-        <TextBlock Margin="5,5" Text="舰船信息记录间隔" Grid.Column="0" Grid.Row="1" />
-        <TextBox Margin="5,5" Grid.Column="1" Grid.Row="0" Text="{Binding BasicInfoLoggingInterval}"/>
-        <TextBox Margin="5,5" Grid.Column="1" Grid.Row="1" Text="{Binding ShipDataLoggingInterval}" />
-    </Grid>
+    <TextBlock Margin="5">
+        <Run Text="基本信息记录间隔" />
+        <InlineUIContainer><TextBox Text="{Binding BasicInfoLoggingInterval}" MinWidth="50" TextAlignment="Right"/></InlineUIContainer>
+        <Run Text="秒" />
+        <LineBreak />
+        <Run Text="舰娘信息记录间隔" />
+        <InlineUIContainer><TextBox Text="{Binding ShipDataLoggingInterval}" MinWidth="50" TextAlignment="Right"/></InlineUIContainer>
+        <Run Text="秒" />
+        <LineBreak />
+        <LineBreak />
+        <Run Text="数据清理"/>
+        <LineBreak />
+        
+    </TextBlock>
 </UserControl>
