@@ -259,8 +259,8 @@
 									</StackPanel>
 
 									<DataTemplate.Triggers>
-										<DataTrigger Binding="{Binding Ship.Situation}"
-													 Value="Repair">
+                                        <DataTrigger Binding="{Binding Ship.Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Repair}"
+													 Value="True">
 											<Setter TargetName="HPIndicator"
 													Property="Opacity"
 													Value=".2" />
