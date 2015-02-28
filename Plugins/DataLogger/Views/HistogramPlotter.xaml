@@ -43,7 +43,7 @@
         <Border Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="5" Grid.RowSpan="5" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" SizeChanged="Plot_SizeChanged">
             <local:NoSizeDecorator IgnoreChildHeightRequest="True" IgnoreChildWidthRequest="True">
                 <Canvas>
-                    <Path x:Name="PlotDataHistory" Panel.ZIndex="200" Stroke="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" StrokeThickness="3"/>
+                    <Path x:Name="PlotDataHistory" Panel.ZIndex="200" Stroke="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Fill="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" StrokeThickness="3"/>
                     <Path x:Name="PlotDataIncrement" Panel.ZIndex="100" Fill="#7FFF0000"/>
                     <Path x:Name="PlotDataDecrement" Panel.ZIndex="100" Fill="#7F00FF00"/>
                     <Path x:Name="PlotGrid" Stroke="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
