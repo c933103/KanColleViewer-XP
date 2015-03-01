@@ -119,7 +119,6 @@
     <Compile Include="Views\HistogramPlotter.xaml.cs">
       <DependentUpon>HistogramPlotter.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NoSizeDecorator.cs" />
     <Compile Include="Views\ResourceHistoryModel.cs" />
     <Compile Include="Views\ResourceHistoryView.xaml.cs">
       <DependentUpon>ResourceHistoryView.xaml</DependentUpon>

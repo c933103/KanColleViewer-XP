@@ -239,24 +239,19 @@ namespace LynLogger.Views
                 tbTime[i].Measure(c);
                 tbDelta[i].Measure(c);
                 tbVal[i].Measure(c);
+
                 d.Height += Math.Max(tbDelta[i].DesiredSize.Height, tbVal[i].DesiredSize.Height);
                 d.Width += tbTime[i].DesiredSize.Width;
             }
             d.Height += tbTime.Select(x => x.DesiredSize.Height).Max();
             d.Width += tbDelta.Select(x => x.DesiredSize.Width).Max();
             d.Width += tbVal.Select(x => x.DesiredSize.Width).Max();
-            d.Height += 30;
-            d.Width += 35;
+            d.Height += 50;
+            d.Width += 50;
             d.Height = Math.Min(d.Height, constraint.Height);
             d.Width = Math.Min(d.Width, constraint.Width);
-            MainGrid.Measure(d);
-            return d;
-        }
 
-        protected override Size ArrangeOverride(Size arrangeBounds)
-        {
-            MainGrid.Measure(arrangeBounds);
-            return base.ArrangeOverride(arrangeBounds);
+            return base.MeasureOverride(d);
         }
     }
 }

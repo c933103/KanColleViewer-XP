@@ -102,7 +102,7 @@
 
                                 <Border BorderBrush="{DynamicResource InactiveForegroundBrushKey}"
 									BorderThickness="0,0,1,1"
-									Margin="10,10,0,0"
+									Padding="10,10,0,0"
                                     DataContext="{Binding Ship}">
                                     <Border.Style>
                                         <Style TargetType="{x:Type Border}">
@@ -210,83 +210,81 @@
 													Margin="5,0,0,0" />
                                             </Grid>
 
-                                            <controls:NoSizeDecorator Grid.Column="0" Grid.Row="3" IgnoreChildWidthRequest="True">
-                                                <WrapPanel Margin="-3,3,-3,-3" HorizontalAlignment="Center">
-                                                    <TextBlock TextAlignment="Center" Margin="3,3" Padding="6,2">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
-                                                                <Setter Property="Background" Value="#FF084008" />
-                                                                <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
-                                                                <Setter Property="Text" Value="正常" />
-                                                                <Style.Triggers>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=DamageControlled}" Value="True" />
-                                                                        </MultiDataTrigger.Conditions>
-                                                                        <Setter Property="Text" Value="正常 / 有损管" />
-                                                                    </MultiDataTrigger>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged}" Value="True" />
-                                                                        </MultiDataTrigger.Conditions>
-                                                                        <Setter Property="Text" Value="大破 / 可能轰沉" />
-                                                                        <Setter Property="Foreground" Value="White" />
-                                                                        <Setter Property="Background" Value="#FFA00000" />
-                                                                    </MultiDataTrigger>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged|DamageControlled}" Value="True" />
-                                                                        </MultiDataTrigger.Conditions>
-                                                                        <Setter Property="Text" Value="大破 / 有损管" />
-                                                                        <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
-                                                                    </MultiDataTrigger>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Evacuation}" Value="True" />
-                                                                        </MultiDataTrigger.Conditions>
-                                                                        <Setter Property="Text" Value="大破 / 已退避" />
-                                                                        <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
-                                                                    </MultiDataTrigger>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Tow}" Value="True" />
-                                                                        </MultiDataTrigger.Conditions>
-                                                                        <Setter Property="Text" Value="撤退 / 退避护卫" />
-                                                                        <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
-                                                                    </MultiDataTrigger>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Repair}" Value="True" />
-                                                                        </MultiDataTrigger.Conditions>
-                                                                        <Setter Property="Text" Value="入渠中" />
-                                                                        <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
-                                                                    </MultiDataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
+                                            <StackPanel Grid.Column="0" Grid.Row="3" Margin="-3,3,-3,-3" HorizontalAlignment="Center" Orientation="Horizontal">
+                                                <TextBlock TextAlignment="Center" Margin="3,3,3,0" Padding="6,2">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
+                                                            <Setter Property="Background" Value="#FF084008" />
+                                                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                                            <Setter Property="Text" Value="正常" />
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=DamageControlled}" Value="True" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="正常 / 有损管" />
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged}" Value="True" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="大破 / 可能轰沉" />
+                                                                    <Setter Property="Foreground" Value="White" />
+                                                                    <Setter Property="Background" Value="#FFA00000" />
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged|DamageControlled}" Value="True" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="大破 / 有损管" />
+                                                                    <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Evacuation}" Value="True" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="大破 / 已退避" />
+                                                                    <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Tow}" Value="True" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="撤退 / 退避护卫" />
+                                                                    <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Repair}" Value="True" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="入渠中" />
+                                                                    <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
 
-                                                    <TextBlock TextAlignment="Center" Margin="3,3" Padding="6,2" Visibility="Collapsed">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
-                                                                <Setter Property="Text" Value="弹着观测射击" />
-                                                                <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
-                                                                <Setter Property="Background" Value="#FF084008" />
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
+                                                <TextBlock TextAlignment="Center" Margin="3,3,3,0" Padding="6,2" Visibility="Collapsed">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
+                                                            <Setter Property="Text" Value="弹着观测射击" />
+                                                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                                            <Setter Property="Background" Value="#FF084008" />
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
 
-                                                    <TextBlock TextAlignment="Center" Margin="3,3" Padding="6,2" Visibility="Collapsed">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
-                                                                <Setter Property="Text" Value="夜战CI" />
-                                                                <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
-                                                                <Setter Property="Background" Value="#FF101060" />
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                </WrapPanel>
-                                            </controls:NoSizeDecorator>
+                                                <TextBlock TextAlignment="Center" Margin="3,3,3,0" Padding="6,2" Visibility="Collapsed">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
+                                                            <Setter Property="Text" Value="夜战CI" />
+                                                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                                            <Setter Property="Background" Value="#FF101060" />
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </StackPanel>
 
                                             <ItemsControl Grid.Row="0"
 												Grid.RowSpan="4"
