@@ -274,6 +274,9 @@ namespace Grabacr07.KanColleWrapper.Models
 				}
 			}
 
+			this.Condition.Update(ships);
+			this.Condition.IsEnabled = state.HasFlag(FleetSituation.Homeport); // 疲労回復通知は母港待機中の艦隊でのみ行う
+
 			if (state.HasFlag(FleetSituation.Homeport))
 			{
 				var repairing = ships.Any(x => this.homeport.Repairyard.CheckRepairing(x.Id));
@@ -290,10 +293,10 @@ namespace Grabacr07.KanColleWrapper.Models
 					ready = false;
 				}
 
-                var recovering = ships.Any(s => s.Condition < KanColleClient.Current.Settings.ReSortieCondition);
-                if(recovering) {
-                    ready = false;
-                }
+				if (this.Condition.IsRejuvenating)
+				{
+					ready = false;
+				}
 			}
 
 			var heavilyDamaged = ships
@@ -309,9 +312,6 @@ namespace Grabacr07.KanColleWrapper.Models
 
 			this.Situation = state;
 			this.IsReady = ready;
-
-			this.Condition.Update(ships);
-			this.Condition.IsEnabled = state.HasFlag(FleetSituation.Homeport); // 疲労回復通知は母港待機中の艦隊でのみ行う
 
 			if (this.Updated != null)
 			{

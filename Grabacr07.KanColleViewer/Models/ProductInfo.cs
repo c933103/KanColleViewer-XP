@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Grabacr07.KanColleViewer.Models
@@ -52,7 +51,7 @@ namespace Grabacr07.KanColleViewer.Models
 
 		public Version Version
 		{
-			get { return this._Version ?? (this._Version = assembly.GetName().Version); }
+			get { return this._Version ?? (this._Version = this.assembly.GetName().Version); }
 		}
 
 		public string VersionString
@@ -62,9 +61,8 @@ namespace Grabacr07.KanColleViewer.Models
 
 		public bool IsBetaRelease
 		{
-			
 #if BETA
-			get { return true; }
+			get { return true;}
 #else
 			get { return false; }
 #endif
