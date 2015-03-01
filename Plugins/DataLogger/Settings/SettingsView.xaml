@@ -4,24 +4,46 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LynLogger.Settings" 
+             xmlns:metro="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"
              x:Class="LynLogger.Settings.SettingsView" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.DataContext>
         <local:SettingsModel/>
     </UserControl.DataContext>
-    <TextBlock Margin="5">
-        <Run Text="基本信息记录间隔" />
-        <InlineUIContainer><TextBox Text="{Binding BasicInfoLoggingInterval}" MinWidth="50" TextAlignment="Right"/></InlineUIContainer>
-        <Run Text="秒" />
+    <TextBlock Margin="5" FontSize="14" >
+        <Run Text="基本信息记录间隔" BaselineAlignment="Center" />
+        <InlineUIContainer BaselineAlignment="Center"><TextBox Text="{Binding BasicInfoLoggingInterval}" MinWidth="50" TextAlignment="Right"/></InlineUIContainer>
+        <Run Text="秒" BaselineAlignment="Center" />
         <LineBreak />
-        <Run Text="舰娘信息记录间隔" />
-        <InlineUIContainer><TextBox Text="{Binding ShipDataLoggingInterval}" MinWidth="50" TextAlignment="Right"/></InlineUIContainer>
-        <Run Text="秒" />
+        <Run Text="舰娘信息记录间隔" BaselineAlignment="Center" />
+        <InlineUIContainer BaselineAlignment="Center"><TextBox Text="{Binding ShipDataLoggingInterval}" MinWidth="50" TextAlignment="Right"/></InlineUIContainer>
+        <Run Text="秒" BaselineAlignment="Center" />
         <LineBreak />
         <LineBreak />
-        <Run Text="数据清理"/>
+        <Run Text="数据管理" BaselineAlignment="Center" FontSize="16"/>
         <LineBreak />
-        
+        <InlineUIContainer BaselineAlignment="Center"><Button Content="清理" Padding="10,2" Command="{Binding CleanupByTime, Mode=OneTime}" CommandParameter="{Binding CleanupKeepDatapointDays}"/></InlineUIContainer>
+        <InlineUIContainer BaselineAlignment="Center"><TextBox Text="{Binding CleanupKeepDatapointDays}" MinWidth="40" TextAlignment="Right"/></InlineUIContainer>
+        <Run Text="天前的数据" BaselineAlignment="Center" />
+        <LineBreak />
+        <InlineUIContainer BaselineAlignment="Center"><Button Content="清理" Padding="10,2" Command="{Binding CleanupByCount, Mode=OneTime}" CommandParameter="{Binding CleanupKeepDatapointCount}"/></InlineUIContainer>
+        <InlineUIContainer BaselineAlignment="Center"><TextBox Text="{Binding CleanupKeepDatapointCount}" MinWidth="40" TextAlignment="Right"/></InlineUIContainer>
+        <Run Text="条以前的数据" BaselineAlignment="Center" />
+        <LineBreak />
+        <InlineUIContainer BaselineAlignment="Center"><Button Content="清理" Padding="10,2" Command="{Binding CleanupDead, Mode=OneTime}"/></InlineUIContainer>
+        <Run Text="仅有除籍记录的舰娘档案" BaselineAlignment="Center" />
+        <LineBreak />
+        <InlineUIContainer BaselineAlignment="Center"><Button Content="立即保存数据" Padding="10,2" Command="{Binding SaveData, Mode=OneTime}"/></InlineUIContainer>
+        <!--<InlineUIContainer><Button Content="合并" Padding="10,0"/></InlineUIContainer>
+        <InlineUIContainer><TextBox Text="{Binding ShipDataLoggingInterval}" MinWidth="100" TextAlignment="Right"/></InlineUIContainer>
+        <InlineUIContainer><Button Content="浏览..." Padding="10,0"/></InlineUIContainer>
+        <Run Text="中的数据" />
+        <LineBreak />
+        <InlineUIContainer><Button Content="导出" Padding="10,0"/></InlineUIContainer>
+        <Run Text="到" />
+        <InlineUIContainer><TextBox Text="{Binding ShipDataLoggingInterval}" MinWidth="100" TextAlignment="Right"/></InlineUIContainer>
+        <InlineUIContainer><Button Content="浏览..." Padding="10,0"/></InlineUIContainer>
+        <LineBreak />-->
     </TextBlock>
 </UserControl>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LynLogger.Models.Scavenge;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 namespace LynLogger.Models
 {
     [Serializable]
-    public class BasicInfoHistory
+    public class BasicInfoHistory : IScavengable
     {
         public Histogram<int> Level { get; internal set; }
         public Histogram<int> Experience { get; internal set; }
@@ -51,6 +52,12 @@ namespace LynLogger.Models
             ExpeWins = new Histogram<int>();
             ExpeLose = new Histogram<int>();
             Score = new Histogram<double>();
+        }
+
+        public int Scavenge(IScavenger sc, KeyValuePair<Type, Type>[] targetTypes)
+        {
+            IScavengable[] scavengables = new IScavengable[] { Level, Experience, FurnitureCoin, Fuel, Ammo, Steel, Bauxite, HsBuild, HsRepair, DevMaterial, ModMaterial, ExerWins, ExerLose, OperWins, OperLose, ExpeWins, ExpeLose, Score };
+            return scavengables.Select(x => x.Scavenge(sc, targetTypes)).Sum();
         }
     }
 }

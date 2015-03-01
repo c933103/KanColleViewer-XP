@@ -185,8 +185,14 @@ namespace Grabacr07.KanColleWrapper.Models
 				.Select(x => Math.Sqrt(x))
 				.Sum() * 1.69;
 
-			var level = (((KanColleClient.Current.Homeport.Admiral.Level + 4) / 5) * 5);
-			var admiralScore = level * -0.61;
+            double admiralScore;
+            if(KanColleClient.Current.Homeport.Admiral != null) {
+                var level = (((KanColleClient.Current.Homeport.Admiral.Level + 4) / 5) * 5);
+                admiralScore = level * -0.61;
+            } else {
+                admiralScore = 0;
+            }
+			//var admiralScore = level * -0.61;
 
 			return itemScore + shipScore + admiralScore;
 		}

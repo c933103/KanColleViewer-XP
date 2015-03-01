@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using LynLogger.Models.Scavenge;
 
 namespace LynLogger.Models
 {
@@ -83,12 +84,12 @@ namespace LynLogger.Models
                 buf.WriteVLCI(StructureVersionNumber);
                 new BinaryFormatter().Serialize(buf, Instance);
                 buf.Position = 0;
-                using(Stream output = File.OpenWrite(Path.Combine(_dataDir, _memberId))) {
+                using(Stream output = File.Create(Path.Combine(_dataDir, _memberId))) {
                     output.Write(dataFileHeader, 0, dataFileHeader.Length);
                     buf.CopyTo(output);
                 }
                 buf.Position = 0;
-                using(Stream output = File.OpenWrite(Path.Combine(_dataDir, _memberId+".Z"))) {
+                using(Stream output = File.Create(Path.Combine(_dataDir, _memberId+".Z"))) {
                     output.Write(compressedDataFileHeader, 0, compressedDataFileHeader.Length);
                     Helpers.CompressData(buf, null, output);
                 }
@@ -138,6 +139,15 @@ namespace LynLogger.Models
         {
             MemberId = memberId;
             InternalMemberId = internalMemberId;
+        }
+
+        public int Cleanup(Scavenge.IScavenger sc)
+        {
+            var targetTypes = Attribute.GetCustomAttributes(sc.GetType(), typeof(Scavenge.ScavengeTargetTypeAttribute)).Cast<Scavenge.ScavengeTargetTypeAttribute>().Select(x => new KeyValuePair<Type, Type>(x.TargetKeyType, x.TargetValueType)).ToArray();
+            var scavengeCount = 0;
+            scavengeCount += RwShipHistories.Scavenge(sc, targetTypes, false);
+            scavengeCount += BasicInfoHistory.Scavenge(sc, targetTypes);
+            return scavengeCount;
         }
     }
 }

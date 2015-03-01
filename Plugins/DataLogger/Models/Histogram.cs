@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LynLogger.Models.Scavenge;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,9 +8,11 @@ using System.Threading.Tasks;
 namespace LynLogger.Models
 {
     [Serializable]
-    public class Histogram<T> : IEnumerable<KeyValuePair<long, T>>
+    public class Histogram<T> : IEnumerable<KeyValuePair<long, T>>, IScavengable
     {
         private readonly SortedDictionary<long, T> backend = new SortedDictionary<long, T>();
+
+        public int Count { get { return backend.Count; } }
 
         public Histogram() { }
         internal Histogram(IEnumerable<KeyValuePair<long, T>> data)
@@ -36,6 +39,15 @@ namespace LynLogger.Models
             return true;
         }
 
+        public int RemoveBefore(long ts)
+        {
+            var deleteKeys = backend.Select(kv => kv.Key).TakeWhile(t => t < ts).ToList();
+            foreach(var t in deleteKeys) {
+                backend.Remove(t);
+            }
+            return deleteKeys.Count;
+        }
+
         public IEnumerator<KeyValuePair<long, T>> GetEnumerator()
         {
             return backend.GetEnumerator();
@@ -44,6 +56,11 @@ namespace LynLogger.Models
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return (backend as System.Collections.IEnumerable).GetEnumerator();
+        }
+
+        public int Scavenge(IScavenger sc, KeyValuePair<Type, Type>[] targetTypes)
+        {
+            return backend.Scavenge(sc, targetTypes, true);
         }
     }
 }

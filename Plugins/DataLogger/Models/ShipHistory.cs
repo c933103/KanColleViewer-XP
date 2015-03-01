@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LynLogger.Models.Scavenge;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace LynLogger.Models
 {
     [Serializable]
-    public class ShipHistory
+    public class ShipHistory : IScavengable
     {
         public string DisplayName
         {
@@ -94,6 +95,12 @@ namespace LynLogger.Models
             ZwEnhancedLuck = new Histogram<int>();
 
             ZwExistenceLog = new Histogram<ShipExistenceStatus>();
+        }
+
+        public int Scavenge(IScavenger sc, KeyValuePair<Type, Type>[] targetTypes)
+        {
+            IScavengable[] scavengables = new IScavengable[] { ZwShipName, ZwTypeName, ZwShipId, ZwTypeId, ZwLevel, ZwExp, ZwSRate, ZwEnhancedPower, ZwEnhancedTorpedo, ZwEnhancedAntiAir, ZwEnhancedDefense, ZwEnhancedLuck, ZwExistenceLog };
+            return scavengables.Select(x => x.Scavenge(sc, targetTypes)).Sum();
         }
     }
 
