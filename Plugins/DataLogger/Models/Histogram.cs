@@ -67,6 +67,10 @@ namespace LynLogger.Models
         public void Merge(Histogram<T> val)
         {
             backend.Merge(val.backend);
+            var removeKeys = backend.SelectWithPrevious((prev, curr) => new { Duplicate = prev.Value.Equals(curr.Value), Key = curr.Key }).Where(x => x.Duplicate).Select(x => x.Key).ToList();
+            foreach(var k in removeKeys) {
+                backend.Remove(k);
+            }
         }
     }
 }
