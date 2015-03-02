@@ -1,4 +1,5 @@
-﻿using LynLogger.Models.Scavenge;
+﻿using LynLogger.Models.Merge;
+using LynLogger.Models.Scavenge;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace LynLogger.Models
 {
     [Serializable]
-    public class Histogram<T> : IEnumerable<KeyValuePair<long, T>>, IScavengable
+    public class Histogram<T> : IEnumerable<KeyValuePair<long, T>>, IScavengable, IMergable<Histogram<T>>
     {
         private readonly SortedDictionary<long, T> backend = new SortedDictionary<long, T>();
 
@@ -61,6 +62,11 @@ namespace LynLogger.Models
         public int Scavenge(IScavenger sc, KeyValuePair<Type, Type>[] targetTypes)
         {
             return backend.Scavenge(sc, targetTypes, true);
+        }
+
+        public void Merge(Histogram<T> val)
+        {
+            backend.Merge(val.backend);
         }
     }
 }

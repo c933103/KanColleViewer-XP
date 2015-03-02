@@ -85,11 +85,8 @@
     <Compile Include="LZMA\DoubleStream.cs" />
     <Compile Include="LZMA\ICoder.cs" />
     <Compile Include="Models\BasicInfoHistory.cs" />
-    <Compile Include="Models\Scavenge\DictionaryHelper.cs" />
-    <Compile Include="Models\Scavenge\IRampUpScavenger.cs" />
-    <Compile Include="Models\Scavenge\IScavengable.cs" />
-    <Compile Include="Models\Scavenge\IScavenger.cs" />
-    <Compile Include="Models\Scavenge\ScavengeTargetTypeAttribute.cs" />
+    <Compile Include="Models\Merge.cs" />
+    <Compile Include="Models\Scavenge.cs" />
     <Compile Include="Models\DataStore.cs" />
     <Compile Include="Models\BasicInfo.cs" />
     <Compile Include="Models\EquipSlot.cs" />

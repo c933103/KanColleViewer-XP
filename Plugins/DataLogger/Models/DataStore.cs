@@ -9,6 +9,7 @@ using System.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using LynLogger.Models.Scavenge;
+using LynLogger.Models.Merge;
 
 namespace LynLogger.Models
 {
@@ -148,6 +149,13 @@ namespace LynLogger.Models
             scavengeCount += RwShipHistories.Scavenge(sc, targetTypes, false);
             scavengeCount += BasicInfoHistory.Scavenge(sc, targetTypes);
             return scavengeCount;
+        }
+
+        public void Merge(DataStore ds)
+        {
+            RwShipHistories.Merge(ds.RwShipHistories);
+            RwShips.Merge(ds.RwShips);
+            BasicInfoHistory.Merge(ds.BasicInfoHistory);
         }
     }
 }

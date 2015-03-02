@@ -1,4 +1,5 @@
-﻿using LynLogger.Models.Scavenge;
+﻿using LynLogger.Models.Merge;
+using LynLogger.Models.Scavenge;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace LynLogger.Models
 {
     [Serializable]
-    public class ShipHistory : IScavengable
+    public class ShipHistory : IScavengable, IMergable<ShipHistory>
     {
         public string DisplayName
         {
@@ -101,6 +102,23 @@ namespace LynLogger.Models
         {
             IScavengable[] scavengables = new IScavengable[] { ZwShipName, ZwTypeName, ZwShipId, ZwTypeId, ZwLevel, ZwExp, ZwSRate, ZwEnhancedPower, ZwEnhancedTorpedo, ZwEnhancedAntiAir, ZwEnhancedDefense, ZwEnhancedLuck, ZwExistenceLog };
             return scavengables.Select(x => x.Scavenge(sc, targetTypes)).Sum();
+        }
+
+        public void Merge(ShipHistory val)
+        {
+            ZwShipName.Merge(val.ZwShipName);
+            ZwTypeName.Merge(val.ZwTypeName);
+            ZwShipId.Merge(val.ZwShipId);
+            ZwTypeId.Merge(val.ZwTypeId);
+            ZwLevel.Merge(val.ZwLevel);
+            ZwExp.Merge(val.ZwExp);
+            ZwSRate.Merge(val.ZwSRate);
+            ZwEnhancedPower.Merge(val.ZwEnhancedPower);
+            ZwEnhancedTorpedo.Merge(val.ZwEnhancedTorpedo);
+            ZwEnhancedAntiAir.Merge(val.ZwEnhancedAntiAir);
+            ZwEnhancedDefense.Merge(val.ZwEnhancedDefense);
+            ZwEnhancedLuck.Merge(val.ZwEnhancedLuck);
+            ZwExistenceLog.Merge(val.ZwExistenceLog);
         }
     }
 

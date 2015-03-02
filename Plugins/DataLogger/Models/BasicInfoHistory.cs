@@ -1,4 +1,5 @@
 ﻿using LynLogger.Models.Scavenge;
+using LynLogger.Models.Merge;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace LynLogger.Models
 {
     [Serializable]
-    public class BasicInfoHistory : IScavengable
+    public class BasicInfoHistory : IScavengable, IMergable<BasicInfoHistory>
     {
         public Histogram<int> Level { get; internal set; }
         public Histogram<int> Experience { get; internal set; }
@@ -58,6 +59,28 @@ namespace LynLogger.Models
         {
             IScavengable[] scavengables = new IScavengable[] { Level, Experience, FurnitureCoin, Fuel, Ammo, Steel, Bauxite, HsBuild, HsRepair, DevMaterial, ModMaterial, ExerWins, ExerLose, OperWins, OperLose, ExpeWins, ExpeLose, Score };
             return scavengables.Select(x => x.Scavenge(sc, targetTypes)).Sum();
+        }
+
+        public void Merge(BasicInfoHistory val)
+        {
+            Level.Merge(val.Level);
+            Experience.Merge(val.Experience);
+            FurnitureCoin.Merge(val.FurnitureCoin);
+            Fuel.Merge(val.Fuel);
+            Ammo.Merge(val.Ammo);
+            Steel.Merge(val.Steel);
+            Bauxite.Merge(val.Bauxite);
+            HsBuild.Merge(val.HsBuild);
+            HsRepair.Merge(val.HsRepair);
+            DevMaterial.Merge(val.DevMaterial);
+            ModMaterial.Merge(val.ModMaterial);
+            ExerWins.Merge(val.ExerWins);
+            ExerLose.Merge(val.ExerLose);
+            OperWins.Merge(val.OperWins);
+            OperLose.Merge(val.OperLose);
+            ExpeWins.Merge(val.ExpeWins);
+            ExpeLose.Merge(val.ExpeLose);
+            Score.Merge(val.Score);
         }
     }
 }

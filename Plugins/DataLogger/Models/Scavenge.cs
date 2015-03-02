@@ -35,4 +35,36 @@ namespace LynLogger.Models.Scavenge
             return scavengeCount;
         }
     }
+
+    public interface IScavenger
+    {
+        void Reset();
+        bool ShouldKeep(object key, object value);
+    }
+
+    interface IRampUpScavenger : IScavenger { void RampUp(object key, object value); }
+    interface IScavengable { int Scavenge(IScavenger sc, KeyValuePair<Type, Type>[] targetTypes); }
+
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
+    sealed class ScavengeTargetTypeAttribute : Attribute
+    {
+        readonly Type targetKeyType;
+        readonly Type targetValueType;
+
+        public ScavengeTargetTypeAttribute(Type targetKeyType, Type targetValueType)
+        {
+            this.targetKeyType = targetKeyType;
+            this.targetValueType = targetValueType;
+        }
+
+        public Type TargetKeyType
+        {
+            get { return targetKeyType; }
+        }
+
+        public Type TargetValueType
+        {
+            get { return targetValueType; }
+        }
+    }
 }

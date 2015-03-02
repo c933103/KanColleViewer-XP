@@ -23,6 +23,12 @@ namespace LynLogger.Settings
         private SaveDataCommand saveDataCmd;
         public ICommand SaveData { get { return saveDataCmd ?? (saveDataCmd = new SaveDataCommand()); } }
 
+        private BrowseFileCommand browseFileCmd;
+        public ICommand BrowseFile { get { return browseFileCmd ?? (browseFileCmd = new BrowseFileCommand()); } }
+
+        private MergeDataCommand mergeDataCmd;
+        public ICommand MergeData { get { return mergeDataCmd ?? (mergeDataCmd = new MergeDataCommand()); } }
+
         public int BasicInfoLoggingInterval
         {
             get { return DataStore.Instance == null ? 0 : DataStore.Instance.Settings.BasicInfoLoggingInterval; }
@@ -66,6 +72,18 @@ namespace LynLogger.Settings
             {
                 if(value == _cleanupKeepDatapointDays) return;
                 _cleanupKeepDatapointDays = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _mergeFileName = "";
+        public string MergeFileName
+        {
+            get { return _mergeFileName; }
+            set
+            {
+                if(value == _mergeFileName) return;
+                _mergeFileName = value;
                 RaisePropertyChanged();
             }
         }
@@ -192,6 +210,45 @@ namespace LynLogger.Settings
             public void Execute(object parameter)
             {
                 DataStore.SaveData();
+            }
+        }
+
+        public class BrowseFileCommand : ICommand
+        {
+            public bool CanExecute(object parameter) { return true; }
+            public event EventHandler CanExecuteChanged;
+
+            public void Execute(object parameter)
+            {
+                Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
+                ofd.CheckFileExists = true;
+                ofd.CheckPathExists = true;
+                ofd.Multiselect = false;
+                ofd.ShowReadOnly = false;
+                ofd.ValidateNames = true;
+                if(ofd.ShowDialog() != true) return;
+
+                ((SettingsModel)parameter).MergeFileName = ofd.FileName;
+            }
+        }
+
+        public class MergeDataCommand : ICommand
+        {
+            public bool CanExecute(object parameter) { return true; }
+            public event EventHandler CanExecuteChanged;
+
+            public void Execute(object parameter)
+            {
+                string fn = parameter as string;
+                if(string.IsNullOrWhiteSpace(fn)) return;
+                if(!System.IO.File.Exists(fn)) return;
+                try {
+                    using(System.IO.Stream input = System.IO.File.OpenRead(fn)) {
+                        DataStore.Instance.Merge(LynLogger.Models.Migrations.DataStoreLoader.LoadFromStream(input));
+                    }
+                } catch(Exception e) {
+                    System.Diagnostics.Debugger.Break();
+                }
             }
         }
     }
