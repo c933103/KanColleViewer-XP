@@ -28,13 +28,13 @@ namespace LynLogger.Models.Battling
         public AirWarfareInfo AirWarfare { get { return ZwAirWarfare; } }
 
         internal TorpedoInfo[] ZwOpeningTorpedoAttack;
-        public IReadOnlyList<TorpedoInfo> OpeningTorpedoAttack { get { return ZwOpeningTorpedoAttack; } }
+        public IReadOnlyList<TorpedoInfo> OpeningTorpedoAttack { get { return ZwOpeningTorpedoAttack ?? (ZwOpeningTorpedoAttack = new TorpedoInfo[0]); } }
 
         internal BombardInfo[][] ZwBombards;
-        public IReadOnlyList<IReadOnlyList<BombardInfo>> Bombards { get { return ZwBombards; } }
+        public IReadOnlyList<IReadOnlyList<BombardInfo>> Bombards { get { return ZwBombards ?? (ZwBombards = new BombardInfo[0][]); } }
 
         internal TorpedoInfo[] ZwClosingTorpedoAttack;
-        public IReadOnlyList<TorpedoInfo> ClosingTorpedoAttack { get { return ZwClosingTorpedoAttack; } }
+        public IReadOnlyList<TorpedoInfo> ClosingTorpedoAttack { get { return ZwClosingTorpedoAttack ?? (ZwClosingTorpedoAttack = new TorpedoInfo[0]); } }
 
         internal string ZwRawData;
         public string RawData { get { return ZwRawData; } }
@@ -208,7 +208,7 @@ namespace LynLogger.Models.Battling
                 [Description("丧失")]
                 Incapability = 5,
 
-                [Description("未知 - 均衡或劣势")]
+                [Description("未知 - 均衡或优势")]
                 InvertNone = 6
             }
         }
@@ -267,6 +267,7 @@ namespace LynLogger.Models.Battling
 
         public class ShipHpStatus
         {
+            public int Id { get; private set; }
             public int HpMax { get; private set; }
             public int HpCurrent { get; private set; }
             public string TypeName { get; private set; }
@@ -276,7 +277,7 @@ namespace LynLogger.Models.Battling
 
             public ShipHpStatus(Models.Battling.BattleStatus.ShipInfo info)
             {
-                origInfo = info; HpMax = info.MaxHp; HpCurrent = info.CurrentHp; TypeName = info.ShipTypeName; ShipName = info.ShipName;
+                origInfo = info; HpMax = info.MaxHp; HpCurrent = info.CurrentHp; TypeName = info.ShipTypeName; ShipName = info.ShipName; Id = info.Id;
             }
 
             public ShipHpStatus ProcessBattle(Models.Battling.BattleStatus report)
@@ -285,7 +286,7 @@ namespace LynLogger.Models.Battling
                     if(aws3report.Ship != origInfo) continue;
                     HpCurrent -= (int)aws3report.Damage;
                 }
-                foreach(var bmbreport in report.Bombards.SelectMany(x => x)) {
+                foreach(var bmbreport in report.Bombards.SafeExpand(x => x)) {
                     foreach(var tgt in bmbreport.AttackInfos) {
                         if(tgt.Key != origInfo) continue;
                         HpCurrent -= (int)tgt.Value;

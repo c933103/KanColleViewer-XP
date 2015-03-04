@@ -43,7 +43,10 @@ namespace LynLogger.Models.Battling
                     sb.AppendFormat("获得 {0} x{1}", ItemGetLost.ItemName, ItemGetLost.Amount);
                     break;
                 case EventType.ItemLost:
-                    sb.AppendFormat("掉落 {0} x{1}", ItemGetLost.ItemName, ItemGetLost.Amount);
+                    sb.AppendFormat("损失 {0} x{1}", ItemGetLost.ItemName, ItemGetLost.Amount);
+                    break;
+                case EventType.Nothing:
+                    sb.Append("来！战个……没事");
                     break;
                 default:
                     sb.Append(RawData);
@@ -54,18 +57,15 @@ namespace LynLogger.Models.Battling
 
         public class ItemGetLostInfo
         {
-            private static readonly string[] Names = new string[] {
-                "油", "弹", "钢", "铝", "喷火器", "桶", "开发资材", "改修资财"
-            };
-
             internal int ZwItemId;
             public int ItemId { get { return ZwItemId; } }
 
             public int ZwAmount;
             public int Amount { get { return ZwAmount; } }
 
-            public string ItemName { get { return Names[ItemId-1]; } }
+            internal string ZwItemName;
+            public string ItemName { get { return ZwItemName; } }
         }
-        public enum EventType { ItemGet = 2, ItemLost = 3, Battle = 4, BossBattle = 5 }
+        public enum EventType { ItemGet = 2, ItemLost = 3, Battle = 4, BossBattle = 5, Nothing = 6 }
     }
 }

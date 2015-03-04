@@ -145,7 +145,7 @@ namespace LynLogger.Observers
                         ZwAntiAir = (int)param[i][2],
                         ZwDefense = (int)param[i][3]
                     },
-                    ZwId = 0,
+                    ZwId = i+1,
                     ZwLv = (int)levels[i+1],
                     ZwShipId = shipId,
                     ZwShipName = ship.Name,
@@ -209,6 +209,7 @@ namespace LynLogger.Observers
             };
             if(r.ZwOurReconnInTouch < 0) r.ZwOurReconnInTouch = 0;
             if(r.ZwEnemyReconnInTouch < 0) r.ZwEnemyReconnInTouch = 0;
+            if(r.ZwOurAirspaceControl == BattleStatus.AirWarfareInfo.AirspaceControl.Denial) r.ZwOurAirspaceControl = BattleStatus.AirWarfareInfo.AirspaceControl.Incapability;
             return r;
         }
 
@@ -272,8 +273,10 @@ namespace LynLogger.Observers
                 int attackType;
 
                 for(int j = 0; data.api_damage[i].IsDefined(j); j++ ) {
-                    dmgs.Add(data.api_damage[i][j]);
-                    tgts.Add((int)data.api_df_list[i][j]);
+                    if(data.api_df_list[i][j] > 0) {
+                        dmgs.Add(data.api_damage[i][j]);
+                        tgts.Add((int)data.api_df_list[i][j]);
+                    }
                 }
                 for(int j = 0; data.api_si_list[i].IsDefined(j); j++) {
                     sis.Add((int)data.api_si_list[i][j]);

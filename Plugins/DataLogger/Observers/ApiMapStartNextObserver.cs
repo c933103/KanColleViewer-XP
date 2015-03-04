@@ -9,6 +9,10 @@ namespace LynLogger.Observers
 {
     class ApiMapStartNextObserver : IObserver<Fiddler.Session>
     {
+        private static readonly string[] Names = new string[] {
+            "油", "弹", "钢", "铝", "喷火器", "桶", "开发资材", "改修资财"
+        };
+
         public event Action<Models.Battling.MapNext> OnMapNext;
 
         public void OnCompleted()
@@ -50,6 +54,18 @@ namespace LynLogger.Observers
                         ZwAmount = (int)data.api_happening.api_count,
                         ZwItemId = (int)data.api_happening.api_mst_id
                     };
+                }
+                if(mapNext.ZwItemGetLost != null) {
+                    if(mapNext.ZwItemGetLost.ItemId <= Names.Length) {
+                        mapNext.ZwItemGetLost.ZwItemName = Names[mapNext.ZwItemGetLost.ItemId - 1];
+                    } else {
+                        var item = Grabacr07.KanColleWrapper.KanColleClient.Current.Master.UseItems[mapNext.ZwItemGetLost.ItemId];
+                        if(item != null) {
+                            mapNext.ZwItemGetLost.ZwItemName = item.Name;
+                        } else {
+                            mapNext.ZwItemGetLost.ZwItemName = mapNext.ZwItemGetLost.ItemId.ToString();
+                        }
+                    }
                 }
 
                 OnMapNext(mapNext);

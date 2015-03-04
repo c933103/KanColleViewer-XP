@@ -265,5 +265,17 @@ namespace LynLogger
                 }
             }
         }
+
+        public static IEnumerable<Tout> SafeExpand<Tin, Tout>(this IEnumerable<Tin> i, Func<Tin, IEnumerable<Tout>> project)
+        {
+            if(i == null) yield break;
+            foreach(var v in i) {
+                var r = project(v);
+                if(r == null) continue;
+                foreach(var v1 in r) {
+                    yield return v1;
+                }
+            }
+        }
     }
 }
