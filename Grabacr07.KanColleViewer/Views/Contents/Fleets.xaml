@@ -185,10 +185,12 @@
 														LimitedValue="{Binding HP, Mode=OneWay}" />
                                                 </StackPanel>
 
-                                                <TextBlock Grid.Column="1" Grid.Row="0" Margin="8,0,0,0"><InlineUIContainer>
+                                                <TextBlock Grid.Column="1" Grid.Row="0" Margin="8,0,0,0">
+                                                    <InlineUIContainer>
 														<controls:ConditionIcon ConditionType="{Binding ConditionType, Mode=OneWay}" />
-													</InlineUIContainer><Run Text=" "/><Run Text="{Binding Condition, Mode=OneWay}"
-														Style="{DynamicResource EmphaticTextElementStyleKey}" /></TextBlock>
+													</InlineUIContainer>
+                                                    <Run Text="{Binding Condition, Mode=OneWay, StringFormat={}{0:00}}" Style="{DynamicResource EmphaticTextElementStyleKey}" />
+                                                </TextBlock>
                                             </Grid>
 
                                             <Grid Grid.Row="2" Margin="0,12,0,0">
