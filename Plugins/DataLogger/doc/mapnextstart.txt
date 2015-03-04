@@ -1,0 +1,42 @@
+/kcsapi/api_req_map/start - 出击开始
+请求：
+api_deck_id				舰队ID
+api_mapinfo_no			地图区域ID
+api_maparea_id			地图ID
+api_formation_id		迷
+
+/kcsapi/api_req_map/next - 前进方向
+请求：
+api_recovery_type		迷
+
+返回：
+api_rashin_flg			显示罗盘娘
+api_rashin_id			哪只罗盘娘
+api_maparea_id			地图区域ID
+api_mapinfo_no			地图ID
+api_no					地图点位
+api_color_no			迷（颜色号码是什么鬼）
+api_event_id			点位类型 0-物品相关 1-战斗
+api_event_kind			点位类型 4-战个痛 3-漩涡 2-获得物品
+api_next				迷（后继点数？）
+api_bosscell_no			BOSS所在点位
+api_bosscomp			迷
+api_comment_kind		迷
+api_production_kind		迷
+api_enemy				迷（战斗时敌军信息？）
+  api_enemy_id			迷
+  api_result			迷
+  api_result_str		迷
+api_itemget				获取物品信息
+  api_usemst			迷
+  api_id				物品ID
+  api_getcount			数量
+  api_name				迷（名称？）
+  api_icon_id			图标
+api_happening			漩涡
+  api_type				迷
+  api_count				掉落数量
+  api_usemst			迷
+  api_mst_id			物品ID
+  api_icon_id			图标
+  api_dentan			电探抑制

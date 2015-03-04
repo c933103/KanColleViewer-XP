@@ -240,5 +240,30 @@ namespace LynLogger
             }
             return type.Name;
         }*/
+
+        public static IEnumerable<Tout> Zip<T1, T2, T3, T4, Tout>(IEnumerable<T1> i1, IEnumerable<T2> i2, IEnumerable<T3> i3, IEnumerable<T4> i4, Func<T1, T2, T3, T4, Tout> project)
+        {
+            using(var e1 = i1.GetEnumerator())
+            using(var e2 = i2.GetEnumerator())
+            using(var e3 = i3.GetEnumerator())
+            using(var e4 = i4.GetEnumerator()) {
+                System.Collections.IEnumerator[] enumerators = new System.Collections.IEnumerator[] { e1, e2, e3, e4 };
+                while(enumerators.All(e => e.MoveNext())) {
+                    yield return project(e1.Current, e2.Current, e3.Current, e4.Current);
+                }
+            }
+        }
+
+        public static IEnumerable<T> SafeConcat<T>(this IEnumerable<T> i1, params IEnumerable<T>[] i2)
+        {
+            if(i1 != null) {
+                foreach(T v in i1) yield return v;
+            }
+            foreach(var i in i2) {
+                if(i != null) {
+                    foreach(T v in i) yield return v;
+                }
+            }
+        }
     }
 }

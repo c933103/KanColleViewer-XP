@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LynLogger.Observers
 {
-    class ApiPortObserver : IObserver<SvData<kcsapi_port>>
+    class ApiShip2Observer : IObserver<SvData<kcsapi_ship2[]>>
     {
         public void OnCompleted()
         {
@@ -20,16 +20,11 @@ namespace LynLogger.Observers
             return;
         }
 
-        public void OnNext(SvData<kcsapi_port> value)
+        public void OnNext(SvData<kcsapi_ship2[]> value)
         {
             try {
                 if(!value.IsSuccess) return;
-                Models.DataStore.SwitchMember(value.Data.api_basic.api_member_id);
-                var ds = Models.DataStore.Instance;
-
-                ds.UpdateShips(value.Data.api_ship);
-                ds.BasicInfo.Update(value.Data.api_material, true);
-                ds.BasicInfo.Update(value.Data.api_basic);
+                Models.DataStore.Instance.UpdateShips(value.Data);
             } catch(Exception e) {
                 System.Diagnostics.Debugger.Break();
                 System.Diagnostics.Trace.TraceError(e.ToString());

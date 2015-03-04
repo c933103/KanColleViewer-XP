@@ -1,0 +1,31 @@
+/kcsapi/api_req_sortie/battleresult
+
+返回：
+api_ship_id					敌方舰队构成
+api_win_rank				评级
+api_get_exp					我司令部获得经验
+api_member_lv				我司令部等级
+api_member_exp				我司令部总经验
+api_mvp						我方MVP
+api_get_base_exp			战斗基本经验
+api_get_ship_exp			我方舰娘获得经验
+api_get_exp_lvup			我方舰娘当前经验
+api_dests					迷
+api_destsf					迷
+api_lost_flag				我方被轰沉的舰娘
+api_quest_name				地图名
+api_quest_level				地图星级
+api_enemy_info				敌军信息
+  api_level					敌司令等级
+  api_rank					敌军衔
+  api_deck_name				敌舰队名
+api_first_clear				迷
+api_get_flag				捞到啥了（下标0迷，1船，2迷）
+api_get_ship				捞到了船
+  api_ship_id				捞船ID
+  api_ship_type				捞船类型
+  api_ship_name				捞船名字
+  api_ship_getmes			捞船信息
+api_get_eventflag			迷
+api_get_exmap_rate			迷
+api_get_exmap_useitem_id	迷

@@ -10,9 +10,6 @@ namespace LynLogger.Models.Migrations.Versions.V0
     [Serializable]
     public class ShipHistory
     {
-        [OptionalField]
-        private string _displayName = null;
-
         public int Id { get; private set; }
         public Histogram<int> ShipId { get; private set; }
         public Histogram<int> TypeId { get; private set; }

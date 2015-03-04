@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Grabacr07.KanColleWrapper.Models.Raw;
 using System.Xml.Serialization;
+using System.Runtime.Serialization;
+using Grabacr07.KanColleWrapper;
 
 namespace LynLogger.Models
 {
@@ -54,8 +56,9 @@ namespace LynLogger.Models
 
         public bool Locked { get; internal set; }
 
-        internal EquipSlot[] _equips;
-        public EquipSlot[] Equips { get { return (EquipSlot[])_equips.Clone(); } }
+        [OptionalField]
+        internal EquiptInfo[] ZwEquipts;
+        public IReadOnlyList<EquiptInfo> Equipts { get { return ZwEquipts; } }
 
         private bool _dirty = false;
 
@@ -100,10 +103,10 @@ namespace LynLogger.Models
             MaxRawLuck = data.api_lucky[1];
             ShipId = data.api_ship_id;
 
-            _equips = new EquipSlot[data.api_slotnum];
+            ZwEquipts = new EquiptInfo[data.api_slotnum];
             for(int i = 0; i < data.api_slotnum; i++) {
-                _equips[i].EquidId = data.api_slot[i];
-                _equips[i].Capacity = data.api_onslot[i];
+                var slotItem = KanColleClient.Current.Homeport.Itemyard.SlotItems[data.api_slot[i]];
+                ZwEquipts[i] = new EquiptInfo(slotItem, data.api_onslot[i], data.api_slot[i]);
             }
 
             EnhancedPower = data.api_kyouka[0];
@@ -153,10 +156,12 @@ namespace LynLogger.Models
             if(MaxRawLuck != data.api_lucky[1]) return true;
             if(ShipId != data.api_ship_id) return true;
 
-            if(_equips.Length != data.api_slotnum) return true;
+            if(ZwEquipts == null) return true;
+            if(ZwEquipts.Length != data.api_slotnum) return true;
             for(int i = 0; i < data.api_slotnum; i++) {
-                if(_equips[i].EquidId != data.api_slot[i]) return true;
-                if(_equips[i].Capacity != data.api_onslot[i]) return true;
+                if(ZwEquipts[i] == null) return true;
+                if(ZwEquipts[i].Id != data.api_slot[i]) return true;
+                if(ZwEquipts[i].EquiptCount != data.api_onslot[i]) return true;
             }
 
             if(EnhancedPower != data.api_kyouka[0]) return true;

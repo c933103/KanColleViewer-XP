@@ -1,0 +1,74 @@
+/kcsapi/api_req_sortie/battle - 昼战
+请求：
+api_formation			阵型(1-单纵 2-复纵 3-轮型 4-梯形 5-单横)
+api_recovery_type		迷
+
+/kcsapi/api_req_battle_midnight/battle - 夜战
+请求：
+api_recovery_type		迷
+
+api_dock_id				【昼战】舰队ID
+api_deck_id				【夜战】舰队ID
+api_ship_ke				敌舰队构成
+api_ship_lv				敌舰队等级（固定全1？）
+api_nowhps				各舰当前HP（下标1~6我方，下标7~12敌方）
+api_maxhps				各舰满HP（下标1~6我方，下标7~12敌方）
+api_midnight_flag		【昼战】迷（直接进入夜战？）
+api_eSlot				敌舰装备
+api_eKyouka				敌舰近代化改修值
+api_eParam				敌舰战斗参数
+api_fParam				我方各舰战斗参数
+api_search				【昼战】迷（索敌？）
+api_formation			【昼战】阵型（下标0我方，下标1敌方，下标2交战形态）
+api_stage_flag			【昼战】航空战阶段（下标0一阶段 1二阶段 2三阶段）
+api_kouku				【昼战】航空战参数
+  api_plane_from		舰载机起飞
+  api_stage1			航空战一阶段（空中交火、制空和接触判定）
+    api_f_count			本方舰载机数量
+	api_f_lostcount		本方被击坠舰载机数量
+	api_e_count			敌方舰载机数量
+	api_e_lostcount		敌方被击坠舰载机数量
+	api_disp_seiku		制空权判定 1-确保 2-优势 （3-均衡 4-劣势 5-丧失）
+	api_touch_plane		索敌接触判定（下标0我方对敌，1敌方对我）
+  api_stage2			航空战二阶段（各舰对空防御）
+    api_f_count			本方舰载机数量
+	api_f_lostcount		本方被击坠舰载机数量
+	api_e_count			敌方舰载机数量
+	api_e_lostcount		敌方被击坠舰载机数量
+  api_stage3			航空战三阶段（舰载机攻击）
+    api_frai_flag		我方受雷击的舰只
+	api_fbak_flag		我方受轰炸的舰只
+	api_erai_flag		敌方受雷击的简直
+	api_ebak_flag		敌方受轰炸的舰只
+	api_fcl_flag		迷
+	api_ecl_flag		迷
+	api_fdam			我方受到的伤害
+	api_edam			敌方受到的伤害
+api_support_flag		【昼战】支援舰队
+api_support_info		【昼战】支援舰队信息（结构未知）
+api_opening_flag		【昼战】开幕雷击
+api_opening_atack		【昼战】开幕雷击信息
+  api_frai				我方对敌舰
+  api_erai				敌方对我舰
+  api_fdam				我方受到的伤害
+  api_edam				敌方受到的伤害
+  api_fydam				我方各舰输出
+  api_eydam				敌方各舰输出
+  api_fcl				迷
+  api_ecl				迷
+api_hourai_flag			【昼战】炮击/雷击战（0、1、2对应炮击，3对应雷击）
+api_touch_plane			【夜战】夜侦接触判定
+api_flare_pos			【夜战】照明弹？
+api_hougeki				【夜战】炮击信息
+api_hougeki1			【昼战】第一轮炮击信息
+  api_at_list			攻击方列表
+  api_at_type			【昼战】攻击类型（0普通 3弹着）（1二连？）
+  api_df_list			被攻击方列表
+  api_si_list			攻击使用装备列表
+  api_cl_list			迷
+  api_sp_list			【夜战】攻击类型（0普通，1二连，2 CI）
+  api_damage			攻击伤害列表
+api_hougeki2			第二轮炮击信息
+api_hougeki3			什么时候有三轮炮击了？
+api_raigeki				雷击战信息（结构同开幕雷击）
+
