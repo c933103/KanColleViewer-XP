@@ -178,7 +178,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
-                            <TextBlock Grid.Column="0" FontSize="16">
+                            <TextBlock FontSize="16">
                                 <Run Text="我方舰队 (" />
                                 <Run Text="{Binding Battle.OurFormation, Mode=OneWay, Converter={StaticResource EnumToDescriptionConverter}}" />
                                 <Run Text=")" />
@@ -250,7 +250,7 @@
                             </ItemsControl>
                         </StackPanel>
                         <StackPanel Grid.Column="1">
-                            <TextBlock Grid.Column="1" FontSize="16">
+                            <TextBlock FontSize="16">
                                 <Run Text="敌方舰队 (" />
                                 <Run Text="{Binding Battle.EnemyFormation, Mode=OneWay, Converter={StaticResource EnumToDescriptionConverter}}" />
                                 <Run Text=")" />
@@ -315,6 +315,25 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
+                        </StackPanel>
+                    </Grid>
+                </Expander>
+                <Expander Header="索敌" IsExpanded="True">
+                    <Grid Margin="20,0,0,15">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock FontSize="16" Text="我方舰队" />
+                            <TextBlock Text="{Binding Battle.OurReconn, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneWay}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock FontSize="16" Text="敌方舰队" />
+                            <TextBlock Text="{Binding Battle.EnemyReconn, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneWay}" />
                         </StackPanel>
                     </Grid>
                 </Expander>

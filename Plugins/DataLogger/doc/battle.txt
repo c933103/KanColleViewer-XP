@@ -10,15 +10,15 @@ api_recovery_type		迷
 api_dock_id				【昼战】舰队ID
 api_deck_id				【夜战】舰队ID
 api_ship_ke				敌舰队构成
-api_ship_lv				敌舰队等级（固定全1？）
+api_ship_lv				敌舰队等级
 api_nowhps				各舰当前HP（下标1~6我方，下标7~12敌方）
 api_maxhps				各舰满HP（下标1~6我方，下标7~12敌方）
-api_midnight_flag		【昼战】迷（直接进入夜战？）
+api_midnight_flag		【昼战】是否有夜战
 api_eSlot				敌舰装备
 api_eKyouka				敌舰近代化改修值
 api_eParam				敌舰战斗参数
 api_fParam				我方各舰战斗参数
-api_search				【昼战】迷（索敌？）
+api_search				【昼战】索敌结果
 api_formation			【昼战】阵型（下标0我方，下标1敌方，下标2交战形态）
 api_stage_flag			【昼战】航空战阶段（下标0一阶段 1二阶段 2三阶段）
 api_kouku				【昼战】航空战参数

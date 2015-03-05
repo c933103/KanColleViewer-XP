@@ -27,6 +27,12 @@ namespace LynLogger.Models.Battling
         internal AirWarfareInfo ZwAirWarfare;
         public AirWarfareInfo AirWarfare { get { return ZwAirWarfare; } }
 
+        internal ReconnResult ZwOurReconn;
+        public ReconnResult OurReconn { get { return ZwOurReconn; } }
+
+        internal ReconnResult ZwEnemyReconn;
+        public ReconnResult EnemyReconn { get { return ZwEnemyReconn; } }
+
         internal TorpedoInfo[] ZwOpeningTorpedoAttack;
         public IReadOnlyList<TorpedoInfo> OpeningTorpedoAttack { get { return ZwOpeningTorpedoAttack ?? (ZwOpeningTorpedoAttack = new TorpedoInfo[0]); } }
 
@@ -339,6 +345,24 @@ namespace LynLogger.Models.Battling
 
             [Description("T不利")]
             UnfavourableT = 4,
+        }
+
+        public enum ReconnResult
+        {
+            [Description("无")]
+            None = 0,
+
+            [Description("敌舰队发现")]
+            Success = 1,
+
+            [Description("敌舰队发现 - 部分索敌机未返航")]
+            SuccessWithLoss = 2,
+
+            [Description("未发现敌舰队")]
+            Fail = 5,
+
+            [Description("索敌机未返航")]
+            ReconnLost = 6,
         }
     }
 }

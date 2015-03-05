@@ -51,6 +51,8 @@ namespace LynLogger.Observers
                     result.ZwEnemyFormation = (BattleStatus.Formation)(int)data.api_formation[1];
                     result.ZwEncounter = (BattleStatus.EncounterForm)(int)data.api_formation[2];
                     result.ZwAirWarfare = ConvertAirWarfare(result, data.api_kouku);
+                    result.ZwOurReconn = (BattleStatus.ReconnResult)(int)data.api_search[0];
+                    result.ZwEnemyReconn = (BattleStatus.ReconnResult)(int)data.api_search[1];
 
                     if(data.api_opening_flag == 1) {
                         result.ZwOpeningTorpedoAttack = ConvertTorpedoInfo(result, data.api_opening_atack);
@@ -159,12 +161,14 @@ namespace LynLogger.Observers
         private BattleStatus.AirWarfareInfo ConvertAirWarfare(BattleStatus holder, dynamic data)
         {
             List<int> planeFrom = new List<int>(12);
-            for(int i = 0; i < 6; i++) {
-                if(data.api_plane_from[0].IsDefined(i) && data.api_plane_from[0][i] > 0) {
-                    planeFrom.Add((int)data.api_plane_from[0][i]);
-                }
-                if(data.api_plane_from[1].IsDefined(i) && data.api_plane_from[1][i] > 0) {
-                    planeFrom.Add((int)data.api_plane_from[1][i]);
+            if(data.api_plane_from != null) {
+                for(int i = 0; i < 6; i++) {
+                    if(data.api_plane_from[0].IsDefined(i) && data.api_plane_from[0][i] > 0) {
+                        planeFrom.Add((int)data.api_plane_from[0][i]);
+                    }
+                    if(data.api_plane_from[1].IsDefined(i) && data.api_plane_from[1][i] > 0) {
+                        planeFrom.Add((int)data.api_plane_from[1][i]);
+                    }
                 }
             }
             List<bool> ourBombed = new List<bool>(6);
@@ -173,33 +177,34 @@ namespace LynLogger.Observers
             List<bool> enemyBombed = new List<bool>(6);
             List<bool> enemyTorpedoed = new List<bool>(6);
             List<double> enemyDamage = new List<double>(6);
-            for(int i = 1; i < 7; i++) {
-                if(data.api_stage3 == null) break;
-                if(data.api_stage3.api_fdam.IsDefined(i) && data.api_stage3.api_fdam[i] >= 0) {
-                    ourBombed.Add(data.api_stage3.api_fbak_flag[i] != 0);
-                    ourTorpedoed.Add(data.api_stage3.api_frai_flag[i] != 0);
-                    ourDamage.Add(data.api_stage3.api_fdam[i]);
-                }
-                if(data.api_stage3.api_edam.IsDefined(i) && data.api_stage3.api_edam[i] >= 0) {
-                    enemyBombed.Add(data.api_stage3.api_ebak_flag[i] != 0);
-                    enemyTorpedoed.Add(data.api_stage3.api_erai_flag[i] != 0);
-                    enemyDamage.Add(data.api_stage3.api_edam[i]);
+            if(data.api_stage3 != null) {
+                for(int i = 1; i < 7; i++) {
+                    if(data.api_stage3.api_fdam.IsDefined(i) && data.api_stage3.api_fdam[i] >= 0) {
+                        ourBombed.Add(data.api_stage3.api_fbak_flag[i] != 0);
+                        ourTorpedoed.Add(data.api_stage3.api_frai_flag[i] != 0);
+                        ourDamage.Add(data.api_stage3.api_fdam[i]);
+                    }
+                    if(data.api_stage3.api_edam.IsDefined(i) && data.api_stage3.api_edam[i] >= 0) {
+                        enemyBombed.Add(data.api_stage3.api_ebak_flag[i] != 0);
+                        enemyTorpedoed.Add(data.api_stage3.api_erai_flag[i] != 0);
+                        enemyDamage.Add(data.api_stage3.api_edam[i]);
+                    }
                 }
             }
             var r = new BattleStatus.AirWarfareInfo(holder) {
                 ZwEnemyCarrierShip = planeFrom.Where(x => x > 6).Select(x => x-7).ToArray(),
-                ZwEnemyReconnInTouch = (int)data.api_stage1.api_touch_plane[1],
-                ZwEnemyStage1Engaged = (int)data.api_stage1.api_e_count,
-                ZwEnemyStage1Lost = (int)data.api_stage1.api_e_lostcount,
+                ZwEnemyReconnInTouch = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_touch_plane[1],
+                ZwEnemyStage1Engaged = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_e_count,
+                ZwEnemyStage1Lost = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_e_lostcount,
                 ZwEnemyStage2Engaged = data.api_stage2 == null ? 0 : (int)data.api_stage2.api_e_count,
                 ZwEnemyStage2Lost = data.api_stage2 == null ? 0 : (int)data.api_stage2.api_e_lostcount,
                 ZwOurCarrierShip = planeFrom.Where(x => x < 7).Select(x => x-1).ToArray(),
-                ZwOurReconnInTouch = (int)data.api_stage1.api_touch_plane[0],
-                ZwOurStage1Engaged = (int)data.api_stage1.api_f_count,
-                ZwOurStage1Lost = (int)data.api_stage1.api_f_lostcount,
+                ZwOurReconnInTouch = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_touch_plane[0],
+                ZwOurStage1Engaged = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_f_count,
+                ZwOurStage1Lost = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_f_lostcount,
                 ZwOurStage2Engaged = data.api_stage2 == null ? 0 : (int)data.api_stage2.api_f_count,
                 ZwOurStage2Lost = data.api_stage2 == null ? 0 : (int)data.api_stage2.api_f_lostcount,
-                ZwOurAirspaceControl = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)data.api_stage1.api_disp_seiku,
+                ZwOurAirspaceControl = data.api_stage1 == null ? BattleStatus.AirWarfareInfo.AirspaceControl.None : (BattleStatus.AirWarfareInfo.AirspaceControl)(int)data.api_stage1.api_disp_seiku,
                 ZwEnemyShipBombed = enemyBombed.ToArray(),
                 ZwEnemyShipDamages = enemyDamage.ToArray(),
                 ZwEnemyShipTorpedoed = enemyTorpedoed.ToArray(),
