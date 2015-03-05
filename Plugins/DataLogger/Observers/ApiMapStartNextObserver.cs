@@ -41,7 +41,7 @@ namespace LynLogger.Observers
                     ZwMapSectionId = (int)data.api_mapinfo_no,
                     ZwMapLocId = (int)data.api_no,
                     ZwMapBossLocId = (int)data.api_bosscell_no,
-                    ZwEvent = (Models.Battling.MapNext.EventType)(int)data.api_event_id,
+                    ZwEvent = (Models.Battling.MapNext.EventType)((int)data.api_event_id * ((int)data.api_event_id == 2 ? -1 : 1)),
                     ZwRawData = json
                 };
                 if(mapNext.ZwEvent == Models.Battling.MapNext.EventType.ItemGet) {

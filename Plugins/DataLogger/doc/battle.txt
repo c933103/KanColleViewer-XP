@@ -19,7 +19,7 @@ api_eKyouka				敌舰近代化改修值
 api_eParam				敌舰战斗参数
 api_fParam				我方各舰战斗参数
 api_search				【昼战】索敌结果
-api_formation			【昼战】阵型（下标0我方，下标1敌方，下标2交战形态）
+api_formation			【昼战】【开幕夜战】阵型（下标0我方，下标1敌方，下标2交战形态）
 api_stage_flag			【昼战】航空战阶段（下标0一阶段 1二阶段 2三阶段）
 api_kouku				【昼战】航空战参数
   api_plane_from		舰载机起飞

@@ -16,7 +16,7 @@ api_maparea_id			地图区域ID
 api_mapinfo_no			地图ID
 api_no					地图点位
 api_color_no			迷（颜色号码是什么鬼）
-api_event_id			点位类型 0-物品相关 1-战斗
+api_event_id			点位类型 0-物品相关 1-战斗 2-夜战
 api_event_kind			点位类型 6-蓝点 5-BOSS 4-战个痛 3-漩涡 2-获得物品
 api_next				迷（后继点数？）
 api_bosscell_no			BOSS所在点位

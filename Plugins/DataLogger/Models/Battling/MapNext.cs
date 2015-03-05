@@ -39,6 +39,12 @@ namespace LynLogger.Models.Battling
                 case EventType.BossBattle:
                     sb.Append("BOSS战突入！");
                     break;
+                case EventType.NightBattle:
+                    sb.Append("准备夜战！");
+                    break;
+                case EventType.NightBossBattle:
+                    sb.Append("准备夜战 BOSS！");
+                    break;
                 case EventType.ItemGet:
                     sb.AppendFormat("获得 {0} x{1}", ItemGetLost.ItemName, ItemGetLost.Amount);
                     break;
@@ -66,6 +72,6 @@ namespace LynLogger.Models.Battling
             internal string ZwItemName;
             public string ItemName { get { return ZwItemName; } }
         }
-        public enum EventType { ItemGet = 2, ItemLost = 3, Battle = 4, BossBattle = 5, Nothing = 6 }
+        public enum EventType { ItemGet = 2, ItemLost = 3, Battle = 4, BossBattle = 5, NightBattle = -4, NightBossBattle = -5, Nothing = 6 }
     }
 }

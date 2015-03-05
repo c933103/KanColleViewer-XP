@@ -46,10 +46,12 @@ namespace LynLogger.Observers
                 result.ZwOurShips = ConvertOurFleet(fleetId, data.api_nowhps, data.api_maxhps, data.api_fParam);
                 result.ZwEnemyShips = ConvertEnemyFleet(data.api_ship_ke, data.api_ship_lv, data.api_nowhps, data.api_maxhps, data.api_eParam, data.api_eKyouka, data.api_eSlot);
 
-                if(data.api_formation()) { //昼战
+                if(data.api_formation()) {
                     result.ZwOurFormation = (BattleStatus.Formation)(int)data.api_formation[0];
                     result.ZwEnemyFormation = (BattleStatus.Formation)(int)data.api_formation[1];
                     result.ZwEncounter = (BattleStatus.EncounterForm)(int)data.api_formation[2];
+                }
+                if(data.api_hourai_flag()) { //昼战
                     result.ZwAirWarfare = ConvertAirWarfare(result, data.api_kouku);
                     result.ZwOurReconn = (BattleStatus.ReconnResult)(int)data.api_search[0];
                     result.ZwEnemyReconn = (BattleStatus.ReconnResult)(int)data.api_search[1];
