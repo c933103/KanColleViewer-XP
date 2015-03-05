@@ -277,5 +277,15 @@ namespace LynLogger
                 }
             }
         }
+
+        public static string GetEquiptNameWithFallback(int eid, string fallbackFormat = "{0} 号装备")
+        {
+            var  item = Grabacr07.KanColleWrapper.KanColleClient.Current.Master.SlotItems[eid];
+            if(item == null) {
+                return string.Format(fallbackFormat, eid);
+            } else {
+                return item.Name;
+            }
+        }
     }
 }

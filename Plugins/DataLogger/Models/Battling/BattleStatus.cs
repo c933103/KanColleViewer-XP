@@ -105,6 +105,7 @@ namespace LynLogger.Models.Battling
             internal int ZwOurReconnInTouch;
             internal int ZwOurStage2Engaged;
             internal int ZwOurStage2Lost;
+            internal string ZwOurReconnInTouchName;
 
             internal int[] ZwEnemyCarrierShip;
             internal int ZwEnemyStage1Engaged;
@@ -112,6 +113,7 @@ namespace LynLogger.Models.Battling
             internal int ZwEnemyReconnInTouch;
             internal int ZwEnemyStage2Engaged;
             internal int ZwEnemyStage2Lost;
+            internal string ZwEnemyReconnInTouchName;
 
             internal bool[] ZwOurShipBombed;
             internal bool[] ZwOurShipTorpedoed;
@@ -130,6 +132,7 @@ namespace LynLogger.Models.Battling
             public int OurReconnInTouch { get { return ZwOurReconnInTouch; } }
             public int OurStage2Engaged { get { return ZwOurStage2Engaged; } }
             public int OurStage2Lost { get { return ZwOurStage2Lost; } }
+            public string OurReconnInTouchName { get { return ZwOurReconnInTouchName; } }
 
             public IEnumerable<ShipInfo> EnemyCarrierShip { get { return ZwEnemyCarrierShip.Select(x => _parent.EnemyShips[x]); } }
             public int EnemyStage1Engaged { get { return ZwEnemyStage1Engaged; } }
@@ -137,6 +140,7 @@ namespace LynLogger.Models.Battling
             public int EnemyReconnInTouch { get { return ZwEnemyReconnInTouch; } }
             public int EnemyStage2Engaged { get { return ZwEnemyStage2Engaged; } }
             public int EnemyStage2Lost { get { return ZwEnemyStage2Lost; } }
+            public string EnemyReconnInTouchName { get { return ZwEnemyReconnInTouchName; } }
 
             //public IReadOnlyList<bool> OurShipBombed { get { return ZwOurShipBombed; } }
             //public IReadOnlyList<bool> OurShipTorpedoed { get { return ZwOurShipTorpedoed; } }

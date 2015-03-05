@@ -400,8 +400,8 @@
                                 <Run Text="架被击落" />
                             </TextBlock>
                             <TextBlock>
-                                <Run Text="{Binding OurReconnInTouch, Mode=OneWay}" />
-                                <Run Text="架侦察机触接" />
+                                <Run Text="{Binding OurReconnInTouchName, Mode=OneWay}" />
+                                <Run Text="触接对方" />
                             </TextBlock>
                             <ItemsControl ItemsSource="{Binding EnemyStage3Report, Mode=OneWay}"/>
                         </StackPanel>
@@ -418,8 +418,8 @@
                                 <Run Text="架被击落" />
                             </TextBlock>
                             <TextBlock>
-                                <Run Text="{Binding EnemyReconnInTouch, Mode=OneWay}" />
-                                <Run Text="架侦察机触接" />
+                                <Run Text="{Binding EnemyReconnInTouchName, Mode=OneWay}" />
+                                <Run Text="触接对方" />
                             </TextBlock>
                             <ItemsControl ItemsSource="{Binding OurStage3Report, Mode=OneWay}"/>
                         </StackPanel>

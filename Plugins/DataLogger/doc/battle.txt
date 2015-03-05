@@ -29,7 +29,7 @@ api_kouku				【昼战】航空战参数
 	api_e_count			敌方舰载机数量
 	api_e_lostcount		敌方被击坠舰载机数量
 	api_disp_seiku		制空权判定 1-确保 2-优势 （3-均衡 4-劣势 5-丧失）
-	api_touch_plane		索敌接触判定（下标0我方对敌，1敌方对我）
+	api_touch_plane		索敌接触（装备ID，下标0我方对敌，1敌方对我）
   api_stage2			航空战二阶段（各舰对空防御）
     api_f_count			本方舰载机数量
 	api_f_lostcount		本方被击坠舰载机数量

@@ -195,13 +195,13 @@ namespace LynLogger.Observers
             }
             var r = new BattleStatus.AirWarfareInfo(holder) {
                 ZwEnemyCarrierShip = planeFrom.Where(x => x > 6).Select(x => x-7).ToArray(),
-                ZwEnemyReconnInTouch = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_touch_plane[1],
+                ZwEnemyReconnInTouch = data.api_stage1 == null ? -1 : (int)data.api_stage1.api_touch_plane[1],
                 ZwEnemyStage1Engaged = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_e_count,
                 ZwEnemyStage1Lost = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_e_lostcount,
                 ZwEnemyStage2Engaged = data.api_stage2 == null ? 0 : (int)data.api_stage2.api_e_count,
                 ZwEnemyStage2Lost = data.api_stage2 == null ? 0 : (int)data.api_stage2.api_e_lostcount,
                 ZwOurCarrierShip = planeFrom.Where(x => x < 7).Select(x => x-1).ToArray(),
-                ZwOurReconnInTouch = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_touch_plane[0],
+                ZwOurReconnInTouch = data.api_stage1 == null ? -1 : (int)data.api_stage1.api_touch_plane[0],
                 ZwOurStage1Engaged = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_f_count,
                 ZwOurStage1Lost = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_f_lostcount,
                 ZwOurStage2Engaged = data.api_stage2 == null ? 0 : (int)data.api_stage2.api_f_count,
@@ -214,8 +214,16 @@ namespace LynLogger.Observers
                 ZwOurShipDamages = ourDamage.ToArray(),
                 ZwOurShipTorpedoed = ourTorpedoed.ToArray()
             };
-            if(r.ZwOurReconnInTouch < 0) r.ZwOurReconnInTouch = 0;
-            if(r.ZwEnemyReconnInTouch < 0) r.ZwEnemyReconnInTouch = 0;
+            if(r.ZwOurReconnInTouch < 0) {
+                r.ZwOurReconnInTouchName = "没有舰载机";
+            } else {
+                r.ZwOurReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwOurReconnInTouch, "{0} 号侦察机");
+            }
+            if(r.ZwEnemyReconnInTouch < 0) {
+                r.ZwEnemyReconnInTouchName = "没有舰载机";
+            } else {
+                r.ZwEnemyReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwEnemyReconnInTouch, "{0} 号侦察机");
+            }
             if(r.ZwOurAirspaceControl == BattleStatus.AirWarfareInfo.AirspaceControl.Denial) r.ZwOurAirspaceControl = BattleStatus.AirWarfareInfo.AirspaceControl.Incapability;
             return r;
         }
@@ -316,11 +324,10 @@ namespace LynLogger.Observers
 
         private Models.EquiptInfo EquiptInfoFromEquiptId(int id, int count)
         {
-            var item = Grabacr07.KanColleWrapper.KanColleClient.Current.Master.SlotItems[id];
             return new Models.EquiptInfo(0) {
                 ZwEquiptCount = count,
                 ZwEquiptId = id,
-                ZwEquiptName = item == null ? "" : item.Name,
+                ZwEquiptName = Helpers.GetEquiptNameWithFallback(id),
                 ZwLevel = 0
             };
         }
