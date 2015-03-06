@@ -275,6 +275,16 @@ namespace LynLogger.Observers
             };
             if(r.ZwOurReconnInTouch < 0) r.ZwOurReconnInTouch = 0;
             if(r.ZwEnemyReconnInTouch < 0) r.ZwEnemyReconnInTouch = 0;
+            if(r.ZwOurReconnInTouch < 0) {
+                r.ZwOurReconnInTouchName = "没有舰载机";
+            } else {
+                r.ZwOurReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwOurReconnInTouch, "{0} 号侦察机");
+            }
+            if(r.ZwEnemyReconnInTouch < 0) {
+                r.ZwEnemyReconnInTouchName = "没有舰载机";
+            } else {
+                r.ZwEnemyReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwEnemyReconnInTouch, "{0} 号侦察机");
+            }
             return r;
         }
 
@@ -294,7 +304,9 @@ namespace LynLogger.Observers
                     }
                 }
                 for(int j = 0; data.api_si_list[i].IsDefined(j); j++) {
-                    sis.Add((int)data.api_si_list[i][j]);
+                    if(data.api_si_list[i][j] > 0) {
+                        sis.Add((int)data.api_si_list[i][j]);
+                    }
                 }
 
                 if(data.api_at_type()) {
@@ -303,12 +315,17 @@ namespace LynLogger.Observers
                         case 2: //昼战二连
                             attackType = 1;
                             break;
-                        case 6: //敌方弹着（为啥用俩数）
+                        case 6: //敌方弹着
                             attackType = 3;
                             break;
                     }
                 } else {
                     attackType = (int)data.api_sp_list[i];
+                    switch(attackType) {
+                        case 3: //敌方CI
+                            attackType = 2;
+                            break;
+                    }
                 }
 
                 r.Add(new BattleStatus.BombardInfo(holder) {
