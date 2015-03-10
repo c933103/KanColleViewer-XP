@@ -112,10 +112,10 @@ namespace LynLogger.Models
         internal Dictionary<int, ShipHistory> RwShipHistories { get { return ZwShipHistories; } }
         public IReadOnlyDictionary<int, ShipHistory> ShipHistories { get { return ZwShipHistories; } }
         
-        [NonSerialized]
-        private Action<int> _shipDataChanged;
-        internal void RaiseShipDataChange(int id) { if(_shipDataChanged != null) _shipDataChanged(id); }
-        public event Action<int> ShipDataChanged
+        //[NonSerialized]
+        internal void RaiseShipDataChange(int id) { if(_shipDataChanged != null) _shipDataChanged(this, id); }
+        private static Action<DataStore, int> _shipDataChanged;
+        public static event Action<DataStore, int> ShipDataChanged
         {
             add { _shipDataChanged += value.MakeWeak(x => _shipDataChanged -= x); }
             remove { }
@@ -127,10 +127,10 @@ namespace LynLogger.Models
         internal BasicInfoHistory ZwBasicInfoHistory;
         public BasicInfoHistory BasicInfoHistory { get { return ZwBasicInfoHistory; } }
 
-        [NonSerialized]
-        private Action _basicInfoChanged;
-        internal void RaiseBasicInfoChange() { if(_basicInfoChanged != null) _basicInfoChanged(); }
-        public event Action BasicInfoChanged
+        //[NonSerialized]
+        internal void RaiseBasicInfoChange() { if(_basicInfoChanged != null) _basicInfoChanged(this); }
+        private static Action<DataStore> _basicInfoChanged;
+        public static event Action<DataStore> BasicInfoChanged
         {
             add { _basicInfoChanged += value.MakeWeak(x => _basicInfoChanged -= x); }
             remove { }

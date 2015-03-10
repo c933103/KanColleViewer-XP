@@ -58,13 +58,11 @@ namespace LynLogger.Views
 
         public ShipHistoryModel()
         {
-            DataStore.OnDataStoreCreate += (_, ds) => {
-                ds.ShipDataChanged += x => {
-                    if(SelectedShip != null && x == SelectedShip.Id) {
-                        RaisePropertyChanged(o => SelectedShip, o => CombinedEventLog, o => SelectedShipExp);
-                    }
-                    RaisePropertyChanged(o => Ships);
-                };
+            DataStore.ShipDataChanged += (ds, x) => {
+                if(SelectedShip != null && x == SelectedShip.Id) {
+                    RaisePropertyChanged(o => SelectedShip, o => CombinedEventLog, o => SelectedShipExp);
+                }
+                RaisePropertyChanged(o => Ships);
             };
             DataStore.OnDataStoreSwitch += (_, ds) => RaisePropertyChanged(o => Ships);
         }

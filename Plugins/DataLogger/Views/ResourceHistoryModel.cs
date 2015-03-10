@@ -80,11 +80,10 @@ namespace LynLogger.Views
 
         public ResourceHistoryModel()
         {
-            DataStore.OnDataStoreCreate += (_, ds) => {
-                ds.BasicInfoChanged += () => {
-                    RaiseMultiPropertyChanged();
-                };
+            DataStore.BasicInfoChanged += x => {
+                RaiseMultiPropertyChanged();
             };
+            DataStore.OnDataStoreSwitch += (_, ds) => RaiseMultiPropertyChanged();
         }
     }
 }

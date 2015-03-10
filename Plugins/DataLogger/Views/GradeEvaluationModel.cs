@@ -38,11 +38,10 @@ namespace LynLogger.Views
 
         public GradeEvaluationModel()
         {
-            DataStore.OnDataStoreCreate += (_, ds) => {
-                ds.BasicInfoChanged += () => {
-                    RaiseMultiPropertyChanged();
-                };
+            DataStore.BasicInfoChanged += x => {
+                RaiseMultiPropertyChanged();
             };
+            DataStore.OnDataStoreSwitch += (_, ds) => RaiseMultiPropertyChanged();
         }
     }
 }

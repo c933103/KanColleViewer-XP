@@ -9,7 +9,7 @@
     <UserControl.DataContext>
         <local:ResourceHistoryModel/>
     </UserControl.DataContext>
-    <StackPanel>
+    <StackPanel Margin="10,10,0,0">
         <Expander Header="油" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
             <local:HistogramPlotter PlotData="{Binding FuelHistogram}" AverageDelta="True"/>
         </Expander>

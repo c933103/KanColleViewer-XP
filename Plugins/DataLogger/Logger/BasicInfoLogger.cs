@@ -4,9 +4,7 @@
     {
         public BasicInfoLogger()
         {
-            Models.DataStore.OnDataStoreCreate += (_, ds) => {
-                ds.BasicInfoChanged += () => ProcBasicInfoChanged(ds);
-            };
+            Models.DataStore.BasicInfoChanged += sender => ProcBasicInfoChanged(sender);
         }
 
         private void ProcBasicInfoChanged(Models.DataStore ds)

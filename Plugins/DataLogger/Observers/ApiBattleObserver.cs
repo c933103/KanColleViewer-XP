@@ -190,15 +190,19 @@ namespace LynLogger.Observers
             }
             BattleStatus.AirWarfareInfo.AirspaceControl ac = BattleStatus.AirWarfareInfo.AirspaceControl.None;
             switch(data.api_stage1 == null ? 0 :  (int)data.api_stage1.api_disp_seiku) {
-                case -1:
+                case 0:
                     ac = BattleStatus.AirWarfareInfo.AirspaceControl.Parity;
                     break;
                 case 3:
                 case 4:
                     ac = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)(data.api_stage1.api_disp_seiku + 1);
                     break;
-                default:
+                case 1:
+                case 2:
                     ac = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)data.api_stage1.api_disp_seiku;
+                    break;
+                default:
+                    ac = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)-Math.Abs(data.api_stage1.api_disp_seiku);
                     break;
             }
             var r = new BattleStatus.AirWarfareInfo(holder) {

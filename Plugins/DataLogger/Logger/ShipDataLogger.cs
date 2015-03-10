@@ -4,9 +4,7 @@
     {
         public ShipDataLogger()
         {
-            Models.DataStore.OnDataStoreCreate += (_, ds) => {
-                ds.ShipDataChanged += x => ProcShipDataChanged(ds, x);
-            };
+            Models.DataStore.ShipDataChanged += (sender, x) => ProcShipDataChanged(sender, x);
         }
 
         void ProcShipDataChanged(Models.DataStore ds, int shipId)
