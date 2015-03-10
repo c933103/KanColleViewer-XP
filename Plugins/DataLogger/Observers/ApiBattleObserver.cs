@@ -10,11 +10,11 @@ namespace LynLogger.Observers
 {
     class ApiBattleObserver : IObserver<Fiddler.Session>
     {
-        private WeakEvent<BattleStatus> _onBattle;
+        private Action<BattleStatus> _onBattle;
         public event Action<BattleStatus> OnBattle
         {
-            add { (_onBattle ?? (_onBattle = new WeakEvent<BattleStatus>())).Add(value); }
-            remove { (_onBattle ?? (_onBattle = new WeakEvent<BattleStatus>())).RemoveLast(value); }
+            add { _onBattle += value.MakeWeak(x => _onBattle -= x); }
+            remove { }
         }
 
         public void OnNext(Fiddler.Session value)
@@ -74,7 +74,7 @@ namespace LynLogger.Observers
                     };
                 }
 
-                _onBattle.FireEvent(result);
+                _onBattle(result);
             } catch(Exception e) {
                 System.Diagnostics.Debugger.Break();
                 System.Diagnostics.Trace.TraceError(e.ToString());
@@ -281,8 +281,6 @@ namespace LynLogger.Observers
                 ZwOurShipDamages = new double[6],
                 ZwOurShipTorpedoed = new bool[6]
             };
-            if(r.ZwOurReconnInTouch < 0) r.ZwOurReconnInTouch = 0;
-            if(r.ZwEnemyReconnInTouch < 0) r.ZwEnemyReconnInTouch = 0;
             if(r.ZwOurReconnInTouch < 0) {
                 r.ZwOurReconnInTouchName = "没有舰载机";
             } else {

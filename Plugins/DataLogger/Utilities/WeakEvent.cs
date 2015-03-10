@@ -3,202 +3,180 @@ using System.Collections.Generic;
 
 namespace LynLogger.Utilities
 {
-    public class WeakEvent
+    public interface IWeakAction
     {
-        private LinkedList<WeakReference<Action>> listeners = new LinkedList<WeakReference<Action>>();
+        Action Handler { get; }
+        void Invoke();
+    }
 
-        public void FireEvent(bool suppressExceptions = false)
+    public interface IWeakAction<TIn>
+    {
+        Action<TIn> Handler { get; }
+        void Invoke(TIn arg1);
+    }
+
+    public interface IWeakAction<TIn1, TIn2>
+    {
+        Action<TIn1, TIn2> Handler { get; }
+        void Invoke(TIn1 arg1, TIn2 arg2);
+    }
+
+    public class WeakAction<TTarget> : IWeakAction
+        where TTarget : class
+    {
+        private delegate void UnboundHandler(TTarget @this);
+
+        private readonly WeakReference<TTarget> _target;
+        private readonly UnboundHandler _unboundHandler;
+        private readonly Action<Action> _targetDead;
+        private Action _handler;
+
+        public Action Handler { get { return _handler ?? (_handler = Invoke); } }
+
+        public WeakAction(Action a)
         {
-            lock (this) {
-                LinkedListNode<WeakReference<Action>> node = listeners.First;
-                Action a;
-                LinkedList<Exception> exceptions = new LinkedList<Exception>();
-                while(node != null) {
-                    if(!node.Value.TryGetTarget(out a)) {
-                        var prevNode = node.Previous;
-                        node.List.Remove(node);
-                        node = prevNode ?? listeners.First;
-                    } else {
-                        try {
-                            a();
-                        } catch (Exception e) {
-                            exceptions.AddLast(e);
-                        }
-                    }
-                    node = node?.Next;
-                }
-                if(!suppressExceptions && (exceptions.First != null)) {
-                    throw new AggregateException(exceptions);
+            _target = new WeakReference<TTarget>((TTarget)a.Target);
+            _unboundHandler = (UnboundHandler)Delegate.CreateDelegate(typeof(UnboundHandler), null, a.Method);
+        }
+
+        public WeakAction(Action a, Action<Action> targetDead) : this(a)
+        {
+            _targetDead = targetDead;
+        }
+
+        public void Invoke()
+        {
+            TTarget target;
+            if(_target.TryGetTarget(out target)) {
+                _unboundHandler(target);
+            } else {
+                if(_targetDead != null) {
+                    _targetDead(_handler);
                 }
             }
         }
 
-        public void Add(Action listener)
+        public static implicit operator Action(WeakAction<TTarget> t)
         {
-            lock (this) {
-                LinkedListNode<WeakReference<Action>> node = listeners.First;
-                Action a;
-                while(node != null) {
-                    if(!node.Value.TryGetTarget(out a)) {
-                        var prevNode = node.Previous;
-                        node.List.Remove(node);
-                        node = prevNode ?? listeners.First;
-                    }
-                    node = node?.Next;
-                }
-                if(listener != null) {
-                    listeners.AddLast(new WeakReference<Action>(listener));
-                }
-            }
-        }
-
-        public void RemoveLast(Action listener)
-        {
-            lock (this) {
-                LinkedListNode<WeakReference<Action>> node = listeners.Last;
-                Action a;
-                bool removed = false;
-                while(node != null) {
-                    if(!node.Value.TryGetTarget(out a) || (!removed && a == listener)) {
-                        var prevNode = node.Next;
-                        node.List.Remove(node);
-                        node = prevNode ?? listeners.Last;
-                    }
-                    node = node?.Previous;
-                }
-            }
+            return t.Handler;
         }
     }
-    public class WeakEvent<T>
+
+    public class WeakAction<TTarget, TIn> : IWeakAction<TIn>
+        where TTarget : class
     {
-        private LinkedList<WeakReference<Action<T>>> listeners = new LinkedList<WeakReference<Action<T>>>();
+        private delegate void UnboundHandler(TTarget @this, TIn arg1);
 
-        public void FireEvent(T arg, bool suppressExceptions = false)
+        private readonly WeakReference<TTarget> _target;
+        private readonly UnboundHandler _unboundHandler;
+        private readonly Action<Action<TIn>> _targetDead;
+        private Action<TIn> _handler;
+
+        public Action<TIn> Handler { get { return _handler ?? (_handler = Invoke); } }
+
+        public WeakAction(Action<TIn> a)
         {
-            lock (this) {
-                LinkedListNode<WeakReference<Action<T>>> node = listeners.First;
-                Action<T> a;
-                LinkedList<Exception> exceptions = new LinkedList<Exception>();
-                while(node != null) {
-                    if(!node.Value.TryGetTarget(out a)) {
-                        var prevNode = node.Previous;
-                        node.List.Remove(node);
-                        node = prevNode ?? listeners.First;
-                    } else {
-                        try {
-                            a(arg);
-                        } catch (Exception e) {
-                            exceptions.AddLast(e);
-                        }
-                    }
-                    node = node?.Next;
-                }
-                if(!suppressExceptions && (exceptions.First != null)) {
-                    throw new AggregateException(exceptions);
+            _target = new WeakReference<TTarget>((TTarget)a.Target);
+            _unboundHandler = (UnboundHandler)Delegate.CreateDelegate(typeof(UnboundHandler), null, a.Method);
+        }
+
+        public WeakAction(Action<TIn> a, Action<Action<TIn>> targetDead) : this(a)
+        {
+            _targetDead = targetDead;
+        }
+
+        public void Invoke(TIn arg)
+        {
+            TTarget target;
+            if(_target.TryGetTarget(out target)) {
+                _unboundHandler(target, arg);
+            } else {
+                if(_targetDead != null) {
+                    _targetDead(_handler);
                 }
             }
         }
 
-        public void Add(Action<T> listener)
+        public static implicit operator Action<TIn>(WeakAction<TTarget, TIn> t)
         {
-            lock (this) {
-                LinkedListNode<WeakReference<Action<T>>> node = listeners.First;
-                Action<T> a;
-                while(node != null) {
-                    if(!node.Value.TryGetTarget(out a)) {
-                        var prevNode = node.Previous;
-                        node.List.Remove(node);
-                        node = prevNode ?? listeners.First;
-                    }
-                    node = node?.Next;
-                }
-                if(listener != null) {
-                    listeners.AddLast(new WeakReference<Action<T>>(listener));
-                }
-            }
-        }
-
-        public void RemoveLast(Action<T> listener)
-        {
-            lock (this) {
-                LinkedListNode<WeakReference<Action<T>>> node = listeners.Last;
-                Action<T> a;
-                bool removed = false;
-                while(node != null) {
-                    if(!node.Value.TryGetTarget(out a) || (!removed && a == listener)) {
-                        var prevNode = node.Next;
-                        node.List.Remove(node);
-                        node = prevNode ?? listeners.Last;
-                    }
-                    node = node?.Previous;
-                }
-            }
+            return t.Handler;
         }
     }
-    public class WeakEvent<T1,T2>
+
+    public class WeakAction<TTarget, TIn1, TIn2> : IWeakAction<TIn1, TIn2>
+        where TTarget : class
     {
-        private LinkedList<WeakReference<Action<T1, T2>>> listeners = new LinkedList<WeakReference<Action<T1, T2>>>();
+        private delegate void UnboundHandler(TTarget @this, TIn1 arg1, TIn2 arg2);
 
-        public void FireEvent(T1 arg1, T2 arg2, bool suppressExceptions = false)
+        private readonly WeakReference<TTarget> _target;
+        private readonly UnboundHandler _unboundHandler;
+        private readonly Action<Action<TIn1, TIn2>> _targetDead;
+        private Action<TIn1, TIn2> _handler;
+
+        public Action<TIn1, TIn2> Handler { get { return _handler ?? (_handler = Invoke); } }
+
+        public WeakAction(Action<TIn1, TIn2> a)
         {
-            lock (this) {
-                LinkedListNode<WeakReference<Action<T1, T2>>> node = listeners.First;
-                Action<T1, T2> a;
-                LinkedList<Exception> exceptions = new LinkedList<Exception>();
-                while(node != null) {
-                    if(!node.Value.TryGetTarget(out a)) {
-                        var prevNode = node.Previous;
-                        node.List.Remove(node);
-                        node = prevNode ?? listeners.First;
-                    } else {
-                        try {
-                            a(arg1, arg2);
-                        } catch (Exception e) {
-                            exceptions.AddLast(e);
-                        }
-                    }
-                    node = node?.Next;
-                }
-                if(!suppressExceptions && (exceptions.First != null)) {
-                    throw new AggregateException(exceptions);
+            _target = new WeakReference<TTarget>((TTarget)a.Target);
+            _unboundHandler = (UnboundHandler)Delegate.CreateDelegate(typeof(UnboundHandler), null, a.Method);
+        }
+
+        public WeakAction(Action<TIn1, TIn2> a, Action<Action<TIn1, TIn2>> targetDead) : this(a)
+        {
+            _targetDead = targetDead;
+        }
+
+        public void Invoke(TIn1 arg1, TIn2 arg2)
+        {
+            TTarget target;
+            if(_target.TryGetTarget(out target)) {
+                _unboundHandler(target, arg1, arg2);
+            } else {
+                if(_targetDead != null) {
+                    _targetDead(_handler);
                 }
             }
         }
 
-        public void Add(Action<T1, T2> listener)
+        public static implicit operator Action<TIn1, TIn2>(WeakAction<TTarget, TIn1, TIn2> t)
         {
-            lock (this) {
-                LinkedListNode<WeakReference<Action<T1, T2>>> node = listeners.First;
-                Action<T1, T2> a;
-                while(node != null) {
-                    if(!node.Value.TryGetTarget(out a)) {
-                        var prevNode = node.Previous;
-                        node.List.Remove(node);
-                        node = prevNode ?? listeners.First;
-                    }
-                    node = node?.Next;
-                }
-                if(listener != null) {
-                    listeners.AddLast(new WeakReference<Action<T1, T2>>(listener));
-                }
-            }
+            return t.Handler;
+        }
+    }
+
+    public static class WeakAction
+    {
+        public static Action MakeWeak(this Action callback, Action<Action> targetDead)
+        {
+            if(callback == null) throw new ArgumentNullException();
+            if(callback.Method.IsStatic) return callback;
+            if(callback.Target == null) return callback;
+
+            var weakActionType = typeof(WeakAction<>).MakeGenericType(callback.Target.GetType());
+            var weakActionConstructor = weakActionType.GetConstructor(new Type[] { typeof(Action), typeof(Action<Action>) });
+            return ((IWeakAction)weakActionConstructor.Invoke(new object[] { callback, targetDead })).Handler;
         }
 
-        public void RemoveLast(Action<T1, T2> listener)
+        public static Action<TIn> MakeWeak<TIn>(this Action<TIn> callback, Action<Action<TIn>> targetDead)
         {
-            lock (this) {
-                LinkedListNode<WeakReference<Action<T1, T2>>> node = listeners.Last;
-                Action<T1, T2> a;
-                bool removed = false;
-                while(node != null) {
-                    if(!node.Value.TryGetTarget(out a) || (!removed && a == listener)) {
-                        var prevNode = node.Next;
-                        node.List.Remove(node);
-                        node = prevNode ?? listeners.Last;
-                    }
-                    node = node?.Previous;
-                }
-            }
+            if(callback == null) throw new ArgumentNullException();
+            if(callback.Method.IsStatic) return callback;
+            if(callback.Target == null) return callback;
+
+            var weakActionType = typeof(WeakAction<,>).MakeGenericType(callback.Target.GetType(), typeof(TIn));
+            var weakActionConstructor = weakActionType.GetConstructor(new Type[] { typeof(Action<TIn>), typeof(Action<Action<TIn>>) });
+            return ((IWeakAction<TIn>)weakActionConstructor.Invoke(new object[] { callback, targetDead })).Handler;
+        }
+
+        public static Action<TIn1, TIn2> MakeWeak<TIn1, TIn2>(this Action<TIn1, TIn2> callback, Action<Action<TIn1, TIn2>> targetDead)
+        {
+            if(callback == null) throw new ArgumentNullException();
+            if(callback.Method.IsStatic) return callback;
+            if(callback.Target == null) return callback;
+
+            var weakActionType = typeof(WeakAction<,,>).MakeGenericType(callback.Target.GetType(), typeof(TIn1), typeof(TIn2));
+            var weakActionConstructor = weakActionType.GetConstructor(new Type[] { typeof(Action<TIn1, TIn2>), typeof(Action<Action<TIn1, TIn2>>) });
+            return ((IWeakAction<TIn1, TIn2>)weakActionConstructor.Invoke(new object[] { callback, targetDead })).Handler;
         }
     }
 }

@@ -35,10 +35,10 @@ namespace LynLogger
         public ToolsModel()
         {
             var listPages = new List<TabViewItem>() {
-                new TabViewItem("肝度", new Views.GradeEvaluationView(){DataContext=new Views.GradeEvaluationModel()}),
-                new TabViewItem("资源历史", new Views.ResourceHistoryView(){DataContext=new Views.ResourceHistoryModel()}),
-                new TabViewItem("舰娘档案", new Views.ShipHistoryView(){DataContext=new Views.ShipHistoryModel()}),
-                new TabViewItem("战斗剧透", new Views.BattleNetaView(){DataContext = new Views.BattleNetaModel()}),
+                new TabViewItem("肝度", new GradeEvaluationView(){DataContext=new GradeEvaluationModel()}),
+                new TabViewItem("资源历史", new ResourceHistoryView(){DataContext=new ResourceHistoryModel()}),
+                new TabViewItem("舰娘档案", new ShipHistoryView(){DataContext=new ShipHistoryModel()}),
+                new TabViewItem("战斗剧透", new BattleNetaView(){DataContext = new BattleNetaModel()}),
                 new TabViewItem("设置", new Settings.SettingsView(){DataContext = new Settings.SettingsModel()}),
                 new TabViewItem("关于", new Settings.AboutView())
             };
@@ -47,7 +47,7 @@ namespace LynLogger
             SelectedPage = Pages.First();
 
             DataStore.OnDataStoreSwitch += (_, ds) => {
-                this.RaisePropertyChanged(o => CurrentActiveDs);
+                RaisePropertyChanged(o => CurrentActiveDs);
             };
         }
     }

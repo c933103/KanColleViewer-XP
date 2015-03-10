@@ -12,11 +12,11 @@ namespace LynLogger.Observers
             "油", "弹", "钢", "铝", "喷火器", "桶", "开发资材", "改修资财"
         };
 
-        private WeakEvent<MapNext> _onMapNext;
+        private Action<MapNext> _onMapNext;
         public event Action<MapNext> OnMapNext
         {
-            add { (_onMapNext ?? (_onMapNext = new WeakEvent<MapNext>())).Add(value); }
-            remove { (_onMapNext ?? (_onMapNext = new WeakEvent<MapNext>())).RemoveLast(value); }
+            add { _onMapNext += value.MakeWeak(x => _onMapNext -= x); }
+            remove { }
         }
 
         public void OnCompleted()
@@ -72,7 +72,7 @@ namespace LynLogger.Observers
                     }
                 }
 
-                _onMapNext.FireEvent(mapNext);
+                _onMapNext(mapNext);
             } catch(Exception e) {
                 System.Diagnostics.Debugger.Break();
                 System.Diagnostics.Trace.TraceError(e.ToString());

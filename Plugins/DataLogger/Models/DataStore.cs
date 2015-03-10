@@ -15,19 +15,19 @@ namespace LynLogger.Models
     {
         public static readonly ulong StructureVersionNumber = 1;
 
-        private static WeakEvent<string, DataStore> _onDataStoreCreate = new WeakEvent<string, DataStore>();
-        private static WeakEvent<string, DataStore> _onDataStoreSwitch = new WeakEvent<string, DataStore>();
+        private static Action<string, DataStore> _onDataStoreCreate;
+        private static Action<string, DataStore> _onDataStoreSwitch;
 
         public static event Action<string, DataStore> OnDataStoreCreate
         {
-            add { (_onDataStoreCreate ?? (_onDataStoreCreate = new WeakEvent<string, DataStore>())).Add(value); }
-            remove { (_onDataStoreCreate ?? (_onDataStoreCreate = new WeakEvent<string, DataStore>())).RemoveLast(value); }
+            add { _onDataStoreCreate += value.MakeWeak(x => _onDataStoreCreate -= x); }
+            remove { }
         }
 
         public static event Action<string, DataStore> OnDataStoreSwitch
         {
-            add { (_onDataStoreSwitch ?? (_onDataStoreSwitch = new WeakEvent<string, DataStore>())).Add(value); }
-            remove { (_onDataStoreSwitch ?? (_onDataStoreSwitch = new WeakEvent<string, DataStore>())).RemoveLast(value); }
+            add { _onDataStoreSwitch += value.MakeWeak(x => _onDataStoreSwitch -= x); }
+            remove { }
         }
 
         public static DataStore Instance
@@ -44,9 +44,6 @@ namespace LynLogger.Models
         private static readonly string _dataDir = Path.Combine(Environment.CurrentDirectory, "LynLogger");
         private static readonly byte[] dataFileHeader = new byte[] { 0x48, 0x41, 0x49, 0x49 };
         private static readonly byte[] compressedDataFileHeader = new byte[] { 0x48, 0x41, 0x49, 0x32 };
-
-        private static readonly Logger.BasicInfoLogger bil = new Logger.BasicInfoLogger();
-        private static readonly Logger.ShipDataLogger sdl = new Logger.ShipDataLogger();
 
         internal static void SwitchMember(string memberId)
         {
@@ -76,9 +73,9 @@ namespace LynLogger.Models
                 _ds[_memberId].MemberId = memberId;
                 _ds[_memberId].InternalMemberId = _memberId;
                 
-                if(_onDataStoreCreate != null) _onDataStoreCreate.FireEvent(_memberId, _ds[_memberId]);
+                if(_onDataStoreCreate != null) _onDataStoreCreate(_memberId, _ds[_memberId]);
             }
-            if(_onDataStoreSwitch != null) _onDataStoreSwitch.FireEvent(_memberId, _ds[_memberId]);
+            if(_onDataStoreSwitch != null) _onDataStoreSwitch(_memberId, _ds[_memberId]);
         }
 
         internal static void SaveData()
@@ -116,12 +113,12 @@ namespace LynLogger.Models
         public IReadOnlyDictionary<int, ShipHistory> ShipHistories { get { return ZwShipHistories; } }
         
         [NonSerialized]
-        private WeakEvent<int> _shipDataChanged;
-        internal void RaiseShipDataChange(int id) { if(_shipDataChanged != null) _shipDataChanged.FireEvent(id); }
+        private Action<int> _shipDataChanged;
+        internal void RaiseShipDataChange(int id) { if(_shipDataChanged != null) _shipDataChanged(id); }
         public event Action<int> ShipDataChanged
         {
-            add { (_shipDataChanged ?? (_shipDataChanged = new WeakEvent<int>())).Add(value); }
-            remove { (_shipDataChanged ?? (_shipDataChanged = new WeakEvent<int>())).RemoveLast(value); }
+            add { _shipDataChanged += value.MakeWeak(x => _shipDataChanged -= x); }
+            remove { }
         }
 
         internal BasicInfo ZwBasicInfo;
@@ -131,12 +128,12 @@ namespace LynLogger.Models
         public BasicInfoHistory BasicInfoHistory { get { return ZwBasicInfoHistory; } }
 
         [NonSerialized]
-        private WeakEvent _basicInfoChanged;
-        internal void RaiseBasicInfoChange() { if(_basicInfoChanged != null) _basicInfoChanged.FireEvent(); }
+        private Action _basicInfoChanged;
+        internal void RaiseBasicInfoChange() { if(_basicInfoChanged != null) _basicInfoChanged(); }
         public event Action BasicInfoChanged
         {
-            add { (_basicInfoChanged ?? (_basicInfoChanged = new WeakEvent())).Add(value); }
-            remove { (_basicInfoChanged ?? (_basicInfoChanged = new WeakEvent())).RemoveLast(value); }
+            add { _basicInfoChanged += value.MakeWeak(x => _basicInfoChanged -= x); }
+            remove { }
         }
 
         internal Settings ZwSettings;

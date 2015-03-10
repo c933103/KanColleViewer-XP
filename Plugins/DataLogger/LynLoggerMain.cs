@@ -19,12 +19,15 @@ namespace LynLogger
     {
         public static LynLoggerMain Instance { get; private set; }
 
-        private static WeakEvent<LynLoggerMain> _onInstanceCreate;
+        private static Action<LynLoggerMain> _onInstanceCreate;
         public static event Action<LynLoggerMain> OnInstanceCreate
         {
-            add { (_onInstanceCreate ?? (_onInstanceCreate = new WeakEvent<LynLoggerMain>())).Add(value); }
-            remove { (_onInstanceCreate ?? (_onInstanceCreate = new WeakEvent<LynLoggerMain>())).RemoveLast(value); }
+            add { _onInstanceCreate += value.MakeWeak(x => _onInstanceCreate -= x); }
+            remove { }
         }
+
+        private static readonly Logger.BasicInfoLogger bil = new Logger.BasicInfoLogger();
+        private static readonly Logger.ShipDataLogger sdl = new Logger.ShipDataLogger();
 
         internal Observers.ApiBattleObserver BattleObserver { get; private set; }
         internal Observers.ApiBattleResultObserver BattleResultObserver { get; private set; }
@@ -55,7 +58,7 @@ namespace LynLogger
             //_disposables.AddLast(KanColleClient.Current.Proxy.api_req_sortie_battleresult.TryParse<kcsapi_battleresult>().Subscribe(BattleResultObserver));
 
             Instance = this;
-            if(_onInstanceCreate != null) _onInstanceCreate.FireEvent(this);
+            if(_onInstanceCreate != null) _onInstanceCreate(this);
         }
 
         System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
