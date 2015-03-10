@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace LynLogger.Models.Battling
 {
@@ -31,7 +27,7 @@ namespace LynLogger.Models.Battling
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(string.Format("{0}-{1}-{2}", MapAreaId, MapSectionId, (char)(MapLocId - 1 + 'A')));
+            sb.AppendLine(string.Format("{0}-{1}-{2}", MapAreaId, MapSectionId, MapLocId));
             switch(Event) {
                 case EventType.Battle:
                     sb.Append("来！战个痛！快！");
@@ -40,10 +36,10 @@ namespace LynLogger.Models.Battling
                     sb.Append("BOSS战突入！");
                     break;
                 case EventType.NightBattle:
-                    sb.Append("准备夜战！");
+                    sb.Append("夜战突入！");
                     break;
                 case EventType.NightBossBattle:
-                    sb.Append("准备夜战 BOSS！");
+                    sb.Append("夜战 BOSS！");
                     break;
                 case EventType.ItemGet:
                     sb.AppendFormat("获得 {0} x{1}", ItemGetLost.ItemName, ItemGetLost.Amount);

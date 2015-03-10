@@ -1,15 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Xml.Serialization;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
+﻿using LynLogger.Models.Merge;
 using LynLogger.Models.Scavenge;
-using LynLogger.Models.Merge;
+using LynLogger.Utilities;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 
 namespace LynLogger.Models
 {
@@ -18,8 +15,20 @@ namespace LynLogger.Models
     {
         public static readonly ulong StructureVersionNumber = 1;
 
-        public static event Action<string, DataStore> OnDataStoreCreate;
-        public static event Action<string, DataStore> OnDataStoreSwitch;
+        private static WeakEvent<string, DataStore> _onDataStoreCreate = new WeakEvent<string, DataStore>();
+        private static WeakEvent<string, DataStore> _onDataStoreSwitch = new WeakEvent<string, DataStore>();
+
+        public static event Action<string, DataStore> OnDataStoreCreate
+        {
+            add { (_onDataStoreCreate ?? (_onDataStoreCreate = new WeakEvent<string, DataStore>())).Add(value); }
+            remove { (_onDataStoreCreate ?? (_onDataStoreCreate = new WeakEvent<string, DataStore>())).RemoveLast(value); }
+        }
+
+        public static event Action<string, DataStore> OnDataStoreSwitch
+        {
+            add { (_onDataStoreSwitch ?? (_onDataStoreSwitch = new WeakEvent<string, DataStore>())).Add(value); }
+            remove { (_onDataStoreSwitch ?? (_onDataStoreSwitch = new WeakEvent<string, DataStore>())).RemoveLast(value); }
+        }
 
         public static DataStore Instance
         {
@@ -66,12 +75,10 @@ namespace LynLogger.Models
 
                 _ds[_memberId].MemberId = memberId;
                 _ds[_memberId].InternalMemberId = _memberId;
-
-                if(OnDataStoreCreate != null) {
-                    OnDataStoreCreate(_memberId, _ds[_memberId]);
-                }
+                
+                if(_onDataStoreCreate != null) _onDataStoreCreate.FireEvent(_memberId, _ds[_memberId]);
             }
-            if(OnDataStoreSwitch != null) OnDataStoreSwitch(_memberId, _ds[_memberId]);
+            if(_onDataStoreSwitch != null) _onDataStoreSwitch.FireEvent(_memberId, _ds[_memberId]);
         }
 
         internal static void SaveData()
@@ -100,40 +107,50 @@ namespace LynLogger.Models
         public string MemberId { get; private set; }
         public string InternalMemberId { get; private set; }
 
-        internal Dictionary<int, Models.Ship> ZwShips;
-        internal Dictionary<int, Models.Ship> RwShips { get { return ZwShips; } }
-        public IReadOnlyDictionary<int, Models.Ship> Ships { get { return ZwShips; } }
+        internal Dictionary<int, Ship> ZwShips;
+        internal Dictionary<int, Ship> RwShips { get { return ZwShips; } }
+        public IReadOnlyDictionary<int, Ship> Ships { get { return ZwShips; } }
 
-        internal Dictionary<int, Models.ShipHistory> ZwShipHistories;
-        internal Dictionary<int, Models.ShipHistory> RwShipHistories { get { return ZwShipHistories; } }
-        public IReadOnlyDictionary<int, Models.ShipHistory> ShipHistories { get { return ZwShipHistories; } }
+        internal Dictionary<int, ShipHistory> ZwShipHistories;
+        internal Dictionary<int, ShipHistory> RwShipHistories { get { return ZwShipHistories; } }
+        public IReadOnlyDictionary<int, ShipHistory> ShipHistories { get { return ZwShipHistories; } }
+        
+        [NonSerialized]
+        private WeakEvent<int> _shipDataChanged;
+        internal void RaiseShipDataChange(int id) { if(_shipDataChanged != null) _shipDataChanged.FireEvent(id); }
+        public event Action<int> ShipDataChanged
+        {
+            add { (_shipDataChanged ?? (_shipDataChanged = new WeakEvent<int>())).Add(value); }
+            remove { (_shipDataChanged ?? (_shipDataChanged = new WeakEvent<int>())).RemoveLast(value); }
+        }
 
-        [field: NonSerialized]
-        public event Action<int> ShipDataChanged;
-        internal void RaiseShipDataChange(int id) { if(ShipDataChanged != null) ShipDataChanged(id); }
+        internal BasicInfo ZwBasicInfo;
+        public BasicInfo BasicInfo { get { return ZwBasicInfo; } }
 
-        internal Models.BasicInfo ZwBasicInfo;
-        public Models.BasicInfo BasicInfo { get { return ZwBasicInfo; } }
+        internal BasicInfoHistory ZwBasicInfoHistory;
+        public BasicInfoHistory BasicInfoHistory { get { return ZwBasicInfoHistory; } }
 
-        internal Models.BasicInfoHistory ZwBasicInfoHistory;
-        public Models.BasicInfoHistory BasicInfoHistory { get { return ZwBasicInfoHistory; } }
+        [NonSerialized]
+        private WeakEvent _basicInfoChanged;
+        internal void RaiseBasicInfoChange() { if(_basicInfoChanged != null) _basicInfoChanged.FireEvent(); }
+        public event Action BasicInfoChanged
+        {
+            add { (_basicInfoChanged ?? (_basicInfoChanged = new WeakEvent())).Add(value); }
+            remove { (_basicInfoChanged ?? (_basicInfoChanged = new WeakEvent())).RemoveLast(value); }
+        }
 
-        [field: NonSerialized]
-        public event Action BasicInfoChanged;
-        internal void RaiseBasicInfoChange() { if(BasicInfoChanged != null) BasicInfoChanged(); }
-
-        internal Models.Settings ZwSettings;
-        public Models.Settings Settings { get { return ZwSettings; } }
+        internal Settings ZwSettings;
+        public Settings Settings { get { return ZwSettings; } }
 
         private DataStore()
         {
-            ZwShips = new Dictionary<int, Models.Ship>();
-            ZwBasicInfo = new Models.BasicInfo();
+            ZwShips = new Dictionary<int, Ship>();
+            ZwBasicInfo = new BasicInfo();
 
-            ZwShipHistories = new Dictionary<int, Models.ShipHistory>();
-            ZwBasicInfoHistory = new Models.BasicInfoHistory();
+            ZwShipHistories = new Dictionary<int, ShipHistory>();
+            ZwBasicInfoHistory = new BasicInfoHistory();
 
-            ZwSettings = new Models.Settings();
+            ZwSettings = new Settings();
         }
 
         internal DataStore(string memberId, string internalMemberId)
@@ -144,7 +161,7 @@ namespace LynLogger.Models
 
         public int Cleanup(Scavenge.IScavenger sc)
         {
-            var targetTypes = Attribute.GetCustomAttributes(sc.GetType(), typeof(Scavenge.ScavengeTargetTypeAttribute)).Cast<Scavenge.ScavengeTargetTypeAttribute>().Select(x => new KeyValuePair<Type, Type>(x.TargetKeyType, x.TargetValueType)).ToArray();
+            var targetTypes = Attribute.GetCustomAttributes(sc.GetType(), typeof(ScavengeTargetTypeAttribute)).Cast<ScavengeTargetTypeAttribute>().Select(x => new KeyValuePair<Type, Type>(x.TargetKeyType, x.TargetValueType)).ToArray();
             var scavengeCount = 0;
             scavengeCount += RwShipHistories.Scavenge(sc, targetTypes, false);
             scavengeCount += BasicInfoHistory.Scavenge(sc, targetTypes);

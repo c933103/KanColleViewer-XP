@@ -1,9 +1,6 @@
-﻿using System;
+﻿using LynLogger.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LynLogger.Models;
 
 namespace LynLogger.Views
 {

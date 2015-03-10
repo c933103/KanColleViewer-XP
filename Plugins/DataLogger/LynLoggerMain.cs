@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Grabacr07.KanColleViewer.Composition;
+using Grabacr07.KanColleWrapper;
+using Grabacr07.KanColleWrapper.Models.Raw;
+using LynLogger.Utilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Grabacr07.KanColleViewer.Composition;
-using Grabacr07.KanColleWrapper;
-using Grabacr07.KanColleWrapper.Models.Raw;
 using System.Reactive.Linq;
 
 namespace LynLogger
@@ -19,7 +18,13 @@ namespace LynLogger
     public class LynLoggerMain : IToolPlugin, IDisposable
     {
         public static LynLoggerMain Instance { get; private set; }
-        public static event Action<LynLoggerMain> OnInstanceCreate;
+
+        private static WeakEvent<LynLoggerMain> _onInstanceCreate;
+        public static event Action<LynLoggerMain> OnInstanceCreate
+        {
+            add { (_onInstanceCreate ?? (_onInstanceCreate = new WeakEvent<LynLoggerMain>())).Add(value); }
+            remove { (_onInstanceCreate ?? (_onInstanceCreate = new WeakEvent<LynLoggerMain>())).RemoveLast(value); }
+        }
 
         internal Observers.ApiBattleObserver BattleObserver { get; private set; }
         internal Observers.ApiBattleResultObserver BattleResultObserver { get; private set; }
@@ -50,7 +55,7 @@ namespace LynLogger
             //_disposables.AddLast(KanColleClient.Current.Proxy.api_req_sortie_battleresult.TryParse<kcsapi_battleresult>().Subscribe(BattleResultObserver));
 
             Instance = this;
-            if(OnInstanceCreate != null) OnInstanceCreate(this);
+            if(_onInstanceCreate != null) _onInstanceCreate.FireEvent(this);
         }
 
         System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

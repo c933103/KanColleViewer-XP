@@ -3,8 +3,6 @@ using LynLogger.Models.Scavenge;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace LynLogger.Settings
@@ -95,6 +93,7 @@ namespace LynLogger.Settings
             };
         }
 
+        #pragma warning disable 0067
         public class CleanupDataByCountCommand : ICommand
         {
             public bool CanExecute(object parameter) { return true; }
@@ -246,7 +245,7 @@ namespace LynLogger.Settings
                     using(System.IO.Stream input = System.IO.File.OpenRead(fn)) {
                         DataStore.Instance.Merge(LynLogger.Models.Migrations.DataStoreLoader.LoadFromStream(input));
                     }
-                } catch(Exception e) {
+                } catch(Exception) {
                     System.Diagnostics.Debugger.Break();
                 }
             }

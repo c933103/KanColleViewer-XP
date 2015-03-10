@@ -1,30 +1,25 @@
 ﻿using Codeplex.Data;
+using LynLogger.Models.Battling;
+using LynLogger.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using LynLogger.Models.Battling;
 
 namespace LynLogger.Observers
 {
     class ApiBattleObserver : IObserver<Fiddler.Session>
     {
-        public event Action<Models.Battling.BattleStatus> OnBattle;
-
-        public void OnCompleted()
+        private WeakEvent<BattleStatus> _onBattle;
+        public event Action<BattleStatus> OnBattle
         {
-            return;
-        }
-
-        public void OnError(Exception error)
-        {
-            return;
+            add { (_onBattle ?? (_onBattle = new WeakEvent<BattleStatus>())).Add(value); }
+            remove { (_onBattle ?? (_onBattle = new WeakEvent<BattleStatus>())).RemoveLast(value); }
         }
 
         public void OnNext(Fiddler.Session value)
         {
-            if(OnBattle == null) return;
+            if(_onBattle == null) return;
 
             try {
                 var response = value.ResponseBody;
@@ -79,7 +74,7 @@ namespace LynLogger.Observers
                     };
                 }
 
-                OnBattle(result);
+                _onBattle.FireEvent(result);
             } catch(Exception e) {
                 System.Diagnostics.Debugger.Break();
                 System.Diagnostics.Trace.TraceError(e.ToString());
@@ -193,6 +188,19 @@ namespace LynLogger.Observers
                     }
                 }
             }
+            BattleStatus.AirWarfareInfo.AirspaceControl ac = BattleStatus.AirWarfareInfo.AirspaceControl.None;
+            switch(data.api_stage1 == null ? 0 :  (int)data.api_stage1.api_disp_seiku) {
+                case -1:
+                    ac = BattleStatus.AirWarfareInfo.AirspaceControl.Parity;
+                    break;
+                case 3:
+                case 4:
+                    ac = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)(data.api_stage1.api_disp_seiku + 1);
+                    break;
+                default:
+                    ac = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)data.api_stage1.api_disp_seiku;
+                    break;
+            }
             var r = new BattleStatus.AirWarfareInfo(holder) {
                 ZwEnemyCarrierShip = planeFrom.Where(x => x > 6).Select(x => x-7).ToArray(),
                 ZwEnemyReconnInTouch = data.api_stage1 == null ? -1 : (int)data.api_stage1.api_touch_plane[1],
@@ -206,7 +214,7 @@ namespace LynLogger.Observers
                 ZwOurStage1Lost = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_f_lostcount,
                 ZwOurStage2Engaged = data.api_stage2 == null ? 0 : (int)data.api_stage2.api_f_count,
                 ZwOurStage2Lost = data.api_stage2 == null ? 0 : (int)data.api_stage2.api_f_lostcount,
-                ZwOurAirspaceControl = data.api_stage1 == null ? BattleStatus.AirWarfareInfo.AirspaceControl.None : (BattleStatus.AirWarfareInfo.AirspaceControl)(int)data.api_stage1.api_disp_seiku,
+                ZwOurAirspaceControl = ac,
                 ZwEnemyShipBombed = enemyBombed.ToArray(),
                 ZwEnemyShipDamages = enemyDamage.ToArray(),
                 ZwEnemyShipTorpedoed = enemyTorpedoed.ToArray(),
@@ -322,7 +330,8 @@ namespace LynLogger.Observers
                 } else {
                     attackType = (int)data.api_sp_list[i];
                     switch(attackType) {
-                        case 3: //敌方CI
+                        case 4: //纯炮击CI
+                        case 3: //潜艇CI
                             attackType = 2;
                             break;
                     }
@@ -348,5 +357,8 @@ namespace LynLogger.Observers
                 ZwLevel = 0
             };
         }
+
+        public void OnCompleted() { }
+        public void OnError(Exception error) { }
     }
 }

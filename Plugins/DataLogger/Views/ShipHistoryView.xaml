@@ -28,6 +28,5 @@
                 </DataGrid>
             </Expander>
         </StackPanel>
-
     </Grid>
 </UserControl>

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Grabacr07.KanColleWrapper;
 using Grabacr07.KanColleWrapper.Models.Raw;
-using System.Xml.Serialization;
+using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Grabacr07.KanColleWrapper;
 
 namespace LynLogger.Models
 {
@@ -58,7 +54,7 @@ namespace LynLogger.Models
 
         [OptionalField]
         internal EquiptInfo[] ZwEquipts;
-        public IReadOnlyList<EquiptInfo> Equipts { get { return ZwEquipts; } }
+        public IReadOnlyList<EquiptInfo> Equipts { get { return ZwEquipts ?? (ZwEquipts = new EquiptInfo[0]); } }
 
         private bool _dirty = false;
 
@@ -155,13 +151,11 @@ namespace LynLogger.Models
             if(Luck != data.api_lucky[0]) return true;
             if(MaxRawLuck != data.api_lucky[1]) return true;
             if(ShipId != data.api_ship_id) return true;
-
-            if(ZwEquipts == null) return true;
-            if(ZwEquipts.Length != data.api_slotnum) return true;
+            
+            if(ZwEquipts?.Length != data.api_slotnum) return true;
             for(int i = 0; i < data.api_slotnum; i++) {
-                if(ZwEquipts[i] == null) return true;
-                if(ZwEquipts[i].Id != data.api_slot[i]) return true;
-                if(ZwEquipts[i].EquiptCount != data.api_onslot[i]) return true;
+                if(ZwEquipts[i]?.Id != data.api_slot[i]) return true;
+                if(ZwEquipts[i]?.EquiptCount != data.api_onslot[i]) return true;
             }
 
             if(EnhancedPower != data.api_kyouka[0]) return true;

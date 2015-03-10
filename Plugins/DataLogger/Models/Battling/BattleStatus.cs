@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LynLogger.Models.Battling
 {
@@ -200,7 +197,7 @@ namespace LynLogger.Models.Battling
 
             public enum AirspaceControl
             {
-                [Description("未知 - 均衡或劣势")]
+                [Description("未知")]
                 None = 0,
 
                 [Description("确保")]
@@ -218,7 +215,7 @@ namespace LynLogger.Models.Battling
                 [Description("丧失")]
                 Incapability = 5,
 
-                [Description("未知 - 均衡或优势")]
+                [Description("未知")]
                 InvertNone = 6
             }
         }
@@ -362,11 +359,17 @@ namespace LynLogger.Models.Battling
             [Description("敌舰队发现 - 部分索敌机未返航")]
             SuccessWithLoss = 2,
 
-            [Description("未发现敌舰队")]
-            Fail = 5,
-
             [Description("索敌机未返航")]
-            ReconnLost = 6,
+            ReconnLost = 3,
+
+            [Description("未发现敌舰队")]
+            Fail = 4,
+
+            [Description("敌舰队发现 - 自主索敌成功")]
+            AutonomousReconnSucceed = 5,
+
+            [Description("无法进行索敌")]
+            NoReconn = 6,
         }
     }
 }

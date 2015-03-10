@@ -78,7 +78,12 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <TextBlock Text="{Binding From.ShipName, Mode=OneWay}" Grid.Column="0"/>
+                <TextBlock Grid.Column="0">
+                    <Run Text="["/>
+                    <Run Text="{Binding From.Id, Mode=OneWay}"/>
+                    <Run Text="]"/>
+                    <Run Text="{Binding From.ShipName, Mode=OneWay}"/>
+                </TextBlock>
                 <TextBlock Text=" --> " Grid.Column="1"/>
                 <TextBlock Grid.Column="2">
                     <Run Text="["/>

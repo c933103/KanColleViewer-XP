@@ -1,10 +1,6 @@
 ﻿using Grabacr07.KanColleWrapper.Models.Raw;
 using LynLogger.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LynLogger.Observers
 {
@@ -17,7 +13,7 @@ namespace LynLogger.Observers
             var shipIds = ds.Keys.ToList();
             foreach(var ship in raw) {
                 if(!ds.ContainsKey(ship.api_id)) {
-                    ds[ship.api_id] = new Models.Ship(ship.api_id, ship.api_ship_id);
+                    ds[ship.api_id] = new Ship(ship.api_id, ship.api_ship_id);
                 }
                 ds[ship.api_id].Update(ship);
                 shipIds.Remove(ship.api_id);
