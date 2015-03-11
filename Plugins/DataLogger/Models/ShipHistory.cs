@@ -3,6 +3,7 @@ using LynLogger.Models.Scavenge;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace LynLogger.Models
 {
@@ -13,21 +14,36 @@ namespace LynLogger.Models
         {
             get
             {
-                return string.Format("[{0}] {1} {2}", Id, TypeName.Last().Value, ShipName.Last().Value);
+                var lastInfo = ShipNameType.Last().Value;
+                return string.Format("[{0}] {1} {2}", Id, lastInfo.TypeName, lastInfo.ShipName);
             }
         }
 
         public int Id { get; private set; }
 
-        internal Histogram<string> ZwShipName;
-        internal Histogram<string> ZwTypeName;
-        internal Histogram<int> ZwShipId;
-        internal Histogram<int> ZwTypeId;
-
-        public Histogram<string> ShipName { get { return ZwShipName; } }
-        public Histogram<string> TypeName { get { return ZwTypeName; } }
-        public Histogram<int> ShipId { get { return ZwShipId; } }
-        public Histogram<int> TypeId { get { return ZwTypeId; } }
+        private Histogram<string> ZwShipName;
+        private Histogram<string> ZwTypeName;
+        private Histogram<int> ZwShipId;
+        [OptionalField] internal Histogram<ShipNameType> ZwShipNameType;
+        
+        public Histogram<ShipNameType> ShipNameType
+        {
+            get
+            {
+                if(ZwShipNameType == null) {
+                    ZwShipNameType = new Histogram<Models.ShipNameType>(Helpers.Zip(ZwShipId, ZwShipName, ZwTypeName, (id, sn, tn) =>
+                        new KeyValuePair<long, ShipNameType>(id.Key, new Models.ShipNameType {
+                            ShipId = id.Value,
+                            ShipName = sn.Value,
+                            TypeName = tn.Value
+                        }
+                    )));
+                    ZwShipId = null;
+                    ZwShipName = ZwTypeName = null;
+                }
+                return ZwShipNameType;
+            }
+        }
 
         internal Histogram<int> ZwLevel;
         internal Histogram<int> ZwExp;
@@ -67,10 +83,7 @@ namespace LynLogger.Models
         public ShipHistory(int id)
         {
             Id = id;
-            ZwShipName = new Histogram<string>();
-            ZwTypeName = new Histogram<string>();
-            ZwShipId = new Histogram<int>();
-            ZwTypeId = new Histogram<int>();
+            ZwShipNameType = new Histogram<ShipNameType>();
             ZwLevel = new Histogram<int>();
             ZwExp = new Histogram<int>();
             ZwSRate = new Histogram<int>();
@@ -97,16 +110,13 @@ namespace LynLogger.Models
 
         public int Scavenge(IScavenger sc, KeyValuePair<Type, Type>[] targetTypes)
         {
-            IScavengable[] scavengables = new IScavengable[] { ZwShipName, ZwTypeName, ZwShipId, ZwTypeId, ZwLevel, ZwExp, ZwSRate, ZwEnhancedPower, ZwEnhancedTorpedo, ZwEnhancedAntiAir, ZwEnhancedDefense, ZwEnhancedLuck, ZwExistenceLog };
+            IScavengable[] scavengables = new IScavengable[] { ShipNameType, ZwLevel, ZwExp, ZwSRate, ZwEnhancedPower, ZwEnhancedTorpedo, ZwEnhancedAntiAir, ZwEnhancedDefense, ZwEnhancedLuck, ZwExistenceLog };
             return scavengables.Select(x => x.Scavenge(sc, targetTypes)).Sum();
         }
 
         public void Merge(ShipHistory val)
         {
-            ZwShipName.Merge(val.ZwShipName);
-            ZwTypeName.Merge(val.ZwTypeName);
-            ZwShipId.Merge(val.ZwShipId);
-            ZwTypeId.Merge(val.ZwTypeId);
+            ShipNameType.Merge(val.ShipNameType);
             ZwLevel.Merge(val.ZwLevel);
             ZwExp.Merge(val.ZwExp);
             ZwSRate.Merge(val.ZwSRate);

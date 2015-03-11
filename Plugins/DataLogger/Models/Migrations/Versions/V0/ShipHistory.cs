@@ -27,8 +27,7 @@ namespace LynLogger.Models.Migrations.Versions.V0
         public Models.ShipHistory Migrate()
         {
             return new Models.ShipHistory(Id) {
-                ZwShipId = ShipId,
-                ZwTypeId =  new Histogram<int>(ShipId.Select(x => new KeyValuePair<long, int>(x.Key, Helpers.LookupShipTypeId(x.Value)))),
+                ZwShipNameType = new Histogram<ShipNameType>(ShipId.Select(x => new KeyValuePair<long, ShipNameType>(x.Key, Helpers.LookupShipNameInfo(x.Value)))),
                 ZwEnhancedAntiAir = EnhancedAntiAir,
                 ZwEnhancedDefense = EnhancedDefense,
                 ZwEnhancedLuck = EnhancedLuck,
@@ -38,8 +37,6 @@ namespace LynLogger.Models.Migrations.Versions.V0
                 ZwExp = Exp,
                 ZwLevel = Level,
                 ZwSRate = SRate,
-                ZwShipName = new Histogram<string>(ShipId.Select(x => new KeyValuePair<long, string>(x.Key, Helpers.LookupShipName(x.Value)))),
-                ZwTypeName = new Histogram<string>(ShipId.Select(x => new KeyValuePair<long, string>(x.Key, Helpers.LookupShipTypeName(x.Value)))),
             };
         }
     }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
@@ -120,6 +120,10 @@ namespace LynLogger.Models.Battling
             internal bool[] ZwEnemyShipTorpedoed;
             internal double[] ZwEnemyShipDamages;
 
+            internal int ZwCutInShipNo = -1;
+            internal AaCutInType ZwCutInType;
+            internal EquiptInfo[] ZwCutInEquipts;
+
             public AirspaceControl OurAirspaceControl { get { return ZwOurAirspaceControl; } }
             public AirspaceControl EnemyAirspaceControl { get { return (AirspaceControl)(6 - (int)ZwOurAirspaceControl); } }
 
@@ -139,6 +143,10 @@ namespace LynLogger.Models.Battling
             public int EnemyStage2Lost { get { return ZwEnemyStage2Lost; } }
             public string EnemyReconnInTouchName { get { return ZwEnemyReconnInTouchName; } }
 
+            public ShipInfo CutInShip { get { return ZwCutInShipNo < 0 ? null : _parent.OurShips[ZwCutInShipNo]; } }
+            public AaCutInType CutInType { get { return ZwCutInType; } }
+            public IReadOnlyList<EquiptInfo> CutInEquipts { get { return ZwCutInEquipts; } }
+            
             //public IReadOnlyList<bool> OurShipBombed { get { return ZwOurShipBombed; } }
             //public IReadOnlyList<bool> OurShipTorpedoed { get { return ZwOurShipTorpedoed; } }
             //public IReadOnlyList<double> OurShipDamages { get { return ZwOurShipDamages; } }
@@ -217,6 +225,39 @@ namespace LynLogger.Models.Battling
 
                 [Description("未知")]
                 InvertNone = 6
+            }
+
+            public enum AaCutInType
+            {
+                [Description("无")]
+                None = 0,
+
+                [Description("秋月 / 双高角炮 / 有电探")]
+                AkizukiDualNavalGunWithRadar = 1,
+
+                [Description("秋月 / 高角炮 / 有电探")]
+                AkizukiNavalGunWithRadar = 2,
+
+                [Description("秋月 / 双高角炮 / 无电探")]
+                AkizukiDualNavalGunNoRadar = 3,
+
+                [Description("大口径主炮 / 三式弹 / 高射装置 / 有电探")]
+                ArtilleryAaT3ShellWithRadar = 4,
+
+                [Description("双高角炮+高射装置 / 有电探")]
+                DualNavalAndAaGunWithRadar = 5,
+
+                [Description("大口径主炮 / 三式弹 / 高射装置 / 无电探")]
+                ArtilleryAaT3ShellNoRadar = 6,
+
+                [Description("高角炮 / 高射装置 / 有电探")]
+                NavalGunWithAaGunWithRadar = 7,
+
+                [Description("高角炮+高射装置 / 有电探")]
+                NavalAndAaGunWithRadar = 8,
+
+                [Description("高角炮 / 高射装置 / 无电探")]
+                NavalGunWithAaGunNoRadar = 9,
             }
         }
 

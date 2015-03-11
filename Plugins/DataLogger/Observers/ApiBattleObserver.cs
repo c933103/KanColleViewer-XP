@@ -226,6 +226,15 @@ namespace LynLogger.Observers
                 ZwOurShipDamages = ourDamage.ToArray(),
                 ZwOurShipTorpedoed = ourTorpedoed.ToArray()
             };
+            if(data.api_stage2 != null && data.api_stage2.api_air_fire() && data.api_stage2.api_air_fire != null) {//对空CI
+                r.ZwCutInShipNo = (int)data.api_stage2.api_air_fire.api_idx;
+                r.ZwCutInType = (BattleStatus.AirWarfareInfo.AaCutInType)(int)data.api_stage2.api_air_fire.api_kind;
+                List<int> ciEquipts = new List<int>();
+                for(int i = 0; data.api_stage2.api_air_fire.api_use_items.IsDefined(i); i++) {
+                    ciEquipts.Add((int)data.api_stage2.api_air_fire.api_use_items[i]);
+                }
+                r.ZwCutInEquipts = ciEquipts.Select(x => EquiptInfoFromEquiptId(x, 0)).ToArray();
+            }
             if(r.ZwOurReconnInTouch < 0) {
                 r.ZwOurReconnInTouchName = "没有舰载机";
             } else {
@@ -236,7 +245,6 @@ namespace LynLogger.Observers
             } else {
                 r.ZwEnemyReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwEnemyReconnInTouch, "{0} 号侦察机");
             }
-            if(r.ZwOurAirspaceControl == BattleStatus.AirWarfareInfo.AirspaceControl.Denial) r.ZwOurAirspaceControl = BattleStatus.AirWarfareInfo.AirspaceControl.Incapability;
             return r;
         }
 

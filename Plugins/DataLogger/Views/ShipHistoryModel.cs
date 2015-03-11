@@ -42,9 +42,9 @@ namespace LynLogger.Views
                 if(SelectedShip == null) return null;
 
                 return new IEnumerable<KeyValuePair<long, string>>[] {
-                    Enumerable.Zip(SelectedShip.TypeName, SelectedShip.ShipName, (a, b) => new KeyValuePair<long, string>(a.Key, string.Format("新成员 {0} {1}", a.Value, b.Value))).Take(1),
+                    SelectedShip.ShipNameType.Select(x => new KeyValuePair<long, string>(x.Key, string.Format("新成员 {0} {1}", x.Value.TypeName, x.Value.ShipName))).Take(1),
                     SelectedShip.Level.Skip(1).Select(x => new KeyValuePair<long, string>(x.Key, string.Format("等级升到 {0} 级", x.Value))),
-                    Enumerable.Zip(SelectedShip.TypeName, SelectedShip.ShipName, (a, b) => new KeyValuePair<long, string>(a.Key, string.Format("改造为 {0} {1}", a.Value, b.Value))).Skip(1),
+                    SelectedShip.ShipNameType.Select(x => new KeyValuePair<long, string>(x.Key, string.Format("改造为 {0} {1}", x.Value.TypeName, x.Value.ShipName))).Skip(1),
                     SelectedShip.EnhancedAntiAir.SelectWithPrevious((prev, curr) => new KeyValuePair<long, string>(curr.Key, "对空提升了" + (curr.Value - prev.Value))),
                     SelectedShip.EnhancedDefense.SelectWithPrevious((prev, curr) => new KeyValuePair<long, string>(curr.Key, "装甲提升了" + (curr.Value - prev.Value))),
                     SelectedShip.EnhancedPower.SelectWithPrevious((prev, curr) => new KeyValuePair<long, string>(curr.Key, "火力提升了" + (curr.Value - prev.Value))),

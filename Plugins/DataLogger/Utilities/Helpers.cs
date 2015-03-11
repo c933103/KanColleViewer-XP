@@ -192,31 +192,14 @@ namespace LynLogger
             }
         }
 
-        public static string LookupShipName(int id)
+        public static Models.ShipNameType LookupShipNameInfo(int id)
         {
             var ship = Grabacr07.KanColleWrapper.KanColleClient.Current.Master.Ships[id];
-            if(ship == null) {
-                return "Ship" + id;
-            }
-            return ship.Name;
-        }
-
-        public static string LookupShipTypeName(int id)
-        {
-            var ship = Grabacr07.KanColleWrapper.KanColleClient.Current.Master.Ships[id];
-            if(ship == null) {
-                return "Type"+id;
-            }
-            return ship.ShipType.Name;
-        }
-
-        public static int LookupShipTypeId(int id)
-        {
-            var ship = Grabacr07.KanColleWrapper.KanColleClient.Current.Master.Ships[id];
-            if(ship == null) {
-                return 0;
-            }
-            return ship.ShipType.Id;
+            return new Models.ShipNameType {
+                ShipId = id,
+                ShipName = ship?.Name ?? ("Ship" + id),
+                TypeName = ship?.ShipType?.Name ?? ("Type"+id)
+            };
         }
 
         public static string ToString(this double val, string format, int targetWidth = 8)
@@ -242,13 +225,25 @@ namespace LynLogger
 
         public static IEnumerable<Tout> Zip<T1, T2, T3, T4, Tout>(IEnumerable<T1> i1, IEnumerable<T2> i2, IEnumerable<T3> i3, IEnumerable<T4> i4, Func<T1, T2, T3, T4, Tout> project)
         {
-            using(var e1 = i1.GetEnumerator())
-            using(var e2 = i2.GetEnumerator())
-            using(var e3 = i3.GetEnumerator())
-            using(var e4 = i4.GetEnumerator()) {
+            using (var e1 = i1.GetEnumerator())
+            using (var e2 = i2.GetEnumerator())
+            using (var e3 = i3.GetEnumerator())
+            using (var e4 = i4.GetEnumerator()) {
                 System.Collections.IEnumerator[] enumerators = new System.Collections.IEnumerator[] { e1, e2, e3, e4 };
                 while(enumerators.All(e => e.MoveNext())) {
                     yield return project(e1.Current, e2.Current, e3.Current, e4.Current);
+                }
+            }
+        }
+
+        public static IEnumerable<Tout> Zip<T1, T2, T3, Tout>(IEnumerable<T1> i1, IEnumerable<T2> i2, IEnumerable<T3> i3, Func<T1, T2, T3, Tout> project)
+        {
+            using (var e1 = i1.GetEnumerator())
+            using (var e2 = i2.GetEnumerator())
+            using (var e3 = i3.GetEnumerator()) {
+                System.Collections.IEnumerator[] enumerators = new System.Collections.IEnumerator[] { e1, e2, e3 };
+                while(enumerators.All(e => e.MoveNext())) {
+                    yield return project(e1.Current, e2.Current, e3.Current);
                 }
             }
         }

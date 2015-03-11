@@ -408,6 +408,29 @@
                                 <Run Text="{Binding OurReconnInTouchName, Mode=OneWay}" />
                                 <Run Text="触接对方" />
                             </TextBlock>
+                            <StackPanel>
+                                <TextBlock>
+                                    <Run Text="["/>
+                                    <Run Text="{Binding CutInShip.Id, Mode=OneWay}"/>
+                                    <Run Text="]"/>
+                                    <Run Text="{Binding CutInShip.ShipName, Mode=OneWay}" />
+                                    <Run Text="对空CI发动"/>
+                                </TextBlock>
+                                <ItemsControl ItemsSource="{Binding Equipts, Mode=OneWay}" DisplayMemberPath="EquiptName" />
+                                <TextBlock>
+                                    <Run Text="类型:" />
+                                    <Run Text="{Binding CutInType, Mode=OneWay, Converter={StaticResource EnumToDescriptionConverter}}" />
+                                </TextBlock>
+                                <StackPanel.Style>
+                                    <Style TargetType="{x:Type StackPanel}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CutInType, Mode=OneWay, FallbackValue=None}" Value="None">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+                            </StackPanel>
                             <ItemsControl ItemsSource="{Binding EnemyStage3Report, Mode=OneWay}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="1" Grid.Column="1" Grid.IsSharedSizeScope="True">

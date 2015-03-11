@@ -167,4 +167,12 @@ namespace LynLogger.Models
             return Locked ^ (data.api_locked != 0);
         }
     }
+
+    [Serializable]
+    public struct ShipNameType
+    {
+        public int ShipId;
+        public string ShipName;
+        public string TypeName;
+    }
 }

@@ -78,6 +78,11 @@ namespace LynLogger.Models
             if(_onDataStoreSwitch != null) _onDataStoreSwitch(_memberId, _ds[_memberId]);
         }
 
+        internal static void Refresh()
+        {
+            if(_onDataStoreSwitch != null) _onDataStoreSwitch(_memberId, _ds[_memberId]);
+        }
+
         internal static void SaveData()
         {
             if(!Directory.Exists(_dataDir)) {

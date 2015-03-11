@@ -102,11 +102,12 @@ namespace LynLogger.Settings
             public void Execute(object parameter)
             {
                 DataStore.Instance.Cleanup(new Scavenger((int)parameter));
+                DataStore.Refresh();
             }
 
             [ScavengeTargetType(typeof(long), typeof(int))]
             [ScavengeTargetType(typeof(long), typeof(double))]
-            [ScavengeTargetType(typeof(long), typeof(string))]
+            [ScavengeTargetType(typeof(long), typeof(ShipNameType))]
             private class Scavenger : IRampUpScavenger
             {
                 private LinkedList<long> seenKeys;
@@ -149,11 +150,12 @@ namespace LynLogger.Settings
             public void Execute(object parameter)
             {
                 DataStore.Instance.Cleanup(new Scavenger(Helpers.UnixTimestamp - ((int)parameter) * 86400L));
+                DataStore.Refresh();
             }
 
             [ScavengeTargetType(typeof(long), typeof(int))]
             [ScavengeTargetType(typeof(long), typeof(double))]
-            [ScavengeTargetType(typeof(long), typeof(string))]
+            [ScavengeTargetType(typeof(long), typeof(ShipNameType))]
             private class Scavenger : IScavenger
             {
                 private long thredsholdTs;
@@ -181,9 +183,10 @@ namespace LynLogger.Settings
             public void Execute(object parameter)
             {
                 DataStore.Instance.Cleanup(new Scavenger());
+                DataStore.Refresh();
             }
 
-            [ScavengeTargetType(typeof(int), typeof(Models.ShipHistory))]
+            [ScavengeTargetType(typeof(int), typeof(ShipHistory))]
             private class Scavenger : IScavenger
             {
                 public void Reset() { }
@@ -195,7 +198,7 @@ namespace LynLogger.Settings
 
                     return !(val.EnhancedAntiAir.Count == 1 && val.EnhancedDefense.Count == 1 && val.EnhancedLuck.Count == 1
                         && val.EnhancedPower.Count == 1 && val.EnhancedTorpedo.Count == 1 && val.Exp.Count == 1
-                        && val.Level.Count == 1 && val.ShipId.Count == 1 && val.SRate.Count == 1
+                        && val.Level.Count == 1 && val.ShipNameType.Count == 1 && val.SRate.Count == 1
                         && val.ExistenceLog.Last().Value == ShipExistenceStatus.NonExistence);
                 }
             }
@@ -245,6 +248,7 @@ namespace LynLogger.Settings
                     using(System.IO.Stream input = System.IO.File.OpenRead(fn)) {
                         DataStore.Instance.Merge(LynLogger.Models.Migrations.DataStoreLoader.LoadFromStream(input));
                     }
+                    DataStore.Refresh();
                 } catch(Exception) {
                     System.Diagnostics.Debugger.Break();
                 }

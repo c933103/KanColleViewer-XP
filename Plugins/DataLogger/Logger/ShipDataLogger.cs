@@ -28,12 +28,7 @@
             shipHisto.Exp.Append(ship.Exp, ds.Settings.ShipDataLoggingInterval);
             shipHisto.Level.Append(ship.Level, ds.Settings.ShipDataLoggingInterval);
             shipHisto.SRate.Append(ship.SRate, ds.Settings.ShipDataLoggingInterval);
-
-            if(shipHisto.ShipId.Append(ship.ShipId, 0)) {
-                shipHisto.TypeId.Append(Helpers.LookupShipTypeId(ship.ShipId), 0, true);
-                shipHisto.ShipName.Append(Helpers.LookupShipName(ship.ShipId), 0, true);
-                shipHisto.TypeName.Append(Helpers.LookupShipTypeName(ship.ShipId), 0, true);
-            }
+            shipHisto.ShipNameType.Append(Helpers.LookupShipNameInfo(ship.ShipId), 0);
 
             if(ship.Locked) {
                 shipHisto.ExistenceLog.Append(Models.ShipExistenceStatus.Locked, 0);
