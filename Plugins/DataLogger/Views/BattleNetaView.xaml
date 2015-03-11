@@ -416,7 +416,7 @@
                                     <Run Text="{Binding CutInShip.ShipName, Mode=OneWay}" />
                                     <Run Text="对空CI发动"/>
                                 </TextBlock>
-                                <ItemsControl ItemsSource="{Binding Equipts, Mode=OneWay}" DisplayMemberPath="EquiptName" />
+                                <ItemsControl ItemsSource="{Binding CutInEquipts, Mode=OneWay}" DisplayMemberPath="EquiptName" />
                                 <TextBlock>
                                     <Run Text="类型:" />
                                     <Run Text="{Binding CutInType, Mode=OneWay, Converter={StaticResource EnumToDescriptionConverter}}" />

@@ -212,7 +212,9 @@
 													Margin="5,0,0,0" />
                                             </Grid>
 
-                                            <StackPanel Grid.Column="0" Grid.Row="3" Margin="-3,3,-3,-3" HorizontalAlignment="Center" Orientation="Horizontal">
+                                            <StackPanel Grid.Column="{Binding LRSplit, FallbackValue=1, ConverterParameter=0:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
+                                                        Grid.Row="{Binding LRSplit, FallbackValue=2, ConverterParameter=3:2, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
+                                                        Margin="-3,3,-3,-3" HorizontalAlignment="Center" Orientation="Horizontal">
                                                 <TextBlock TextAlignment="Center" Margin="3,3,3,0" Padding="6,2">
                                                     <TextBlock.Style>
                                                         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
@@ -289,7 +291,7 @@
                                             </StackPanel>
 
                                             <ItemsControl Grid.Row="0"
-												Grid.RowSpan="4"
+												Grid.RowSpan="{Binding LRSplit, FallbackValue=2, ConverterParameter=4:2, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
 												Grid.Column="1"
 												Grid.IsSharedSizeScope="True"
 												ItemsSource="{Binding EquiptableSlots}"
@@ -315,9 +317,9 @@
                                                             <controls:SlotItemIcon Grid.Column="0" Grid.RowSpan="2"
 																Type="{Binding Item.Info.IconType}"
 																Width="20" Height="20" Margin="0,0,5,0" />
-                                                            <TextBlock Grid.ColumnSpan="{Binding LRSplit, ConverterParameter=4:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
-                                                                       Grid.Row="{Binding LRSplit, ConverterParameter=0:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
-                                                                       Grid.Column="{Binding LRSplit, ConverterParameter=1:4, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
+                                                            <TextBlock Grid.ColumnSpan="{Binding LRSplit, FallbackValue=1, ConverterParameter=4:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
+                                                                       Grid.Row="{Binding LRSplit, FallbackValue=1, ConverterParameter=0:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
+                                                                       Grid.Column="{Binding LRSplit, FallbackValue=4, ConverterParameter=1:4, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
 																Text="{Binding Item.Info.Name}"
 																Foreground="{DynamicResource ActiveForegroundBrushKey}"
 																Style="{DynamicResource DefaultTextStyleKey}" />

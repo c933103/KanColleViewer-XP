@@ -154,8 +154,8 @@ namespace LynLogger.Models
             
             if(ZwEquipts?.Length != data.api_slotnum) return true;
             for(int i = 0; i < data.api_slotnum; i++) {
-                if(ZwEquipts[i]?.Id != data.api_slot[i]) return true;
-                if(ZwEquipts[i]?.EquiptCount != data.api_onslot[i]) return true;
+                if(ZwEquipts[i].Id != data.api_slot[i]) return true;
+                if(ZwEquipts[i].EquiptCount != data.api_onslot[i]) return true;
             }
 
             if(EnhancedPower != data.api_kyouka[0]) return true;

@@ -4,7 +4,7 @@ using System;
 namespace LynLogger.Models
 {
     [Serializable]
-    public class EquiptInfo
+    public struct EquiptInfo
     {
         public int Id { get; private set; }
 
@@ -23,6 +23,8 @@ namespace LynLogger.Models
         public EquiptInfo(int id)
         {
             Id = id;
+            ZwEquiptId = ZwLevel = ZwEquiptCount = 0;
+            ZwEquiptName = null;
         }
 
         public EquiptInfo(SlotItem si, int count, int id = -1)

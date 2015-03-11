@@ -78,7 +78,7 @@ namespace LynLogger.Models.Battling
             internal EquiptInfo[] ZwEquipts;
             public IReadOnlyList<EquiptInfo> Equipts { get { return ZwEquipts; } }
 
-            public class ParameterInfo
+            public struct ParameterInfo
             {
                 internal int ZwPower;
                 internal int ZwTorpedo;
@@ -190,7 +190,7 @@ namespace LynLogger.Models.Battling
             private BattleStatus _parent;
             public AirWarfareInfo(BattleStatus parent) { _parent = parent; }
 
-            public class Stage3Report
+            public struct Stage3Report
             {
                 internal ShipInfo ZwShip;
                 internal bool ZwBombed;
@@ -261,7 +261,7 @@ namespace LynLogger.Models.Battling
             }
         }
 
-        public class TorpedoInfo
+        public struct TorpedoInfo
         {
             internal int ZwFrom;
             internal int ZwTo;
@@ -274,7 +274,7 @@ namespace LynLogger.Models.Battling
             public double Damage { get { return ZwDamage; } }
 
             private BattleStatus _parent;
-            public TorpedoInfo(BattleStatus parent) { _parent = parent; }
+            public TorpedoInfo(BattleStatus parent) { _parent = parent; ZwDamage = ZwFrom = ZwTo = 0; }
         }
 
         public class BombardInfo
@@ -313,7 +313,7 @@ namespace LynLogger.Models.Battling
             }
         }
 
-        public class ShipHpStatus
+        public struct ShipHpStatus
         {
             public int Id { get; private set; }
             public int HpMax { get; private set; }
@@ -321,14 +321,14 @@ namespace LynLogger.Models.Battling
             public string TypeName { get; private set; }
             public string ShipName { get; private set; }
             public Grabacr07.KanColleWrapper.Models.LimitedValue Hp { get { return new Grabacr07.KanColleWrapper.Models.LimitedValue(HpCurrent, HpMax, 0); } }
-            private Models.Battling.BattleStatus.ShipInfo origInfo;
+            private ShipInfo origInfo;
 
-            public ShipHpStatus(Models.Battling.BattleStatus.ShipInfo info)
+            public ShipHpStatus(ShipInfo info)
             {
                 origInfo = info; HpMax = info.MaxHp; HpCurrent = info.CurrentHp; TypeName = info.ShipTypeName; ShipName = info.ShipName; Id = info.Id;
             }
 
-            public ShipHpStatus ProcessBattle(Models.Battling.BattleStatus report)
+            public ShipHpStatus ProcessBattle(BattleStatus report)
             {
                 foreach(var aws3report in report.AirWarfare.EnemyStage3Report.SafeConcat(report.AirWarfare.OurStage3Report)) {
                     if(aws3report.Ship != origInfo) continue;
