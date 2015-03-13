@@ -59,7 +59,7 @@ namespace LynLogger.Views
         }
     }
 
-    public class TabViewItem : LynLogger.Models.NotificationSourceObject
+    public class TabViewItem : Models.NotificationSourceObject
     {
         public string TabName { get; set; }
         public object TabView { get; set; }

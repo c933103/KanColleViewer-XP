@@ -366,7 +366,8 @@
                                             <Run Text="{Binding Id, Mode=OneWay}"/>
                                             <Run Text="]"/>
                                             <Run Text="{Binding ShipName, Mode=OneWay}" />
-                                            <Run Text="参战" />
+                                            <Run Text="制空" />
+                                            <Run Text="{Binding ShipAsControl, Mode=OneWay}" />
                                         </TextBlock>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -386,7 +387,8 @@
                                             <Run Text="{Binding Id, Mode=OneWay}"/>
                                             <Run Text="]"/>
                                             <Run Text="{Binding ShipName, Mode=OneWay}" />
-                                            <Run Text="参战" />
+                                            <Run Text="制空" />
+                                            <Run Text="{Binding ShipAsControl, Mode=OneWay}" />
                                         </TextBlock>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -397,6 +399,10 @@
                                 <Run Text="共起飞" />
                                 <Run Text="{Binding OurStage1Engaged, Mode=OneWay}" />
                                 <Run Text="架舰载机" />
+                            </TextBlock>
+                            <TextBlock>
+                                <Run Text="合计制空" />
+                                <Run Text="{Binding OurAsControlValue, Mode=OneWay}" />
                             </TextBlock>
                             <TextBlock>
                                 <Run Text="{Binding OurStage1Lost, Mode=OneWay}" />
@@ -438,6 +444,10 @@
                                 <Run Text="共起飞" />
                                 <Run Text="{Binding EnemyStage1Engaged, Mode=OneWay}" />
                                 <Run Text="架舰载机" />
+                            </TextBlock>
+                            <TextBlock>
+                                <Run Text="合计制空" />
+                                <Run Text="{Binding EnemyAsControlValue, Mode=OneWay}" />
                             </TextBlock>
                             <TextBlock>
                                 <Run Text="{Binding EnemyStage1Lost, Mode=OneWay}" />

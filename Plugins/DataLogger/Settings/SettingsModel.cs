@@ -246,7 +246,7 @@ namespace LynLogger.Settings
                 if(!System.IO.File.Exists(fn)) return;
                 try {
                     using(System.IO.Stream input = System.IO.File.OpenRead(fn)) {
-                        DataStore.Instance.Merge(LynLogger.Models.Migrations.DataStoreLoader.LoadFromStream(input));
+                        DataStore.Instance.Merge(Models.Migrations.DataStoreLoader.LoadFromStream(input));
                     }
                     DataStore.Refresh();
                 } catch(Exception) {

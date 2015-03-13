@@ -171,7 +171,7 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 
 			this.Update();
 
-			var window = Window.GetWindow(this.WebBrowser);
+			/*var window = Window.GetWindow(this.WebBrowser);
 			if (window != null) {
                 if(App.ViewModelRoot.LRSplit) {
                     window.Height = this.WebBrowser.Height + 120;
@@ -180,7 +180,7 @@ namespace Grabacr07.KanColleViewer.Views.Controls
                     window.Height = Math.Min(window.MaxHeight, this.WebBrowser.Height + 450);
                     window.Width = this.WebBrowser.Width;
                 }
-			}
+			}*/
 		}
 
 		private void ApplyStyleSheet()

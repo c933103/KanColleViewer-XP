@@ -94,15 +94,19 @@ namespace LynLogger.Models
                 buf.WriteVLCI(StructureVersionNumber);
                 new BinaryFormatter().Serialize(buf, Instance);
                 buf.Position = 0;
-                using(Stream output = File.Create(Path.Combine(_dataDir, _memberId))) {
-                    output.Write(dataFileHeader, 0, dataFileHeader.Length);
-                    buf.CopyTo(output);
-                }
+                try {
+                    using (Stream output = File.Create(Path.Combine(_dataDir, _memberId))) {
+                        output.Write(dataFileHeader, 0, dataFileHeader.Length);
+                        buf.CopyTo(output);
+                    }
+                } catch(IOException) { }
                 buf.Position = 0;
-                using(Stream output = File.Create(Path.Combine(_dataDir, _memberId+".Z"))) {
-                    output.Write(compressedDataFileHeader, 0, compressedDataFileHeader.Length);
-                    Helpers.CompressData(buf, null, output);
-                }
+                try {
+                    using (Stream output = File.Create(Path.Combine(_dataDir, _memberId+".Z"))) {
+                        output.Write(compressedDataFileHeader, 0, compressedDataFileHeader.Length);
+                        Helpers.CompressData(buf, null, output);
+                    }
+                } catch (IOException) { }
             }
         }
 

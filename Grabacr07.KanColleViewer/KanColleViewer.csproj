@@ -247,6 +247,7 @@
       <DependentUpon>ZoomFactorSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Converters\BoolToIntSelector.cs" />
+    <Compile Include="Views\Converters\EnumToDescriptionsConverter.cs" />
     <Compile Include="Views\Converters\HasFlagConverter.cs" />
     <Compile Include="Views\Converters\QuestCategoryToColorConverter.cs" />
     <Compile Include="Views\Dev\DebugTab.xaml.cs">

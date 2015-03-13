@@ -78,6 +78,8 @@ namespace LynLogger.Models.Battling
             internal EquiptInfo[] ZwEquipts;
             public IReadOnlyList<EquiptInfo> Equipts { get { return ZwEquipts; } }
 
+            public int ShipAsControl { get { return Equipts.Sum(x => x.SlotAsControl); } }
+
             public struct ParameterInfo
             {
                 internal int ZwPower;
@@ -146,7 +148,10 @@ namespace LynLogger.Models.Battling
             public ShipInfo CutInShip { get { return ZwCutInShipNo < 0 ? null : _parent.OurShips[ZwCutInShipNo]; } }
             public AaCutInType CutInType { get { return ZwCutInType; } }
             public IReadOnlyList<EquiptInfo> CutInEquipts { get { return ZwCutInEquipts; } }
-            
+
+            public int OurAsControlValue { get { return OurCarrierShip.Sum(x => x.ShipAsControl); } }
+            public int EnemyAsControlValue { get { return EnemyCarrierShip.Sum(x => x.ShipAsControl); } }
+
             //public IReadOnlyList<bool> OurShipBombed { get { return ZwOurShipBombed; } }
             //public IReadOnlyList<bool> OurShipTorpedoed { get { return ZwOurShipTorpedoed; } }
             //public IReadOnlyList<double> OurShipDamages { get { return ZwOurShipDamages; } }
@@ -299,17 +304,38 @@ namespace LynLogger.Models.Battling
 
             public enum AttackType
             {
+                [Description("夜战CI - 纯炮击")]
+                ArtilleryCutIn = -4,
+
+                [Description("夜战CI - 纯雷击")]
+                TorpedoCutIn = -3,
+
+                [Description("夜战CI - 炮雷混合")]
+                ArtilleryAndTorpedoCutIn = -2,
+
+                [Description("夜战二连")]
+                NightTwiceInRow = -1,
+
                 [Description("普通")]
                 Normal = 0,
 
-                [Description("二连")]
-                TwiceInRow = 1,
+                //[Description("二连")]
+                //TwiceInRow = 1,
 
-                [Description("CI")]
-                CutIn = 2,
+                [Description("昼战二连")]
+                DayTwiceInRow = 2,
 
-                [Description("弹着观测")]
-                WithCorrection = 3
+                [Description("弹着观测 - 主炮+副炮")]
+                ArtilleryWithCanonWithCorrection = 3,
+
+                [Description("弹着观测 - 主炮+电探")]
+                ArtilleryWithRadarCorrection = 4,
+
+                [Description("弹着观测 - 主炮+彻甲弹")]
+                ArtilleryWithApShellWithCorrection = 5,
+
+                [Description("弹着观测 - 双主炮")]
+                DualArtilleryWithCorrection = 6
             }
         }
 

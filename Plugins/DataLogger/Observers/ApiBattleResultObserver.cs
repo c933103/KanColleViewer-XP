@@ -18,7 +18,7 @@ namespace LynLogger.Observers
 
         public void OnNext(SvData<kcsapi_battleresult> value)
         {
-            
+            //value.Data
         }
     }
 }

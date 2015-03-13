@@ -147,7 +147,7 @@
 												Grid.Column="0"
 												Margin="0,0,0,5">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"
+                                                    <ColumnDefinition Width="*"
 														SharedSizeGroup="ShipName" />
                                                     <ColumnDefinition Width="8" />
                                                     <ColumnDefinition Width="Auto"
@@ -214,79 +214,151 @@
 
                                             <StackPanel Grid.Column="{Binding LRSplit, FallbackValue=1, ConverterParameter=0:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
                                                         Grid.Row="{Binding LRSplit, FallbackValue=2, ConverterParameter=3:2, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
-                                                        Margin="-3,3,-3,-3" HorizontalAlignment="Center" Orientation="Horizontal">
-                                                <TextBlock TextAlignment="Center" Margin="3,3,3,0" Padding="6,2">
+                                                        Grid.RowSpan="{Binding LRSplit, FallbackValue=2, ConverterParameter=1:2, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
+                                                        Margin="0,3,0,-3" HorizontalAlignment="Center" Orientation="Horizontal">
+                                                <TextBlock Margin="3" Padding="6,2">
                                                     <TextBlock.Style>
                                                         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
                                                             <Setter Property="Background" Value="#FF084008" />
                                                             <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
                                                             <Setter Property="Text" Value="正常" />
                                                             <Style.Triggers>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=DamageControlled}" Value="True" />
-                                                                    </MultiDataTrigger.Conditions>
+                                                                <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=DamageControlled}" Value="True">
                                                                     <Setter Property="Text" Value="正常 / 有损管" />
-                                                                </MultiDataTrigger>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged}" Value="True" />
-                                                                    </MultiDataTrigger.Conditions>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged}" Value="True">
                                                                     <Setter Property="Text" Value="大破 / 可能轰沉" />
                                                                     <Setter Property="Foreground" Value="White" />
                                                                     <Setter Property="Background" Value="#FFA00000" />
-                                                                </MultiDataTrigger>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged|DamageControlled}" Value="True" />
-                                                                    </MultiDataTrigger.Conditions>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged|DamageControlled}" Value="True">
                                                                     <Setter Property="Text" Value="大破 / 有损管" />
                                                                     <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
-                                                                </MultiDataTrigger>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Evacuation}" Value="True" />
-                                                                    </MultiDataTrigger.Conditions>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Evacuation}" Value="True">
                                                                     <Setter Property="Text" Value="大破 / 已退避" />
                                                                     <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
-                                                                </MultiDataTrigger>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Tow}" Value="True" />
-                                                                    </MultiDataTrigger.Conditions>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Tow}" Value="True">
                                                                     <Setter Property="Text" Value="撤退 / 退避护卫" />
                                                                     <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
-                                                                </MultiDataTrigger>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Repair}" Value="True" />
-                                                                    </MultiDataTrigger.Conditions>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Repair}" Value="True">
                                                                     <Setter Property="Text" Value="入渠中" />
                                                                     <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
-                                                                </MultiDataTrigger>
+                                                                </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
                                                     </TextBlock.Style>
                                                 </TextBlock>
 
-                                                <TextBlock TextAlignment="Center" Margin="3,3,3,0" Padding="6,2" Visibility="Collapsed">
+                                                <TextBlock Margin="3" Padding="6,2">
                                                     <TextBlock.Style>
                                                         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
-                                                            <Setter Property="Text" Value="弹着观测射击" />
-                                                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
                                                             <Setter Property="Background" Value="#FF084008" />
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding AntiAirCutIn, Mode=OneWay}" Value="None" />
+                                                                        <Condition Binding="{Binding BattleSpecialAttack, Mode=OneWay}" Value="None" />
+                                                                        <Condition Binding="{Binding NightSpecialAttack, Mode=OneWay}" Value="None" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Background" Value="#FF101060" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
                                                         </Style>
                                                     </TextBlock.Style>
-                                                </TextBlock>
-
-                                                <TextBlock TextAlignment="Center" Margin="3,3,3,0" Padding="6,2" Visibility="Collapsed">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
-                                                            <Setter Property="Text" Value="夜战CI" />
-                                                            <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
-                                                            <Setter Property="Background" Value="#FF101060" />
-                                                        </Style>
-                                                    </TextBlock.Style>
+                                                    <Run Text="■">
+                                                        <Run.Style>
+                                                            <Style TargetType="{x:Type Run}">
+                                                                <Setter Property="Foreground" Value="DeepSkyBlue" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding AntiAirCutIn, Mode=OneWay}" Value="None">
+                                                                        <Setter Property="Foreground" Value="{x:Null}" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Run.Style>
+                                                    </Run><Run Text="■">
+                                                        <Run.Style>
+                                                            <Style TargetType="{x:Type Run}">
+                                                                <Setter Property="Foreground" Value="Yellow" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding BattleSpecialAttack, Mode=OneWay}" Value="None">
+                                                                        <Setter Property="Foreground" Value="{x:Null}" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Run.Style>
+                                                    </Run><Run Text="■">
+                                                        <Run.Style>
+                                                            <Style TargetType="{x:Type Run}">
+                                                                <Setter Property="Foreground" Value="Violet" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding NightSpecialAttack, Mode=OneWay}" Value="None">
+                                                                        <Setter Property="Foreground" Value="{x:Null}" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Run.Style>
+                                                    </Run>
+                                                    <TextBlock.ToolTip>
+                                                        <ToolTip>
+                                                            <StackPanel>
+                                                                <TextBlock FontWeight="Bold" Margin="3">可能的特殊攻击</TextBlock>
+                                                                <Grid>
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="Auto" />
+                                                                        <ColumnDefinition Width="Auto" />
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <Grid.RowDefinitions>
+                                                                        <RowDefinition Height="Auto" />
+                                                                        <RowDefinition Height="Auto" />
+                                                                        <RowDefinition Height="Auto" />
+                                                                    </Grid.RowDefinitions>
+                                                                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="DeepSkyBlue" Text="对空CI" />
+                                                                    <TextBlock Grid.Row="0" Grid.Column="1" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding AntiAirCutIn, Mode=OneWay, Converter={StaticResource EnumToDescriptionsConverter}}">
+                                                                        <TextBlock.Style>
+                                                                            <Style TargetType="{x:Type TextBlock}">
+                                                                                <Setter Property="Foreground" Value="DeepSkyBlue" />
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding AntiAirCutIn, Mode=OneWay}" Value="None">
+                                                                                        <Setter Property="Foreground" Value="Red" />
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </TextBlock.Style>
+                                                                    </TextBlock>
+                                                                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="Yellow" Text="昼战" />
+                                                                    <ItemsControl Grid.Row="1" Grid.Column="1" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" ItemsSource="{Binding BattleSpecialAttack, Mode=OneWay, Converter={StaticResource EnumToDescriptionsConverter}, ConverterParameter=Flags}">
+                                                                        <ItemsControl.Style>
+                                                                            <Style TargetType="{x:Type ItemsControl}">
+                                                                                <Setter Property="Foreground" Value="Yellow" />
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding BattleSpecialAttack, Mode=OneWay}" Value="None">
+                                                                                        <Setter Property="Foreground" Value="Red" />
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </ItemsControl.Style>
+                                                                    </ItemsControl>
+                                                                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="Violet" Text="夜战" />
+                                                                    <TextBlock Grid.Row="2" Grid.Column="1" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding NightSpecialAttack, Mode=OneWay, Converter={StaticResource EnumToDescriptionsConverter}}">
+                                                                        <TextBlock.Style>
+                                                                            <Style TargetType="{x:Type TextBlock}">
+                                                                                <Setter Property="Foreground" Value="Violet" />
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding NightSpecialAttack, Mode=OneWay}" Value="None">
+                                                                                        <Setter Property="Foreground" Value="Red" />
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </TextBlock.Style>
+                                                                    </TextBlock>
+                                                                </Grid>
+                                                            </StackPanel>
+                                                        </ToolTip>
+                                                    </TextBlock.ToolTip>
                                                 </TextBlock>
                                             </StackPanel>
 
@@ -294,7 +366,7 @@
 												Grid.RowSpan="{Binding LRSplit, FallbackValue=2, ConverterParameter=4:2, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
 												Grid.Column="1"
 												Grid.IsSharedSizeScope="True"
-												ItemsSource="{Binding EquiptableSlots}"
+												ItemsSource="{Binding Slots}"
 												Margin="8,0,0,0">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>

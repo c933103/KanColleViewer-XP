@@ -23,8 +23,8 @@
 			<converters:StringToVisiblityConverter x:Key="StringToVisiblityConverter" />
             <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
             <Converters:HasFlagConverter x:Key="HasFlagConverter" />
-            <Converters:BoolToIntSelector x:Key="BoolToIntSelector"/>
-
+            <Converters:BoolToIntSelector x:Key="BoolToIntSelector" />
+            <Converters:EnumToDescriptionsConverter x:Key="EnumToDescriptionsConverter" />
 
         </ResourceDictionary>
 	</Application.Resources>

@@ -54,7 +54,7 @@ namespace LynLogger
             _disposables.AddLast(KanColleClient.Current.Proxy.api_req_map_start.Subscribe(MapStartNextObserver));
             _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_map/next").Subscribe(MapStartNextObserver));
 
-            //BattleResultObserver = new Observers.ApiBattleResultObserver();
+            BattleResultObserver = new Observers.ApiBattleResultObserver();
             //_disposables.AddLast(KanColleClient.Current.Proxy.api_req_sortie_battleresult.TryParse<kcsapi_battleresult>().Subscribe(BattleResultObserver));
 
             Instance = this;

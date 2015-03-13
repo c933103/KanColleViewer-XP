@@ -73,7 +73,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			{
 				new SettingsViewModel(),
 				#region DEBUG
-#if DEBUG
+#if false
 				new DebugTabViewModel(),
 #endif
 				#endregion

@@ -1,4 +1,5 @@
 ﻿using Codeplex.Data;
+using Grabacr07.KanColleWrapper;
 using LynLogger.Models.Battling;
 using LynLogger.Utilities;
 using System;
@@ -83,8 +84,8 @@ namespace LynLogger.Observers
 
         private BattleStatus.ShipInfo[] ConvertOurFleet(int fleetId, dynamic nowHps, dynamic maxHps, dynamic param)
         {
-            return Grabacr07.KanColleWrapper.KanColleClient.Current.Homeport.Organization.Fleets[fleetId].Ships.Select((x, i) => {
-                var localShip = LynLogger.Models.DataStore.Instance.Ships[x.Id];
+            return KanColleClient.Current.Homeport.Organization.Fleets[fleetId].Ships.Select((x, i) => {
+                var localShip = Models.DataStore.Instance.Ships[x.Id];
                 return new BattleStatus.ShipInfo() {
                     ZwShipTypeName = x.Info.ShipType.Name,
                     ZwShipName = x.Info.Name,
@@ -105,12 +106,7 @@ namespace LynLogger.Observers
                         ZwPower = localShip.EnhancedPower,
                         ZwTorpedo = localShip.EnhancedTorpedo
                     },
-                    ZwEquipts = x.EquippedSlots.Select(si => new LynLogger.Models.EquiptInfo(si.Item.Id) {
-                        ZwEquiptId = si.Item.Info.Id,
-                        ZwEquiptCount = si.Current,
-                        ZwLevel = si.Item.Level,
-                        ZwEquiptName = si.Item.Info.Name
-                    }).ToArray()
+                    ZwEquipts = x.EquippedSlots.Select(si => new Models.EquiptInfo(si)).ToArray()
                 };
             }).ToArray();
         }
@@ -121,12 +117,12 @@ namespace LynLogger.Observers
             for(int i = 0; i < 6; i++) {
                 if(types[i+1] <= 0) break;
                 int shipId = (int)types[i+1];
-                var ship = Grabacr07.KanColleWrapper.KanColleClient.Current.Master.Ships[shipId];
-                var equipts = new List<LynLogger.Models.EquiptInfo>(5);
+                var ship = KanColleClient.Current.Master.Ships[shipId];
+                var equipts = new List<Models.EquiptInfo>(5);
                 for(int j = 0; j < 5; j++) {
                     if(slots[i][j] <= 0) break;
                     int equiptId = (int)slots[i][j];
-                    equipts.Add(EquiptInfoFromEquiptId(equiptId, ship.Slots[j]));
+                    equipts.Add(new Models.EquiptInfo(KanColleClient.Current.Master.SlotItems[equiptId], ship.Slots[j]));
                 }
 
                 r.Add(new BattleStatus.ShipInfo() {
@@ -233,7 +229,7 @@ namespace LynLogger.Observers
                 for(int i = 0; data.api_stage2.api_air_fire.api_use_items.IsDefined(i); i++) {
                     ciEquipts.Add((int)data.api_stage2.api_air_fire.api_use_items[i]);
                 }
-                r.ZwCutInEquipts = ciEquipts.Select(x => EquiptInfoFromEquiptId(x, 0)).ToArray();
+                r.ZwCutInEquipts = ciEquipts.Select(x => new Models.EquiptInfo(KanColleClient.Current.Master.SlotItems[x], 0)).ToArray();
             }
             if(r.ZwOurReconnInTouch < 0) {
                 r.ZwOurReconnInTouchName = "没有舰载机";
@@ -329,43 +325,19 @@ namespace LynLogger.Observers
 
                 if(data.api_at_type()) {
                     attackType = (int)data.api_at_type[i];
-                    switch(attackType) {
-                        case 2: //昼战二连
-                            attackType = 1;
-                            break;
-                        case 6: //敌方弹着
-                            attackType = 3;
-                            break;
-                    }
                 } else {
-                    attackType = (int)data.api_sp_list[i];
-                    switch(attackType) {
-                        case 4: //纯炮击CI
-                        case 3: //潜艇CI
-                            attackType = 2;
-                            break;
-                    }
+                    attackType = (int)-data.api_sp_list[i];
                 }
 
                 r.Add(new BattleStatus.BombardInfo(holder) {
                     ZwFrom = (int)data.api_at_list[i],
                     ZwTo = tgts.ToArray(),
                     ZwDamage = dmgs.ToArray(),
-                    ZwEquipts = sis.Select(x => EquiptInfoFromEquiptId(x, 0)).ToArray(),
+                    ZwEquipts = sis.Select(x => new Models.EquiptInfo(KanColleClient.Current.Master.SlotItems[x], 0)).ToArray(),
                     ZwType = (BattleStatus.BombardInfo.AttackType)attackType
                 });
             }
             return r.ToArray();
-        }
-
-        private Models.EquiptInfo EquiptInfoFromEquiptId(int id, int count)
-        {
-            return new Models.EquiptInfo(0) {
-                ZwEquiptCount = count,
-                ZwEquiptId = id,
-                ZwEquiptName = Helpers.GetEquiptNameWithFallback(id),
-                ZwLevel = 0
-            };
         }
 
         public void OnCompleted() { }

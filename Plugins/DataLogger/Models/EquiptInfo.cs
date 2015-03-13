@@ -17,30 +17,61 @@ namespace LynLogger.Models
         internal int ZwLevel;
         public int Level { get { return ZwLevel; } }
 
+        [System.Runtime.Serialization.OptionalField] internal int ZwAsControl;
+        public int AsControl { get { return ZwAsControl; } }
+
         internal string ZwEquiptName;
         public string EquiptName { get { return ZwEquiptName; } }
 
-        public EquiptInfo(int id)
+        public int SlotAsControl { get { return (int)(Math.Sqrt(EquiptCount) * AsControl); } }
+        
+        public EquiptInfo(SlotItemInfo info, int count, int id = 0)
         {
+            if(info != null) {
+                ZwLevel = 0;
+                ZwAsControl = info.IsAirSuperiorityFighter ? info.AA : 0;
+                ZwEquiptId = info.Id;
+                ZwEquiptName = info.Name;
+            } else {
+                ZwAsControl = ZwLevel = 0;
+                ZwEquiptId = id;
+                ZwEquiptName = id.ToString();
+            }
             Id = id;
-            ZwEquiptId = ZwLevel = ZwEquiptCount = 0;
-            ZwEquiptName = null;
+            ZwEquiptCount = count;
         }
 
-        public EquiptInfo(SlotItem si, int count, int id = -1)
+        public EquiptInfo(SlotItem si, int count, int id = 0)
         {
             if(si != null) {
                 Id = si.Id;
                 ZwEquiptId = si.Info.Id;
                 ZwEquiptName = si.Info.Name;
                 ZwLevel = si.Level;
+                ZwAsControl = si.Info.IsAirSuperiorityFighter ? si.Info.AA : 0;
             } else {
-                Id = id;
-                ZwEquiptId = id;
-                ZwEquiptName = "";
-                ZwLevel = 0;
+                Id = ZwEquiptId = id;
+                ZwAsControl = ZwLevel = 0;
+                ZwEquiptName = id.ToString();
             }
             ZwEquiptCount = count;
+        }
+
+        public EquiptInfo(ShipSlot ss, int id = 0, int count = 0)
+        {
+            if(ss != null) {
+                Id = ss.Item.Id;
+                ZwEquiptId = ss.Item.Info.Id;
+                ZwEquiptName = ss.Item.Info.Name;
+                ZwLevel = ss.Item.Level;
+                ZwAsControl = ss.Item.Info.IsAirSuperiorityFighter ? ss.Item.Info.AA : 0;
+                ZwEquiptCount = ss.Current;
+            } else {
+                Id = ZwEquiptId = id;
+                ZwAsControl = ZwLevel = 0;
+                ZwEquiptCount = count;
+                ZwEquiptName = id.ToString();
+            }
         }
     }
 }

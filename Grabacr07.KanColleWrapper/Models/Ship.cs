@@ -65,12 +65,48 @@ namespace Grabacr07.KanColleWrapper.Models
 		public int ExpForNextLevel
 		{
 			get { return this.RawData.api_exp.Get(1) ?? 0; }
-		}
+        }
+
+        private AaCutInType _antiAirCutIn;
+        public AaCutInType AntiAirCutIn
+        {
+            get { return _antiAirCutIn; }
+            set
+            {
+                if(_antiAirCutIn == value) return;
+                _antiAirCutIn = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private SpecialAttackType _battleSpecialAttack;
+        public SpecialAttackType BattleSpecialAttack
+        {
+            get { return _battleSpecialAttack; }
+            set
+            {
+                if(_battleSpecialAttack == value) return;
+                _battleSpecialAttack = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private NightBattleAttackType _nightSpecialAttack;
+        public NightBattleAttackType NightSpecialAttack
+        {
+            get { return _nightSpecialAttack; }
+            set
+            {
+                if(_nightSpecialAttack == value) return;
+                _nightSpecialAttack = value;
+                RaisePropertyChanged();
+            }
+        }
 
 
-		#region HP 変更通知プロパティ
+        #region HP 変更通知プロパティ
 
-		private LimitedValue _HP;
+        private LimitedValue _HP;
 
 		/// <summary>
 		/// 耐久値を取得します。
@@ -310,8 +346,7 @@ namespace Grabacr07.KanColleWrapper.Models
 		{
 			get { return this.RawData.api_sally_area; }
 		}
-
-        public ShipSlot[] EquiptableSlots { get; private set; }
+        
 		#region Status 変更通知プロパティ
 
 		private ShipSituation situation;
@@ -357,10 +392,9 @@ namespace Grabacr07.KanColleWrapper.Models
 			}
 
             this.Slots = this.RawData.api_slot
+                .Take(rawData.api_slotnum)
                 .Select(id => this.homeport.Itemyard.SlotItems[id])
-                .Select((t, i) => new ShipSlot(t, this.Info.RawData.api_maxeq.Get(i) ?? 0, this.RawData.api_onslot.Get(i) ?? 0))
-                .ToArray();
-            this.EquiptableSlots = this.Slots.Take(rawData.api_slotnum).ToArray();
+                .Select((t, i) => new ShipSlot(t, this.Info.RawData.api_maxeq.Get(i) ?? 0, this.RawData.api_onslot.Get(i) ?? 0)).ToArray();
 			this.EquippedSlots = this.Slots.Where(x => x.Equipped).ToArray();
 
 			if (this.EquippedSlots.Any(x => x.Item.Info.Type == SlotItemType.応急修理要員))
@@ -371,7 +405,113 @@ namespace Grabacr07.KanColleWrapper.Models
 			{
 				this.Situation &= ~ShipSituation.DamageControlled;
 			}
-		}
+
+            // Count different types of equipments
+            var primaryCannons = 0;
+            var heavyPrimaryCannons = 0;
+            var secondaryCannons = 0;
+            var torpedoes = 0;
+            var observationPlanes = 0;
+            var radars = 0;
+            var apShells = 0;
+            var aaShells = 0;
+            var highAngleGun = 0;
+            var comboGunAndDirector = 0;
+            var aaFireDirector = 0;
+            foreach(var itemInfo in EquippedSlots.Select(x => x.Item.Info)) {
+                switch(itemInfo.Type) {
+                    case SlotItemType.水上偵察機:
+                    case SlotItemType.水上爆撃機:
+                        observationPlanes++;
+                        break;
+                    default:
+                        switch(itemInfo.IconType) {
+                            case SlotItemIconType.MainCanonHeavy:
+                                heavyPrimaryCannons++;
+                                primaryCannons++;
+                                break;
+                            case SlotItemIconType.MainCanonLight:
+                            case SlotItemIconType.MainCanonMedium:
+                                primaryCannons++;
+                                break;
+                            case SlotItemIconType.SecondaryCanon:
+                                secondaryCannons++;
+                                break;
+                            case SlotItemIconType.Torpedo:
+                                if(itemInfo.Id != 41) {
+                                    torpedoes++;
+                                }
+                                break;
+                            case SlotItemIconType.Rader:
+                                radars++;
+                                break;
+                            case SlotItemIconType.APShell:
+                                apShells++;
+                                break;
+                            case SlotItemIconType.HighAngleGun:
+                                switch(itemInfo.Id) {
+                                    case 10: //12.7cm連装高角砲
+                                    case 66: //8cm高角砲
+                                    case 71: //10cm連装高角砲(砲架)
+                                        secondaryCannons++;
+                                        break;
+                                    case 3: //10cm連装高角砲
+                                    case 48: //12.7cm単装高角砲
+                                    case 91: //12.7cm連装高角砲(後期型)
+                                        primaryCannons++;
+                                        break;
+                                    case 122: //10cm高角砲＋高射装置
+                                        primaryCannons++;
+                                        comboGunAndDirector++;
+                                        break;
+                                }
+                                highAngleGun++;
+                                break;
+                            case SlotItemIconType.AntiAircraftFireDirector:
+                                aaFireDirector++;
+                                break;
+                            case SlotItemIconType.AAShell:
+                                aaShells++;
+                                break;
+                        }
+                        break;
+                }
+            }
+
+            SpecialAttackType sat = SpecialAttackType.None;
+            if(observationPlanes > 0) {
+                if(primaryCannons == 2 && secondaryCannons == 0 && apShells == 1 && radars == 0) sat |= SpecialAttackType.DualArtilleryWithCorrection;
+                if(primaryCannons == 1 && secondaryCannons == 1 && apShells == 1 && radars == 0) sat |= SpecialAttackType.ArtilleryWithApShellWithCorrection;
+                if(primaryCannons == 1 && secondaryCannons == 1 && apShells == 0 && radars == 1) sat |= SpecialAttackType.ArtilleryWithRadarCorrection;
+                if(primaryCannons >= 1 && secondaryCannons >= 1) sat |= SpecialAttackType.ArtilleryWithCanonWithCorrection;
+                if(primaryCannons >= 2) sat |= SpecialAttackType.DualArtillery;
+            }
+            BattleSpecialAttack = sat;
+
+            if(heavyPrimaryCannons == 1 && aaShells == 1 && aaFireDirector == 1 && radars == 1) AntiAirCutIn = AaCutInType.ArtilleryAaT3ShellWithRadar;
+            else if(comboGunAndDirector == 2 && radars == 1) AntiAirCutIn = AaCutInType.DualNavalAndAaGunWithRadar;
+            else if(heavyPrimaryCannons == 1 && aaShells == 1 && aaFireDirector == 1) AntiAirCutIn = AaCutInType.ArtilleryAaT3ShellNoRadar;
+            else if(highAngleGun == 1 && aaFireDirector == 1 && radars == 1) AntiAirCutIn = AaCutInType.NavalGunWithAaGunWithRadar;
+            else if(comboGunAndDirector == 1 && radars == 1) AntiAirCutIn = AaCutInType.NavalAndAaGunWithRadar;
+            else if(highAngleGun == 1 && aaFireDirector == 1) AntiAirCutIn = AaCutInType.NavalGunWithAaGunNoRadar;
+            else AntiAirCutIn = AaCutInType.None;
+
+            if(Info.Id == 330 || Info.Id == 421) {
+                     if(highAngleGun == 2 && radars == 1) AntiAirCutIn = AaCutInType.AkizukiDualNavalGunWithRadar;
+                else if(highAngleGun == 1 && radars == 1) AntiAirCutIn = AaCutInType.AkizukiNavalGunWithRadar;
+                else if(highAngleGun == 2               ) AntiAirCutIn = AaCutInType.AkizukiDualNavalGunNoRadar;
+            }
+
+                 if(                                                torpedoes >= 2) NightSpecialAttack = NightBattleAttackType.TorpedoCutIn;
+            else if(primaryCannons >= 3                                           ) NightSpecialAttack = NightBattleAttackType.TriArtilleryCutIn;
+            else if(primaryCannons == 2 && secondaryCannons >= 1                  ) NightSpecialAttack = NightBattleAttackType.DualArtilleryWithCannonCutIn;
+            else if(primaryCannons == 2 && secondaryCannons == 0 && torpedoes == 1) NightSpecialAttack = NightBattleAttackType.DualArtilleryWithTorpedoCutIn;
+            else if(primaryCannons == 1 &&                          torpedoes == 1) NightSpecialAttack = NightBattleAttackType.ArtilleryWithTorpedoCutIn;
+            else if(primaryCannons == 2 && secondaryCannons == 0 && torpedoes == 0) NightSpecialAttack = NightBattleAttackType.DualArtillery;
+            else if(primaryCannons == 1 && secondaryCannons >= 1 && torpedoes == 0) NightSpecialAttack = NightBattleAttackType.ArtilleryWithCannon;
+            else if(secondaryCannons >= 2 && (torpedoes == 0 || torpedoes == 1)) NightSpecialAttack = NightBattleAttackType.DualCannon;
+            else NightSpecialAttack = NightBattleAttackType.None;
+        }
 
 
 		internal void Charge(int fuel, int bull, int[] onslot)

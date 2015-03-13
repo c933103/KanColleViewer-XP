@@ -63,7 +63,7 @@ namespace Grabacr07.KanColleViewer.Views.Behaviors
 			this.AssociatedObject.Width = 800 / dpi.ScaleX;
 			this.AssociatedObject.Height = 480 / dpi.ScaleY;
 
-			if (window != null) {
+            /*if (window != null) {
                 if(App.ViewModelRoot.LRSplit) {
                     window.Height = this.AssociatedObject.Height + 120;
                     window.Width = Math.Min(window.MaxWidth, this.AssociatedObject.Width + 768);
@@ -71,7 +71,7 @@ namespace Grabacr07.KanColleViewer.Views.Behaviors
                     window.Height = Math.Min(window.MaxHeight, this.AssociatedObject.Height + 450);
                     window.Width = this.AssociatedObject.Width;
                 }
-			}
-		}
-	}
+            }*/
+        }
+    }
 }

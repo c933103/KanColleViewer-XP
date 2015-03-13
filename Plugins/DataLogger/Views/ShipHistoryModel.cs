@@ -22,7 +22,7 @@ namespace LynLogger.Views
             get
             {
                 if(DataStore.Instance == null) return null;
-                return DataStore.Instance.ShipHistories.Select(x => x.Value);
+                return new LinkedList<ShipHistory>(DataStore.Instance.ShipHistories.Select(x => x.Value));
             }
         }
 
