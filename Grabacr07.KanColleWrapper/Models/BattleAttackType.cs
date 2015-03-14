@@ -73,6 +73,12 @@ namespace Grabacr07.KanColleWrapper.Models
         [Description("秋月 / 双高角炮 / 无电探")]
         AkizukiDualNavalGunNoRadar,
 
+        [Description("摩耶改二 / 集中机枪 / 高角炮 / 有电探")]
+        MayaGen2MultiAaGunWithNavalGunWithRadar,
+
+        [Description("摩耶改二 / 集中机枪 / 高角炮 / 无电探")]
+        MayaGen2MultiAaGunWithNavalGunNoRadar,
+
         [Description("大口径主炮 / 三式弹 / 高射装置 / 有电探")]
         ArtilleryAaT3ShellWithRadar,
 

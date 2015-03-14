@@ -455,6 +455,10 @@ namespace Grabacr07.KanColleWrapper.Models
                                     case 71: //10cm連装高角砲(砲架)
                                         secondaryCannons++;
                                         break;
+                                    case 130: //12.7cm高角砲＋高射装置
+                                        secondaryCannons++;
+                                        comboGunAndDirector++;
+                                        break;
                                     case 3: //10cm連装高角砲
                                     case 48: //12.7cm単装高角砲
                                     case 91: //12.7cm連装高角砲(後期型)
@@ -496,10 +500,14 @@ namespace Grabacr07.KanColleWrapper.Models
             else if(highAngleGun == 1 && aaFireDirector == 1) AntiAirCutIn = AaCutInType.NavalGunWithAaGunNoRadar;
             else AntiAirCutIn = AaCutInType.None;
 
-            if(Info.Id == 330 || Info.Id == 421) {
+            if(Info.Id == 330 || Info.Id == 421) { //秋月
                      if(highAngleGun == 2 && radars == 1) AntiAirCutIn = AaCutInType.AkizukiDualNavalGunWithRadar;
                 else if(highAngleGun == 1 && radars == 1) AntiAirCutIn = AaCutInType.AkizukiNavalGunWithRadar;
                 else if(highAngleGun == 2               ) AntiAirCutIn = AaCutInType.AkizukiDualNavalGunNoRadar;
+            } else if(Info.Id == 428) { //摩耶改二
+                if((highAngleGun - comboGunAndDirector) >= 1 && EquippedSlots.Any(x => x.Item.Info.Id == 131)) {
+                    AntiAirCutIn = radars > 0 ? AaCutInType.MayaGen2MultiAaGunWithNavalGunWithRadar : AaCutInType.MayaGen2MultiAaGunWithNavalGunNoRadar;
+                }
             }
 
                  if(                                                torpedoes >= 2) NightSpecialAttack = NightBattleAttackType.TorpedoCutIn;

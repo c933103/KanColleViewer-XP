@@ -263,6 +263,12 @@ namespace LynLogger.Models.Battling
 
                 [Description("高角炮 / 高射装置 / 无电探")]
                 NavalGunWithAaGunNoRadar = 9,
+
+                [Description("摩耶改二 / 集中机枪 / 高角炮 / 有电探")]
+                MayaGen2MultiAaGunWithNavalGunWithRadar = 10,
+
+                [Description("摩耶改二 / 集中机枪 / 高角炮 / 无电探")]
+                MayaGen2MultiAaGunWithNavalGunNoRadar = 11
             }
         }
 
