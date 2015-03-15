@@ -13,7 +13,7 @@ namespace LynLogger.Views
             {
                 if(_selected == value) return;
                 _selected = value;
-                RaisePropertyChanged(o => SelectedShip, o => CombinedEventLog, o => SelectedShipExp);
+                RaisePropertyChanged(() => SelectedShip, () => CombinedEventLog, () => SelectedShipExp);
             }
         }
 
@@ -59,12 +59,12 @@ namespace LynLogger.Views
         public ShipHistoryModel()
         {
             DataStore.ShipDataChanged += (ds, x) => {
-                if(SelectedShip != null && x == SelectedShip.Id) {
-                    RaisePropertyChanged(o => SelectedShip, o => CombinedEventLog, o => SelectedShipExp);
+                if(x == SelectedShip?.Id) {
+                    RaisePropertyChanged(() => SelectedShip, () => CombinedEventLog, () => SelectedShipExp);
                 }
-                RaisePropertyChanged(o => Ships);
+                RaisePropertyChanged(() => Ships);
             };
-            DataStore.OnDataStoreSwitch += (_, ds) => RaisePropertyChanged(o => Ships);
+            DataStore.OnDataStoreSwitch += (_, ds) => RaisePropertyChanged(() => Ships);
         }
     }
 }

@@ -82,6 +82,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\LevelExperienceTable.cs" />
+    <Compile Include="Data\MapExperienceTable.cs" />
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Logger\BasicInfoLogger.cs" />
     <Compile Include="Logger\ShipDataLogger.cs" />
@@ -151,6 +153,9 @@
     <Compile Include="Views\HistogramPlotter.xaml.cs">
       <DependentUpon>HistogramPlotter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\HorizontalTabViewControl.xaml.cs">
+      <DependentUpon>HorizontalTabViewControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ResourceHistoryModel.cs" />
     <Compile Include="Views\ResourceHistoryView.xaml.cs">
       <DependentUpon>ResourceHistoryView.xaml</DependentUpon>
@@ -159,8 +164,13 @@
     <Compile Include="Views\ShipHistoryView.xaml.cs">
       <DependentUpon>ShipHistoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TabViewControl.xaml.cs">
-      <DependentUpon>TabViewControl.xaml</DependentUpon>
+    <Compile Include="Views\ShipStatusModel.cs" />
+    <Compile Include="Views\ShipStatusView.xaml.cs">
+      <DependentUpon>ShipStatusView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TabViewItem.cs" />
+    <Compile Include="Views\VerticalTabViewControl.xaml.cs">
+      <DependentUpon>VerticalTabViewControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GradeEvaluationModel.cs" />
     <Compile Include="Views\GradeEvaluationView.xaml.cs">
@@ -211,6 +221,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\HorizontalTabViewControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ResourceHistoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -219,7 +233,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TabViewControl.xaml">
+    <Page Include="Views\ShipStatusView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VerticalTabViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -6,14 +6,12 @@
              xmlns:local="clr-namespace:LynLogger.Settings" x:Class="LynLogger.Settings.AboutView" 
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="300">
-    <Grid Margin="10,10,0,0">
-        <TextBlock>
-            <Run Text="这是一个闲的无聊的人做给闲的无聊的人用的插件" />
-            <LineBreak />
-            <LineBreak />
-            <Run Text="By 某蠢琳" />
-            <LineBreak />
-            <Run Text="版本：鬼知道" />
-        </TextBlock>
-    </Grid>
+    <TextBlock>
+        <Run Text="这是一个闲的无聊的人做给闲的无聊的人用的插件" />
+        <LineBreak />
+        <LineBreak />
+        <Run Text="By 某蠢琳" />
+        <LineBreak />
+        <Run Text="版本：鬼知道" />
+    </TextBlock>
 </UserControl>

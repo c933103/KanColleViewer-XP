@@ -9,7 +9,7 @@
     <UserControl.DataContext>
         <local:ShipHistoryModel/>
     </UserControl.DataContext>
-    <StackPanel Margin="10,10,0,0">
+    <StackPanel>
         <ComboBox ItemsSource="{Binding Ships}" SelectedItem="{Binding SelectedShip}" DisplayMemberPath="DisplayName"/>
         <Expander Header="经验历史" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,5" IsExpanded="True">
             <local:HistogramPlotter PlotData="{Binding SelectedShipExp}" AverageDelta="True" />

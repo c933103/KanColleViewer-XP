@@ -13,25 +13,8 @@
              ScrollViewer.VerticalScrollBarVisibility="Hidden"
              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
              Height="{Binding ViewportHeight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}}">
-    <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    </UserControl.Resources>
     <UserControl.DataContext>
         <local:ToolsModel/>
     </UserControl.DataContext>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="0,0,0,15">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <TextBlock Margin="0,0,25,0"><Run Text="{Binding CurrentActiveDs.BasicInfo.Name, Mode=OneWay}" /><Run Text=" "/><Run Text=" (" /><Run Text=" "/><Run Text="{Binding CurrentActiveDs.MemberId, Mode=OneWay}" /><Run Text=" "/><Run Text=")" /></TextBlock>
-            <TextBlock Grid.Column="1"><Run Text="记录文件：LynLogger /" /><Run Text=" "/><Run Text="{Binding CurrentActiveDs.InternalMemberId, Mode=OneWay}" /></TextBlock>
-        </Grid>
-        <localViews:TabViewControl Grid.Row="1" TabViewItems="{Binding Pages, Mode=OneWay}" TabViewSelected="{Binding SelectedPage, Mode=TwoWay}"/>
-    </Grid>
+    <localViews:HorizontalTabViewControl Grid.Row="1" TabViewItems="{Binding Pages, Mode=OneWay}" TabViewSelected="{Binding SelectedPage, Mode=TwoWay}"/>
 </UserControl>

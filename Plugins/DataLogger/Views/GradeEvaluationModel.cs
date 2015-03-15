@@ -6,20 +6,11 @@ namespace LynLogger.Views
 {
     class GradeEvaluationModel : NotificationSourceObject
     {
-        public double Score
-        {
-            get
-            {
-                if(DataStore.Instance == null) return 0;
-                return DataStore.Instance.BasicInfo.Score;
-            }
-        }
-
         public string Grade
         {
             get
             {
-                var s = Score;
+                var s = DataStore.Instance?.BasicInfo?.Score;
                 if(s < 5) return "很休闲";
                 if(s < 12) return "正常";
                 if(s < 15) return "甘地";
@@ -34,6 +25,11 @@ namespace LynLogger.Views
                 if(DataStore.Instance == null) return null;
                 return DataStore.Instance.BasicInfoHistory.Score.Select(x => x);
             }
+        }
+
+        public DataStore CurrentActiveDs
+        {
+            get { return DataStore.Instance; }
         }
 
         public GradeEvaluationModel()

@@ -9,6 +9,15 @@ namespace LynLogger.Models
     [Serializable]
     public class Ship
     {
+        public string DisplayName
+        {
+            get
+            {
+                var info = Helpers.LookupShipNameInfo(ShipId);
+                return string.Format("[{0}] {1} {2}", Id, info.TypeName, info.ShipName);
+            }
+        }
+
         public int Id { get; private set; }
         public int ShipId { get; private set; }
 

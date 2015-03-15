@@ -28,7 +28,7 @@ namespace LynLogger.Views
             {
                 if(value == _battle) return;
                 _battle = value;
-                RaisePropertyChanged(o => Battle, o => BombardRound1, o => BombardRound2);
+                RaisePropertyChanged(() => Battle, () => BombardRound1, () => BombardRound2);
             }
         }
 

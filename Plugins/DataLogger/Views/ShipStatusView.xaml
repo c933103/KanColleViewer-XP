@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="LynLogger.Views.ShipStatusView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LynLogger.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.DataContext>
+        <local:ShipStatusModel/>
+    </UserControl.DataContext>
+    <StackPanel>
+        <ComboBox ItemsSource="{Binding Ships, Mode=OneWay}" SelectedItem="{Binding SelectedShip}" DisplayMemberPath="DisplayName"/>
+        <Expander Header="经验计算" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,5" IsExpanded="True">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Margin="3">
+                    <Run Text="当前等级" />
+                    <Run Text="{Binding SelectedShip.Level, Mode=OneWay}" />
+                    <Run Text="距下一级" />
+                    <Run Text="{Binding SelectedShip.ExpNext, Mode=OneWay}" />
+                </TextBlock>
+                <WrapPanel Orientation="Horizontal" Grid.Row="1">
+                    <TextBlock Margin="3" Text="目标等级" />
+                    <TextBox Margin="3" Text="{Binding TargetLevel, Delay=500, UpdateSourceTrigger=PropertyChanged}" MinWidth="40"/>
+                    <TextBlock Margin="3">
+                        <Run Text="还需经验" />
+                        <Run Text="{Binding RemainingExp, Mode=OneWay}" />
+                    </TextBlock>
+                </WrapPanel>
+                <WrapPanel Orientation="Horizontal" Grid.Row="2">
+                    <CheckBox Margin="3" IsChecked="{Binding IsFlagship}">作为旗舰</CheckBox>
+                    <TextBlock Margin="3" Text="出击海域" />
+                    <ComboBox ItemsSource="{Binding MapAreas, Mode=OneTime}" SelectedItem="{Binding SelectedMapArea}" MinWidth="50" />
+                    <TextBlock Margin="3" Text="评级" />
+                    <ComboBox ItemsSource="{Binding Ranks, Mode=OneTime}" SelectedItem="{Binding TargetRank}" MinWidth="40" />
+                    <CheckBox Margin="3" IsChecked="{Binding IsMvp}">MVP</CheckBox>
+                    <TextBlock Margin="3">
+                        <Run Text="还需出击" />
+                        <Run Text="{Binding RamaingCount, Mode=OneWay}" />
+                        <Run Text="次" />
+                    </TextBlock>
+                </WrapPanel>
+            </Grid>
+        </Expander>
+    </StackPanel>
+</UserControl>

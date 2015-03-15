@@ -143,7 +143,7 @@
         <local:BattleNetaModel/>
     </UserControl.DataContext>
 
-    <StackPanel Margin="10,10,0,0">
+    <StackPanel>
         <Expander Header="下一张地图" IsExpanded="True" Margin="0,0,0,5">
             <StackPanel Margin="20,0,0,0">
                 <ContentControl Content="{Binding MapNext, Mode=OneWay}" Margin="0,0,0,5" />
@@ -347,6 +347,8 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -414,30 +416,6 @@
                                 <Run Text="{Binding OurReconnInTouchName, Mode=OneWay}" />
                                 <Run Text="触接对方" />
                             </TextBlock>
-                            <StackPanel>
-                                <TextBlock>
-                                    <Run Text="["/>
-                                    <Run Text="{Binding CutInShip.Id, Mode=OneWay}"/>
-                                    <Run Text="]"/>
-                                    <Run Text="{Binding CutInShip.ShipName, Mode=OneWay}" />
-                                    <Run Text="对空CI发动"/>
-                                </TextBlock>
-                                <ItemsControl ItemsSource="{Binding CutInEquipts, Mode=OneWay}" DisplayMemberPath="EquiptName" />
-                                <TextBlock>
-                                    <Run Text="类型:" />
-                                    <Run Text="{Binding CutInType, Mode=OneWay, Converter={StaticResource EnumToDescriptionConverter}}" />
-                                </TextBlock>
-                                <StackPanel.Style>
-                                    <Style TargetType="{x:Type StackPanel}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding CutInType, Mode=OneWay, FallbackValue=None}" Value="None">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </StackPanel.Style>
-                            </StackPanel>
-                            <ItemsControl ItemsSource="{Binding EnemyStage3Report, Mode=OneWay}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="1" Grid.Column="1" Grid.IsSharedSizeScope="True">
                             <TextBlock>
@@ -459,8 +437,31 @@
                                 <Run Text="{Binding EnemyReconnInTouchName, Mode=OneWay}" />
                                 <Run Text="触接对方" />
                             </TextBlock>
-                            <ItemsControl ItemsSource="{Binding OurStage3Report, Mode=OneWay}"/>
                         </StackPanel>
+                        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" Padding="2" BorderThickness="1" BorderBrush="DeepSkyBlue">
+                            <StackPanel>
+                                <TextBlock>
+                                    <Run Text="["/>
+                                    <Run Text="{Binding CutInShip.Id, Mode=OneWay}"/>
+                                    <Run Text="]"/>
+                                    <Run Text="{Binding CutInShip.ShipName, Mode=OneWay}" />
+                                    <Run Text="对空CI发动"/>
+                                </TextBlock>
+                                <TextBlock Text="{Binding CutInType, Mode=OneWay, Converter={StaticResource EnumToDescriptionConverter}}" />
+                                <ItemsControl ItemsSource="{Binding CutInEquipts, Mode=OneWay}" DisplayMemberPath="EquiptName" />
+                            </StackPanel>
+                            <Border.Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CutInType, Mode=OneWay}" Value="None">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                        <ItemsControl Grid.Row="3" Grid.Column="0" ItemsSource="{Binding EnemyStage3Report, Mode=OneWay}"/>
+                        <ItemsControl Grid.Row="3" Grid.Column="1" ItemsSource="{Binding OurStage3Report, Mode=OneWay}"/>
                     </Grid>
                 </Expander>
                 <Expander Header="开幕雷击" IsExpanded="True">

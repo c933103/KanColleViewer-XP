@@ -9,23 +9,37 @@
     <UserControl.DataContext>
         <local:GradeEvaluationModel/>
     </UserControl.DataContext>
-    <Grid Margin="10,10,0,0">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="评分：" />
-        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Score}" />
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="等级：" />
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Grade}" />
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="历史记录" Margin="0,15,0,0" />
-        <local:HistogramPlotter Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" PlotData="{Binding ScoreHistogram}" AverageDelta="True"/>
+        <Grid Grid.Row="0" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="0,0,25,0"><Run Text="{Binding CurrentActiveDs.BasicInfo.Name, Mode=OneWay}" /><Run Text="  ( " /><Run Text="{Binding CurrentActiveDs.MemberId, Mode=OneWay}" /><Run Text=" )" /></TextBlock>
+            <TextBlock Grid.Column="1"><Run Text="记录文件：LynLogger / " /><Run Text="{Binding CurrentActiveDs.InternalMemberId, Mode=OneWay}" /></TextBlock>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="评分：" />
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding CurrentActiveDs.BasicInfo.Score}" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="等级：" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Grade}" />
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="历史记录" Margin="0,15,0,0" />
+            <local:HistogramPlotter Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" PlotData="{Binding ScoreHistogram}" AverageDelta="True"/>
+        </Grid>
     </Grid>
 </UserControl>

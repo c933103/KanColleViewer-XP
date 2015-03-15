@@ -108,10 +108,10 @@
                                         <Style TargetType="{x:Type Border}">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged}" Value="True">
-                                                    <Setter Property="Background" Value="#14FF0000" />
+                                                    <Setter Property="Background" Value="#32FF0000" />
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged|DamageControlled}" Value="True">
-                                                    <Setter Property="Background" Value="Transparent" />
+                                                <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Repair}" Value="True">
+                                                    <Setter Property="Background" Value="{x:Null}" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Evacuation}" Value="True">
                                                     <Setter Property="Opacity" Value="0.3" />
@@ -233,7 +233,6 @@
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=HeavilyDamaged|DamageControlled}" Value="True">
                                                                     <Setter Property="Text" Value="大破 / 有损管" />
-                                                                    <Setter Property="Background" Value="{DynamicResource FleetRepairingBrushKey}" />
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Evacuation}" Value="True">
                                                                     <Setter Property="Text" Value="大破 / 已退避" />

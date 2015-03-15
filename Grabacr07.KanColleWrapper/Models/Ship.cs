@@ -437,16 +437,22 @@ namespace Grabacr07.KanColleWrapper.Models
                             case SlotItemIconType.SecondaryCanon:
                                 secondaryCannons++;
                                 break;
-                            case SlotItemIconType.Torpedo:
-                                if(itemInfo.Id != 41) {
-                                    torpedoes++;
-                                }
-                                break;
                             case SlotItemIconType.Rader:
                                 radars++;
                                 break;
                             case SlotItemIconType.APShell:
                                 apShells++;
+                                break;
+                            case SlotItemIconType.AntiAircraftFireDirector:
+                                aaFireDirector++;
+                                break;
+                            case SlotItemIconType.AAShell:
+                                aaShells++;
+                                break;
+                            case SlotItemIconType.Torpedo:
+                                if(itemInfo.Id != 41) { //甲標的
+                                    torpedoes++;
+                                }
                                 break;
                             case SlotItemIconType.HighAngleGun:
                                 switch(itemInfo.Id) {
@@ -471,12 +477,6 @@ namespace Grabacr07.KanColleWrapper.Models
                                 }
                                 highAngleGun++;
                                 break;
-                            case SlotItemIconType.AntiAircraftFireDirector:
-                                aaFireDirector++;
-                                break;
-                            case SlotItemIconType.AAShell:
-                                aaShells++;
-                                break;
                         }
                         break;
                 }
@@ -493,22 +493,20 @@ namespace Grabacr07.KanColleWrapper.Models
             BattleSpecialAttack = sat;
 
             if(heavyPrimaryCannons == 1 && aaShells == 1 && aaFireDirector == 1 && radars == 1) AntiAirCutIn = AaCutInType.ArtilleryAaT3ShellWithRadar;
-            else if(comboGunAndDirector == 2 && radars == 1) AntiAirCutIn = AaCutInType.DualNavalAndAaGunWithRadar;
-            else if(heavyPrimaryCannons == 1 && aaShells == 1 && aaFireDirector == 1) AntiAirCutIn = AaCutInType.ArtilleryAaT3ShellNoRadar;
-            else if(highAngleGun == 1 && aaFireDirector == 1 && radars == 1) AntiAirCutIn = AaCutInType.NavalGunWithAaGunWithRadar;
-            else if(comboGunAndDirector == 1 && radars == 1) AntiAirCutIn = AaCutInType.NavalAndAaGunWithRadar;
-            else if(highAngleGun == 1 && aaFireDirector == 1) AntiAirCutIn = AaCutInType.NavalGunWithAaGunNoRadar;
-            else AntiAirCutIn = AaCutInType.None;
-
-            if(Info.Id == 330 || Info.Id == 421) { //秋月
-                     if(highAngleGun == 2 && radars == 1) AntiAirCutIn = AaCutInType.AkizukiDualNavalGunWithRadar;
-                else if(highAngleGun == 1 && radars == 1) AntiAirCutIn = AaCutInType.AkizukiNavalGunWithRadar;
-                else if(highAngleGun == 2               ) AntiAirCutIn = AaCutInType.AkizukiDualNavalGunNoRadar;
+            else if(comboGunAndDirector >= 2 && radars >= 1) AntiAirCutIn = AaCutInType.DualNavalAndAaGunWithRadar;
+            else if(heavyPrimaryCannons >= 1 && aaShells >= 1 && aaFireDirector >= 1) AntiAirCutIn = AaCutInType.ArtilleryAaT3ShellNoRadar;
+            else if(highAngleGun >= 1 && aaFireDirector >= 1 && radars >= 1) AntiAirCutIn = AaCutInType.NavalGunWithAaGunWithRadar;
+            else if(comboGunAndDirector >= 1 && radars >= 1) AntiAirCutIn = AaCutInType.NavalAndAaGunWithRadar;
+            else if(highAngleGun >= 1 && aaFireDirector >= 1) AntiAirCutIn = AaCutInType.NavalGunWithAaGunNoRadar;
+            else if(Info.Id == 330 || Info.Id == 421) { //秋月
+                     if(highAngleGun >= 2 && radars >= 1) AntiAirCutIn = AaCutInType.AkizukiDualNavalGunWithRadar;
+                else if(highAngleGun >= 1 && radars >= 1) AntiAirCutIn = AaCutInType.AkizukiNavalGunWithRadar;
+                else if(highAngleGun >= 2               ) AntiAirCutIn = AaCutInType.AkizukiDualNavalGunNoRadar;
             } else if(Info.Id == 428) { //摩耶改二
                 if((highAngleGun - comboGunAndDirector) >= 1 && EquippedSlots.Any(x => x.Item.Info.Id == 131)) {
                     AntiAirCutIn = radars > 0 ? AaCutInType.MayaGen2MultiAaGunWithNavalGunWithRadar : AaCutInType.MayaGen2MultiAaGunWithNavalGunNoRadar;
                 }
-            }
+            } else AntiAirCutIn = AaCutInType.None;
 
                  if(                                                torpedoes >= 2) NightSpecialAttack = NightBattleAttackType.TorpedoCutIn;
             else if(primaryCannons >= 3                                           ) NightSpecialAttack = NightBattleAttackType.TriArtilleryCutIn;

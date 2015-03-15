@@ -145,7 +145,7 @@ namespace LynLogger.Models.Battling
             public int EnemyStage2Lost { get { return ZwEnemyStage2Lost; } }
             public string EnemyReconnInTouchName { get { return ZwEnemyReconnInTouchName; } }
 
-            public ShipInfo CutInShip { get { return ZwCutInShipNo < 0 ? null : _parent.OurShips[ZwCutInShipNo]; } }
+            public ShipInfo CutInShip { get { return (ZwCutInShipNo < 0 || ZwCutInShipNo > 5) ? null : _parent.OurShips[ZwCutInShipNo]; } }
             public AaCutInType CutInType { get { return ZwCutInType; } }
             public IReadOnlyList<EquiptInfo> CutInEquipts { get { return ZwCutInEquipts; } }
 
@@ -310,8 +310,11 @@ namespace LynLogger.Models.Battling
 
             public enum AttackType
             {
-                [Description("夜战CI - 纯炮击")]
-                ArtilleryCutIn = -4,
+                [Description("夜战CI - 三主炮")]
+                ArtilleryCutIn = -5,
+
+                [Description("夜战CI - 双主炮+副炮")]
+                ArtilleryAndCannonCutIn = -4,
 
                 [Description("夜战CI - 纯雷击")]
                 TorpedoCutIn = -3,

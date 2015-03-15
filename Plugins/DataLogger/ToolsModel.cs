@@ -27,28 +27,20 @@ namespace LynLogger
             }
         }
 
-        public DataStore CurrentActiveDs
-        {
-            get { return DataStore.Instance; }
-        }
-
         public ToolsModel()
         {
             var listPages = new List<TabViewItem>() {
-                new TabViewItem("肝度", new GradeEvaluationView(){DataContext=new GradeEvaluationModel()}),
-                new TabViewItem("资源历史", new ResourceHistoryView(){DataContext=new ResourceHistoryModel()}),
-                new TabViewItem("舰娘档案", new ShipHistoryView(){DataContext=new ShipHistoryModel()}),
-                new TabViewItem("战斗剧透", new BattleNetaView(){DataContext = new BattleNetaModel()}),
-                new TabViewItem("设置", new Settings.SettingsView(){DataContext = new Settings.SettingsModel()}),
+                new TabViewItem("舰娘信息", new ShipStatusView()/*{DataContext=new ResourceHistoryModel()}*/),
+                new TabViewItem("资源历史", new ResourceHistoryView()/*{DataContext=new ResourceHistoryModel()}*/),
+                new TabViewItem("档案室", new ShipHistoryView()/*{DataContext=new ShipHistoryModel()}*/),
+                new TabViewItem("战斗剧透", new BattleNetaView()/*{DataContext = new BattleNetaModel()}*/),
+                new TabViewItem("肝度", new GradeEvaluationView()/*{DataContext=new GradeEvaluationModel()}*/),
+                new TabViewItem("设置", new Settings.SettingsView()/*{DataContext = new Settings.SettingsModel()}*/),
                 new TabViewItem("关于", new Settings.AboutView())
             };
             listPages.ForEach(x => x.IsSelected = false);
             Pages = listPages;
             SelectedPage = Pages.First();
-
-            DataStore.OnDataStoreSwitch += (_, ds) => {
-                RaisePropertyChanged(o => CurrentActiveDs);
-            };
         }
     }
 }

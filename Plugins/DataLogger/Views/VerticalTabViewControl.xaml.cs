@@ -17,19 +17,19 @@ using System.Windows.Shapes;
 namespace LynLogger.Views
 {
     /// <summary>
-    /// TabViewControl.xaml 的交互逻辑
+    /// VerticalTabViewControl.xaml 的交互逻辑
     /// </summary>
-    public partial class TabViewControl : UserControl, INotifyPropertyChanged
+    public partial class VerticalTabViewControl : UserControl, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public TabViewControl()
+        public VerticalTabViewControl()
         {
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty dpTabViewItems = DependencyProperty.Register("TabViewItems", typeof(IList<TabViewItem>), typeof(TabViewControl));
-        public static readonly DependencyProperty dpTabViewSelected = DependencyProperty.Register("TabViewSelected", typeof(TabViewItem), typeof(TabViewControl));
+        public static readonly DependencyProperty dpTabViewItems = DependencyProperty.Register("TabViewItems", typeof(IList<TabViewItem>), typeof(VerticalTabViewControl));
+        public static readonly DependencyProperty dpTabViewSelected = DependencyProperty.Register("TabViewSelected", typeof(TabViewItem), typeof(VerticalTabViewControl));
 
         public IList<TabViewItem> TabViewItems
         {
@@ -55,31 +55,7 @@ namespace LynLogger.Views
 
         private void Grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            TabViewSelected = (TabViewItem)((Grid)sender).DataContext;
-        }
-    }
-
-    public class TabViewItem : Models.NotificationSourceObject
-    {
-        public string TabName { get; set; }
-        public object TabView { get; set; }
-
-        private bool _selected = false;
-        public bool IsSelected
-        {
-            get { return _selected; }
-            set
-            {
-                if(_selected == value) return;
-                _selected = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public TabViewItem(string name, object view)
-        {
-            TabName = name;
-            TabView = view;
+            TabViewSelected = (TabViewItem)((Border)sender).DataContext;
         }
     }
 }

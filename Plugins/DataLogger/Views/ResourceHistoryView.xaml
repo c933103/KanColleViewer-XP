@@ -3,36 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:LynLogger.Views" x:Class="LynLogger.Views.ResourceHistoryView" 
+             xmlns:local="clr-namespace:LynLogger.Views"
+             xmlns:Controls="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             x:Class="LynLogger.Views.ResourceHistoryView" 
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="300">
+             d:DesignHeight="400" d:DesignWidth="300">
     <UserControl.DataContext>
         <local:ResourceHistoryModel/>
     </UserControl.DataContext>
-    <StackPanel Margin="10,10,0,0">
-        <Expander Header="油" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
-            <local:HistogramPlotter PlotData="{Binding FuelHistogram}" AverageDelta="True"/>
-        </Expander>
-        <Expander Header="弹" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
-            <local:HistogramPlotter PlotData="{Binding AmmoHistogram}" AverageDelta="True"/>
-        </Expander>
-        <Expander Header="钢" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
-            <local:HistogramPlotter PlotData="{Binding SteelHistogram}" AverageDelta="True"/>
-        </Expander>
-        <Expander Header="铝" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
-            <local:HistogramPlotter PlotData="{Binding BauxiteHistogram}" AverageDelta="True"/>
-        </Expander>
-        <Expander Header="桶" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
-            <local:HistogramPlotter PlotData="{Binding HSRepairHistogram}" AverageDelta="True"/>
-        </Expander>
-        <Expander Header="喷火器" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
-            <local:HistogramPlotter PlotData="{Binding HSBuildHistogram}" AverageDelta="True"/>
-        </Expander>
-        <Expander Header="开发" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
-            <local:HistogramPlotter PlotData="{Binding DevMaterialHistogram}" AverageDelta="True"/>
-        </Expander>
-        <Expander Header="改修" IsExpanded="True" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,0,0,5">
-            <local:HistogramPlotter PlotData="{Binding ModMaterialHistogram}" AverageDelta="True"/>
-        </Expander>
-    </StackPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <local:VerticalTabViewControl TabViewItems="{Binding Pages, Mode=OneWay}" TabViewSelected="{Binding SelectedPage, Mode=TwoWay}" />
+        <local:HistogramPlotter PlotData="{Binding ActiveHistogram}" AverageDelta="True" Grid.Column="1"/>
+    </Grid>
 </UserControl>

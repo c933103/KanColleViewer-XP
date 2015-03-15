@@ -11,7 +11,7 @@
     <UserControl.DataContext>
         <local:SettingsModel/>
     </UserControl.DataContext>
-    <TextBlock Margin="10,10,0,0" FontSize="14" >
+    <TextBlock FontSize="14" >
         <Run Text="基本信息记录间隔" BaselineAlignment="Center" />
         <InlineUIContainer BaselineAlignment="Center"><TextBox Text="{Binding BasicInfoLoggingInterval}" MinWidth="50" TextAlignment="Right"/></InlineUIContainer>
         <Run Text="秒" BaselineAlignment="Center" />
