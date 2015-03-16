@@ -31,13 +31,7 @@ namespace LynLogger.Models
             get
             {
                 if(ZwShipNameType == null) {
-                    ZwShipNameType = new Histogram<Models.ShipNameType>(Helpers.Zip(ZwShipId, ZwShipName, ZwTypeName, (id, sn, tn) =>
-                        new KeyValuePair<long, ShipNameType>(id.Key, new Models.ShipNameType {
-                            ShipId = id.Value,
-                            ShipName = sn.Value,
-                            TypeName = tn.Value
-                        }
-                    )));
+                    ZwShipNameType = new Histogram<ShipNameType>(ZwShipId.Select(id => new KeyValuePair<long, ShipNameType>(id.Key, Helpers.LookupShipNameInfo(id.Value))));
                     ZwShipId = null;
                     ZwShipName = ZwTypeName = null;
                 }

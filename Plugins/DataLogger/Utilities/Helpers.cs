@@ -236,7 +236,7 @@ namespace LynLogger
             }
         }
 
-        public static IEnumerable<Tout> Zip<T1, T2, T3, Tout>(IEnumerable<T1> i1, IEnumerable<T2> i2, IEnumerable<T3> i3, Func<T1, T2, T3, Tout> project)
+        /*public static IEnumerable<Tout> Zip<T1, T2, T3, Tout>(IEnumerable<T1> i1, IEnumerable<T2> i2, IEnumerable<T3> i3, Func<T1, T2, T3, Tout> project)
         {
             using (var e1 = i1.GetEnumerator())
             using (var e2 = i2.GetEnumerator())
@@ -246,7 +246,7 @@ namespace LynLogger
                     yield return project(e1.Current, e2.Current, e3.Current);
                 }
             }
-        }
+        }*/
 
         public static IEnumerable<T> SafeConcat<T>(this IEnumerable<T> i1, params IEnumerable<T>[] i2)
         {
