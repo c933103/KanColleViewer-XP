@@ -20,9 +20,7 @@ namespace LynLogger.Models
         }
 
         public int Id { get; private set; }
-
-        private Histogram<string> ZwShipName;
-        private Histogram<string> ZwTypeName;
+        
         private Histogram<int> ZwShipId;
         [OptionalField] internal Histogram<ShipNameType> ZwShipNameType;
         
@@ -33,7 +31,6 @@ namespace LynLogger.Models
                 if(ZwShipNameType == null) {
                     ZwShipNameType = new Histogram<ShipNameType>(ZwShipId.Select(id => new KeyValuePair<long, ShipNameType>(id.Key, Helpers.LookupShipNameInfo(id.Value))));
                     ZwShipId = null;
-                    ZwShipName = ZwTypeName = null;
                 }
                 return ZwShipNameType;
             }

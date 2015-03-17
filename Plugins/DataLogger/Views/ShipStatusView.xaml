@@ -5,11 +5,39 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LynLogger.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="500">
     <UserControl.DataContext>
         <local:ShipStatusModel/>
     </UserControl.DataContext>
     <StackPanel>
+        <ItemsControl ItemsSource="{Binding ShipSortMode}" Margin="-5,-5,-5,0">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock VerticalAlignment="Center" Text="按" />
+                        <ComboBox ItemsSource="{Binding SortModes, Mode=OneTime}" SelectedItem="{Binding SortKey}" MinWidth="90" DisplayMemberPath="DisplayName" />
+                        <ToggleButton IsChecked="{Binding SortAscending}">
+                            <ToggleButton.Style>
+                                <Style TargetType="{x:Type ToggleButton}">
+                                    <Setter Property="Content" Value="从高到低" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SortAscending}" Value="True">
+                                            <Setter Property="Content" Value="从低到高"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ToggleButton.Style>
+                        </ToggleButton>
+                        <TextBlock VerticalAlignment="Center" Text="排序" />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
         <ComboBox ItemsSource="{Binding Ships, Mode=OneWay}" SelectedItem="{Binding SelectedShip}" DisplayMemberPath="DisplayName"/>
         <Expander Header="经验计算" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,5" IsExpanded="True">
             <Grid>
@@ -46,6 +74,98 @@
                     </TextBlock>
                 </WrapPanel>
             </Grid>
+        </Expander>
+        <Expander Header="状态与参数" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,5" IsExpanded="True">
+            <StackPanel>
+                <Border Margin="2" BorderThickness="1" Padding="2" BorderBrush="Yellow">
+                    <TextBlock Text="这里列出的数值中, 当前状态是包含装备加成的, 而最大状态是不计装备的" />
+                </Border>
+                <UniformGrid Columns="4">
+                    <TextBlock>
+                        <Run Text="火力: "/>
+                        <Run Text="{Binding SelectedShip.Power, Mode=OneWay}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding SelectedShip.MaxRawPower, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="雷装: "/>
+                        <Run Text="{Binding SelectedShip.Torpedo, Mode=OneWay}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding SelectedShip.MaxRawTorpedo, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="对空: "/>
+                        <Run Text="{Binding SelectedShip.AntiAir, Mode=OneWay}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding SelectedShip.MaxRawAntiAir, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="对潜: "/>
+                        <Run Text="{Binding SelectedShip.AntiSub, Mode=OneWay}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding SelectedShip.MaxRawAntiSub, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="HP: "/>
+                        <Run Text="{Binding SelectedShip.Hp, Mode=OneWay}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding SelectedShip.HpMax, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="装甲: "/>
+                        <Run Text="{Binding SelectedShip.Defense, Mode=OneWay}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding SelectedShip.MaxRawDefense, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="回避: "/>
+                        <Run Text="{Binding SelectedShip.Maneuver, Mode=OneWay}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding SelectedShip.MaxRawManeuver, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="运: "/>
+                        <Run Text="{Binding SelectedShip.Luck, Mode=OneWay}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding SelectedShip.MaxRawLuck, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="索敌: "/>
+                        <Run Text="{Binding SelectedShip.Scout, Mode=OneWay}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding SelectedShip.MaxRawScout, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="剩余弹药: "/>
+                        <Run Text="{Binding SelectedShip.Ammo, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="剩余燃料: "/>
+                        <Run Text="{Binding SelectedShip.Fuel, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="疲劳: "/>
+                        <Run Text="{Binding SelectedShip.Condition, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="入渠用油: "/>
+                        <Run Text="{Binding SelectedShip.DockFuel, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="入渠用钢: "/>
+                        <Run Text="{Binding SelectedShip.DockSteel, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="入渠时间: "/>
+                        <Run Text="{Binding SelectedShip.DockTime, Mode=OneWay}" />
+                        <Run Text="秒"/>
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="总经验: "/>
+                        <Run Text="{Binding SelectedShip.Exp, Mode=OneWay}" />
+                    </TextBlock>
+                </UniformGrid>
+            </StackPanel>
         </Expander>
     </StackPanel>
 </UserControl>
