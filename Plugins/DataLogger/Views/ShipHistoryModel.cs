@@ -30,8 +30,7 @@ namespace LynLogger.Views
         {
             get
             {
-                if(SelectedShip == null) return null;
-                return SelectedShip.Exp.Select(x => new KeyValuePair<long, double>(x.Key, x.Value));
+                return SelectedShip?.Exp.Select(x => new KeyValuePair<long, double>(x.Key, x.Value));
             }
         }
 

@@ -10,8 +10,8 @@ namespace LynLogger.Models
 
         public Settings()
         {
-            BasicInfoLoggingInterval = 7200;
-            ShipDataLoggingInterval = 1800;
+            BasicInfoLoggingInterval = 14400;
+            ShipDataLoggingInterval = 7200;
         }
     }
 }

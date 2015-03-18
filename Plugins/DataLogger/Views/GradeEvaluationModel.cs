@@ -10,7 +10,7 @@ namespace LynLogger.Views
         {
             get
             {
-                var s = DataStore.Instance?.BasicInfo?.Score;
+                var s = DataStore.Instance?.BasicInfo.Score;
                 if(s < 5) return "很休闲";
                 if(s < 12) return "正常";
                 if(s < 15) return "甘地";
@@ -22,8 +22,7 @@ namespace LynLogger.Views
         {
             get
             {
-                if(DataStore.Instance == null) return null;
-                return DataStore.Instance.BasicInfoHistory.Score.Select(x => x);
+                return DataStore.Instance?.BasicInfoHistory.Score.Select(x => x);
             }
         }
 

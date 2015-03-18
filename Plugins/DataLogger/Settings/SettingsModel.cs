@@ -29,7 +29,7 @@ namespace LynLogger.Settings
 
         public int BasicInfoLoggingInterval
         {
-            get { return DataStore.Instance == null ? 0 : DataStore.Instance.Settings.BasicInfoLoggingInterval; }
+            get { return DataStore.Instance?.Settings.BasicInfoLoggingInterval ?? 0; }
             set
             {
                 if(DataStore.Instance == null) return;
@@ -41,7 +41,7 @@ namespace LynLogger.Settings
 
         public int ShipDataLoggingInterval
         {
-            get { return DataStore.Instance == null ? 0 : DataStore.Instance.Settings.ShipDataLoggingInterval; }
+            get { return DataStore.Instance?.Settings.ShipDataLoggingInterval ?? 0; }
             set
             {
                 if(DataStore.Instance == null) return;

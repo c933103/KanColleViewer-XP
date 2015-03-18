@@ -185,7 +185,10 @@ namespace LynLogger.Observers
                 }
             }
             BattleStatus.AirWarfareInfo.AirspaceControl ac = BattleStatus.AirWarfareInfo.AirspaceControl.None;
-            switch(data.api_stage1 == null ? 0 :  (int)data.api_stage1.api_disp_seiku) {
+            switch((int?)(data.api_stage1?.api_disp_seiku)) {
+                case null:
+                    ac = BattleStatus.AirWarfareInfo.AirspaceControl.None;
+                    break;
                 case 0:
                     ac = BattleStatus.AirWarfareInfo.AirspaceControl.Parity;
                     break;
@@ -203,17 +206,18 @@ namespace LynLogger.Observers
             }
             var r = new BattleStatus.AirWarfareInfo(holder) {
                 ZwEnemyCarrierShip = planeFrom.Where(x => x > 6).Select(x => x-7).ToArray(),
-                ZwEnemyReconnInTouch = data.api_stage1 == null ? -1 : (int)data.api_stage1.api_touch_plane[1],
-                ZwEnemyStage1Engaged = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_e_count,
-                ZwEnemyStage1Lost = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_e_lostcount,
-                ZwEnemyStage2Engaged = data.api_stage2 == null ? 0 : (int)data.api_stage2.api_e_count,
-                ZwEnemyStage2Lost = data.api_stage2 == null ? 0 : (int)data.api_stage2.api_e_lostcount,
-                ZwOurCarrierShip = planeFrom.Where(x => x < 7).Select(x => x-1).ToArray(),
-                ZwOurReconnInTouch = data.api_stage1 == null ? -1 : (int)data.api_stage1.api_touch_plane[0],
-                ZwOurStage1Engaged = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_f_count,
-                ZwOurStage1Lost = data.api_stage1 == null ? 0 : (int)data.api_stage1.api_f_lostcount,
-                ZwOurStage2Engaged = data.api_stage2 == null ? 0 : (int)data.api_stage2.api_f_count,
-                ZwOurStage2Lost = data.api_stage2 == null ? 0 : (int)data.api_stage2.api_f_lostcount,
+                ZwEnemyReconnInTouch = (int)(data.api_stage1?.api_touch_plane[1] ?? -1),
+                ZwEnemyStage1Engaged = (int)(data.api_stage1?.api_e_count        ?? 0),
+                ZwEnemyStage1Lost    = (int)(data.api_stage1?.api_e_lostcount    ?? 0),
+                ZwEnemyStage2Engaged = (int)(data.api_stage2?.api_e_count        ?? 0),
+                ZwEnemyStage2Lost    = (int)(data.api_stage2?.api_e_lostcount    ?? 0),
+
+                ZwOurCarrierShip     = planeFrom.Where(x => x < 7).Select(x => x-1).ToArray(),
+                ZwOurReconnInTouch   = (int)(data.api_stage1?.api_touch_plane[0] ?? -1),
+                ZwOurStage1Engaged   = (int)(data.api_stage1?.api_f_count        ?? 0),
+                ZwOurStage1Lost      = (int)(data.api_stage1?.api_f_lostcount    ?? 0),
+                ZwOurStage2Engaged   = (int)(data.api_stage2?.api_f_count        ?? 0),
+                ZwOurStage2Lost      = (int)(data.api_stage2?.api_f_lostcount    ?? 0),
                 ZwOurAirspaceControl = ac,
                 ZwEnemyShipBombed = enemyBombed.ToArray(),
                 ZwEnemyShipDamages = enemyDamage.ToArray(),

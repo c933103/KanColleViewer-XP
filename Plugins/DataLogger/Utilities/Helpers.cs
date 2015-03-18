@@ -197,8 +197,9 @@ namespace LynLogger
             var ship = Grabacr07.KanColleWrapper.KanColleClient.Current.Master.Ships[id];
             return new Models.ShipNameType {
                 ShipId = id,
+                //TypeId = ship?.ShipType.Id ?? id,
                 ShipName = ship?.Name ?? ("Ship" + id),
-                TypeName = ship?.ShipType?.Name ?? ("Type"+id)
+                TypeName = ship?.ShipType.Name ?? ("Type"+id)
             };
         }
 
@@ -214,14 +215,10 @@ namespace LynLogger
             return text;
         }
 
-        /*public static string LookupTypeName(int id)
+        public static int LookupTypeId(int shipId)
         {
-            var type = Grabacr07.KanColleWrapper.KanColleClient.Current.Master.ShipTypes[id];
-            if(type == null) {
-                return "Type" + id;
-            }
-            return type.Name;
-        }*/
+            return Grabacr07.KanColleWrapper.KanColleClient.Current.Master.Ships[shipId]?.ShipType.Id ?? shipId;
+        }
 
         public static IEnumerable<Tout> Zip<T1, T2, T3, T4, Tout>(IEnumerable<T1> i1, IEnumerable<T2> i2, IEnumerable<T3> i3, IEnumerable<T4> i4, Func<T1, T2, T3, T4, Tout> project)
         {

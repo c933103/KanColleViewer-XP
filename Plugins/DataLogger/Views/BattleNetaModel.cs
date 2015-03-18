@@ -34,12 +34,12 @@ namespace LynLogger.Views
 
         public IReadOnlyList<Models.Battling.BattleStatus.BombardInfo> BombardRound1
         {
-            get { return (Battle?.Bombards?.Count > 0) ? Battle.Bombards[0] : null; }
+            get { return (Battle?.Bombards.Count > 0) ? Battle.Bombards[0] : null; }
         }
 
         public IReadOnlyList<Models.Battling.BattleStatus.BombardInfo> BombardRound2
         {
-            get { return (Battle?.Bombards?.Count > 1) ? Battle.Bombards[1] : null; }
+            get { return (Battle?.Bombards.Count > 1) ? Battle.Bombards[1] : null; }
         }
 
         public BattleNetaModel()

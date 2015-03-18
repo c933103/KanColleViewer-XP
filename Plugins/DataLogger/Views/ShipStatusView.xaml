@@ -167,5 +167,10 @@
                 </UniformGrid>
             </StackPanel>
         </Expander>
+        <Expander Header="自定义排序" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,5" Visibility="Collapsed">
+            <StackPanel>
+                
+            </StackPanel>
+        </Expander>
     </StackPanel>
 </UserControl>
