@@ -1,83 +1,116 @@
+using Grabacr07.KanColleWrapper.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
 namespace LynLogger.Models.Battling
 {
-    public class BattleStatus
+    public interface IShipInfoHolder
+    {
+        IReadOnlyList<BattleStatus.ShipInfo> EnemyShips { get; }
+        IReadOnlyList<BattleStatus.ShipInfo> OurShips { get; }
+    }
+
+    public class BattleStatus : ICloneable, IShipInfoHolder
     {
         internal ShipInfo[] ZwEnemyShips;
-        public IReadOnlyList<ShipInfo> EnemyShips { get { return ZwEnemyShips; } }
-
         internal ShipInfo[] ZwOurShips;
-        public IReadOnlyList<ShipInfo> OurShips { get { return ZwOurShips; } }
-
         internal Formation ZwOurFormation;
-        public Formation OurFormation { get { return ZwOurFormation; } }
-
         internal Formation ZwEnemyFormation;
-        public Formation EnemyFormation { get { return ZwEnemyFormation; } }
-
         internal EncounterForm ZwEncounter;
-        public EncounterForm Encounter { get { return ZwEncounter; } }
-
         internal AirWarfareInfo ZwAirWarfare;
-        public AirWarfareInfo AirWarfare { get { return ZwAirWarfare; } }
-
+        internal NightWarInfo ZwNightWar;
         internal ReconnResult ZwOurReconn;
-        public ReconnResult OurReconn { get { return ZwOurReconn; } }
-
         internal ReconnResult ZwEnemyReconn;
-        public ReconnResult EnemyReconn { get { return ZwEnemyReconn; } }
-
         internal TorpedoInfo[] ZwOpeningTorpedoAttack;
-        public IReadOnlyList<TorpedoInfo> OpeningTorpedoAttack { get { return ZwOpeningTorpedoAttack ?? (ZwOpeningTorpedoAttack = new TorpedoInfo[0]); } }
-
         internal BombardInfo[][] ZwBombards;
-        public IReadOnlyList<IReadOnlyList<BombardInfo>> Bombards { get { return ZwBombards ?? (ZwBombards = new BombardInfo[0][]); } }
-
         internal TorpedoInfo[] ZwClosingTorpedoAttack;
-        public IReadOnlyList<TorpedoInfo> ClosingTorpedoAttack { get { return ZwClosingTorpedoAttack ?? (ZwClosingTorpedoAttack = new TorpedoInfo[0]); } }
-
         internal string ZwRawData;
+
+        public IReadOnlyList<ShipInfo> EnemyShips { get { return ZwEnemyShips; } }
+        public IReadOnlyList<ShipInfo> OurShips { get { return ZwOurShips; } }
+        public Formation OurFormation { get { return ZwOurFormation; } }
+        public Formation EnemyFormation { get { return ZwEnemyFormation; } }
+        public EncounterForm Encounter { get { return ZwEncounter; } }
+        public AirWarfareInfo AirWarfare { get { return ZwAirWarfare; } }
+        public ReconnResult OurReconn { get { return ZwOurReconn; } }
+        public ReconnResult EnemyReconn { get { return ZwEnemyReconn; } }
+        public IReadOnlyList<TorpedoInfo> OpeningTorpedoAttack { get { return ZwOpeningTorpedoAttack ?? (ZwOpeningTorpedoAttack = new TorpedoInfo[0]); } }
+        public IReadOnlyList<IReadOnlyList<BombardInfo>> Bombards { get { return ZwBombards ?? (ZwBombards = new BombardInfo[0][]); } }
+        public IReadOnlyList<TorpedoInfo> ClosingTorpedoAttack { get { return ZwClosingTorpedoAttack ?? (ZwClosingTorpedoAttack = new TorpedoInfo[0]); } }
         public string RawData { get { return ZwRawData; } }
+        public NightWarInfo NightWar
+        {
+            get { return ZwNightWar; }
+            set
+            {
+                if(ZwNightWar == null) {
+                    ZwNightWar = value.Clone();
+                    ZwNightWar._parent = this;
+                } else {
+                    throw new InvalidOperationException();
+                }
+            }
+        }
 
         public IEnumerable<ShipHpStatus> OurShipBattleEndHp { get { return OurShips.Select(x => new ShipHpStatus(x)).Select(x => x.ProcessBattle(this)); } }
-
         public IEnumerable<ShipHpStatus> EnemyShipBattleEndHp { get { return EnemyShips.Select(x => new ShipHpStatus(x)).Select(x => x.ProcessBattle(this)); } }
 
-        public class ShipInfo
+        public class NightWarInfo : ICloneable, IShipInfoHolder
+        {
+            internal ShipInfo[] ZwEnemyShips;
+            internal ShipInfo[] ZwOurShips;
+            internal BombardInfo[] ZwBombard;
+            internal string ZwOurReconnInTouchName;
+            internal int ZwOurReconnInTouch;
+            internal string ZwEnemyReconnInTouchName;
+            internal int ZwEnemyReconnInTouch;
+            internal string ZwRawData;
+            internal IShipInfoHolder _parent;
+
+            public IReadOnlyList<ShipInfo> EnemyShips { get { return _parent?.EnemyShips ?? ZwEnemyShips; } }
+            public IReadOnlyList<ShipInfo> OurShips { get { return _parent?.OurShips ?? ZwOurShips; } }
+            public IReadOnlyList<BombardInfo> Bombard { get { return ZwBombard ?? (ZwBombard = new BombardInfo[0]); } }
+            public int OurReconnInTouch { get { return ZwOurReconnInTouch; } }
+            public string OurReconnInTouchName { get { return ZwOurReconnInTouchName; } }
+            public int EnemyReconnInTouch { get { return ZwEnemyReconnInTouch; } }
+            public string EnemyReconnInTouchName { get { return ZwEnemyReconnInTouchName; } }
+            public string RawData { get { return ZwRawData; } }
+
+            object ICloneable.Clone()
+            {
+                var clone = (NightWarInfo)MemberwiseClone();
+                clone.ZwEnemyShips = ZwEnemyShips.DeepCloneArray();
+                clone.ZwOurShips = ZwOurShips.DeepCloneArray();
+                clone.ZwBombard = ZwBombard.DeepCloneArray().ForEach(x => x._parent = clone);
+                return clone;
+            }
+        }
+
+        public class ShipInfo : ICloneable
         {
             internal int ZwId;
-            public int Id { get { return ZwId; } }
-
             internal int ZwShipId;
-            public int ShipId { get { return ZwShipId; } }
-
             internal string ZwShipTypeName;
-            public string ShipTypeName { get { return ZwShipTypeName; } }
-
             internal string ZwShipName;
-            public string ShipName { get { return ZwShipName; } }
-
             internal int ZwLv;
-            public int Lv { get { return ZwLv; } }
-
             internal int ZwCurrentHp;
-            public int CurrentHp { get { return ZwCurrentHp; } }
-
             internal int ZwMaxHp;
-            public int MaxHp { get { return ZwMaxHp; } }
-
             internal ParameterInfo ZwParameter;
-            public ParameterInfo Parameter { get { return ZwParameter; } }
-
             internal ParameterInfo ZwEnhancement;
-            public ParameterInfo Enhancement { get { return ZwEnhancement; } }
-
             internal EquiptInfo[] ZwEquipts;
-            public IReadOnlyList<EquiptInfo> Equipts { get { return ZwEquipts; } }
 
+            public int Id { get { return ZwId; } }
+            public int ShipId { get { return ZwShipId; } }
+            public string ShipTypeName { get { return ZwShipTypeName; } }
+            public string ShipName { get { return ZwShipName; } }
+            public int Lv { get { return ZwLv; } }
+            public int CurrentHp { get { return ZwCurrentHp; } }
+            public int MaxHp { get { return ZwMaxHp; } }
+            public ParameterInfo Parameter { get { return ZwParameter; } }
+            public ParameterInfo Enhancement { get { return ZwEnhancement; } }
+            public IReadOnlyList<EquiptInfo> Equipts { get { return ZwEquipts; } }
             public int ShipAsControl { get { return Equipts.Sum(x => x.SlotAsControl); } }
 
             public struct ParameterInfo
@@ -92,9 +125,16 @@ namespace LynLogger.Models.Battling
                 public int AntiAir { get { return ZwAntiAir; } }
                 public int Defense { get { return ZwDefense; } }
             }
+
+            object ICloneable.Clone()
+            {
+                var clone = (ShipInfo)MemberwiseClone();
+                clone.ZwEquipts = (EquiptInfo[])ZwEquipts.Clone();
+                return clone;
+            }
         }
 
-        public class AirWarfareInfo
+        public class AirWarfareInfo : ICloneable
         {
             internal AirspaceControl ZwOurAirspaceControl;
 
@@ -124,7 +164,7 @@ namespace LynLogger.Models.Battling
 
             internal int ZwCutInShipNo = -1;
             internal AaCutInType ZwCutInType;
-            internal EquiptInfo[] ZwCutInEquipts;
+            internal SimpleEquiptInfo[] ZwCutInEquipts;
 
             public AirspaceControl OurAirspaceControl { get { return ZwOurAirspaceControl; } }
             public AirspaceControl EnemyAirspaceControl { get { return (AirspaceControl)(6 - (int)ZwOurAirspaceControl); } }
@@ -147,7 +187,7 @@ namespace LynLogger.Models.Battling
 
             public ShipInfo CutInShip { get { return (ZwCutInShipNo < 0 || ZwCutInShipNo > 5) ? null : _parent.OurShips[ZwCutInShipNo]; } }
             public AaCutInType CutInType { get { return ZwCutInType; } }
-            public IReadOnlyList<EquiptInfo> CutInEquipts { get { return ZwCutInEquipts; } }
+            public IReadOnlyList<SimpleEquiptInfo> CutInEquipts { get { return ZwCutInEquipts; } }
 
             public int OurAsControlValue { get { return OurCarrierShip.Sum(x => x.ShipAsControl); } }
             public int EnemyAsControlValue { get { return EnemyCarrierShip.Sum(x => x.ShipAsControl); } }
@@ -192,8 +232,8 @@ namespace LynLogger.Models.Battling
                 }
             }
 
-            private BattleStatus _parent;
-            public AirWarfareInfo(BattleStatus parent) { _parent = parent; }
+            internal IShipInfoHolder _parent;
+            public AirWarfareInfo(IShipInfoHolder parent) { _parent = parent; }
 
             public struct Stage3Report
             {
@@ -270,9 +310,24 @@ namespace LynLogger.Models.Battling
                 [Description("摩耶改二 / 集中机枪 / 高角炮 / 无电探")]
                 MayaGen2MultiAaGunWithNavalGunNoRadar = 11
             }
+
+            object ICloneable.Clone()
+            {
+                var clone = (AirWarfareInfo)MemberwiseClone();
+                clone.ZwOurCarrierShip = (int[])ZwOurCarrierShip.Clone();
+                clone.ZwOurShipBombed = (bool[])ZwOurShipBombed.Clone();
+                clone.ZwOurShipTorpedoed = (bool[])ZwOurShipTorpedoed.Clone();
+                clone.ZwOurShipDamages = (double[])ZwOurShipDamages.Clone();
+                clone.ZwEnemyCarrierShip = (int[])ZwEnemyCarrierShip.Clone();
+                clone.ZwEnemyShipBombed = (bool[])ZwEnemyShipBombed.Clone();
+                clone.ZwEnemyShipTorpedoed = (bool[])ZwEnemyShipTorpedoed.Clone();
+                clone.ZwEnemyShipDamages = (double[])ZwEnemyShipDamages.Clone();
+                clone.ZwCutInEquipts = (SimpleEquiptInfo[])ZwCutInEquipts.Clone();
+                return clone;
+            }
         }
 
-        public struct TorpedoInfo
+        public class TorpedoInfo : ICloneable
         {
             internal int ZwFrom;
             internal int ZwTo;
@@ -280,33 +335,38 @@ namespace LynLogger.Models.Battling
 
             public ShipInfo From { get { return ZwFrom > 6 ? _parent.EnemyShips[ZwFrom - 7] : _parent.OurShips[ZwFrom - 1]; } }
             public ShipInfo To { get { return ZwTo > 6 ? _parent.EnemyShips[ZwTo - 7] : _parent.OurShips[ZwTo - 1]; } }
-            public int FromId { get { return ZwFrom; } }
-            public int ToId { get { return ZwTo; } }
+            //public int FromId { get { return ZwFrom; } }
+            //public int ToId { get { return ZwTo; } }
             public double Damage { get { return ZwDamage; } }
 
-            private BattleStatus _parent;
-            public TorpedoInfo(BattleStatus parent) { _parent = parent; ZwDamage = ZwFrom = ZwTo = 0; }
+            internal IShipInfoHolder _parent;
+            public TorpedoInfo(IShipInfoHolder parent) { _parent = parent; ZwDamage = ZwFrom = ZwTo = 0; }
+
+            object ICloneable.Clone()
+            {
+                return MemberwiseClone();
+            }
         }
 
-        public class BombardInfo
+        public class BombardInfo : ICloneable
         {
             internal int ZwFrom;
             internal int[] ZwTo;
             internal AttackType ZwType;
-            internal EquiptInfo[] ZwEquipts;
+            internal SimpleEquiptInfo[] ZwEquipts;
             internal double[] ZwDamage;
 
             public ShipInfo From { get { return ZwFrom > 6 ? _parent.EnemyShips[ZwFrom - 7] : _parent.OurShips[ZwFrom - 1]; } }
             public IEnumerable<ShipInfo> To { get { return ZwTo.Select(x => x > 6 ? _parent.EnemyShips[x - 7] : _parent.OurShips[x - 1]); } }
-            public int FromId { get { return ZwFrom; } }
-            public IReadOnlyList<int> ToId { get { return ZwTo; } }
+            //public int FromId { get { return ZwFrom; } }
+            //public IReadOnlyList<int> ToId { get { return ZwTo; } }
             public AttackType Type { get { return ZwType; } }
-            public IReadOnlyList<EquiptInfo> Equipts { get { return ZwEquipts; } }
+            public IReadOnlyList<SimpleEquiptInfo> Equipts { get { return ZwEquipts; } }
             public IReadOnlyList<double> Damage { get { return ZwDamage; } }
             public IEnumerable<KeyValuePair<ShipInfo, double>> AttackInfos { get { return Enumerable.Zip(To, Damage, (a, b) => new KeyValuePair<ShipInfo, double>(a, b)); } }
 
-            private BattleStatus _parent;
-            public BombardInfo(BattleStatus parent) { _parent = parent; }
+            internal IShipInfoHolder _parent;
+            public BombardInfo(IShipInfoHolder parent) { _parent = parent; }
 
             public enum AttackType
             {
@@ -346,6 +406,15 @@ namespace LynLogger.Models.Battling
                 [Description("弹着观测 - 双主炮")]
                 DualArtilleryWithCorrection = 6
             }
+
+            object ICloneable.Clone()
+            {
+                var clone = (BombardInfo)MemberwiseClone();
+                clone.ZwTo = (int[])ZwTo.Clone();
+                clone.ZwEquipts = (SimpleEquiptInfo[])ZwEquipts.Clone();
+                clone.ZwDamage = (double[])ZwDamage.Clone();
+                return clone;
+            }
         }
 
         public struct ShipHpStatus
@@ -369,7 +438,7 @@ namespace LynLogger.Models.Battling
                     if(aws3report.Ship != origInfo) continue;
                     HpCurrent -= (int)aws3report.Damage;
                 }
-                foreach(var bmbreport in report.Bombards.SafeExpand(x => x)) {
+                foreach(var bmbreport in report.Bombards.SafeExpand(x => x).SafeConcat(report.NightWar?.Bombard)) {
                     foreach(var tgt in bmbreport.AttackInfos) {
                         if(tgt.Key != origInfo) continue;
                         HpCurrent -= (int)tgt.Value;
@@ -379,9 +448,36 @@ namespace LynLogger.Models.Battling
                     if(tpreport.To != origInfo) continue;
                     HpCurrent -= (int)tpreport.Damage;
                 }
+
                 if(HpCurrent < 0) HpCurrent = 0;
 
                 return this;
+            }
+        }
+
+        public struct SimpleEquiptInfo
+        {
+            private string ZwName;
+            private int ZwId;
+
+            public string Name { get { return ZwName; } }
+            public int Id { get { return ZwId; } }
+
+            public SimpleEquiptInfo(EquiptInfo ei)
+            {
+                ZwName = ei.EquiptName;
+                ZwId = ei.EquiptId;
+            }
+
+            public SimpleEquiptInfo(SlotItemInfo info, int id = 0)
+            {
+                if(info != null) {
+                    ZwId = info.Id;
+                    ZwName = info.Name;
+                } else {
+                    ZwId = id;
+                    ZwName = id.ToString();
+                }
             }
         }
 
@@ -446,6 +542,19 @@ namespace LynLogger.Models.Battling
 
             [Description("无法进行索敌")]
             NoReconn = 6,
+        }
+
+        object ICloneable.Clone()
+        {
+            var clone = (BattleStatus)MemberwiseClone();
+            clone.ZwEnemyShips = ZwEnemyShips.DeepCloneArray();
+            clone.ZwOurShips = ZwOurShips.DeepCloneArray();
+            clone.ZwAirWarfare = ZwAirWarfare.Clone();
+            clone.ZwNightWar = ZwNightWar.Clone();
+            clone.ZwOpeningTorpedoAttack = ZwOpeningTorpedoAttack.DeepCloneArray().ForEach(x => x._parent = clone);
+            clone.ZwBombards = ZwBombards.DeepCloneArray().ForEach(x => x.ForEach(xx => xx._parent = clone));
+            clone.ZwClosingTorpedoAttack = ZwClosingTorpedoAttack.DeepCloneArray().ForEach(x => x._parent = clone);
+            return clone;
         }
     }
 }

@@ -25,6 +25,10 @@ namespace LynLogger.Views
                     o => ((ShipStatusModel)o).IsMvp,
                     o => ((ShipStatusModel)o).SelectedMapArea,
                     o => ((ShipStatusModel)o).TargetRank },
+                [o => ((ShipStatusModel)o).FuelReq] = new List<Expression<Func<object, object>>> {
+                    o => ((ShipStatusModel)o).SelectedShip },
+                [o => ((ShipStatusModel)o).AmmoReq] = new List<Expression<Func<object, object>>> {
+                    o => ((ShipStatusModel)o).SelectedShip }
             };
 
         protected override IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency { get { return PropertyDependencies; } }
@@ -179,14 +183,17 @@ namespace LynLogger.Views
             }
         }
 
+        public int FuelReq { get { return SelectedShip == null ? 0 : SelectedShip.Fuel - SelectedShip.MaxFuel; } }
+        public int AmmoReq { get { return SelectedShip == null ? 0 : SelectedShip.Ammo - SelectedShip.MaxAmmo; } }
+
         public ShipStatusModel()
         {
-            DataStore.OnDataStoreSwitch += (_, __) => RaisePropertyChanged(() => Ships);
+            DataStore.OnDataStoreSwitch += (_, __) => RaiseMultiPropertyChanged(() => Ships);
             DataStore.ShipDataChanged += (ds, x) => {
                 if(x == SelectedShip?.Id) {
-                    RaisePropertyChanged(() => SelectedShip);
+                    RaiseMultiPropertyChanged(() => SelectedShip);
                 }
-                RaisePropertyChanged(() => Ships);
+                RaiseMultiPropertyChanged(() => Ships);
             };
             sortMode[0].PropertyChanged += HandleSortChange;
         }
@@ -203,7 +210,7 @@ namespace LynLogger.Views
                 defSort.PropertyChanged += HandleSortChange;
                 sortMode.Add(defSort);
             }
-            RaisePropertyChanged(() => ShipSortMode);
+            RaiseMultiPropertyChanged(() => ShipSortMode);
         }
 
         public enum Rank { S, A, B, C, D, E }

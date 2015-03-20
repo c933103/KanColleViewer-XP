@@ -69,14 +69,31 @@ namespace LynLogger.Observers
                         };
                     }
                 } else if(data.api_flare_pos()) { //夜战
-                    result.ZwAirWarfare = CreateNightAirWarfare(result, data.api_touch_plane);
-                    result.ZwBombards = new BattleStatus.BombardInfo[][] {
-                        ConvertBombards(result, data.api_hougeki)
+                    var r = new BattleStatus.NightWarInfo() {
+                        ZwOurShips = result.ZwOurShips,
+                        ZwEnemyShips = result.ZwEnemyShips,
+                        ZwRawData = json,
+                        ZwBombard = ConvertBombards(result, data.api_hougeki),
+                        ZwOurReconnInTouch = (int)data.api_touch_plane[0],
+                        ZwEnemyReconnInTouch = (int)data.api_touch_plane[1],
+                        _parent = result
                     };
+                    if(r.ZwOurReconnInTouch < 0) {
+                        r.ZwOurReconnInTouchName = "没有舰载机";
+                    } else {
+                        r.ZwOurReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwOurReconnInTouch, "{0} 号侦察机");
+                    }
+                    if(r.ZwEnemyReconnInTouch < 0) {
+                        r.ZwEnemyReconnInTouchName = "没有舰载机";
+                    } else {
+                        r.ZwEnemyReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwEnemyReconnInTouch, "{0} 号侦察机");
+                    }
+                    result.ZwNightWar = r;
+                    result.ZwAirWarfare = _dummyAirwarfare.Clone();
                 }
 
                 _onBattle(result);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 System.Diagnostics.Debugger.Break();
                 System.Diagnostics.Trace.TraceError(e.ToString());
             }
@@ -219,12 +236,13 @@ namespace LynLogger.Observers
                 ZwOurStage2Engaged   = (int)(data.api_stage2?.api_f_count        ?? 0),
                 ZwOurStage2Lost      = (int)(data.api_stage2?.api_f_lostcount    ?? 0),
                 ZwOurAirspaceControl = ac,
-                ZwEnemyShipBombed = enemyBombed.ToArray(),
-                ZwEnemyShipDamages = enemyDamage.ToArray(),
+
+                ZwEnemyShipBombed    = enemyBombed.ToArray(),
+                ZwEnemyShipDamages   = enemyDamage.ToArray(),
                 ZwEnemyShipTorpedoed = enemyTorpedoed.ToArray(),
-                ZwOurShipBombed = ourBombed.ToArray(),
-                ZwOurShipDamages = ourDamage.ToArray(),
-                ZwOurShipTorpedoed = ourTorpedoed.ToArray()
+                ZwOurShipBombed      = ourBombed.ToArray(),
+                ZwOurShipDamages     = ourDamage.ToArray(),
+                ZwOurShipTorpedoed   = ourTorpedoed.ToArray()
             };
             if(data.api_stage2 != null && data.api_stage2.api_air_fire() && data.api_stage2.api_air_fire != null) {//对空CI
                 r.ZwCutInShipNo = (int)data.api_stage2.api_air_fire.api_idx;
@@ -233,7 +251,9 @@ namespace LynLogger.Observers
                 for(int i = 0; data.api_stage2.api_air_fire.api_use_items.IsDefined(i); i++) {
                     ciEquipts.Add((int)data.api_stage2.api_air_fire.api_use_items[i]);
                 }
-                r.ZwCutInEquipts = ciEquipts.Select(x => new Models.EquiptInfo(KanColleClient.Current.Master.SlotItems[x], 0)).ToArray();
+                r.ZwCutInEquipts = ciEquipts.Select(x => new BattleStatus.SimpleEquiptInfo(KanColleClient.Current.Master.SlotItems[x], x)).ToArray();
+            } else {
+                r.ZwCutInEquipts = new BattleStatus.SimpleEquiptInfo[0];
             }
             if(r.ZwOurReconnInTouch < 0) {
                 r.ZwOurReconnInTouchName = "没有舰载机";
@@ -270,42 +290,6 @@ namespace LynLogger.Observers
             return r.ToArray();
         }
 
-        private BattleStatus.AirWarfareInfo CreateNightAirWarfare(BattleStatus holder, dynamic touch_plane)
-        {
-            var r = new BattleStatus.AirWarfareInfo(holder) {
-                ZwEnemyCarrierShip = new int[0],
-                ZwEnemyReconnInTouch = (int)touch_plane[1],
-                ZwEnemyStage1Engaged = 0,
-                ZwEnemyStage1Lost = 0,
-                ZwEnemyStage2Engaged = 0,
-                ZwEnemyStage2Lost = 0,
-                ZwOurCarrierShip = new int[0],
-                ZwOurReconnInTouch = (int)touch_plane[0],
-                ZwOurStage1Engaged = 0,
-                ZwOurStage1Lost = 0,
-                ZwOurStage2Engaged = 0,
-                ZwOurStage2Lost = 0,
-                ZwOurAirspaceControl = BattleStatus.AirWarfareInfo.AirspaceControl.None,
-                ZwEnemyShipBombed = new bool[6],
-                ZwEnemyShipDamages = new double[6],
-                ZwEnemyShipTorpedoed = new bool[6],
-                ZwOurShipBombed = new bool[6],
-                ZwOurShipDamages = new double[6],
-                ZwOurShipTorpedoed = new bool[6]
-            };
-            if(r.ZwOurReconnInTouch < 0) {
-                r.ZwOurReconnInTouchName = "没有舰载机";
-            } else {
-                r.ZwOurReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwOurReconnInTouch, "{0} 号侦察机");
-            }
-            if(r.ZwEnemyReconnInTouch < 0) {
-                r.ZwEnemyReconnInTouchName = "没有舰载机";
-            } else {
-                r.ZwEnemyReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwEnemyReconnInTouch, "{0} 号侦察机");
-            }
-            return r;
-        }
-
         private BattleStatus.BombardInfo[] ConvertBombards(BattleStatus holder, dynamic data)
         {
             List<BattleStatus.BombardInfo> r = new List<BattleStatus.BombardInfo>(12);
@@ -315,7 +299,7 @@ namespace LynLogger.Observers
                 List<int> sis = new List<int>(3);
                 int attackType;
 
-                for(int j = 0; data.api_damage[i].IsDefined(j); j++ ) {
+                for(int j = 0; data.api_damage[i].IsDefined(j); j++) {
                     if(data.api_df_list[i][j] > 0) {
                         dmgs.Add(data.api_damage[i][j]);
                         tgts.Add((int)data.api_df_list[i][j]);
@@ -337,7 +321,7 @@ namespace LynLogger.Observers
                     ZwFrom = (int)data.api_at_list[i],
                     ZwTo = tgts.ToArray(),
                     ZwDamage = dmgs.ToArray(),
-                    ZwEquipts = sis.Select(x => new Models.EquiptInfo(KanColleClient.Current.Master.SlotItems[x], 0)).ToArray(),
+                    ZwEquipts = sis.Select(x => new BattleStatus.SimpleEquiptInfo(KanColleClient.Current.Master.SlotItems[x], x)).ToArray(),
                     ZwType = (BattleStatus.BombardInfo.AttackType)attackType
                 });
             }
@@ -346,5 +330,30 @@ namespace LynLogger.Observers
 
         public void OnCompleted() { }
         public void OnError(Exception error) { }
+
+        private static readonly BattleStatus.AirWarfareInfo _dummyAirwarfare = new BattleStatus.AirWarfareInfo(null) {
+            ZwEnemyCarrierShip = new int[0],
+            ZwEnemyReconnInTouch = -1,
+            ZwEnemyStage1Engaged = 0,
+            ZwEnemyStage1Lost = 0,
+            ZwEnemyStage2Engaged = 0,
+            ZwEnemyStage2Lost = 0,
+            ZwOurCarrierShip = new int[0],
+            ZwOurReconnInTouch = -1,
+            ZwOurStage1Engaged = 0,
+            ZwOurStage1Lost = 0,
+            ZwOurStage2Engaged = 0,
+            ZwOurStage2Lost = 0,
+            ZwOurAirspaceControl = BattleStatus.AirWarfareInfo.AirspaceControl.None,
+            ZwEnemyShipBombed = new bool[6],
+            ZwEnemyShipDamages = new double[6],
+            ZwEnemyShipTorpedoed = new bool[6],
+            ZwOurShipBombed = new bool[6],
+            ZwOurShipDamages = new double[6],
+            ZwOurShipTorpedoed = new bool[6],
+            ZwOurReconnInTouchName = "没有舰载机",
+            ZwEnemyReconnInTouchName = "没有舰载机",
+            ZwCutInEquipts = new BattleStatus.SimpleEquiptInfo[0]
+        };
     }
 }

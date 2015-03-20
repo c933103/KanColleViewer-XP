@@ -8,7 +8,7 @@
              xmlns:kcvControls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls;assembly=KanColleViewer"
              x:Class="LynLogger.Views.BattleNetaView" 
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="300">
+             d:DesignHeight="1200" d:DesignWidth="300">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <local:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
@@ -29,7 +29,7 @@
                         <Run Text="]"/>
                         <Run Text="{Binding From.ShipName, Mode=OneWay}"/>
                     </TextBlock>
-                    <ItemsControl ItemsSource="{Binding Equipts, Mode=OneWay}" DisplayMemberPath="EquiptName" />
+                    <ItemsControl ItemsSource="{Binding Equipts, Mode=OneWay}" DisplayMemberPath="Name" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.IsSharedSizeScope="True">
                     <TextBlock>
@@ -448,7 +448,7 @@
                                     <Run Text="对空CI发动"/>
                                 </TextBlock>
                                 <TextBlock Text="{Binding CutInType, Mode=OneWay, Converter={StaticResource EnumToDescriptionConverter}}" />
-                                <ItemsControl ItemsSource="{Binding CutInEquipts, Mode=OneWay}" DisplayMemberPath="EquiptName" />
+                                <ItemsControl ItemsSource="{Binding CutInEquipts, Mode=OneWay}" DisplayMemberPath="Name" />
                             </StackPanel>
                             <Border.Style>
                                 <Style TargetType="{x:Type Border}">
@@ -483,6 +483,34 @@
                 </Expander>
                 <Expander Header="雷击战" IsExpanded="True">
                     <ItemsControl Margin="20,0,0,15" Grid.IsSharedSizeScope="True" ItemsSource="{Binding Battle.ClosingTorpedoAttack, Mode=OneWay}"/>
+                </Expander>
+                <Expander Header="夜战" IsExpanded="True">
+                    <StackPanel Margin="20,0,0,15" DataContext="{Binding Battle.NightWar, Mode=OneWay}">
+                        <Expander Header="夜侦触接判定" IsExpanded="True">
+                            <UniformGrid Margin="20,0,0,15" Columns="2">
+                                <StackPanel>
+                                    <TextBlock FontSize="16" Text="我方舰队"/>
+                                    <TextBlock>
+                                        <Run Text="{Binding OurReconnInTouchName, Mode=OneWay}" />
+                                        <Run Text="触接对方" />
+                                    </TextBlock>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock FontSize="16" Text="敌方舰队"/>
+                                    <TextBlock>
+                                        <Run Text="{Binding EnemyReconnInTouchName, Mode=OneWay}" />
+                                        <Run Text="触接对方" />
+                                    </TextBlock>
+                                </StackPanel>
+                            </UniformGrid>
+                        </Expander>
+                        <Expander Header="炮击战" IsExpanded="True">
+                            <ItemsControl Margin="20,0,0,15" ItemsSource="{Binding Bombard, Mode=OneWay}"/>
+                        </Expander>
+                        <Expander Header="原始数据">
+                            <TextBox Text="{Binding RawData, Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" Margin="20,0,0,15"/>
+                        </Expander>
+                    </StackPanel>
                 </Expander>
                 <Expander Header="原始数据">
                     <TextBox Text="{Binding Battle.RawData, Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" Margin="20,0,0,15"/>

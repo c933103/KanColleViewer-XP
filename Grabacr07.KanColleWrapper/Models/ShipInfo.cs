@@ -49,6 +49,16 @@ namespace Grabacr07.KanColleWrapper.Models
             get { return this.RawData.api_maxeq; }
         }
 
+        public int MaxFuel
+        {
+            get { return RawData.api_fuel_max; }
+        }
+
+        public int MaxAmmo
+        {
+            get { return RawData.api_bull_max; }
+        }
+
 		#region 用意したけど使わないっぽい？
 
 		/// <summary>

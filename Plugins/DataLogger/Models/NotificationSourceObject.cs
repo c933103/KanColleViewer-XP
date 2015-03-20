@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -12,10 +13,12 @@ namespace LynLogger.Models
     [Serializable]
     public abstract class NotificationSourceObject : INotifyPropertyChanged
     {
+        private static ConcurrentDictionary<Type, IReadOnlyDictionary<string, IReadOnlyCollection<string>>> _cache = new ConcurrentDictionary<Type, IReadOnlyDictionary<string, IReadOnlyCollection<string>>>();
+
         protected virtual IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency { get { return null; } }
 
         [NonSerialized]
-        private Dictionary<string, HashSet<string>> _propertyChangePath;
+        private IReadOnlyDictionary<string, IReadOnlyCollection<string>> _propertyChangePath;
 
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
@@ -31,10 +34,17 @@ namespace LynLogger.Models
             allProperties = new Lazy<string[]>(() => {
                 return GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(info => info.Name).ToArray();
             });
-            _propertyChangePath = new Dictionary<string, HashSet<string>>();
-            if(PropertyDependency == null) return;
+            if(PropertyDependency == null) {
+                return;
+            }
+            IReadOnlyDictionary<string, IReadOnlyCollection<string>> cached;
+            if(_cache.TryGetValue(GetType(), out cached)) {
+                _propertyChangePath = cached;
+                return;
+            }
 
             var _propertyDependency = new Dictionary<string, HashSet<string>>();
+            var _cp = new Dictionary<string, HashSet<string>>();
             foreach(var dpPair in PropertyDependency) {                     //Build a preliminary dependency graph
                 var name = ResolveTargetName(dpPair.Key);
                 if(name == null) continue;
@@ -63,13 +73,16 @@ namespace LynLogger.Models
                     }
                 }
                 foreach(var source in closed) {                             //Flip the dependency list to form the lookup table
-                    if(!_propertyChangePath.ContainsKey(source)) {
-                        _propertyChangePath[source] = new HashSet<string>();
-                        _propertyChangePath[source].Add(source);
+                    if(!_cp.ContainsKey(source)) {
+                        _cp[source] = new HashSet<string>();
+                        _cp[source].Add(source);
                     }
-                    _propertyChangePath[source].Add(dpPair.Key);
+                    _cp[source].Add(dpPair.Key);
                 }
             }
+
+            _propertyChangePath = _cp.Select(x => new KeyValuePair<string, IReadOnlyCollection<string>>(x.Key, new Utilities.ReadOnlyCollectionWrapper<string>(x.Value))).ToDictionary(x => x.Key, x => x.Value);
+            _cache.TryAdd(GetType(), _propertyChangePath);
         }
 
         protected void RaisePropertyChanged([CallerMemberName] string property = null)
@@ -81,16 +94,16 @@ namespace LynLogger.Models
                 return;
             }
 
-            if(!_propertyChangePath.ContainsKey(property)) {
-                handler(this, new PropertyChangedEventArgs(property));
-            } else {
+            if(_propertyChangePath?.ContainsKey(property) == true) {
                 foreach(var dp in _propertyChangePath[property]) {
                     handler(this, new PropertyChangedEventArgs(dp));
                 }
+            } else {
+                handler(this, new PropertyChangedEventArgs(property));
             }
         }
 
-        protected void RaiseMultiPropertyChanged(params string[] properties)
+        /*protected void RaiseMultiPropertyChanged(params string[] properties)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if(handler == null) return;
@@ -102,15 +115,17 @@ namespace LynLogger.Models
             } else {
                 DoRaiseMultiPropertyChanged(properties, handler);
             }
-        }
+        }*/
 
-        protected void RaisePropertyChanged(params Expression<Func<object>>[] properties)
+        protected void RaiseMultiPropertyChanged(params Expression<Func<object>>[] properties)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if(handler == null) return;
 
             if(properties.Length == 0) {
-                RaiseMultiPropertyChanged();
+                foreach(var prop in allProperties.Value) {
+                    handler(this, new PropertyChangedEventArgs(prop));
+                }
                 return;
             }
             DoRaiseMultiPropertyChanged(properties.Select(ResolveTargetName).Where(x => x != null), handler);
@@ -120,12 +135,12 @@ namespace LynLogger.Models
         {
             var affected = new HashSet<string>();
             foreach(var source in properties) {
-                if(!_propertyChangePath.ContainsKey(source)) {
-                    affected.Add(source);
-                } else {
+                if(_propertyChangePath?.ContainsKey(source) == true) {
                     foreach(var dp in _propertyChangePath[source]) {
                         affected.Add(dp);
                     }
+                } else {
+                    affected.Add(source);
                 }
             }
             foreach(var dp in affected) {

@@ -136,12 +136,22 @@
                         <Run Text="{Binding SelectedShip.MaxRawScout, Mode=OneWay}" />
                     </TextBlock>
                     <TextBlock>
-                        <Run Text="剩余弹药: "/>
+                        <Run Text="弹药: "/>
                         <Run Text="{Binding SelectedShip.Ammo, Mode=OneWay}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding SelectedShip.MaxAmmo, Mode=OneWay}" />
+                        <Run Text="(" />
+                        <Run Text="{Binding AmmoReq, Mode=OneWay}" />
+                        <Run Text=")" />
                     </TextBlock>
                     <TextBlock>
-                        <Run Text="剩余燃料: "/>
+                        <Run Text="燃料: "/>
                         <Run Text="{Binding SelectedShip.Fuel, Mode=OneWay}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding SelectedShip.MaxFuel, Mode=OneWay}" />
+                        <Run Text="(" />
+                        <Run Text="{Binding FuelReq, Mode=OneWay}" />
+                        <Run Text=")" />
                     </TextBlock>
                     <TextBlock>
                         <Run Text="疲劳: "/>

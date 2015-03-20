@@ -144,6 +144,7 @@
     <Compile Include="ToolsView.xaml.cs">
       <DependentUpon>ToolsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\ReadOnlyCollectionWrapper.cs" />
     <Compile Include="Utilities\WeakEvent.cs" />
     <Compile Include="Views\BattleNetaModel.cs" />
     <Compile Include="Views\BattleNetaView.xaml.cs">

@@ -61,9 +61,13 @@ namespace LynLogger.Models
 
         public bool Locked { get; internal set; }
 
-        [OptionalField]
-        internal EquiptInfo[] ZwEquipts;
+        [OptionalField] internal EquiptInfo[] ZwEquipts;
         public IReadOnlyList<EquiptInfo> Equipts { get { return ZwEquipts ?? (ZwEquipts = new EquiptInfo[0]); } }
+        
+        [OptionalField] internal int ZwMaxFuel;
+        [OptionalField] internal int ZwMaxAmmo;
+        public int MaxFuel { get { return ZwMaxFuel; } }
+        public int MaxAmmo { get { return ZwMaxAmmo; } }
 
         private bool _dirty = false;
 
@@ -121,6 +125,10 @@ namespace LynLogger.Models
             EnhancedLuck = data.api_kyouka[4];
 
             Locked = data.api_locked != 0;
+
+            var shipInfo = KanColleClient.Current.Master.Ships[ShipId];
+            ZwMaxAmmo = shipInfo?.MaxAmmo ?? Ammo;
+            ZwMaxFuel = shipInfo?.MaxFuel ?? Fuel;
 
             if(noUpdateEvent) return;
 

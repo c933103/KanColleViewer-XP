@@ -50,7 +50,7 @@ namespace LynLogger.Views
                 x.PropertyChanged += (s, e) => {
                     if((s as HistogramTabViewItem)?.IsSelected == true) {
                         _histogramFactory = (s as HistogramTabViewItem).Factory;
-                        RaisePropertyChanged(() => ActiveHistogram);
+                        RaiseMultiPropertyChanged(() => ActiveHistogram);
                     }
                 };
             });
@@ -58,9 +58,9 @@ namespace LynLogger.Views
             SelectedPage = Pages.First();
 
             DataStore.BasicInfoChanged += x => {
-                RaisePropertyChanged(() => ActiveHistogram);
+                RaiseMultiPropertyChanged(() => ActiveHistogram);
             };
-            DataStore.OnDataStoreSwitch += (_, ds) => RaisePropertyChanged(() => ActiveHistogram);
+            DataStore.OnDataStoreSwitch += (_, ds) => RaiseMultiPropertyChanged(() => ActiveHistogram);
         }
 
         public class HistogramTabViewItem : TabViewItem

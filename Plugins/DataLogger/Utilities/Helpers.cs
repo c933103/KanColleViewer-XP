@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace LynLogger
@@ -247,26 +248,26 @@ namespace LynLogger
 
         public static IEnumerable<T> SafeConcat<T>(this IEnumerable<T> i1, params IEnumerable<T>[] i2)
         {
-            if(i1 != null) {
-                foreach(T v in i1) yield return v;
+            IEnumerable<T> i = i1;
+            int i2Index = 0;
+            while(i == null && i2Index < i2.Length) {
+                i = i2[i2Index];
+                i2Index++;
             }
-            foreach(var i in i2) {
-                if(i != null) {
-                    foreach(T v in i) yield return v;
+
+            for(; i2Index < i2.Length; i2Index++) {
+                if(i2[i2Index] != null) {
+                    i = i.Concat(i2[i2Index]);
                 }
             }
+
+            return i ?? new T[0];
         }
 
         public static IEnumerable<Tout> SafeExpand<Tin, Tout>(this IEnumerable<Tin> i, Func<Tin, IEnumerable<Tout>> project)
         {
-            if(i == null) yield break;
-            foreach(var v in i) {
-                var r = project(v);
-                if(r == null) continue;
-                foreach(var v1 in r) {
-                    yield return v1;
-                }
-            }
+            if(i == null) return new Tout[0];
+            return i.SelectMany(project);
         }
 
         public static string GetEquiptNameWithFallback(int eid, string fallbackFormat = "{0} 号装备")
@@ -277,6 +278,36 @@ namespace LynLogger
             } else {
                 return item.Name;
             }
+        }
+
+        public static T[] DeepCloneArray<T>(this T[] input)
+        {
+            if(input == null) return null;
+            T[] output = new T[input.Length];
+            for(int i = 0; i < input.Length; i++) {
+                if(input[i] is Array && (input[i] as Array).Rank == 1) {
+                    output[i] = (T)((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(input[i].GetType().GetElementType()).Invoke(null, new object[]{ input[i] });
+                } else if(input[i] is ICloneable) {
+                    output[i] = (T)((ICloneable)input[i]).Clone();
+                } else {
+                    output[i] = input[i];
+                }
+            }
+            return output;
+        }
+
+        public static T[] ForEach<T>(this T[] arr, Action<T> act)
+        {
+            if(arr == null || act == null) return arr;
+            for(int i = 0; i < arr.Length; i++) {
+                act(arr[i]);
+            }
+            return arr;
+        }
+
+        public static T Clone<T>(this T s) where T :ICloneable
+        {
+            return (T)s.Clone();
         }
     }
 }

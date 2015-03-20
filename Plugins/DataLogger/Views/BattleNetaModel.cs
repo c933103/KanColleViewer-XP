@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,6 +9,18 @@ namespace LynLogger.Views
 {
     public class BattleNetaModel : Models.NotificationSourceObject
     {
+        private static readonly IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependencies =
+            new Dictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> {
+                [o => ((BattleNetaModel)o).BombardRound1] = new List<Expression<Func<object, object>>> {
+                    o => ((BattleNetaModel)o).Battle},
+                [o => ((BattleNetaModel)o).BombardRound2] = new List<Expression<Func<object, object>>> {
+                    o => ((BattleNetaModel)o).Battle },
+            };
+
+        protected override IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency { get { return PropertyDependencies; } }
+
+        private ViewState _state = ViewState.AnticipateBattle;
+
         private Models.Battling.MapNext _mapNext;
         public Models.Battling.MapNext MapNext
         {
@@ -28,7 +41,7 @@ namespace LynLogger.Views
             {
                 if(value == _battle) return;
                 _battle = value;
-                RaisePropertyChanged(() => Battle, () => BombardRound1, () => BombardRound2);
+                RaisePropertyChanged();
             }
         }
 
@@ -45,9 +58,27 @@ namespace LynLogger.Views
         public BattleNetaModel()
         {
             LynLoggerMain.OnInstanceCreate += i => {
-                i.MapStartNextObserver.OnMapNext += a => MapNext = a;
-                i.BattleObserver.OnBattle += a => Battle = a;
+                i.MapStartNextObserver.OnMapNext += a => {
+                    MapNext = a;
+                    _state = ViewState.AnticipateBattle;
+                };
+                i.BattleObserver.OnBattle += a => {
+                    switch(_state) {
+                        case ViewState.AnticipateBattle:
+                            Battle = a;
+                            _state = ViewState.AnticipateNightBattle;
+                            break;
+                        case ViewState.AnticipateNightBattle:
+                            if(a.NightWar == null) goto case ViewState.AnticipateBattle;
+                            _state = ViewState.AnticipateBattle;
+                            Battle.NightWar = a.NightWar;
+                            RaiseMultiPropertyChanged(() => Battle);
+                            break;
+                    }
+                };
             };
         }
+
+        enum ViewState { AnticipateBattle, AnticipateNightBattle }
     }
 }
