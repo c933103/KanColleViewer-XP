@@ -205,7 +205,7 @@ namespace LynLogger.Views
                     tbDelta[i].Text = (minDelta + deltaDiff / 10 * (1+2*i)).ToString("F", 8);
                     tbVal[i].Text = (minVal + valDiff / 10 * (1+2*i)).ToString("F", 8);
                 }
-            } catch(InvalidOperationException e) {
+            } catch(InvalidOperationException) {
                 System.Diagnostics.Debugger.Break();
                 return;
             }

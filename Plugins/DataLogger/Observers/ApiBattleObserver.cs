@@ -51,6 +51,7 @@ namespace LynLogger.Observers
                     result.ZwAirWarfare = ConvertAirWarfare(result, data.api_kouku);
                     result.ZwOurReconn = (BattleStatus.ReconnResult)(int)data.api_search[0];
                     result.ZwEnemyReconn = (BattleStatus.ReconnResult)(int)data.api_search[1];
+                    result.ZwHasNightWar = data.api_midnight_flag > 0;
 
                     if(data.api_opening_flag == 1) {
                         result.ZwOpeningTorpedoAttack = ConvertTorpedoInfo(result, data.api_opening_atack);
@@ -88,6 +89,7 @@ namespace LynLogger.Observers
                     } else {
                         r.ZwEnemyReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwEnemyReconnInTouch, "{0} 号侦察机");
                     }
+                    result.ZwHasNightWar = true;
                     result.ZwNightWar = r;
                     result.ZwAirWarfare = _dummyAirwarfare.Clone();
                 }

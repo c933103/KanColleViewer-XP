@@ -20,6 +20,7 @@ namespace LynLogger.Models.Battling
         internal Formation ZwEnemyFormation;
         internal EncounterForm ZwEncounter;
         internal AirWarfareInfo ZwAirWarfare;
+        internal bool ZwHasNightWar;
         internal NightWarInfo ZwNightWar;
         internal ReconnResult ZwOurReconn;
         internal ReconnResult ZwEnemyReconn;
@@ -40,12 +41,13 @@ namespace LynLogger.Models.Battling
         public IReadOnlyList<IReadOnlyList<BombardInfo>> Bombards { get { return ZwBombards ?? (ZwBombards = new BombardInfo[0][]); } }
         public IReadOnlyList<TorpedoInfo> ClosingTorpedoAttack { get { return ZwClosingTorpedoAttack ?? (ZwClosingTorpedoAttack = new TorpedoInfo[0]); } }
         public string RawData { get { return ZwRawData; } }
+        public bool HasNightWar { get { return ZwHasNightWar; } }
         public NightWarInfo NightWar
         {
             get { return ZwNightWar; }
             set
             {
-                if(ZwNightWar == null) {
+                if(ZwNightWar == null && HasNightWar) {
                     ZwNightWar = value.Clone();
                     ZwNightWar._parent = this;
                 } else {

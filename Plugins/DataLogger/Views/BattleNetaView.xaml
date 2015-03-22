@@ -484,7 +484,7 @@
                 <Expander Header="雷击战" IsExpanded="True">
                     <ItemsControl Margin="20,0,0,15" Grid.IsSharedSizeScope="True" ItemsSource="{Binding Battle.ClosingTorpedoAttack, Mode=OneWay}"/>
                 </Expander>
-                <Expander Header="夜战" IsExpanded="True">
+                <Expander Header="夜战" IsExpanded="{Binding Battle.HasNightWar, Mode=OneWay}">
                     <StackPanel Margin="20,0,0,15" DataContext="{Binding Battle.NightWar, Mode=OneWay}">
                         <Expander Header="夜侦触接判定" IsExpanded="True">
                             <UniformGrid Margin="20,0,0,15" Columns="2">

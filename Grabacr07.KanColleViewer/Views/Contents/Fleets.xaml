@@ -139,7 +139,7 @@
                                                 <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" SharedSizeGroup="ShipInfo" />
+                                                <ColumnDefinition Width="Auto" MaxWidth="224" SharedSizeGroup="ShipInfo" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
 
@@ -149,7 +149,6 @@
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"
 														SharedSizeGroup="ShipName" />
-                                                    <ColumnDefinition Width="8" />
                                                     <ColumnDefinition Width="Auto"
 														SharedSizeGroup="ShipLevel" />
                                                 </Grid.ColumnDefinitions>
@@ -159,7 +158,7 @@
 														Style="{DynamicResource EmphaticTextElementStyleKey}" /><LineBreak /><Run Text="{Binding Info.ShipType.Name, Mode=OneWay}"
 														FontSize="14" /></TextBlock>
 
-                                                <TextBlock Grid.Column="2"
+                                                <TextBlock Grid.Column="1" Margin="8,0,0,0"
 													Style="{DynamicResource DefaultTextStyleKey}"><Run Text="Lv." /><Run Text=" "/><Run Text="{Binding Level, Mode=OneWay}"
 														FontSize="18"
 														Style="{DynamicResource EmphaticTextElementStyleKey}" /><LineBreak /><Run Text="Next:"
@@ -170,7 +169,7 @@
                                             <Grid Grid.Row="1"
 												Grid.Column="0">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"
+                                                    <ColumnDefinition Width="*"
 														SharedSizeGroup="ShipHP" />
                                                     <ColumnDefinition Width="Auto"
 														SharedSizeGroup="ShipHoge" />
@@ -189,7 +188,7 @@
                                                     <InlineUIContainer>
 														<controls:ConditionIcon ConditionType="{Binding ConditionType, Mode=OneWay}" />
 													</InlineUIContainer>
-                                                    <Run Text="{Binding Condition, Mode=OneWay, StringFormat={}{0:00}}" Style="{DynamicResource EmphaticTextElementStyleKey}" />
+                                                    <Run Text="{Binding Condition, Mode=OneWay, StringFormat={}{0,-3}}" Style="{DynamicResource EmphaticTextElementStyleKey}" />
                                                 </TextBlock>
                                             </Grid>
 
