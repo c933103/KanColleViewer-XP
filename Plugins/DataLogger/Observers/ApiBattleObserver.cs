@@ -92,6 +92,7 @@ namespace LynLogger.Observers
                     result.ZwHasNightWar = true;
                     result.ZwNightWar = r;
                     result.ZwAirWarfare = _dummyAirwarfare.Clone();
+                    result.ZwAirWarfare._parent = result;
                 }
 
                 _onBattle(result);

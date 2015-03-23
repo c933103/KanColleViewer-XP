@@ -73,7 +73,7 @@ namespace LynLogger.Views
                             }
                             break;
                         case ViewState.AnticipateNightBattle:
-                            if(!a.HasNightWar) goto case ViewState.AnticipateBattle;
+                            if(a.NightWar == null) goto case ViewState.AnticipateBattle;
                             _state = ViewState.AnticipateBattle;
                             Battle.NightWar = a.NightWar;
                             RaiseMultiPropertyChanged(() => Battle);

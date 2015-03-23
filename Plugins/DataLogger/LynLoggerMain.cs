@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reflection;
 
 namespace LynLogger
 {
@@ -63,7 +64,7 @@ namespace LynLogger
 
         System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            if(args.Name == typeof(LynLoggerMain).Assembly.FullName) {
+            if(new AssemblyName(args.Name).Name == typeof(LynLoggerMain).Assembly.GetName().Name) {
                 return typeof(LynLoggerMain).Assembly;
             }
             return null;
@@ -102,6 +103,27 @@ namespace LynLogger
                 d.Dispose();
             }
             GC.SuppressFinalize(this);
+        }
+    }
+
+    public abstract class CustomComparerBase<T> : MarshalByRefObject, IComparer<T>
+    {
+        public abstract int Compare(T x, T y);
+    }
+
+    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
+    public sealed class ComparerClassAttribute : Attribute
+    {
+        readonly string _className;
+        
+        public ComparerClassAttribute(string className)
+        {
+            _className = className;
+        }
+
+        public string ClassName
+        {
+            get { return _className; }
         }
     }
 }

@@ -13,13 +13,14 @@ namespace LynLogger.Models
         {
             get
             {
-                var info = Helpers.LookupShipNameInfo(ShipId);
-                return string.Format("[{0}] {1} {2}", Id, info.TypeName, info.ShipName);
+                return string.Format("[{0}] {1} {2}", Id, ShipInfo.TypeName, ShipInfo.ShipName);
             }
         }
 
         public int Id { get; private set; }
-        public int ShipId { get; private set; }
+
+        [OptionalField] private ShipNameType ZwShipInfo;
+        public ShipNameType ShipInfo { get { return ZwShipInfo; } }
 
         public int Level { get; internal set; }
         public int Exp { get; internal set; }
@@ -73,7 +74,7 @@ namespace LynLogger.Models
 
         internal Ship(int id, int shipId)
         {
-            Id = id; ShipId = shipId;
+            Id = id; ZwShipInfo = Helpers.LookupShipNameInfo(shipId);
         }
 
         internal void Update(kcsapi_ship2 data, bool noUpdateEvent = false)
@@ -110,7 +111,7 @@ namespace LynLogger.Models
             MaxRawScout = data.api_sakuteki[1];
             Luck = data.api_lucky[0];
             MaxRawLuck = data.api_lucky[1];
-            ShipId = data.api_ship_id;
+            ZwShipInfo = Helpers.LookupShipNameInfo(data.api_ship_id);
 
             ZwEquipts = new EquiptInfo[data.api_slotnum];
             for(int i = 0; i < data.api_slotnum; i++) {
@@ -126,7 +127,7 @@ namespace LynLogger.Models
 
             Locked = data.api_locked != 0;
 
-            var shipInfo = KanColleClient.Current.Master.Ships[ShipId];
+            var shipInfo = KanColleClient.Current.Master.Ships[ShipInfo.ShipId];
             ZwMaxAmmo = shipInfo?.MaxAmmo ?? Ammo;
             ZwMaxFuel = shipInfo?.MaxFuel ?? Fuel;
 
@@ -167,7 +168,7 @@ namespace LynLogger.Models
             if(MaxRawScout != data.api_sakuteki[1]) return true;
             if(Luck != data.api_lucky[0]) return true;
             if(MaxRawLuck != data.api_lucky[1]) return true;
-            if(ShipId != data.api_ship_id) return true;
+            if(ShipInfo.ShipId != data.api_ship_id) return true;
             
             if(ZwEquipts?.Length != data.api_slotnum) return true;
             for(int i = 0; i < data.api_slotnum; i++) {

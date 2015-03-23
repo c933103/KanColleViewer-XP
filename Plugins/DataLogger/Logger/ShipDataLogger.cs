@@ -28,7 +28,7 @@
             shipHisto.Exp.Append(ship.Exp, ds.Settings.ShipDataLoggingInterval);
             shipHisto.Level.Append(ship.Level, ds.Settings.ShipDataLoggingInterval);
             shipHisto.SRate.Append(ship.SRate, ds.Settings.ShipDataLoggingInterval);
-            shipHisto.ShipNameType.Append(Helpers.LookupShipNameInfo(ship.ShipId), 0);
+            shipHisto.ShipNameType.Append(ship.ShipInfo, 0);
 
             if(ship.Locked) {
                 shipHisto.ExistenceLog.Append(Models.ShipExistenceStatus.Locked, 0);

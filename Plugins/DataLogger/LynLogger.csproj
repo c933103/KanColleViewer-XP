@@ -31,6 +31,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>signingkey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BCMakeCert">
       <HintPath>..\..\packages\FiddlerCore.4.4.8.4\lib\net40\BCMakeCert.dll</HintPath>
@@ -44,6 +50,7 @@
     <Reference Include="Livet">
       <HintPath>..\..\packages\LivetCask.1.1.0.0\lib\net45\Livet.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\LivetCask.1.1.0.0\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
@@ -76,7 +83,6 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -145,6 +151,7 @@
       <DependentUpon>ToolsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\ReadOnlyCollectionWrapper.cs" />
+    <Compile Include="Utilities\Remoting\BootstrapLoader.cs" />
     <Compile Include="Utilities\WeakEvent.cs" />
     <Compile Include="Views\BattleNetaModel.cs" />
     <Compile Include="Views\BattleNetaView.xaml.cs">
@@ -165,6 +172,7 @@
     <Compile Include="Views\ShipHistoryView.xaml.cs">
       <DependentUpon>ShipHistoryView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ShipStatusCustomSorting.cs" />
     <Compile Include="Views\ShipStatusModel.cs" />
     <Compile Include="Views\ShipStatusView.xaml.cs">
       <DependentUpon>ShipStatusView.xaml</DependentUpon>
@@ -252,6 +260,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="signingkey.snk" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

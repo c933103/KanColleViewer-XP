@@ -59,11 +59,13 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>signingkey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CoreAudioApi, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\assemblies\CoreAudioApi.dll</HintPath>
-    </Reference>
     <Reference Include="Livet">
       <HintPath>..\packages\LivetCask.1.1.0.0\lib\net45\Livet.dll</HintPath>
     </Reference>
@@ -102,8 +104,8 @@
       <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
     </Reference>
     <Reference Include="System.Reactive.Windows.Threading, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Rx-Xaml.2.2.5\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\LivetCask.1.1.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -131,6 +133,72 @@
     <Compile Include="Composition\IToolPlugin.cs" />
     <Compile Include="Composition\NotifyType.cs" />
     <Compile Include="Composition\PluginHost.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioCaptureClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioClientBufferFlags.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioClientProperties.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioClientShareMode.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioClientStreamFlags.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioClientStreamOptions.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioClockClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioEndpointVolume.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioEndpointVolumeCallback.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioEndpointVolumeChannel.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioEndpointVolumeChannels.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioEndpointVolumeNotificationDelegate.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioEndpointVolumeStepInformation.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioEndpointVolumeVolumeRange.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioMeterInformation.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioMeterInformationChannels.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioRenderClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioSessionControl.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioSessionEventsCallback.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioSessionManager.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioSessionNotification.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioStreamCategory.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioStreamVolume.cs" />
+    <Compile Include="NAudio\CoreAudioApi\AudioVolumeNotificationData.cs" />
+    <Compile Include="NAudio\CoreAudioApi\DataFlow.cs" />
+    <Compile Include="NAudio\CoreAudioApi\DeviceState.cs" />
+    <Compile Include="NAudio\CoreAudioApi\EEndpointHardwareSupport.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\AudioVolumeNotificationDataStruct.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\Blob.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\ClsCtx.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\ErrorCodes.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioCaptureClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioClock2.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioEndpointVolume.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioEndpointVolumeCallback.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioMeterInformation.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioRenderClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioSessionControl.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioSessionEnumerator.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioSessionEvents.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioSessionEventsHandler.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioSessionManager.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioSessionNotification.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IAudioStreamVolume.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IMMDevice.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IMMDeviceCollection.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IMMDeviceEnumerator.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IMMEndpoint.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IMMNotificationClient.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\IPropertyStore.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\ISimpleAudioVolume.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\MMDeviceEnumeratorComObject.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Interfaces\StorageAccessMode.cs" />
+    <Compile Include="NAudio\CoreAudioApi\MMDevice.cs" />
+    <Compile Include="NAudio\CoreAudioApi\MMDeviceCollection.cs" />
+    <Compile Include="NAudio\CoreAudioApi\MMDeviceEnumerator.cs" />
+    <Compile Include="NAudio\CoreAudioApi\PropertyKey.cs" />
+    <Compile Include="NAudio\CoreAudioApi\PropertyKeys.cs" />
+    <Compile Include="NAudio\CoreAudioApi\PropertyStore.cs" />
+    <Compile Include="NAudio\CoreAudioApi\PropertyStoreProperty.cs" />
+    <Compile Include="NAudio\CoreAudioApi\PropVariant.cs" />
+    <Compile Include="NAudio\CoreAudioApi\Role.cs" />
+    <Compile Include="NAudio\CoreAudioApi\SessionCollection.cs" />
+    <Compile Include="NAudio\CoreAudioApi\SimpleAudioVolume.cs" />
     <Compile Include="Models\BrowserZoomFactor.cs" />
     <Compile Include="Composition\IPlugin.cs" />
     <Compile Include="Models\IZoomFactor.cs" />
@@ -147,6 +215,14 @@
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\SupportedImageFormat.cs" />
     <Compile Include="Models\Volume.cs" />
+    <Compile Include="NAudio\Dmo\AudioMediaSubtypes.cs" />
+    <Compile Include="NAudio\Utils\HResult.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\AdpcmWaveFormat.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\Gsm610WaveFormat.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\WaveFormat.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\WaveFormatEncoding.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\WaveFormatExtensible.cs" />
+    <Compile Include="NAudio\Wave\WaveFormats\WaveFormatExtraData.cs" />
     <Compile Include="ViewModels\Catalogs\ShipCatalogFilter.cs" />
     <Compile Include="ViewModels\Catalogs\ShipViewModel.cs" />
     <Compile Include="ViewModels\Catalogs\SlotItemCatalogViewModel.cs" />
@@ -559,6 +635,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="signingkey.snk" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
