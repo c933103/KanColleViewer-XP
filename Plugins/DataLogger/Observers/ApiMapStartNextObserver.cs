@@ -19,16 +19,6 @@ namespace LynLogger.Observers
             remove { }
         }
 
-        public void OnCompleted()
-        {
-            return;
-        }
-
-        public void OnError(Exception error)
-        {
-            return;
-        }
-
         public void OnNext(Fiddler.Session value)
         {
             if(_onMapNext == null) return;
@@ -78,5 +68,8 @@ namespace LynLogger.Observers
                 System.Diagnostics.Trace.TraceError(e.ToString());
             }
         }
+
+        public void OnCompleted() { return; }
+        public void OnError(Exception error) { return; }
     }
 }

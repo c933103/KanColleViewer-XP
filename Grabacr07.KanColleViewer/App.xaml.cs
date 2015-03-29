@@ -43,7 +43,7 @@ namespace Grabacr07.KanColleViewer
 			Helper.SetRegistryFeatureBrowserEmulation();
 			Helper.SetMMCSSTask();
 
-			KanColleClient.Current.Proxy.Startup(AppSettings.Default.LocalProxyPort);
+			KanColleClient.Current.Proxy.Startup(/*AppSettings.Default.LocalProxyPort*/);
 			KanColleClient.Current.Proxy.UpstreamProxySettings = Settings.Current.ProxySettings;
 
 			ResourceService.Current.ChangeCulture(Settings.Current.Culture);

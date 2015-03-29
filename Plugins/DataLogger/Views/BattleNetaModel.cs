@@ -1,9 +1,8 @@
-﻿using System;
+﻿using LynLogger.Models.Battling;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LynLogger.Views
 {
@@ -11,18 +10,18 @@ namespace LynLogger.Views
     {
         private static readonly IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependencies =
             new Dictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> {
-                [o => ((BattleNetaModel)o).BombardRound1] = new List<Expression<Func<object, object>>> {
+                [o => ((BattleNetaModel)o).EstimatedExp] = new List<Expression<Func<object, object>>> {
                     o => ((BattleNetaModel)o).Battle},
-                [o => ((BattleNetaModel)o).BombardRound2] = new List<Expression<Func<object, object>>> {
-                    o => ((BattleNetaModel)o).Battle },
+                [o => ((BattleNetaModel)o).OurEndMvpStatus] = new List<Expression<Func<object, object>>> {
+                    o => ((BattleNetaModel)o).Battle},
             };
 
         protected override IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency { get { return PropertyDependencies; } }
 
         private ViewState _state = ViewState.AnticipateBattle;
 
-        private Models.Battling.MapNext _mapNext;
-        public Models.Battling.MapNext MapNext
+        private MapNext _mapNext;
+        public MapNext MapNext
         {
             get { return _mapNext; }
             set
@@ -33,8 +32,8 @@ namespace LynLogger.Views
             }
         }
 
-        private Models.Battling.BattleStatus _battle;
-        public Models.Battling.BattleStatus Battle
+        private BattleStatus _battle;
+        public BattleStatus Battle
         {
             get { return _battle; }
             set
@@ -45,14 +44,99 @@ namespace LynLogger.Views
             }
         }
 
-        public IReadOnlyList<Models.Battling.BattleStatus.BombardInfo> BombardRound1
+        private PracticeEnemyInfo _practiceEnemy;
+        public PracticeEnemyInfo PracticeEnemy
         {
-            get { return (Battle?.Bombards.Count > 0) ? Battle.Bombards[0] : null; }
+            get { return _practiceEnemy; }
+            set
+            {
+                if(value == _practiceEnemy) return;
+                _practiceEnemy = value;
+                RaisePropertyChanged();
+            }
         }
 
-        public IReadOnlyList<Models.Battling.BattleStatus.BombardInfo> BombardRound2
+        private ViewShowInfo _showInfo;
+        public ViewShowInfo ShowInfo
         {
-            get { return (Battle?.Bombards.Count > 1) ? Battle.Bombards[1] : null; }
+            get { return _showInfo; }
+            set
+            {
+                if(value == _showInfo) return;
+                _showInfo = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private FuzzyDouble _mvpRange;
+        public FuzzyDouble MvpRange
+        {
+            get { return _mvpRange; }
+            private set
+            {
+                _mvpRange = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public IEnumerable<KeyValuePair<BattleStatus.ShipHpStatus, TriState>> OurEndMvpStatus
+        {
+            get
+            {
+                if(Battle == null) yield break;
+
+                var EndShips = Battle.OurShipBattleEndHp.ToList();
+                MvpRange = EndShips.Aggregate(new FuzzyDouble(), (range, ship) => FuzzyDouble.UpperRange(range, ship.DeliveredDamage));
+
+                var inRangeState = EndShips.Count(x => (x.DeliveredDamage >= MvpRange) != TriState.No) == 1 ? TriState.Yes : TriState.DK;
+                foreach(var ship in EndShips) {
+                    yield return new KeyValuePair<BattleStatus.ShipHpStatus, TriState>(ship, (ship.DeliveredDamage >= MvpRange) != TriState.No ? inRangeState : TriState.No);
+                }
+            }
+        }
+
+        public int EstimatedExp
+        {
+            get
+            {
+                if(Battle == null) return 2;
+                int basic;
+                switch(ShowInfo) {
+                    case ViewShowInfo.MapNext:
+                        basic = Data.MapExperienceTable.Instance[string.Format("{0}-{1}", MapNext.MapAreaId, MapNext.MapSectionId)];
+                        switch(Battle.Rank) {
+                            case Ranking.S:
+                                return (int)(basic * 1.2);
+                            case Ranking.A:
+                            case Ranking.B:
+                                return basic;
+                            case Ranking.C:
+                                return (int)(basic * 0.8);
+                            case Ranking.D:
+                                return (int)(basic * 0.7);
+                            case Ranking.E:
+                                return (int)(basic * 0.5);
+                        }
+                        break;
+                    case ViewShowInfo.PracticeEnemyInfo:
+                        basic = PracticeEnemy.DrillBasicExp;
+                        switch(Battle.Rank) {
+                            case Ranking.S:
+                                return (int)(basic * 1.2);
+                            case Ranking.A:
+                            case Ranking.B:
+                                return basic;
+                            case Ranking.C:
+                                return (int)(basic * 0.64);
+                            case Ranking.D:
+                                return (int)(basic * 0.56);
+                            case Ranking.E:
+                                return (int)(basic * 0.4);
+                        }
+                        break;
+                }
+                return 2;
+            }
         }
 
         public BattleNetaModel()
@@ -61,6 +145,12 @@ namespace LynLogger.Views
                 i.MapStartNextObserver.OnMapNext += a => {
                     MapNext = a;
                     _state = ViewState.AnticipateBattle;
+                    ShowInfo = ViewShowInfo.MapNext;
+                };
+                i.PracticeEnemyInfoObserver.OnPracticeEnemyInfo += a => {
+                    PracticeEnemy = a;
+                    _state = ViewState.AnticipateBattle;
+                    ShowInfo = ViewShowInfo.PracticeEnemyInfo;
                 };
                 i.BattleObserver.OnBattle += a => {
                     switch(_state) {
@@ -84,5 +174,6 @@ namespace LynLogger.Views
         }
 
         enum ViewState { AnticipateBattle, AnticipateNightBattle }
+        public enum ViewShowInfo { None, PracticeEnemyInfo, MapNext }
     }
 }

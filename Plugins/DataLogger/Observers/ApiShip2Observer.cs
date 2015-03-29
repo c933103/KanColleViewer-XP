@@ -6,16 +6,6 @@ namespace LynLogger.Observers
 {
     class ApiShip2Observer : IObserver<SvData<kcsapi_ship2[]>>
     {
-        public void OnCompleted()
-        {
-            return;
-        }
-
-        public void OnError(Exception error)
-        {
-            return;
-        }
-
         public void OnNext(SvData<kcsapi_ship2[]> value)
         {
             try {
@@ -26,5 +16,8 @@ namespace LynLogger.Observers
                 System.Diagnostics.Trace.TraceError(e.ToString());
             }
         }
+
+        public void OnCompleted() { return; }
+        public void OnError(Exception error) { return; }
     }
 }

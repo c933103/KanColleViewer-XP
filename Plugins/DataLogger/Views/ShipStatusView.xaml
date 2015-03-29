@@ -179,9 +179,7 @@
         </Expander>
         <Expander Header="自定义排序" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,5">
             <StackPanel>
-                <TextBox TextWrapping="NoWrap" AcceptsReturn="True" MinLines="10" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Text="{Binding CustomComparerSource}">
-                    
-                </TextBox>
+                <TextBox TextWrapping="NoWrap" AcceptsReturn="True" MinLines="10" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Text="{Binding CustomComparerSource}" FontFamily="SimSun" AcceptsTab="True" TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Fixed" Padding="0" />
                 <TextBlock Margin="8" FontSize="16" Text="错误列表" />
                 <TextBlock Text="{Binding ErrorMessage}" />
             </StackPanel>

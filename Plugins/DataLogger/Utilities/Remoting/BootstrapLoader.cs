@@ -12,6 +12,8 @@ namespace LynLogger.Utilities.Remoting
 {
     public class BootstrapLoader : MarshalByRefObject
     {
+        private static List<object> KeepAlive = new List<object>();
+
         public CustomShipComparerBootstrapResult BootstrapCustomShipComparer(byte[] assemblyBinary)
         {
             var result = new CustomShipComparerBootstrapResult();
@@ -34,7 +36,7 @@ namespace LynLogger.Utilities.Remoting
             }
 
             try {
-                result.Comparer = assembly.GetType(comparer).GetConstructor(new Type[0]).Invoke(new object[0]) as CustomComparerBase<Ship>;
+                KeepAlive.Add(result.Comparer = assembly.GetType(comparer).GetConstructor(new Type[0]).Invoke(new object[0]) as CustomComparerBase<Ship>);
                 if(result.Comparer == null) {
                     msgBuilder.Append("行0   列0   错误CCE0001: 程序集的 ComparerClass 属性上指定的比较器 ");
                     msgBuilder.Append(comparer);

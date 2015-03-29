@@ -9,12 +9,14 @@ namespace LynLogger.Data
     class LevelExperienceTable
     {
         private static readonly LevelExperienceTable _instance = new LevelExperienceTable();
+        private static readonly LevelExperienceTable _accumulated = new AccumulatedLevelExperienceTable();
 
         public static LevelExperienceTable Instance { get { return _instance; } }
+        public static LevelExperienceTable Accumulated { get { return _accumulated; } }
 
         private LevelExperienceTable() { }
 
-        public int this[int lv]
+        public virtual int this[int lv]
         {
             get
             {
@@ -43,6 +45,18 @@ namespace LynLogger.Data
                 if(lv <= 145) { return 3500*lv*lv- 856500*lv+53070000; }
                 if(lv <= 150) { return 4000*lv*lv-1001000*lv+63510000; }
                 return int.MaxValue;
+            }
+        }
+
+        private class AccumulatedLevelExperienceTable : LevelExperienceTable
+        {
+            public override int this[int lv]
+            {
+                get
+                {
+                    if(lv > 99) return _instance[lv] + _instance[99];
+                    return _instance[lv];
+                }
             }
         }
     }

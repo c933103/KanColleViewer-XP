@@ -6,19 +6,12 @@ namespace LynLogger.Observers
 {
     class ApiBattleResultObserver : IObserver<SvData<kcsapi_battleresult>>
     {
-        public void OnCompleted()
-        {
-            return;
-        }
-
-        public void OnError(Exception error)
-        {
-            return;
-        }
-
         public void OnNext(SvData<kcsapi_battleresult> value)
         {
             //value.Data
         }
+
+        public void OnCompleted() { return; }
+        public void OnError(Exception error) { return; }
     }
 }

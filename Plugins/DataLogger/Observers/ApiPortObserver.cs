@@ -6,16 +6,6 @@ namespace LynLogger.Observers
 {
     class ApiPortObserver : IObserver<SvData<kcsapi_port>>
     {
-        public void OnCompleted()
-        {
-            return;
-        }
-
-        public void OnError(Exception error)
-        {
-            return;
-        }
-
         public void OnNext(SvData<kcsapi_port> value)
         {
             try {
@@ -31,5 +21,8 @@ namespace LynLogger.Observers
                 System.Diagnostics.Trace.TraceError(e.ToString());
             }
         }
+
+        public void OnCompleted() { return; }
+        public void OnError(Exception error) { return; }
     }
 }

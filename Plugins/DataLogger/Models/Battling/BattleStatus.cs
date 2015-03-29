@@ -37,11 +37,20 @@ namespace LynLogger.Models.Battling
         public AirWarfareInfo AirWarfare { get { return ZwAirWarfare; } }
         public ReconnResult OurReconn { get { return ZwOurReconn; } }
         public ReconnResult EnemyReconn { get { return ZwEnemyReconn; } }
+        public bool HasNightWar { get { return ZwHasNightWar; } }
         public IReadOnlyList<TorpedoInfo> OpeningTorpedoAttack { get { return ZwOpeningTorpedoAttack ?? (ZwOpeningTorpedoAttack = new TorpedoInfo[0]); } }
         public IReadOnlyList<IReadOnlyList<BombardInfo>> Bombards { get { return ZwBombards ?? (ZwBombards = new BombardInfo[0][]); } }
         public IReadOnlyList<TorpedoInfo> ClosingTorpedoAttack { get { return ZwClosingTorpedoAttack ?? (ZwClosingTorpedoAttack = new TorpedoInfo[0]); } }
+        public IEnumerable<ShipHpStatus> OurShipBattleEndHp { get { return OurShips.Select(x => new ShipHpStatus(x)).Select(x => x.ProcessBattle(this)); } }
+        public IEnumerable<ShipHpStatus> EnemyShipBattleEndHp { get { return EnemyShips.Select(x => new ShipHpStatus(x)).Select(x => x.ProcessBattle(this)); } }
+        public LimitedValue OurGuage { get { return new LimitedValue(EnemyShipBattleEndHp.Sum(x => x.OrigInfo.CurrentHp - x.HpCurrent), EnemyShips.Sum(x => x.CurrentHp), 0); } }
+        public LimitedValue EnemyGuage { get { return new LimitedValue(OurShipBattleEndHp.Sum(x => x.OrigInfo.CurrentHp - x.HpCurrent), OurShips.Sum(x => x.CurrentHp), 0); } }
+        public int OurGuagePerMil { get { var guage = OurGuage; return guage.Current * 1000 / guage.Maximum; } }
+        public int EnemyGuagePerMil { get { var guage = EnemyGuage; return guage.Current * 1000 / guage.Maximum; } }
+        public IReadOnlyList<BombardInfo> BombardRound1 { get { return (Bombards.Count > 0) ? Bombards[0] : null; } }
+        public IReadOnlyList<BombardInfo> BombardRound2 { get { return (Bombards.Count > 1) ? Bombards[1] : null; } }
         public string RawData { get { return ZwRawData; } }
-        public bool HasNightWar { get { return ZwHasNightWar; } }
+
         public NightWarInfo NightWar
         {
             get { return ZwNightWar; }
@@ -55,9 +64,46 @@ namespace LynLogger.Models.Battling
                 }
             }
         }
+        
+        public Ranking Rank
+        {
+            get
+            {
+                var our = OurShipBattleEndHp.ToList();
+                var enemy = EnemyShipBattleEndHp.ToList();
+                var ourPm = OurGuagePerMil;
+                var enemyPm = EnemyGuagePerMil;
+                var enemySunk = enemy.Count(x => x.HpCurrent == 0);
+                var ourSunk = our.Count(x => x.HpCurrent == 0);
 
-        public IEnumerable<ShipHpStatus> OurShipBattleEndHp { get { return OurShips.Select(x => new ShipHpStatus(x)).Select(x => x.ProcessBattle(this)); } }
-        public IEnumerable<ShipHpStatus> EnemyShipBattleEndHp { get { return EnemyShips.Select(x => new ShipHpStatus(x)).Select(x => x.ProcessBattle(this)); } }
+                if(ourSunk == 0) {
+                    if(enemySunk == enemy.Count) return Ranking.S;
+
+                    if(enemy.Count < 6 && enemySunk >= (enemy.Count+1)/2) return Ranking.A;
+                    if(enemy.Count == 6 && enemySunk >= 4) return Ranking.A;
+
+                    if(enemy[0].HpCurrent == 0) return Ranking.B;
+                    if(ourPm > enemyPm * 2.5) return Ranking.B;
+
+                    if(ourPm > enemyPm) return Ranking.C;
+                } else {
+                    if(enemy[0].HpCurrent == 0) {
+                        if(ourSunk < enemySunk) return Ranking.B;
+                        return Ranking.C;
+                    }
+                    if(ourPm > enemyPm * 2.5) {
+                        if(enemy.Count < 6 && enemySunk >= (enemy.Count+1)/2) return Ranking.B;
+                        if(enemy.Count == 6 && enemySunk == 4) return Ranking.B;
+                    }
+                    if(ourPm > enemyPm) {
+                        return Ranking.C;
+                    }
+                    if(ourSunk >= (1+our.Count)/2) return Ranking.E;
+                }
+
+                return Ranking.D;
+            }
+        }
 
         public class NightWarInfo : ICloneable, IShipInfoHolder
         {
@@ -421,34 +467,61 @@ namespace LynLogger.Models.Battling
 
         public struct ShipHpStatus
         {
-            public int Id { get; private set; }
-            public int HpMax { get; private set; }
+            private FuzzyDouble ZwDeliveredDamage;
+
+            public ShipInfo OrigInfo { get; private set; }
+            public int Id { get { return OrigInfo.Id; } }
+            public string TypeName { get { return OrigInfo.ShipTypeName; } }
+            public string ShipName { get { return OrigInfo.ShipName; } }
+            public int HpMax { get { return OrigInfo.MaxHp; } }
+
             public int HpCurrent { get; private set; }
-            public string TypeName { get; private set; }
-            public string ShipName { get; private set; }
-            public Grabacr07.KanColleWrapper.Models.LimitedValue Hp { get { return new Grabacr07.KanColleWrapper.Models.LimitedValue(HpCurrent, HpMax, 0); } }
-            private ShipInfo origInfo;
+            public LimitedValue Hp { get { return new LimitedValue(HpCurrent, HpMax, 0); } }
+            public FuzzyDouble DeliveredDamage { get { return ZwDeliveredDamage; } }
 
             public ShipHpStatus(ShipInfo info)
             {
-                origInfo = info; HpMax = info.MaxHp; HpCurrent = info.CurrentHp; TypeName = info.ShipTypeName; ShipName = info.ShipName; Id = info.Id;
+                OrigInfo = info; HpCurrent = info.CurrentHp; ZwDeliveredDamage = new FuzzyDouble();
             }
 
             public ShipHpStatus ProcessBattle(BattleStatus report)
             {
+                ShipInfo a = OrigInfo;
+
+                if (report.AirWarfare.EnemyCarrierShip.Any(x => x == a)) {
+                    if (report.AirWarfare.ZwEnemyCarrierShip.Length == 1) {
+                        ZwDeliveredDamage += report.AirWarfare.ZwOurShipDamages.Sum();
+                    } else {
+                        ZwDeliveredDamage.UpperBound += report.AirWarfare.ZwOurShipDamages.Sum();
+                    }
+                } else if (report.AirWarfare.OurCarrierShip.Any(x => x == a)) {
+                    if (report.AirWarfare.ZwOurCarrierShip.Length == 1) {
+                        ZwDeliveredDamage += report.AirWarfare.ZwEnemyShipDamages.Sum();
+                    } else {
+                        ZwDeliveredDamage.UpperBound += report.AirWarfare.ZwEnemyShipDamages.Sum();
+                    }
+                }
+
                 foreach(var aws3report in report.AirWarfare.EnemyStage3Report.SafeConcat(report.AirWarfare.OurStage3Report)) {
-                    if(aws3report.Ship != origInfo) continue;
+                    if(aws3report.Ship != a) continue;
                     HpCurrent -= (int)aws3report.Damage;
                 }
                 foreach(var bmbreport in report.Bombards.SafeExpand(x => x).SafeConcat(report.NightWar?.Bombard)) {
                     foreach(var tgt in bmbreport.AttackInfos) {
-                        if(tgt.Key != origInfo) continue;
+                        if(tgt.Key != a) continue;
                         HpCurrent -= (int)tgt.Value;
+                    }
+                    if(bmbreport.From == a) {
+                        ZwDeliveredDamage += bmbreport.AttackInfos.Sum(x => x.Value);
                     }
                 }
                 foreach(var tpreport in report.ClosingTorpedoAttack.SafeConcat(report.OpeningTorpedoAttack)) {
-                    if(tpreport.To != origInfo) continue;
-                    HpCurrent -= (int)tpreport.Damage;
+                    if (tpreport.To == a) {
+                        HpCurrent -= (int)tpreport.Damage;
+                    }
+                    if(tpreport.From == a) {
+                        ZwDeliveredDamage += tpreport.Damage;
+                    }
                 }
 
                 if(HpCurrent < 0) HpCurrent = 0;
@@ -559,4 +632,6 @@ namespace LynLogger.Models.Battling
             return clone;
         }
     }
+
+    public enum Ranking { S, A, B, C, D, E }
 }

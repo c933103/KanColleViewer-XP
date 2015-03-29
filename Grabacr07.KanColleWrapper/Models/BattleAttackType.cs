@@ -9,7 +9,7 @@ namespace Grabacr07.KanColleWrapper.Models
 {
     public enum NightBattleAttackType
     {
-        [Description("×")]
+        [Description("✖")]
         None,
 
         [Description("纯雷击CI")]
@@ -40,7 +40,7 @@ namespace Grabacr07.KanColleWrapper.Models
     [Flags]
     public enum SpecialAttackType
     {
-        [Description("×")]
+        [Description("✖")]
         None = 0,
 
         [Description("弹着观测 - 双主炮")]
@@ -61,7 +61,7 @@ namespace Grabacr07.KanColleWrapper.Models
 
     public enum AaCutInType
     {
-        [Description("×")]
+        [Description("✖")]
         None,
 
         [Description("秋月 / 双高角炮 / 有电探")]

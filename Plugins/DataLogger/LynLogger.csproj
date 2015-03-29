@@ -90,6 +90,8 @@
   <ItemGroup>
     <Compile Include="Data\LevelExperienceTable.cs" />
     <Compile Include="Data\MapExperienceTable.cs" />
+    <Compile Include="Models\Battling\PracticeEnemyInfo.cs" />
+    <Compile Include="Observers\ApiPracticeEnemyInfoObserver.cs" />
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Logger\BasicInfoLogger.cs" />
     <Compile Include="Logger\ShipDataLogger.cs" />

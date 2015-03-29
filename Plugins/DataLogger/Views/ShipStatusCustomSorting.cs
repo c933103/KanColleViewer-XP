@@ -4,6 +4,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+//using System.Runtime.Remoting;
 using System.Security;
 using System.Security.Permissions;
 using System.Security.Policy;
@@ -47,7 +48,11 @@ namespace LynLogger.Views
             get
             {
                 if(_compileTime >= _srcTime) return _customComparer;
-                if(_sortDomain != null) AppDomain.Unload(_sortDomain);
+                if(_sortDomain != null) {
+                    try {
+                        AppDomain.Unload(_sortDomain);
+                    } catch (AppDomainUnloadedException) { }
+                }
                 _sortDomain = null;
                 _customComparer = null;
                 
@@ -134,16 +139,34 @@ namespace LynLogger.Views
 
             public override int Compare(Ship x, Ship y)
             {
+                return DoCompare(x, y);
+            }
+
+            private int DoCompare(Ship x, Ship y, bool reEntrant = false)
+            {
                 try {
                     return parent.CustomComparer == null ? 0 : parent.CustomComparer.Compare(x, y);
-                } catch(Exception e) {
-                    var stack = new System.Diagnostics.StackTrace(e).GetFrame(0);
-                    var line = stack.GetFileLineNumber();
-                    var col = stack.GetFileColumnNumber();
-                    var file = stack.GetFileName();
-                    parent.ErrorMessage = string.Format("行{0,-3} 列{1,-3} 错误CCE0002: 比较器发生异常，源文件是 {2}，{3}", line, col, file, e.ToString());
+                } catch (System.Runtime.Remoting.RemotingException e) {
+                    if(!reEntrant) {
+                        parent._compileTime = DateTimeOffset.MinValue;
+                        return DoCompare(x, y, true);
+                    } else {
+                        ReportException(e);
+                        return 0;
+                    }
+                } catch (Exception e) {
+                    ReportException(e);
+                    return 0;
                 }
-                return 0;
+            }
+
+            private void ReportException(Exception e)
+            {
+                var stack = new System.Diagnostics.StackTrace(e).GetFrame(0);
+                var line = stack.GetFileLineNumber();
+                var col = stack.GetFileColumnNumber();
+                var file = stack.GetFileName();
+                parent.ErrorMessage = string.Format("行{0,-3} 列{1,-3} 错误CCE0002: 比较器发生异常，源文件是 {2}，{3}", line, col, file, e.ToString());
             }
         }
     }

@@ -61,19 +61,25 @@ namespace LynLogger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using LynLogger;
-        ///using LynLogger.Models;
-        ///using System;
+        ///   Looks up a localized string similar to //以下代码将舰娘名字去掉“改二”和“改”之后，反转，并按反转后的名字排序
         ///
+        /////引入必要的命名空间
+        ///using LynLogger;         //插件主命名空间
+        ///using LynLogger.Models;  //插件数据模型命名空间
+        ///using System;            //标准系统命名空间
+        ///using System.Linq;       //Linq扩展方法空间
+        ///
+        /////标注处理排序用的类名称 CustomSorter.Sorter
         ///[assembly: ComparerClass(&quot;CustomSorter.Sorter&quot;)]
         ///
+        /////定义命名空间CustomSorter
         ///namespace CustomSorter {
+        ///
+        ///  //定义公开类Sorter 继承于LynLogger.CustomComparerBase&lt;LynLogger.Models.Ship&gt;
         ///  public class Sorter : CustomComparerBase&lt;Ship&gt; {
-        ///    public override int Compare(Ship x, Ship y) {
-        ///      return x.Id.CompareTo(y.Id);
-        ///    }
-        ///  }
-        ///}.
+        ///
+        ///    //重写父类的比较方法
+        ///    public override int C [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string TemplateCustomShipSorter {
             get {

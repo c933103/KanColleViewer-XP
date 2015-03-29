@@ -192,5 +192,9 @@ namespace LynLogger.Models
         public int ShipId;
         public string ShipName;
         public string TypeName;
+
+        public int PShipId { get { return ShipId; } }
+        public string PShipName { get { return ShipName; } }
+        public string PTypeName { get { return TypeName; } }
     }
 }

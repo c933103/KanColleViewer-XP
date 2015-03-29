@@ -1,4 +1,5 @@
 ﻿using LynLogger.Models;
+using LynLogger.Models.Battling;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,12 +37,12 @@ namespace LynLogger.Views
         private int _targetLevel;
         private bool _isMvp;
         private bool _isFlagship;
-        private Rank _rank;
+        private Ranking _rank;
         private List<SortRequest<Ship>> sortMode;
         private List<ComparerBase<Ship>> avaliableSorts;
 
         public IEnumerable<string> MapAreas { get { return Data.MapExperienceTable.Instance.Keys; } }
-        public IEnumerable<Rank> Ranks { get { return _ranks; } }
+        public IEnumerable<Ranking> Ranks { get { return _ranks; } }
         public IEnumerable<SortRequest<Ship>> ShipSortMode { get { return new LinkedList<SortRequest<Ship>>(sortMode); } }
         
         public IEnumerable<Ship> Ships
@@ -121,7 +122,7 @@ namespace LynLogger.Views
             }
         }
 
-        public Rank TargetRank
+        public Ranking TargetRank
         {
             get { return _rank; }
             set
@@ -154,26 +155,26 @@ namespace LynLogger.Views
                 var mapExp = Data.MapExperienceTable.Instance[SelectedMapArea];
                 double multiplier;
                 switch(TargetRank) {
-                    case Rank.S:
+                    case Ranking.S:
                         multiplier = 1.2;
                         break;
-                    case Rank.A:
-                    case Rank.B:
+                    case Ranking.A:
+                    case Ranking.B:
                         multiplier = 1;
                         break;
-                    case Rank.C:
+                    case Ranking.C:
                         multiplier = 0.8;
                         break;
-                    case Rank.D:
+                    case Ranking.D:
                         multiplier = 0.7;
                         break;
-                    case Rank.E:
+                    case Ranking.E:
                     default:
                         multiplier = 0.5;
                         break;
                 }
                 if(IsFlagship) multiplier *= 1.5;
-                if((TargetRank != Rank.E) && IsMvp) multiplier *= 2;
+                if((TargetRank != Ranking.E) && IsMvp) multiplier *= 2;
 
                 var expGet = (int)(mapExp * multiplier);
                 return (int)Math.Ceiling(1.0 * RemainingExp / expGet);
@@ -215,8 +216,7 @@ namespace LynLogger.Views
             RaiseMultiPropertyChanged(() => ShipSortMode);
         }
 
-        public enum Rank { S, A, B, C, D, E }
-        private static readonly Rank[] _ranks = new Rank[] { Rank.S, Rank.A, Rank.B, Rank.C, Rank.D, Rank.E };
+        private static readonly Ranking[] _ranks = Enum.GetValues(typeof(Ranking)).Cast<Ranking>().ToArray();
         private static readonly ComparerBase<Ship>[] _builtinSorts = new ComparerBase<Ship>[] {
             new WeightComparerBase<Ship>("(默认)", x => x.Id, true),
             new WeightComparerBase<Ship>("等级", x => x.Level),
