@@ -617,7 +617,7 @@
                             </UniformGrid>
                         </Expander>
                         <Expander Header="炮击战" IsExpanded="True">
-                            <ItemsControl Margin="20,0,0,15" ItemsSource="{Binding Bombard, Mode=OneTime}"/>
+                            <ItemsControl Margin="20,0,0,15" ItemsSource="{Binding Bombard, Mode=OneTime}" Grid.IsSharedSizeScope="True"/>
                         </Expander>
                         <Expander Header="原始数据">
                             <TextBox Text="{Binding RawData, Mode=OneTime}" TextWrapping="Wrap" IsReadOnly="True" Margin="20,0,0,15"/>

@@ -14,6 +14,7 @@ using Livet;
 using MetroRadiance;
 using AppSettings = Grabacr07.KanColleViewer.Properties.Settings;
 using Settings = Grabacr07.KanColleViewer.Models.Settings;
+using System.Reflection;
 
 namespace Grabacr07.KanColleViewer
 {
@@ -26,9 +27,16 @@ namespace Grabacr07.KanColleViewer
 		static App()
 		{
 			AppDomain.CurrentDomain.UnhandledException += (sender, args) => ReportException(sender, args.ExceptionObject as Exception);
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 		}
 
-		protected override void OnStartup(StartupEventArgs e)
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            AssemblyName resolvName = new AssemblyName(args.Name);
+            return AppDomain.CurrentDomain.GetAssemblies().Where(x => x.GetName().Name == resolvName.Name).FirstOrDefault();
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
 		{
 			base.OnStartup(e);
 

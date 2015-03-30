@@ -67,7 +67,7 @@ namespace LynLogger
             if(_onInstanceCreate != null) _onInstanceCreate(this);
         }
 
-        System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             if(new AssemblyName(args.Name).Name == typeof(LynLoggerMain).Assembly.GetName().Name) {
                 return typeof(LynLoggerMain).Assembly;
