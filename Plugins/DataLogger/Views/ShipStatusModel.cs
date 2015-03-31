@@ -1,4 +1,6 @@
-﻿using LynLogger.Models;
+﻿using LynLogger.DataStore;
+using LynLogger.DataStore.MasterInfo;
+using LynLogger.Models;
 using LynLogger.Models.Battling;
 using System;
 using System.Collections.Generic;
@@ -49,12 +51,12 @@ namespace LynLogger.Views
         {
             get
             {
-                if(DataStore.Instance == null) return null;
+                if(Store.Current == null) return null;
                 IOrderedEnumerable<Ship> o;
                 if(sortMode[0].SortAscending) {
-                    o = DataStore.Instance.Ships.Select(x => x.Value).OrderBy(x => x, sortMode[0].SortKey);
+                    o = Store.Current.Ships.OrderBy(x => x, sortMode[0].SortKey);
                 } else {
-                    o = DataStore.Instance.Ships.Select(x => x.Value).OrderByDescending(x => x, sortMode[0].SortKey);
+                    o = Store.Current.Ships.OrderByDescending(x => x, sortMode[0].SortKey);
                 }
                 foreach(var sm in sortMode.Skip(1)) {
                     if(sm.SortAscending) {
@@ -186,8 +188,8 @@ namespace LynLogger.Views
 
         public ShipStatusModel()
         {
-            DataStore.OnDataStoreSwitch += (_, __) => RaiseMultiPropertyChanged(() => Ships);
-            DataStore.ShipDataChanged += (ds, x) => {
+            Store.OnDataStoreSwitch += (_, __) => RaiseMultiPropertyChanged(() => Ships);
+            Store.OnDataStoreCreate += (_, store) => store.OnShipDataChange += (ds, x) => {
                 if(x == SelectedShip?.Id) {
                     RaiseMultiPropertyChanged(() => SelectedShip);
                 }

@@ -10,6 +10,7 @@
 			 xmlns:viewModels="clr-namespace:Grabacr07.KanColleViewer.ViewModels"
 			 xmlns:models="clr-namespace:Grabacr07.KanColleViewer.Models"
 			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+			 xmlns:root="clr-namespace:Grabacr07.KanColleViewer"
 			 mc:Ignorable="d"
 			 d:DesignWidth="500"
 			 d:DesignHeight="300"
@@ -111,5 +112,15 @@
 		<Rectangle Height="1"
 				   Style="{DynamicResource SeparatorRectangleStyleKey}" />
 
+        <StackPanel>
+            <TextBlock FontFamily="Lucida Console" FontSize="13.333">
+                <Run Text="Bytes received: " />
+                <Run Text="{Binding ReceivedBytes, StringFormat={}{0,11:N0}}"/>
+            </TextBlock>
+            <TextBlock FontFamily="Lucida Console" FontSize="13.333">
+                <Run Text="Bytes sent:     " />
+                <Run Text="{Binding SentBytes, StringFormat={}{0,11:N0}}"/>
+            </TextBlock>
+        </StackPanel>
 	</StackPanel>
 </UserControl>

@@ -1,4 +1,5 @@
-﻿using LynLogger.Models;
+﻿using LynLogger.DataStore.LogBook;
+using LynLogger.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,8 +7,8 @@ namespace LynLogger.Views
 {
     class ShipHistoryModel : NotificationSourceObject
     {
-        private ShipHistory _selected;
-        public ShipHistory SelectedShip {
+        private Ship _selected;
+        public Ship SelectedShip {
             get { return _selected; }
             set
             {
@@ -17,12 +18,12 @@ namespace LynLogger.Views
             }
         }
 
-        public IEnumerable<ShipHistory> Ships
+        public IEnumerable<Ship> Ships
         {
             get
             {
-                if(DataStore.Instance == null) return null;
-                return new LinkedList<ShipHistory>(DataStore.Instance.ShipHistories.Select(x => x.Value));
+                if(DataStore.Store.Current == null) return null;
+                return new LinkedList<Ship>(DataStore.Store.Current.Weekbook.Ships);
             }
         }
 
@@ -57,13 +58,13 @@ namespace LynLogger.Views
 
         public ShipHistoryModel()
         {
-            DataStore.ShipDataChanged += (ds, x) => {
+            DataStore.Store.OnDataStoreCreate += (_, store) => store.OnShipDataChange += (ds, x) => {
                 if(x == SelectedShip?.Id) {
                     RaiseMultiPropertyChanged(() => SelectedShip, () => CombinedEventLog, () => SelectedShipExp);
                 }
                 RaiseMultiPropertyChanged(() => Ships);
             };
-            DataStore.OnDataStoreSwitch += (_, ds) => RaiseMultiPropertyChanged(() => Ships);
+            DataStore.Store.OnDataStoreSwitch += (_, ds) => RaiseMultiPropertyChanged(() => Ships);
         }
     }
 }

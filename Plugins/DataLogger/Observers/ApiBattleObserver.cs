@@ -1,5 +1,6 @@
 ﻿using Codeplex.Data;
 using Grabacr07.KanColleWrapper;
+using LynLogger.DataStore.MasterInfo;
 using LynLogger.Models.Battling;
 using LynLogger.Utilities;
 using System;
@@ -74,7 +75,7 @@ namespace LynLogger.Observers
                         int supportDeckId = (int)(data.api_support_info.api_support_airatack?.api_deck_id ?? data.api_support_info.api_support_hourai.api_deck_id);
                         result.ZwSupport = new BattleStatus.SupportInfo() {
                             ZwSupportShips = KanColleClient.Current.Homeport.Organization.Fleets[supportDeckId].Ships.Select((x, i) => {
-                                var localShip = Models.DataStore.Instance.Ships[x.Id];
+                                var localShip = DataStore.Store.Current.Ships[x.Id];
                                 return new BattleStatus.ShipInfo() {
                                     ZwShipTypeName = x.Info.ShipType.Name,
                                     ZwShipName = x.Info.Name,
@@ -95,7 +96,7 @@ namespace LynLogger.Observers
                                         ZwPower = localShip.EnhancedPower,
                                         ZwTorpedo = localShip.EnhancedTorpedo
                                     },
-                                    ZwEquipts = x.EquippedSlots.Select(si => new Models.EquiptInfo(si)).ToArray()
+                                    ZwEquipts = x.EquippedSlots.Select(si => new EquiptInfo(si)).ToArray()
                                 };
                             }).ToArray()
                         };
@@ -141,7 +142,7 @@ namespace LynLogger.Observers
         private BattleStatus.ShipInfo[] ConvertOurFleet(int fleetId, dynamic nowHps, dynamic maxHps, dynamic param)
         {
             return KanColleClient.Current.Homeport.Organization.Fleets[fleetId].Ships.Select((x, i) => {
-                var localShip = Models.DataStore.Instance.Ships[x.Id];
+                var localShip = DataStore.Store.Current.Ships[x.Id];
                 return new BattleStatus.ShipInfo() {
                     ZwShipTypeName = x.Info.ShipType.Name,
                     ZwShipName = x.Info.Name,
@@ -162,7 +163,7 @@ namespace LynLogger.Observers
                         ZwPower = localShip.EnhancedPower,
                         ZwTorpedo = localShip.EnhancedTorpedo
                     },
-                    ZwEquipts = x.EquippedSlots.Select(si => new Models.EquiptInfo(si)).ToArray()
+                    ZwEquipts = x.EquippedSlots.Select(si => new EquiptInfo(si)).ToArray()
                 };
             }).ToArray();
         }
@@ -174,11 +175,11 @@ namespace LynLogger.Observers
                 if(types[i+1] <= 0) break;
                 int shipId = (int)types[i+1];
                 var ship = KanColleClient.Current.Master.Ships[shipId];
-                var equipts = new List<Models.EquiptInfo>(5);
+                var equipts = new List<EquiptInfo>(5);
                 for(int j = 0; j < 5; j++) {
                     if(slots[i][j] <= 0) break;
                     int equiptId = (int)slots[i][j];
-                    equipts.Add(new Models.EquiptInfo(KanColleClient.Current.Master.SlotItems[equiptId], ship.Slots[j]));
+                    equipts.Add(new EquiptInfo(KanColleClient.Current.Master.SlotItems[equiptId], ship.Slots[j]));
                 }
 
                 r.Add(new BattleStatus.ShipInfo() {

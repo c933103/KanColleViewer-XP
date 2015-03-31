@@ -265,8 +265,21 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			}
 		}
 
-		#endregion
+        #endregion
 
+        private long _receivedBytes = 0;
+        private long _sentBytes = 0;
+        public long ReceivedBytes
+        {
+            get { return _receivedBytes; }
+            set { _receivedBytes = value; RaisePropertyChanged(); }
+        }
+
+        public long SentBytes
+        {
+            get { return _sentBytes; }
+            set { _sentBytes = value; RaisePropertyChanged(); }
+        }
 
 		public SettingsViewModel()
 		{
@@ -308,6 +321,9 @@ namespace Grabacr07.KanColleViewer.ViewModels
 				.ToList();
 
 			this.ReloadPlugins();
+
+            KanColleClient.Current.Proxy.OnBytesReceived += i => ReceivedBytes += i;
+            KanColleClient.Current.Proxy.OnBytesSent += i => SentBytes += i;
 		}
 
 

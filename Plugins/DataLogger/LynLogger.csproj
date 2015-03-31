@@ -88,6 +88,36 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataStore\Extensions\PremitiveExtensions.cs" />
+    <Compile Include="DataStore\LogBook\BasicInfo.cs" />
+    <Compile Include="DataStore\LogBook\Histogram.cs" />
+    <Compile Include="DataStore\LogBook\Ship.cs" />
+    <Compile Include="DataStore\MasterInfo\EquiptInfo.cs" />
+    <Compile Include="DataStore\MasterInfo\ShipNameType.cs" />
+    <Compile Include="DataStore\Premitives\Constants.cs" />
+    <Compile Include="DataStore\Extensions\Collections.cs" />
+    <Compile Include="DataStore\Extensions\Streams.cs" />
+    <Compile Include="DataStore\Serialization\AttributeResolver.cs" />
+    <Compile Include="DataStore\Serialization\ExpressionGeneration.cs" />
+    <Compile Include="DataStore\Serialization\IDSSerializable.cs" />
+    <Compile Include="DataStore\IO\DSReader.cs" />
+    <Compile Include="DataStore\IO\DSWriter.cs" />
+    <Compile Include="DataStore\Logbook.cs" />
+    <Compile Include="DataStore\MasterInfo\BasicInfo.cs" />
+    <Compile Include="DataStore\MasterInfo\Settings.cs" />
+    <Compile Include="DataStore\MasterInfo\Ship.cs" />
+    <Compile Include="DataStore\Premitives\Blob.cs" />
+    <Compile Include="DataStore\Premitives\Compound.cs" />
+    <Compile Include="DataStore\Premitives\Decimal.cs" />
+    <Compile Include="DataStore\Premitives\Dictionary.cs" />
+    <Compile Include="DataStore\Premitives\Double.cs" />
+    <Compile Include="DataStore\Premitives\List.cs" />
+    <Compile Include="DataStore\Premitives\SignedInteger.cs" />
+    <Compile Include="DataStore\Premitives\StoragePremitive.cs" />
+    <Compile Include="DataStore\Premitives\String.cs" />
+    <Compile Include="DataStore\Premitives\UnsignedInteger.cs" />
+    <Compile Include="DataStore\Store.cs" />
+    <Compile Include="DataStore\WeekBook.cs" />
     <Compile Include="Data\LevelExperienceTable.cs" />
     <Compile Include="Data\MapExperienceTable.cs" />
     <Compile Include="Models\Battling\PracticeEnemyInfo.cs" />
@@ -95,39 +125,10 @@
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Logger\BasicInfoLogger.cs" />
     <Compile Include="Logger\ShipDataLogger.cs" />
-    <Compile Include="LZMA\Common\CRC.cs" />
-    <Compile Include="LZMA\Common\InBuffer.cs" />
-    <Compile Include="LZMA\Common\OutBuffer.cs" />
-    <Compile Include="LZMA\Compress\LZMA\LzmaBase.cs" />
-    <Compile Include="LZMA\Compress\LZMA\LzmaDecoder.cs" />
-    <Compile Include="LZMA\Compress\LZMA\LzmaEncoder.cs" />
-    <Compile Include="LZMA\Compress\LZ\IMatchFinder.cs" />
-    <Compile Include="LZMA\Compress\LZ\LzBinTree.cs" />
-    <Compile Include="LZMA\Compress\LZ\LzInWindow.cs" />
-    <Compile Include="LZMA\Compress\LZ\LzOutWindow.cs" />
-    <Compile Include="LZMA\Compress\RangeCoder\RangeCoder.cs" />
-    <Compile Include="LZMA\Compress\RangeCoder\RangeCoderBit.cs" />
-    <Compile Include="LZMA\Compress\RangeCoder\RangeCoderBitTree.cs" />
-    <Compile Include="LZMA\DoubleStream.cs" />
-    <Compile Include="LZMA\ICoder.cs" />
-    <Compile Include="Models\BasicInfoHistory.cs" />
     <Compile Include="Models\Battling\BattleResult.cs" />
     <Compile Include="Models\Battling\BattleStatus.cs" />
     <Compile Include="Models\Battling\MapNext.cs" />
-    <Compile Include="Models\Merge.cs" />
-    <Compile Include="Models\Scavenge.cs" />
-    <Compile Include="Models\DataStore.cs" />
-    <Compile Include="Models\BasicInfo.cs" />
-    <Compile Include="Models\EquiptInfo.cs" />
-    <Compile Include="Models\Histogram.cs" />
-    <Compile Include="Models\Migrations\DataStoreLoader.cs" />
-    <Compile Include="Models\Migrations\Versions\V0Binder.cs" />
-    <Compile Include="Models\Migrations\Versions\V0\DataStore.cs" />
-    <Compile Include="Models\Migrations\Versions\V0\ShipHistory.cs" />
     <Compile Include="Models\NotificationSourceObject.cs" />
-    <Compile Include="Models\Settings.cs" />
-    <Compile Include="Models\Ship.cs" />
-    <Compile Include="Models\ShipHistory.cs" />
     <Compile Include="Observers\ApiBattleObserver.cs" />
     <Compile Include="Observers\ApiBattleResultObserver.cs" />
     <Compile Include="Observers\ApiMapStartNextObserver.cs" />
@@ -141,11 +142,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Settings\AboutView.xaml.cs">
+    <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\SettingsModel.cs" />
-    <Compile Include="Settings\SettingsView.xaml.cs">
+    <Compile Include="Views\SettingsModel.cs" />
+    <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ToolsModel.cs" />
@@ -208,11 +209,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Page Include="Settings\AboutView.xaml">
+    <Page Include="Views\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\SettingsView.xaml">
+    <Page Include="Views\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

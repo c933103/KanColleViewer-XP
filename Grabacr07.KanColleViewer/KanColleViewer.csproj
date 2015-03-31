@@ -67,6 +67,9 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>signingkey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Grabacr07.KanColleViewer.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Livet">
       <HintPath>..\packages\LivetCask.1.1.0.0\lib\net45\Livet.dll</HintPath>
@@ -370,7 +373,7 @@
     <Compile Include="Views\StatusBar.xaml.cs">
       <DependentUpon>StatusBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Win32\INTERNET_CACHE_ENTRY_INFOA.cs" />
+    <Compile Include="Win32\INTERNET_CACHE_ENTRY_INFO.cs" />
     <Compile Include="Win32\WinInet.cs" />
     <Compile Include="Win32\DVTARGETDEVICE.cs" />
     <Compile Include="Win32\IServiceProvider.cs" />

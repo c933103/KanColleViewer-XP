@@ -1,39 +1,45 @@
-﻿namespace LynLogger.Logger
+﻿using LynLogger.DataStore;
+using LynLogger.DataStore.LogBook;
+
+namespace LynLogger.Logger
 {
     public class ShipDataLogger
     {
         public ShipDataLogger()
         {
-            Models.DataStore.ShipDataChanged += (sender, x) => ProcShipDataChanged(sender, x);
+            Store.OnDataStoreCreate += (sid, store) => store.OnShipDataChange += (sender, x) => ProcShipDataChanged(sender, x);
         }
 
-        void ProcShipDataChanged(Models.DataStore ds, int shipId)
+        void ProcShipDataChanged(Store ds, int shipId)
         {
-            var store = ds.RwShipHistories;
-            if(!store.ContainsKey(shipId)) {
-                store[shipId] = new Models.ShipHistory(shipId);
-                store[shipId].ExistenceLog.Append(Models.ShipExistenceStatus.Existing, 0);
-            }
-            var shipHisto = store[shipId];
             var ship = ds.Ships[shipId];
-            if(ship == null) {
-                shipHisto.ExistenceLog.Append(Models.ShipExistenceStatus.NonExistence, 0);
-                return;
-            }
-            shipHisto.EnhancedAntiAir.Append(ship.EnhancedAntiAir, ds.Settings.ShipDataLoggingInterval);
-            shipHisto.EnhancedDefense.Append(ship.EnhancedDefense, ds.Settings.ShipDataLoggingInterval);
-            shipHisto.EnhancedLuck.Append(ship.EnhancedLuck, ds.Settings.ShipDataLoggingInterval);
-            shipHisto.EnhancedPower.Append(ship.EnhancedPower, ds.Settings.ShipDataLoggingInterval);
-            shipHisto.EnhancedTorpedo.Append(ship.EnhancedTorpedo, ds.Settings.ShipDataLoggingInterval);
-            shipHisto.Exp.Append(ship.Exp, ds.Settings.ShipDataLoggingInterval);
-            shipHisto.Level.Append(ship.Level, ds.Settings.ShipDataLoggingInterval);
-            shipHisto.SRate.Append(ship.SRate, ds.Settings.ShipDataLoggingInterval);
-            shipHisto.ShipNameType.Append(ship.ShipInfo, 0);
+            var histo = new IShipsLogAccessor[] { ds.CurrentLogbook.Ships, ds.Weekbook.Ships };
+            foreach(var storage in histo) {
+                Ship shipHisto;
+                if(ship == null) {
+                    if(!storage.Contains(shipId)) continue;
+                    shipHisto = storage[shipId];
+                    shipHisto.ExistenceLog.Append(ShipExistenceStatus.NonExistence, 0);
+                } else {
+                    shipHisto = storage[shipId];
+                    shipHisto.EnhancedAntiAir.Append(ship.EnhancedAntiAir, ds.Settings.ShipDataLoggingInterval, false);
+                    shipHisto.EnhancedDefense.Append(ship.EnhancedDefense, ds.Settings.ShipDataLoggingInterval, false);
+                    shipHisto.EnhancedLuck.Append(ship.EnhancedLuck, ds.Settings.ShipDataLoggingInterval, false);
+                    shipHisto.EnhancedPower.Append(ship.EnhancedPower, ds.Settings.ShipDataLoggingInterval, false);
+                    shipHisto.EnhancedTorpedo.Append(ship.EnhancedTorpedo, ds.Settings.ShipDataLoggingInterval, false);
+                    shipHisto.Exp.Append(ship.Exp, ds.Settings.ShipDataLoggingInterval);
+                    shipHisto.Level.Append(ship.Level, ds.Settings.ShipDataLoggingInterval, false);
+                    shipHisto.SRate.Append(ship.SRate, ds.Settings.ShipDataLoggingInterval, false);
+                    shipHisto.ShipNameType.Append(ship.ShipInfo, 0, false);
 
-            if(ship.Locked) {
-                shipHisto.ExistenceLog.Append(Models.ShipExistenceStatus.Locked, 0);
-            } else {
-                shipHisto.ExistenceLog.Append(Models.ShipExistenceStatus.Existing, 0);
+                    if(ship.Locked) {
+                        shipHisto.ExistenceLog.Append(ShipExistenceStatus.Locked, 0, false);
+                    } else {
+                        shipHisto.ExistenceLog.Append(ShipExistenceStatus.Existing, 0, false);
+                    }
+                }
+
+                shipHisto.RefreshUpdateTime();
             }
         }
     }

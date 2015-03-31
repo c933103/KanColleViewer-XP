@@ -1,4 +1,5 @@
-﻿using LynLogger.Models;
+﻿using LynLogger.DataStore.MasterInfo;
+using LynLogger.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

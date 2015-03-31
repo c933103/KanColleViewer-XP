@@ -39,7 +39,7 @@ namespace LynLogger.Observers
                         ZwId = (int)ships[i].api_id,
                         ZwLevel = (int)ships[i].api_level,
                         ZwStar = (int)ships[i].api_star,
-                        ZwShipType = Helpers.LookupShipNameInfo((int)ships[i].api_ship_id)
+                        ZwShipType = new DataStore.MasterInfo.ShipNameType((int)ships[i].api_ship_id)
                     });
                 }
 

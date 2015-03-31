@@ -34,8 +34,8 @@ namespace LynLogger
                 new TabViewItem("资源历史", new ResourceHistoryView()/*{DataContext=new ResourceHistoryModel()}*/),
                 new TabViewItem("档案室", new ShipHistoryView()/*{DataContext=new ShipHistoryModel()}*/),
                 new TabViewItem("战斗剧透", new BattleNetaView()/*{DataContext = new BattleNetaModel()}*/),
-                new TabViewItem("设置", new Settings.SettingsView()/*{DataContext = new Settings.SettingsModel()}*/),
-                new TabViewItem("关于", new Settings.AboutView())
+                new TabViewItem("设置", new SettingsView()/*{DataContext = new Settings.SettingsModel()}*/),
+                new TabViewItem("关于", new AboutView())
             };
             listPages.ForEach(x => x.IsSelected = false);
             Pages = listPages;

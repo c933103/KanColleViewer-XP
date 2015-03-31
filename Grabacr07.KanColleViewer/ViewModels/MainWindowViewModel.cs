@@ -139,7 +139,12 @@ namespace Grabacr07.KanColleViewer.ViewModels
             }
         }
 
-		public MainWindowViewModel()
+        private bool _downloadActivity = false;
+        public bool DownloadActive { get { return _downloadActivity = !_downloadActivity; } set { RaisePropertyChanged(); } }
+        private bool _uploadActivity = false;
+        public bool UploadActive { get { return _uploadActivity = !_uploadActivity; } set { RaisePropertyChanged(); } }
+
+        public MainWindowViewModel()
 		{
 			this.Title = App.ProductInfo.Title;
 			this.Navigator = new NavigatorViewModel();
@@ -157,7 +162,10 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
 			this.UpdateMode();
             Models.Settings.Current.PropertyChanged += (_, __) => this.UpdateLayout(Models.Settings.Current.LRSplit);
-		}
+
+            KanColleClient.Current.Proxy.OnBytesReceived += x => DownloadActive = true;
+            KanColleClient.Current.Proxy.OnBytesSent += x => UploadActive = true;
+        }
 
 		public void TakeScreenshot()
 		{

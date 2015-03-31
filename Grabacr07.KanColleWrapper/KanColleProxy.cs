@@ -14,6 +14,9 @@ namespace Grabacr07.KanColleWrapper
 {
 	public partial class KanColleProxy
 	{
+        public event Action<int> OnBytesReceived;
+        public event Action<int> OnBytesSent;
+
 		private readonly IConnectableObservable<Session> connectableSessionSource;
 		private readonly IConnectableObservable<Session> apiSource;
 		private readonly LivetCompositeDisposable compositeDisposable;
@@ -65,14 +68,26 @@ namespace Grabacr07.KanColleWrapper
             if(proxy < 1024) proxy = new Random().Next(49152, 65535);
 			FiddlerApplication.Startup(proxy, false, false, false);
 			FiddlerApplication.BeforeRequest += this.SetUpstreamProxyHandler;
+            FiddlerApplication.OnReadRequestBuffer += FiddlerApplication_OnReadRequestBuffer;
+            FiddlerApplication.OnReadResponseBuffer += FiddlerApplication_OnReadResponseBuffer;
 
-			SetIESettings("localhost:" + proxy);
+            SetIESettings("localhost:" + proxy);
 
 			this.compositeDisposable.Add(this.connectableSessionSource.Connect());
 			this.compositeDisposable.Add(this.apiSource.Connect());
 		}
 
-		public void Shutdown()
+        private void FiddlerApplication_OnReadResponseBuffer(object sender, RawReadEventArgs e)
+        {
+            OnBytesReceived(e.iCountOfBytes);
+        }
+
+        private void FiddlerApplication_OnReadRequestBuffer(object sender, RawReadEventArgs e)
+        {
+            OnBytesSent(e.iCountOfBytes);
+        }
+
+        public void Shutdown()
 		{
 			this.compositeDisposable.Dispose();
 

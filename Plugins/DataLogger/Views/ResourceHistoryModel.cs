@@ -36,14 +36,14 @@ namespace LynLogger.Views
         public ResourceHistoryModel()
         {
             var listPages = new List<TabViewItem>() {
-                new HistogramTabViewItem("油", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Instance?.BasicInfoHistory.Fuel.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
-                new HistogramTabViewItem("弹", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Instance?.BasicInfoHistory.Ammo.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
-                new HistogramTabViewItem("钢", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Instance?.BasicInfoHistory.Steel.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
-                new HistogramTabViewItem("铝", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Instance?.BasicInfoHistory.Bauxite.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
-                new HistogramTabViewItem("桶", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Instance?.BasicInfoHistory.HsRepair.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
-                new HistogramTabViewItem("喷火器", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Instance?.BasicInfoHistory.HsBuild.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
-                new HistogramTabViewItem("开发", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Instance?.BasicInfoHistory.DevMaterial.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
-                new HistogramTabViewItem("改修", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Instance?.BasicInfoHistory.ModMaterial.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
+                new HistogramTabViewItem("油", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Store.Current?.Weekbook.BasicInfo.Fuel.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
+                new HistogramTabViewItem("弹", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Store.Current?.Weekbook.BasicInfo.Ammo.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
+                new HistogramTabViewItem("钢", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Store.Current?.Weekbook.BasicInfo.Steel.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
+                new HistogramTabViewItem("铝", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Store.Current?.Weekbook.BasicInfo.Bauxite.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
+                new HistogramTabViewItem("桶", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Store.Current?.Weekbook.BasicInfo.HsRepair.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
+                new HistogramTabViewItem("喷火器", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Store.Current?.Weekbook.BasicInfo.HsBuild.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
+                new HistogramTabViewItem("开发", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Store.Current?.Weekbook.BasicInfo.DevMaterial.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
+                new HistogramTabViewItem("改修", new Func<IEnumerable<KeyValuePair<long,double>>>(() => DataStore.Store.Current?.Weekbook.BasicInfo.ModMaterial.Select(x => new KeyValuePair<long, double>(x.Key, x.Value)))),
             };
             listPages.ForEach(x => {
                 x.IsSelected = false;
@@ -57,10 +57,10 @@ namespace LynLogger.Views
             Pages = listPages;
             SelectedPage = Pages.First();
 
-            DataStore.BasicInfoChanged += x => {
+            DataStore.Store.OnDataStoreCreate += (_, ds) => ds.OnBasicInfoChange += x => {
                 RaiseMultiPropertyChanged(() => ActiveHistogram);
             };
-            DataStore.OnDataStoreSwitch += (_, ds) => RaiseMultiPropertyChanged(() => ActiveHistogram);
+            DataStore.Store.OnDataStoreSwitch += (_, ds) => RaiseMultiPropertyChanged(() => ActiveHistogram);
         }
 
         public class HistogramTabViewItem : TabViewItem

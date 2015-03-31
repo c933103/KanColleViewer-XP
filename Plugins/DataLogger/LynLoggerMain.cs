@@ -65,6 +65,10 @@ namespace LynLogger
 
             Instance = this;
             if(_onInstanceCreate != null) _onInstanceCreate(this);
+
+            //DataStore.Store.SwitchMember("19053428");
+            //DataStore.Store.Current.CurrentLogbook.GetHashCode();
+            //DataStore.Store.Current.SaveData();
         }
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
@@ -102,7 +106,7 @@ namespace LynLogger
 
         private void Dispose(bool disposing)
         {
-            Models.DataStore.SaveData();
+            DataStore.Store.Current?.SaveData();
             if(!disposing) return;
             foreach(var d in _disposables) {
                 d.Dispose();

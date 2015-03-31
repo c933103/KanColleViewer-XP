@@ -157,8 +157,8 @@
                                 <Run Text="["/>
                                 <Run Text="{Binding Id, Mode=OneTime}"/>
                                 <Run Text="]"/>
-                                <Run Text="{Binding ShipType.PTypeName, Mode=OneTime}" />
-                                <Run Text="{Binding ShipType.PShipName, Mode=OneTime}" />
+                                <Run Text="{Binding ShipType.TypeName, Mode=OneTime}" />
+                                <Run Text="{Binding ShipType.ShipName, Mode=OneTime}" />
                                 <Run Text="Lv." />
                                 <Run Text="{Binding Level, Mode=OneTime}" />
                             </TextBlock>

@@ -10,8 +10,8 @@ namespace LynLogger.Observers
         {
             try {
                 if(!value.IsSuccess) return;
-                Models.DataStore.SwitchMember(value.Data.api_basic.api_member_id);
-                var ds = Models.DataStore.Instance;
+                DataStore.Store.SwitchMember(value.Data.api_basic.api_member_id);
+                var ds = DataStore.Store.Current;
 
                 ds.UpdateShips(value.Data.api_ship);
                 ds.BasicInfo.Update(value.Data.api_material, true);

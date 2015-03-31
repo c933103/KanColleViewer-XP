@@ -4,7 +4,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:vm="clr-namespace:Grabacr07.KanColleViewer.ViewModels;assembly=KanColleViewer"
 			 xmlns:local="clr-namespace:LynLogger"
-			 xmlns:localSettings="clr-namespace:LynLogger.Settings"
 			 xmlns:localViews="clr-namespace:LynLogger.Views"
              xmlns:Custom="http://schemes.grabacr.net/winfx/2014/controls"
              x:Class="LynLogger.ToolsView" 

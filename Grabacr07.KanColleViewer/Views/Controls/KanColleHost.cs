@@ -133,8 +133,9 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 				this.WebBrowser.Width = double.NaN;
 				this.WebBrowser.Height = (browserSize.Height * (zoomFactor / dpi.ScaleY)) / dpi.ScaleY;
 				this.MinWidth = (browserSize.Width * (zoomFactor / dpi.ScaleX)) / dpi.ScaleX;
-			}
-		}
+            }
+            this.MinHeight = this.WebBrowser.Height;
+        }
 
 		private static void ApplyZoomFactor(WebBrowser target, int zoomFactor)
 		{
@@ -171,16 +172,10 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 
 			this.Update();
 
-			/*var window = Window.GetWindow(this.WebBrowser);
+			var window = Window.GetWindow(this.WebBrowser);
 			if (window != null) {
-                if(App.ViewModelRoot.LRSplit) {
-                    window.Height = this.WebBrowser.Height + 120;
-                    window.Width = Math.Min(window.MaxWidth, this.WebBrowser.Width + 768);
-                } else {
-                    window.Height = Math.Min(window.MaxHeight, this.WebBrowser.Height + 450);
-                    window.Width = this.WebBrowser.Width;
-                }
-			}*/
+                window.MinHeight = this.WebBrowser.Height + 60;
+			}
 		}
 
 		private void ApplyStyleSheet()

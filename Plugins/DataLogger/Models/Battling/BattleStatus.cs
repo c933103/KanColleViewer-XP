@@ -1,4 +1,5 @@
 using Grabacr07.KanColleWrapper.Models;
+using LynLogger.DataStore.MasterInfo;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
