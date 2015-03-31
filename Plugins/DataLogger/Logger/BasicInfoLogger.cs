@@ -1,4 +1,4 @@
-﻿namespace LynLogger.Logger
+namespace LynLogger.Logger
 {
     public class BasicInfoLogger
     {
@@ -26,7 +26,6 @@
             ds.BasicInfoHistory.OperLose.Append(ds.BasicInfo.OperLose, ds.Settings.BasicInfoLoggingInterval);
             ds.BasicInfoHistory.ExpeWins.Append(ds.BasicInfo.ExpeWins, ds.Settings.BasicInfoLoggingInterval);
             ds.BasicInfoHistory.ExpeLose.Append(ds.BasicInfo.ExpeLose, ds.Settings.BasicInfoLoggingInterval);
-            ds.BasicInfoHistory.Score.Append(ds.BasicInfo.Score, ds.Settings.BasicInfoLoggingInterval);
         }
     }
 }

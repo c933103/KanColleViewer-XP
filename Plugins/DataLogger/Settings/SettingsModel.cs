@@ -93,7 +93,12 @@ namespace LynLogger.Settings
             };
         }
 
-        #pragma warning disable 0067
+        public DataStore CurrentActiveDs
+        {
+            get { return DataStore.Instance; }
+        }
+
+#pragma warning disable 0067
         public class CleanupDataByCountCommand : ICommand
         {
             public bool CanExecute(object parameter) { return true; }

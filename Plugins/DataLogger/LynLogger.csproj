@@ -183,10 +183,6 @@
     <Compile Include="Views\VerticalTabViewControl.xaml.cs">
       <DependentUpon>VerticalTabViewControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\GradeEvaluationModel.cs" />
-    <Compile Include="Views\GradeEvaluationView.xaml.cs">
-      <DependentUpon>GradeEvaluationView.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Grabacr07.Desktop.Metro\Desktop.Metro.csproj">
@@ -249,10 +245,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\VerticalTabViewControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\GradeEvaluationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
