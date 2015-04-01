@@ -69,6 +69,42 @@ namespace LynLogger.Observers
                             ConvertBombards(result, data.api_hougeki1)
                         };
                     }
+                    result.ZwSupportType = (BattleStatus.SupportInfo.Type)(int)(data.api_support_flag() ? data.api_support_flag : 0);
+                    if(data.api_support_info() && (data.api_support_info != null)) {
+                        int supportDeckId = (int)(data.api_support_info.api_support_airatack?.api_deck_id ?? data.api_support_info.api_support_hourai.api_deck_id);
+                        result.ZwSupport = new BattleStatus.SupportInfo() {
+                            ZwSupportShips = KanColleClient.Current.Homeport.Organization.Fleets[supportDeckId].Ships.Select((x, i) => {
+                                var localShip = Models.DataStore.Instance.Ships[x.Id];
+                                return new BattleStatus.ShipInfo() {
+                                    ZwShipTypeName = x.Info.ShipType.Name,
+                                    ZwShipName = x.Info.Name,
+                                    ZwShipId = x.Info.Id,
+                                    ZwId = x.Id,
+                                    ZwLv = x.Level,
+                                    ZwCurrentHp = x.HP.Current,
+                                    ZwMaxHp = x.HP.Maximum,
+                                    ZwParameter = new BattleStatus.ShipInfo.ParameterInfo() {
+                                        ZwPower = x.Firepower.Current,
+                                        ZwTorpedo = x.Torpedo.Current,
+                                        ZwAntiAir = x.AA.Current,
+                                        ZwDefense = x.Armer.Current
+                                    },
+                                    ZwEnhancement = new BattleStatus.ShipInfo.ParameterInfo() {
+                                        ZwAntiAir = localShip.EnhancedAntiAir,
+                                        ZwDefense = localShip.EnhancedDefense,
+                                        ZwPower = localShip.EnhancedPower,
+                                        ZwTorpedo = localShip.EnhancedTorpedo
+                                    },
+                                    ZwEquipts = x.EquippedSlots.Select(si => new Models.EquiptInfo(si)).ToArray()
+                                };
+                            }).ToArray()
+                        };
+                        if(data.api_support_info.api_support_airatack != null) {
+                            result.ZwSupport.ZwAttackInfo = ConvertAirWarfare(result, data.api_support_info.api_support_airatack);
+                        } else if(data.api_support_info.api_support_hourai != null) {
+                            result.ZwSupport.ZwAttackInfo = CreateSupportAttackInfo(result, data.api_support_info.api_support_hourai);
+                        }
+                    }
                 } else if(data.api_flare_pos()) { //夜战
                     var r = new BattleStatus.NightWarInfo() {
                         ZwOurShips = result.ZwOurShips,
@@ -171,6 +207,45 @@ namespace LynLogger.Observers
             return r.ToArray();
         }
 
+        private BattleStatus.AirWarfareInfo CreateSupportAttackInfo(BattleStatus holder, dynamic data)
+        {
+            List<double> enemyDamage = new List<double>(6);
+            List<bool> enemyBombed = new List<bool>(6);
+            List<bool> enemyTorpedoed = new List<bool>(6);
+            for(int i = 1; i < 7; i++) {
+                if(data.api_damage.IsDefined(i) && data.api_damage[i] >= 0) {
+                    enemyBombed.Add(holder.SupportType == BattleStatus.SupportInfo.Type.GunFight);
+                    enemyTorpedoed.Add(holder.SupportType == BattleStatus.SupportInfo.Type.Torpedo);
+                    enemyDamage.Add(data.api_damage[i]);
+                }
+            }
+            return new BattleStatus.AirWarfareInfo(holder) {
+                ZwEnemyCarrierShip      = new int[0],
+                ZwEnemyStage1Engaged    = 0,
+                ZwEnemyStage1Lost       = 0,
+                ZwEnemyReconnInTouch    = -1,
+                ZwEnemyReconnInTouchName= "",
+                ZwEnemyStage2Engaged    = 0,
+                ZwEnemyStage2Lost       = 0,
+
+                ZwOurCarrierShip        = new int[0],
+                ZwOurReconnInTouch      = -1,
+                ZwOurReconnInTouchName  = "",
+                ZwOurStage1Engaged      = 0,
+                ZwOurStage1Lost         = 0,
+                ZwOurStage2Engaged      = 0,
+                ZwOurStage2Lost         = 0,
+                ZwOurAirspaceControl    = BattleStatus.AirWarfareInfo.AirspaceControl.None,
+
+                ZwEnemyShipBombed       = enemyBombed.ToArray(),
+                ZwEnemyShipDamages      = enemyDamage.ToArray(),
+                ZwEnemyShipTorpedoed    = enemyTorpedoed.ToArray(),
+                ZwOurShipBombed         = new bool[0],
+                ZwOurShipDamages        = new double[0],
+                ZwOurShipTorpedoed      = new bool[0]
+            };
+        }
+
         private BattleStatus.AirWarfareInfo ConvertAirWarfare(BattleStatus holder, dynamic data)
         {
             List<int> planeFrom = new List<int>(12);
@@ -192,7 +267,7 @@ namespace LynLogger.Observers
             List<double> enemyDamage = new List<double>(6);
             if(data.api_stage3 != null) {
                 for(int i = 1; i < 7; i++) {
-                    if(data.api_stage3.api_fdam.IsDefined(i) && data.api_stage3.api_fdam[i] >= 0) {
+                    if(data.api_stage3.api_fdam() && data.api_stage3.api_fdam.IsDefined(i) && data.api_stage3.api_fdam[i] >= 0) {
                         ourBombed.Add(data.api_stage3.api_fbak_flag[i] != 0);
                         ourTorpedoed.Add(data.api_stage3.api_frai_flag[i] != 0);
                         ourDamage.Add(data.api_stage3.api_fdam[i]);
@@ -205,68 +280,96 @@ namespace LynLogger.Observers
                 }
             }
             BattleStatus.AirWarfareInfo.AirspaceControl ac = BattleStatus.AirWarfareInfo.AirspaceControl.None;
-            switch((int?)(data.api_stage1?.api_disp_seiku)) {
-                case null:
-                    ac = BattleStatus.AirWarfareInfo.AirspaceControl.None;
-                    break;
-                case 0:
-                    ac = BattleStatus.AirWarfareInfo.AirspaceControl.Parity;
-                    break;
-                case 3:
-                case 4:
-                    ac = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)(data.api_stage1.api_disp_seiku + 1);
-                    break;
-                case 1:
-                case 2:
-                    ac = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)data.api_stage1.api_disp_seiku;
-                    break;
-                default:
-                    ac = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)-Math.Abs(data.api_stage1.api_disp_seiku);
-                    break;
-            }
-            var r = new BattleStatus.AirWarfareInfo(holder) {
-                ZwEnemyCarrierShip = planeFrom.Where(x => x > 6).Select(x => x-7).ToArray(),
-                ZwEnemyReconnInTouch = (int)(data.api_stage1?.api_touch_plane[1] ?? -1),
-                ZwEnemyStage1Engaged = (int)(data.api_stage1?.api_e_count        ?? 0),
-                ZwEnemyStage1Lost    = (int)(data.api_stage1?.api_e_lostcount    ?? 0),
-                ZwEnemyStage2Engaged = (int)(data.api_stage2?.api_e_count        ?? 0),
-                ZwEnemyStage2Lost    = (int)(data.api_stage2?.api_e_lostcount    ?? 0),
-
-                ZwOurCarrierShip     = planeFrom.Where(x => x < 7).Select(x => x-1).ToArray(),
-                ZwOurReconnInTouch   = (int)(data.api_stage1?.api_touch_plane[0] ?? -1),
-                ZwOurStage1Engaged   = (int)(data.api_stage1?.api_f_count        ?? 0),
-                ZwOurStage1Lost      = (int)(data.api_stage1?.api_f_lostcount    ?? 0),
-                ZwOurStage2Engaged   = (int)(data.api_stage2?.api_f_count        ?? 0),
-                ZwOurStage2Lost      = (int)(data.api_stage2?.api_f_lostcount    ?? 0),
-                ZwOurAirspaceControl = ac,
-
-                ZwEnemyShipBombed    = enemyBombed.ToArray(),
-                ZwEnemyShipDamages   = enemyDamage.ToArray(),
-                ZwEnemyShipTorpedoed = enemyTorpedoed.ToArray(),
-                ZwOurShipBombed      = ourBombed.ToArray(),
-                ZwOurShipDamages     = ourDamage.ToArray(),
-                ZwOurShipTorpedoed   = ourTorpedoed.ToArray()
-            };
-            if(data.api_stage2 != null && data.api_stage2.api_air_fire() && data.api_stage2.api_air_fire != null) {//对空CI
-                r.ZwCutInShipNo = (int)data.api_stage2.api_air_fire.api_idx;
-                r.ZwCutInType = (BattleStatus.AirWarfareInfo.AaCutInType)(int)data.api_stage2.api_air_fire.api_kind;
-                List<int> ciEquipts = new List<int>();
-                for(int i = 0; data.api_stage2.api_air_fire.api_use_items.IsDefined(i); i++) {
-                    ciEquipts.Add((int)data.api_stage2.api_air_fire.api_use_items[i]);
+            if (data.api_stage1 != null && data.api_stage1.api_disp_seiku()) {
+                switch ((int)(data.api_stage1.api_disp_seiku)) {
+                    case 0:
+                        ac = BattleStatus.AirWarfareInfo.AirspaceControl.Parity;
+                        break;
+                    case 3:
+                    case 4:
+                        ac = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)(data.api_stage1.api_disp_seiku + 1);
+                        break;
+                    case 1:
+                    case 2:
+                        ac = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)data.api_stage1.api_disp_seiku;
+                        break;
+                    default:
+                        ac = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)-Math.Abs(data.api_stage1.api_disp_seiku);
+                        break;
                 }
-                r.ZwCutInEquipts = ciEquipts.Select(x => new BattleStatus.SimpleEquiptInfo(KanColleClient.Current.Master.SlotItems[x], x)).ToArray();
-            } else {
-                r.ZwCutInEquipts = new BattleStatus.SimpleEquiptInfo[0];
             }
-            if(r.ZwOurReconnInTouch < 0) {
-                r.ZwOurReconnInTouchName = "没有舰载机";
+            BattleStatus.AirWarfareInfo r;
+            if (data.api_deck_id()) { //航空支援
+                r = new BattleStatus.AirWarfareInfo(holder) {
+                    ZwEnemyCarrierShip      = planeFrom.Where(x => x > 6).Select(x => x - 7).ToArray(),
+                    ZwEnemyStage1Engaged    = (int)(data.api_stage1?.api_e_count        ?? 0),
+                    ZwEnemyStage1Lost       = (int)(data.api_stage1?.api_e_lostcount    ?? 0),
+                    ZwEnemyReconnInTouch    = -1,
+                    ZwEnemyReconnInTouchName= "",
+                    ZwEnemyStage2Engaged    = 0,
+                    ZwEnemyStage2Lost       = 0,
+
+                    ZwOurCarrierShip        = new int[0],
+                    ZwOurReconnInTouch      = -1,
+                    ZwOurReconnInTouchName  = "",
+                    ZwOurStage1Engaged      = (int)(data.api_stage1?.api_f_count        ?? 0),
+                    ZwOurStage1Lost         = (int)(data.api_stage1?.api_f_lostcount    ?? 0),
+                    ZwOurStage2Engaged      = (int)(data.api_stage2?.api_f_count        ?? 0),
+                    ZwOurStage2Lost         = (int)(data.api_stage2?.api_f_lostcount    ?? 0),
+                    ZwOurAirspaceControl    = BattleStatus.AirWarfareInfo.AirspaceControl.None,
+
+                    ZwEnemyShipBombed       = enemyBombed.ToArray(),
+                    ZwEnemyShipDamages      = enemyDamage.ToArray(),
+                    ZwEnemyShipTorpedoed    = enemyTorpedoed.ToArray(),
+                    ZwOurShipBombed         = new bool[0],
+                    ZwOurShipDamages        = new double[0],
+                    ZwOurShipTorpedoed      = new bool[0]
+                };
             } else {
-                r.ZwOurReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwOurReconnInTouch, "{0} 号侦察机");
-            }
-            if(r.ZwEnemyReconnInTouch < 0) {
-                r.ZwEnemyReconnInTouchName = "没有舰载机";
-            } else {
-                r.ZwEnemyReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwEnemyReconnInTouch, "{0} 号侦察机");
+                r = new BattleStatus.AirWarfareInfo(holder) {
+                    ZwEnemyCarrierShip      = planeFrom.Where(x => x > 6).Select(x => x - 7).ToArray(),
+                    ZwEnemyReconnInTouch    = (int)(data.api_stage1?.api_touch_plane[1] ?? -1),
+                    ZwEnemyStage1Engaged    = (int)(data.api_stage1?.api_e_count        ?? 0),
+                    ZwEnemyStage1Lost       = (int)(data.api_stage1?.api_e_lostcount    ?? 0),
+                    ZwEnemyStage2Engaged    = (int)(data.api_stage2?.api_e_count        ?? 0),
+                    ZwEnemyStage2Lost       = (int)(data.api_stage2?.api_e_lostcount    ?? 0),
+
+                    ZwOurCarrierShip        = planeFrom.Where(x => x < 7).Select(x => x - 1).ToArray(),
+                    ZwOurReconnInTouch      = (int)(data.api_stage1?.api_touch_plane[0] ?? -1),
+                    ZwOurStage1Engaged      = (int)(data.api_stage1?.api_f_count        ?? 0),
+                    ZwOurStage1Lost         = (int)(data.api_stage1?.api_f_lostcount    ?? 0),
+                    ZwOurStage2Engaged      = (int)(data.api_stage2?.api_f_count        ?? 0),
+                    ZwOurStage2Lost         = (int)(data.api_stage2?.api_f_lostcount    ?? 0),
+                    ZwOurAirspaceControl    = ac,
+
+                    ZwEnemyShipBombed       = enemyBombed.ToArray(),
+                    ZwEnemyShipDamages      = enemyDamage.ToArray(),
+                    ZwEnemyShipTorpedoed    = enemyTorpedoed.ToArray(),
+                    ZwOurShipBombed         = ourBombed.ToArray(),
+                    ZwOurShipDamages        = ourDamage.ToArray(),
+                    ZwOurShipTorpedoed      = ourTorpedoed.ToArray()
+                };
+                if (data.api_stage2 != null && data.api_stage2.api_air_fire() && data.api_stage2.api_air_fire != null) {//对空CI
+                    r.ZwCutInShipNo = (int)data.api_stage2.api_air_fire.api_idx;
+                    r.ZwCutInType = (BattleStatus.AirWarfareInfo.AaCutInType)(int)data.api_stage2.api_air_fire.api_kind;
+                    List<int> ciEquipts = new List<int>();
+                    for (int i = 0; data.api_stage2.api_air_fire.api_use_items.IsDefined(i); i++) {
+                        ciEquipts.Add((int)data.api_stage2.api_air_fire.api_use_items[i]);
+                    }
+                    r.ZwCutInEquipts = ciEquipts.Select(x => new BattleStatus.SimpleEquiptInfo(KanColleClient.Current.Master.SlotItems[x], x)).ToArray();
+                } else {
+                    r.ZwCutInEquipts = new BattleStatus.SimpleEquiptInfo[0];
+                }
+                if(r.ZwOurReconnInTouch < 0) {
+                    r.ZwOurReconnInTouchName = "没有舰载机";
+                } else {
+                    r.ZwOurReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwOurReconnInTouch, "{0} 号侦察机");
+                }
+                if(r.ZwEnemyReconnInTouch < 0) {
+                    r.ZwEnemyReconnInTouchName = "没有舰载机";
+                } else {
+                    r.ZwEnemyReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwEnemyReconnInTouch, "{0} 号侦察机");
+                }
             }
             return r;
         }

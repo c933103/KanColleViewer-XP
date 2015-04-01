@@ -508,7 +508,7 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </StackPanel>
-                        <StackPanel Grid.Row="1" Grid.Column="0" Grid.IsSharedSizeScope="True">
+                        <StackPanel Grid.Row="1" Grid.Column="0">
                             <TextBlock>
                                 <Run Text="共起飞" />
                                 <Run Text="{Binding OurStage1Engaged, Mode=OneTime}" />
@@ -529,7 +529,7 @@
                                 <Run Text="触接对方" />
                             </TextBlock>
                         </StackPanel>
-                        <StackPanel Grid.Row="1" Grid.Column="1" Grid.IsSharedSizeScope="True">
+                        <StackPanel Grid.Row="1" Grid.Column="1">
                             <TextBlock>
                                 <Run Text="共起飞" />
                                 <Run Text="{Binding EnemyStage1Engaged, Mode=OneTime}" />
@@ -572,9 +572,123 @@
                                 </Style>
                             </Border.Style>
                         </Border>
-                        <ItemsControl Grid.Row="3" Grid.Column="0" ItemsSource="{Binding EnemyStage3Report, Mode=OneTime}"/>
-                        <ItemsControl Grid.Row="3" Grid.Column="1" ItemsSource="{Binding OurStage3Report, Mode=OneTime}"/>
+                        <ItemsControl Grid.Row="3" Grid.Column="0" ItemsSource="{Binding EnemyStage3Report, Mode=OneTime}" Grid.IsSharedSizeScope="True"/>
+                        <ItemsControl Grid.Row="3" Grid.Column="1" ItemsSource="{Binding OurStage3Report, Mode=OneTime}" Grid.IsSharedSizeScope="True"/>
                     </Grid>
+                </Expander>
+                <Expander Header="支援舰队">
+                    <Grid Margin="20,0,0,15" DataContext="{Binding Battle, Mode=OneWay}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Row="0" Grid.Column="0">
+                            <TextBlock FontSize="16">
+                                <Run Text="支援舰队 (" />
+                                <Run Text="{Binding SupportType, Mode=OneTime, Converter={StaticResource EnumToDescriptionConverter}}" />
+                                <Run Text=")" />
+                            </TextBlock>
+                            <ItemsControl ItemsSource="{Binding Support.SupportShips, Mode=OneTime}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <Run Text="["/>
+                                            <Run Text="{Binding Id, Mode=OneTime}"/>
+                                            <Run Text="]"/>
+                                            <Run Text="{Binding ShipName, Mode=OneTime}" />
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="1">
+                            <TextBlock FontSize="16" Text="敌方舰队" />
+                            <ItemsControl ItemsSource="{Binding Support.AttackInfo.EnemyCarrierShip, Mode=OneTime}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <Run Text="["/>
+                                            <Run Text="{Binding Id, Mode=OneTime}"/>
+                                            <Run Text="]"/>
+                                            <Run Text="{Binding ShipName, Mode=OneTime}" />
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <StackPanel.Style>
+                                <Style TargetType="{x:Type StackPanel}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SupportType, FallbackValue=AirSupport, Mode=OneTime}" Value="AirSupport">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="0">
+                            <TextBlock>
+                                <Run Text="共起飞" />
+                                <Run Text="{Binding Support.AttackInfo.OurStage1Engaged, Mode=OneTime}" />
+                                <Run Text="架舰载机" />
+                            </TextBlock>
+                            <TextBlock>
+                                <Run Text="{Binding Support.AttackInfo.OurStage1Lost, Mode=OneTime}" />
+                                <Run Text="+" />
+                                <Run Text="{Binding Support.AttackInfo.OurStage2Lost, Mode=OneTime}" />
+                                <Run Text="架被击落" />
+                            </TextBlock>
+                            <StackPanel.Style>
+                                <Style TargetType="{x:Type StackPanel}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SupportType, FallbackValue=AirSupport, Mode=OneTime}" Value="AirSupport">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="1">
+                            <TextBlock>
+                                <Run Text="共起飞" />
+                                <Run Text="{Binding Support.AttackInfo.EnemyStage1Engaged, Mode=OneTime}" />
+                                <Run Text="架舰载机" />
+                            </TextBlock>
+                            <TextBlock>
+                                <Run Text="{Binding Support.AttackInfo.EnemyStage1Lost, Mode=OneTime}" />
+                                <Run Text="+" />
+                                <Run Text="{Binding Support.AttackInfo.EnemyStage2Lost, Mode=OneTime}" />
+                                <Run Text="架被击落" />
+                            </TextBlock>
+                            <StackPanel.Style>
+                                <Style TargetType="{x:Type StackPanel}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SupportType, FallbackValue=AirSupport, Mode=OneTime}" Value="AirSupport">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                        </StackPanel>
+                        <ItemsControl Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Support.AttackInfo.EnemyStage3Report, Mode=OneTime}" Grid.IsSharedSizeScope="True"/>
+                    </Grid>
+                    <Expander.Style>
+                        <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
+                            <Setter Property="IsExpanded" Value="True" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Battle.SupportType, FallbackValue=None, Mode=OneTime}" Value="None">
+                                    <Setter Property="IsExpanded" Value="False" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Expander.Style>
                 </Expander>
                 <Expander Header="开幕雷击" IsExpanded="True">
                     <ItemsControl Margin="20,0,0,15" Grid.IsSharedSizeScope="True" ItemsSource="{Binding Battle.OpeningTorpedoAttack, Mode=OneWay}"/>

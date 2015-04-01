@@ -20,6 +20,8 @@ namespace LynLogger.Models.Battling
         internal Formation ZwEnemyFormation;
         internal EncounterForm ZwEncounter;
         internal AirWarfareInfo ZwAirWarfare;
+        internal SupportInfo.Type ZwSupportType;
+        internal SupportInfo ZwSupport;
         internal bool ZwHasNightWar;
         internal NightWarInfo ZwNightWar;
         internal ReconnResult ZwOurReconn;
@@ -35,6 +37,8 @@ namespace LynLogger.Models.Battling
         public Formation EnemyFormation { get { return ZwEnemyFormation; } }
         public EncounterForm Encounter { get { return ZwEncounter; } }
         public AirWarfareInfo AirWarfare { get { return ZwAirWarfare; } }
+        public SupportInfo.Type SupportType { get { return ZwSupportType; } }
+        public SupportInfo Support { get { return ZwSupport; } }
         public ReconnResult OurReconn { get { return ZwOurReconn; } }
         public ReconnResult EnemyReconn { get { return ZwEnemyReconn; } }
         public bool HasNightWar { get { return ZwHasNightWar; } }
@@ -59,6 +63,8 @@ namespace LynLogger.Models.Battling
                 if(ZwNightWar == null && HasNightWar) {
                     ZwNightWar = value.Clone();
                     ZwNightWar._parent = this;
+                    ZwNightWar.ZwOurShips = null;
+                    ZwNightWar.ZwEnemyShips = null;
                 } else {
                     throw new InvalidOperationException();
                 }
@@ -465,6 +471,38 @@ namespace LynLogger.Models.Battling
             }
         }
 
+        public class SupportInfo : ICloneable
+        {
+            internal ShipInfo[] ZwSupportShips;
+            internal AirWarfareInfo ZwAttackInfo;
+
+            public IReadOnlyList<ShipInfo> SupportShips { get { return ZwSupportShips; } }
+            public AirWarfareInfo AttackInfo { get { return ZwAttackInfo; } }
+
+            object ICloneable.Clone()
+            {
+                SupportInfo mwc = (SupportInfo)MemberwiseClone();
+                mwc.ZwSupportShips = ZwSupportShips.DeepCloneArray();
+                mwc.ZwAttackInfo = AttackInfo.Clone();
+                return mwc;
+            }
+
+            public enum Type
+            {
+                [Description("无")]
+                None = 0,
+
+                [Description("航空支援")]
+                AirSupport = 1,
+
+                [Description("炮击支援")]
+                GunFight = 2,
+
+                [Description("雷击支援")]
+                Torpedo = 3
+            }
+        }
+
         public struct ShipHpStatus
         {
             private FuzzyDouble ZwDeliveredDamage;
@@ -502,7 +540,7 @@ namespace LynLogger.Models.Battling
                     }
                 }
 
-                foreach(var aws3report in report.AirWarfare.EnemyStage3Report.SafeConcat(report.AirWarfare.OurStage3Report)) {
+                foreach(var aws3report in report.AirWarfare.EnemyStage3Report.SafeConcat(report.AirWarfare.OurStage3Report, report.Support?.AttackInfo.EnemyStage3Report)) {
                     if(aws3report.Ship != a) continue;
                     HpCurrent -= (int)aws3report.Damage;
                 }
@@ -574,7 +612,19 @@ namespace LynLogger.Models.Battling
             Echelon = 4,
 
             [Description("单横")]
-            SingleRow = 5
+            SingleRow = 5,
+
+            [Description("第一警戒航行序列 (对潜警戒)")]
+            JointFormation1 = 11,
+
+            [Description("第二警戒航行序列 (前方警戒)")]
+            JointFormation2 = 12,
+
+            [Description("第三警戒航行序列 (防空警戒)")]
+            JointFormation3 = 13,
+
+            [Description("第四警戒航行序列 (通常战斗)")]
+            JointFormation4 = 14,
         }
 
         public enum EncounterForm
@@ -629,6 +679,9 @@ namespace LynLogger.Models.Battling
             clone.ZwOpeningTorpedoAttack = ZwOpeningTorpedoAttack.DeepCloneArray().ForEach(x => x._parent = clone);
             clone.ZwBombards = ZwBombards.DeepCloneArray().ForEach(x => x.ForEach(xx => xx._parent = clone));
             clone.ZwClosingTorpedoAttack = ZwClosingTorpedoAttack.DeepCloneArray().ForEach(x => x._parent = clone);
+            clone.ZwSupport = ZwSupport.Clone();
+
+            clone.ZwSupport.ZwAttackInfo._parent = clone;
             return clone;
         }
     }

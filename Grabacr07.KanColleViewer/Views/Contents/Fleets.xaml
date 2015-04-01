@@ -370,13 +370,11 @@
                                                     <DataTemplate>
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="Auto"
-																	SharedSizeGroup="SlotItemIcon" />
-                                                                <ColumnDefinition Width="Auto"
-																	SharedSizeGroup="SlotItemCurrent" />
+                                                                <ColumnDefinition Width="Auto" SharedSizeGroup="SlotItemIcon" />
+                                                                <ColumnDefinition Width="Auto" SharedSizeGroup="SlotItemCurrent" />
                                                                 <ColumnDefinition Width="Auto" />
-                                                                <ColumnDefinition Width="Auto"
-																	SharedSizeGroup="SlotItemMaximum" />
+                                                                <ColumnDefinition Width="Auto" SharedSizeGroup="SlotItemMaximum" />
+                                                                <ColumnDefinition Width="Auto" SharedSizeGroup="SlotItemLevel" />
                                                                 <ColumnDefinition Width="*" />
                                                             </Grid.ColumnDefinitions>
                                                             <Grid.RowDefinitions>
@@ -387,9 +385,9 @@
                                                             <controls:SlotItemIcon Grid.Column="0" Grid.RowSpan="2"
 																Type="{Binding Item.Info.IconType}"
 																Width="20" Height="20" Margin="0,0,5,0" />
-                                                            <TextBlock Grid.ColumnSpan="{Binding LRSplit, FallbackValue=1, ConverterParameter=4:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
+                                                            <TextBlock Grid.ColumnSpan="{Binding LRSplit, FallbackValue=1, ConverterParameter=5:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
                                                                        Grid.Row="{Binding LRSplit, FallbackValue=1, ConverterParameter=0:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
-                                                                       Grid.Column="{Binding LRSplit, FallbackValue=4, ConverterParameter=1:4, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
+                                                                       Grid.Column="{Binding LRSplit, FallbackValue=5, ConverterParameter=1:5, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
 																Text="{Binding Item.Info.Name}"
 																Foreground="{DynamicResource ActiveForegroundBrushKey}"
 																Style="{DynamicResource DefaultTextStyleKey}" />
@@ -407,6 +405,20 @@
 																HorizontalAlignment="Right"
                                                                 Margin="0,0,8,0"
 																Style="{DynamicResource DefaultTextStyleKey}" />
+                                                            <TextBlock Grid.Column="4" Grid.Row="1"
+																Text="{Binding Item.LevelText}"
+																HorizontalAlignment="Left"
+                                                                Foreground="#FF45A9A5">
+                                                                <TextBlock.Style>
+                                                                    <Style TargetType="{x:Type TextBlock}">
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding Item.Level}" Value="0">
+                                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
                                                         </Grid>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
