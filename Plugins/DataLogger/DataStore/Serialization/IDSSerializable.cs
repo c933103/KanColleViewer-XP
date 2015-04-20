@@ -106,7 +106,6 @@ namespace LynLogger.DataStore.Serialization
             get { return fieldId; }
         }
 
-        //public Type SerializationType { get; set; }
         public Type ConstructionType { get; set; }
     }
 }

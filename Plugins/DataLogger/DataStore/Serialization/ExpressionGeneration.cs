@@ -60,7 +60,7 @@ namespace LynLogger.DataStore.Serialization
         {
             get
             {
-                return _premitive ?? (_premitive = InferPremitiveType(typeof(T)));
+                return _premitive ?? (_premitive = InferPremitiveType());
             }
         }
 
@@ -123,8 +123,9 @@ namespace LynLogger.DataStore.Serialization
             return Expression.Lambda<Func<Premitives.StoragePremitive, LinkedList<object>, T>>(Expression.Convert(Expression.Condition(Expression.Equal(Expression.Convert(paramInfo, typeof(object)), ConstantExpressions.NullConstant), Expression.Default(constructionType), Expression.Convert(body, constructionType)), typeof(T)), paramInfo, paramPath).Compile();
         }
 
-        private static Type InferPremitiveType(Type fieldType)
+        private static Type InferPremitiveType()
         {
+            var fieldType = typeof(T);
             if(fieldType.IsEnum) fieldType = fieldType.GetEnumUnderlyingType();
 
             if(fieldType == typeof(string)) return typeof(Premitives.String);

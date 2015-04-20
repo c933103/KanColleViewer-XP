@@ -51,21 +51,25 @@ namespace LynLogger.Views
         {
             get
             {
-                if(Store.Current == null) return null;
-                IOrderedEnumerable<Ship> o;
-                if(sortMode[0].SortAscending) {
-                    o = Store.Current.Ships.OrderBy(x => x, sortMode[0].SortKey);
-                } else {
-                    o = Store.Current.Ships.OrderByDescending(x => x, sortMode[0].SortKey);
-                }
-                foreach(var sm in sortMode.Skip(1)) {
-                    if(sm.SortAscending) {
-                        o = o.ThenBy(x => x, sm.SortKey);
+                while(true) {
+                    if(Store.Current == null) return null;
+                    IOrderedEnumerable<Ship> o;
+                    if(sortMode[0].SortAscending) {
+                        o = Store.Current.Ships.OrderBy(x => x, sortMode[0].SortKey);
                     } else {
-                        o = o.ThenByDescending(x => x, sm.SortKey);
+                        o = Store.Current.Ships.OrderByDescending(x => x, sortMode[0].SortKey);
                     }
+                    foreach(var sm in sortMode.Skip(1)) {
+                        if(sm.SortAscending) {
+                            o = o.ThenBy(x => x, sm.SortKey);
+                        } else {
+                            o = o.ThenByDescending(x => x, sm.SortKey);
+                        }
+                    }
+                    try {
+                        return new LinkedList<Ship>(o);
+                    } catch (InvalidOperationException) { }
                 }
-                return new LinkedList<Ship>(o);
             }
         }
 

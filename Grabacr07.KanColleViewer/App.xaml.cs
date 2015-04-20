@@ -26,7 +26,7 @@ namespace Grabacr07.KanColleViewer
 
 		static App()
 		{
-			AppDomain.CurrentDomain.UnhandledException += (sender, args) => ReportException(sender, args.ExceptionObject as Exception);
+			AppDomain.CurrentDomain.UnhandledException += (sender, args) => ReportException(sender, args.ExceptionObject as Exception, true);
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 		}
 
@@ -40,9 +40,9 @@ namespace Grabacr07.KanColleViewer
 		{
 			base.OnStartup(e);
 
-			this.DispatcherUnhandledException += (sender, args) => ReportException(sender, args.Exception);
+			this.DispatcherUnhandledException += (sender, args) => ReportException(sender, args.Exception, false);
 
-			DispatcherHelper.UIDispatcher = this.Dispatcher;
+            DispatcherHelper.UIDispatcher = this.Dispatcher;
 			ProductInfo = new ProductInfo();
 
 			Settings.Load();
@@ -75,7 +75,7 @@ namespace Grabacr07.KanColleViewer
 		}
 
 
-		private static void ReportException(object sender, Exception exception)
+		private static void ReportException(object sender, Exception exception, bool fatal)
 		{
 			#region const
 			const string messageFormat = @"
@@ -84,19 +84,21 @@ ERROR, date = {0}, sender = {1},
 {2}
 ";
 			const string path = "error.log";
-			#endregion
+            #endregion
 
-			try
-			{
-				var message = string.Format(messageFormat, DateTimeOffset.Now, sender, exception);
+            try {
+                while(exception != null) {
+                    var message = string.Format(messageFormat, DateTimeOffset.Now, sender, exception);
 
-				Debug.WriteLine(message);
-				File.AppendAllText(path, message);
-			}
-			catch (Exception ex)
-			{
-				Debug.WriteLine(ex);
-			}
+                    if(fatal) MessageBox.Show(message, "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Debug.WriteLine(message);
+                    File.AppendAllText(path, message);
+                    exception = exception.InnerException;
+                }
+            } catch (Exception ex) {
+                if(fatal) MessageBox.Show(ex.ToString(), "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                Debug.WriteLine(ex);
+            }
 		}
 	}
 }
