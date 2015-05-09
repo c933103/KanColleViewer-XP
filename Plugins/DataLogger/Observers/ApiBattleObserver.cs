@@ -61,14 +61,10 @@ namespace LynLogger.Observers
                         result.ZwClosingTorpedoAttack = ConvertTorpedoInfo(result, data.api_raigeki);
                     }
                     if(data.api_hourai_flag[1] == 1) {
-                        result.ZwBombards = new BattleStatus.BombardInfo[][] {
-                            ConvertBombards(result, data.api_hougeki1),
-                            ConvertBombards(result, data.api_hougeki2)
-                        };
-                    } else if(data.api_hourai_flag[0] == 1) {
-                        result.ZwBombards = new BattleStatus.BombardInfo[][] {
-                            ConvertBombards(result, data.api_hougeki1)
-                        };
+                        result.ZwBombardRound2 = ConvertBombards(result, data.api_hougeki2);
+                    }
+                    if(data.api_hourai_flag[0] == 1) {
+                        result.ZwBombardRound1 = ConvertBombards(result, data.api_hougeki1);
                     }
                     result.ZwSupportType = (BattleStatus.SupportInfo.Type)(int)(data.api_support_flag() ? data.api_support_flag : 0);
                     if(data.api_support_info() && (data.api_support_info != null)) {
@@ -357,9 +353,9 @@ namespace LynLogger.Observers
                     for (int i = 0; data.api_stage2.api_air_fire.api_use_items.IsDefined(i); i++) {
                         ciEquipts.Add((int)data.api_stage2.api_air_fire.api_use_items[i]);
                     }
-                    r.ZwCutInEquipts = ciEquipts.Select(x => new BattleStatus.SimpleEquiptInfo(KanColleClient.Current.Master.SlotItems[x], x)).ToArray();
+                    r.ZwCutInEquipts = ciEquipts.Select(x => new EquiptInfo(KanColleClient.Current.Master.SlotItems[x], x)).ToArray();
                 } else {
-                    r.ZwCutInEquipts = new BattleStatus.SimpleEquiptInfo[0];
+                    r.ZwCutInEquipts = new EquiptInfo[0];
                 }
                 if(r.ZwOurReconnInTouch < 0) {
                     r.ZwOurReconnInTouchName = "没有舰载机";
@@ -428,7 +424,7 @@ namespace LynLogger.Observers
                     ZwFrom = (int)data.api_at_list[i],
                     ZwTo = tgts.ToArray(),
                     ZwDamage = dmgs.ToArray(),
-                    ZwEquipts = sis.Select(x => new BattleStatus.SimpleEquiptInfo(KanColleClient.Current.Master.SlotItems[x], x)).ToArray(),
+                    ZwEquipts = sis.Select(x => new EquiptInfo(KanColleClient.Current.Master.SlotItems[x], x)).ToArray(),
                     ZwType = (BattleStatus.BombardInfo.AttackType)attackType
                 });
             }
@@ -460,7 +456,7 @@ namespace LynLogger.Observers
             ZwOurShipTorpedoed = new bool[6],
             ZwOurReconnInTouchName = "没有舰载机",
             ZwEnemyReconnInTouchName = "没有舰载机",
-            ZwCutInEquipts = new BattleStatus.SimpleEquiptInfo[0]
+            ZwCutInEquipts = new EquiptInfo[0]
         };
     }
 }

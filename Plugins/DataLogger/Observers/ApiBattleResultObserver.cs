@@ -17,7 +17,8 @@ namespace LynLogger.Observers
 
         public void OnNext(SvData<kcsapi_battleresult> value)
         {
-            //value.Data
+            if(_onBattleResult == null) return;
+            _onBattleResult(new BattleResult(value.Data));
         }
 
         public void OnCompleted() { }

@@ -126,6 +126,14 @@ namespace LynLogger
             }
         }
 
+        public static IEnumerable<int> Sequence()
+        {
+            int x = 0;
+            while(true) {
+                yield return x++;
+            }
+        }
+
         /*public static IEnumerable<Tout> Zip<T1, T2, T3, Tout>(IEnumerable<T1> i1, IEnumerable<T2> i2, IEnumerable<T3> i3, Func<T1, T2, T3, Tout> project)
         {
             using (var e1 = i1.GetEnumerator())

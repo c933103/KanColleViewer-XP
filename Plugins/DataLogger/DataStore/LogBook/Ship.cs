@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using LynLogger.DataStore.Serialization;
 using LynLogger.DataStore.MasterInfo;
-using LynLogger.DataStore.Premitives;
 
 namespace LynLogger.DataStore.LogBook
 {
@@ -21,7 +20,6 @@ namespace LynLogger.DataStore.LogBook
         }
 
         [Serialize(0)] public int Id { get; private set; }
-        [Serialize(1)] public Histogram<int> ShipId { get; private set; }
         [Serialize(2)] public Histogram<ShipNameType> ShipNameType { get; private set; }
         [Serialize(3)] public Histogram<int> Level { get; private set; }
         [Serialize(4)] public Histogram<int> Exp { get; private set; }
@@ -77,9 +75,19 @@ namespace LynLogger.DataStore.LogBook
 
         internal void RefreshUpdateTime() { UpdateTime = Helpers.UnixTimestamp; }
 
-        public Ship(StoragePremitive info, LinkedList<object> serializationPath) : base(info, serializationPath)
+        public Ship(Premitives.StoragePremitive info, LinkedList<object> serializationPath) : base(info, serializationPath)
         {
             if(UpdateTime == 0) UpdateTime = Helpers.UnixTimestamp;
+        }
+
+        protected override IReadOnlyDictionary<ulong, HandlerInfo> CustomFieldHandlers
+        {
+            get
+            {
+                return new Dictionary<ulong, HandlerInfo>() {
+                    [1] = new HandlerInfo(x => null, (o, i, p) => { }),
+                };
+            }
         }
     }
     

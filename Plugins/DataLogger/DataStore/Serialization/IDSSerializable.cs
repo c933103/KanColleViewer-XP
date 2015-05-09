@@ -1,14 +1,7 @@
-﻿using LynLogger.DataStore.IO;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace LynLogger.DataStore.Serialization
 {
@@ -26,7 +19,7 @@ namespace LynLogger.DataStore.Serialization
 
         protected virtual IReadOnlyDictionary<ulong, HandlerInfo> CustomFieldHandlers { get { return null; } }
 
-        [NonSerialized] private static ConcurrentDictionary<ulong, HandlerInfo> _serializationHandlers = null;
+        private static ConcurrentDictionary<ulong, HandlerInfo> _serializationHandlers = null;
         private IDictionary<ulong, Premitives.StoragePremitive> blackBox = new Dictionary<ulong, Premitives.StoragePremitive>();
 
         protected AbstractDSSerializable() { DeserializedStructureVersion = StructureVersion; }

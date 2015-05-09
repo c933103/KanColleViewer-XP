@@ -22,7 +22,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			set
 			{
 				this._Source = value;
-				this.SourceString = value.ToString();
+				this.SourceString = value?.ToString();
 				this.RaisePropertyChanged();
 			}
 		}

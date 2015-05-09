@@ -29,7 +29,7 @@
                         <Run Text="]"/>
                         <Run Text="{Binding From.ShipName, Mode=OneTime}"/>
                     </TextBlock>
-                    <ItemsControl ItemsSource="{Binding Equipts, Mode=OneTime}" DisplayMemberPath="Name" />
+                    <ItemsControl ItemsSource="{Binding Equipts, Mode=OneTime}" DisplayMemberPath="EquiptName" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.IsSharedSizeScope="True">
                     <TextBlock>
@@ -560,7 +560,7 @@
                                     <Run Text="对空CI发动"/>
                                 </TextBlock>
                                 <TextBlock Text="{Binding CutInType, Mode=OneTime, Converter={StaticResource EnumToDescriptionConverter}}" />
-                                <ItemsControl ItemsSource="{Binding CutInEquipts, Mode=OneTime}" DisplayMemberPath="Name" />
+                                <ItemsControl ItemsSource="{Binding CutInEquipts, Mode=OneTime}" DisplayMemberPath="EquiptName" />
                             </StackPanel>
                             <Border.Style>
                                 <Style TargetType="{x:Type Border}">

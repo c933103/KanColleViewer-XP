@@ -38,14 +38,14 @@
     <AssemblyOriginatorKeyFile>signingkey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BCMakeCert">
-      <HintPath>..\..\packages\FiddlerCore.4.4.8.4\lib\net40\BCMakeCert.dll</HintPath>
-    </Reference>
-    <Reference Include="CertMaker">
-      <HintPath>..\..\packages\FiddlerCore.4.4.8.4\lib\net40\CertMaker.dll</HintPath>
+    <Reference Include="crypto">
+      <HintPath>.\crypto.dll</HintPath>
     </Reference>
     <Reference Include="FiddlerCore4">
       <HintPath>..\..\packages\FiddlerCore.4.4.8.4\lib\net40\FiddlerCore4.dll</HintPath>
+    </Reference>
+    <Reference Include="LibHAI2">
+      <HintPath>.\LibHAI2.dll</HintPath>
     </Reference>
     <Reference Include="Livet">
       <HintPath>..\..\packages\LivetCask.1.1.0.0\lib\net45\Livet.dll</HintPath>
@@ -90,6 +90,8 @@
   <ItemGroup>
     <Compile Include="DataStore\Extensions\PremitiveExtensions.cs" />
     <Compile Include="DataStore\LogBook\BasicInfo.cs" />
+    <Compile Include="DataStore\LogBook\CreateItemLog.cs" />
+    <Compile Include="DataStore\LogBook\CreateShipLog.cs" />
     <Compile Include="DataStore\LogBook\Histogram.cs" />
     <Compile Include="DataStore\LogBook\Ship.cs" />
     <Compile Include="DataStore\MasterInfo\EquiptInfo.cs" />
@@ -121,6 +123,8 @@
     <Compile Include="Data\LevelExperienceTable.cs" />
     <Compile Include="Data\MapExperienceTable.cs" />
     <Compile Include="Models\Battling\PracticeEnemyInfo.cs" />
+    <Compile Include="Observers\ApiCreateItemObserver.cs" />
+    <Compile Include="Observers\ApiCreateShipObserver.cs" />
     <Compile Include="Observers\ApiPracticeEnemyInfoObserver.cs" />
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Logger\BasicInfoLogger.cs" />
@@ -207,7 +211,9 @@
       <Name>MetroRadiance</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Networking\Packets\" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="Views\AboutView.xaml">
       <SubType>Designer</SubType>

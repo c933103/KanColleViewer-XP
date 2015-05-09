@@ -9,7 +9,7 @@ using LynLogger.DataStore.Serialization;
 namespace LynLogger.DataStore.MasterInfo
 {
     [Serializable]
-    public class EquiptInfo : AbstractDSSerializable<EquiptInfo>
+    public class EquiptInfo : AbstractDSSerializable<EquiptInfo>, ICloneable
     {
         [Serialize(0)] public int Id { get; private set; }
         [Serialize(1)] public int EquiptId { get; private set; }
@@ -69,5 +69,11 @@ namespace LynLogger.DataStore.MasterInfo
             }
         }
         public EquiptInfo(Premitives.StoragePremitive info, LinkedList<object> serializationPath) : base(info, serializationPath) { }
+
+        public EquiptInfo(int r, int c) : this(Grabacr07.KanColleWrapper.KanColleClient.Current.Master.SlotItems[r], c, r)
+        {
+        }
+
+        object ICloneable.Clone() { return MemberwiseClone(); }
     }
 }

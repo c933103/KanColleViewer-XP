@@ -1,6 +1,7 @@
 ﻿using Grabacr07.KanColleViewer.Composition;
 using Grabacr07.KanColleWrapper;
 using Grabacr07.KanColleWrapper.Models.Raw;
+using LynLogger.DataStore.Serialization;
 using LynLogger.Utilities;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,8 @@ namespace LynLogger
         internal Observers.ApiBattleResultObserver BattleResultObserver { get; private set; }
         internal Observers.ApiMapStartNextObserver MapStartNextObserver { get; private set; }
         internal Observers.ApiPracticeEnemyInfoObserver PracticeEnemyInfoObserver { get; private set; }
+        internal Observers.ApiCreateItemObserver CreateItemObserver { get; private set; }
+        internal Observers.ApiCreateShipObserver CreateShipObserver { get; private set; }
 
         private LinkedList<IDisposable> _disposables = new LinkedList<IDisposable>();
         private ToolsModel model = new ToolsModel();
@@ -58,10 +61,14 @@ namespace LynLogger
             _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_map/next").Subscribe(MapStartNextObserver));
 
             BattleResultObserver = new Observers.ApiBattleResultObserver();
-            //_disposables.AddLast(KanColleClient.Current.Proxy.api_req_sortie_battleresult.TryParse<kcsapi_battleresult>().Subscribe(BattleResultObserver));
+            _disposables.AddLast(KanColleClient.Current.Proxy.api_req_sortie_battleresult.TryParse<kcsapi_battleresult>().Subscribe(BattleResultObserver));
 
             PracticeEnemyInfoObserver = new Observers.ApiPracticeEnemyInfoObserver();
             _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_member/get_practice_enemyinfo").Subscribe(PracticeEnemyInfoObserver));
+
+            CreateShipObserver = new Observers.ApiCreateShipObserver();
+            _disposables.AddLast(KanColleClient.Current.Proxy.api_req_sortie_battleresult.TryParse<kcsapi_kdock[]>().Subscribe(CreateShipObserver));
+            _disposables.AddLast(KanColleClient.Current.Proxy.api_req_sortie_battleresult.TryParse<kcsapi_createship>().Subscribe(CreateShipObserver));
 
             Instance = this;
             if(_onInstanceCreate != null) _onInstanceCreate(this);
@@ -148,10 +155,10 @@ namespace LynLogger
         Yes,
     }
 
-    public struct FuzzyDouble
+    public class FuzzyDouble : AbstractDSSerializable<FuzzyDouble>
     {
-        public double UpperBound { get; set; }
-        public double LowerBound { get; set; }
+        [Serialize(0)] public double UpperBound { get; set; }
+        [Serialize(1)] public double LowerBound { get; set; }
 
         public static FuzzyDouble operator +(FuzzyDouble a, FuzzyDouble b)
         {

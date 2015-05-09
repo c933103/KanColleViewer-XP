@@ -1,27 +1,26 @@
-﻿using System.Text;
+﻿using LynLogger.DataStore.Serialization;
+using System.Text;
 
 namespace LynLogger.Models.Battling
 {
-    public class MapNext
+    public class MapNext : AbstractDSSerializable<MapNext>
     {
-        internal string ZwRawData;
+        [Serialize(0)] internal string ZwRawData;
         public string RawData { get { return ZwRawData; } }
 
-        internal int ZwMapAreaId;
+        [Serialize(1)] internal int ZwMapAreaId;
         public int MapAreaId { get { return ZwMapAreaId; } }
 
-        internal int ZwMapSectionId;
+        [Serialize(2)] internal int ZwMapSectionId;
         public int MapSectionId { get { return ZwMapSectionId; } }
 
-        internal int ZwMapLocId;
+        [Serialize(3)] internal int ZwMapLocId;
         public int MapLocId { get { return ZwMapLocId; } }
 
-        internal int ZwMapBossLocId;
-
-        internal EventType ZwEvent;
+        [Serialize(4)] internal EventType ZwEvent;
         public EventType Event { get { return ZwEvent; } }
 
-        internal ItemGetLostInfo ZwItemGetLost;
+        [Serialize(5)] internal ItemGetLostInfo ZwItemGetLost;
         public ItemGetLostInfo ItemGetLost { get { return ZwItemGetLost; } }
 
         public override string ToString()
@@ -57,15 +56,15 @@ namespace LynLogger.Models.Battling
             return sb.ToString();
         }
 
-        public class ItemGetLostInfo
+        public class ItemGetLostInfo : AbstractDSSerializable<ItemGetLostInfo>
         {
-            internal int ZwItemId;
+            [Serialize(0)] internal int ZwItemId;
             public int ItemId { get { return ZwItemId; } }
 
-            public int ZwAmount;
+            [Serialize(1)] public int ZwAmount;
             public int Amount { get { return ZwAmount; } }
 
-            internal string ZwItemName;
+            [Serialize(2)] internal string ZwItemName;
             public string ItemName { get { return ZwItemName; } }
         }
         public enum EventType { ItemGet = 2, ItemLost = 3, Battle = 4, BossBattle = 5, NightBattle = -4, NightBossBattle = -5, Nothing = 6 }
