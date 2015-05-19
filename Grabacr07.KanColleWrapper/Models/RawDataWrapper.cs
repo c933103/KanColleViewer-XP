@@ -15,7 +15,7 @@ namespace Grabacr07.KanColleWrapper.Models
 		/// <summary>
 		/// 艦これ API からの応答に含まれる api_data をパースした生のデータを取得します。
 		/// </summary>
-		internal T RawData { get; private set; }
+		public T RawData { get; private set; }
 
 		/// <summary>
 		/// ラップする api_data (生のデータ) を使用して、<see cref="RawDataWrapper{T}" /> クラスの新しいインスタンスを初期化します。

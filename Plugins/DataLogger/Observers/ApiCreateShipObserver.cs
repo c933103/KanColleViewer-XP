@@ -40,9 +40,9 @@ namespace LynLogger.Observers
         public void OnNext(SvData<kcsapi_kdock[]> value)
         {
             if(waitDockId < 0) return;
-            if(_onShipCreate == null) return;
-
-            _onShipCreate(new CreateShipLog(fuel, ammo, steel, bauxite, mat, waitDockId, value.Data[waitDockId].api_created_ship_id));
+            if (_onShipCreate != null) {
+                _onShipCreate(new CreateShipLog(fuel, ammo, steel, bauxite, mat, waitDockId, value.Data[waitDockId].api_created_ship_id));
+            }
             waitDockId = -1;
         }
 

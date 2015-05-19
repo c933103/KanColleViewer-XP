@@ -21,9 +21,18 @@ namespace LynLogger.DataStore.MasterInfo
         {
             var ship = KanColleClient.Current.Master.Ships[id];
             ShipId = id;
-            //TypeId = ship?.ShipType.Id ?? id;
             ShipName = ship?.Name ?? ("Ship" + id);
             TypeName = ship?.ShipType.Name ?? ("Type"+id);
+            if(ship != null) {
+                ShipName = ship.Name;
+                TypeName = ship.ShipType.Name;
+                if(ship.RawData.api_yomi == "flagship" || ship.RawData.api_yomi == "elite") {
+                    ShipName += ship.RawData.api_yomi;
+                }
+            } else {
+                ShipName = "Ship" + id;
+                TypeName = "Type" + id;
+            }
         }
 
         public override bool Equals(object obj)

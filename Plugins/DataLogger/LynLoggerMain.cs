@@ -67,8 +67,11 @@ namespace LynLogger
             _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_member/get_practice_enemyinfo").Subscribe(PracticeEnemyInfoObserver));
 
             CreateShipObserver = new Observers.ApiCreateShipObserver();
-            _disposables.AddLast(KanColleClient.Current.Proxy.api_req_sortie_battleresult.TryParse<kcsapi_kdock[]>().Subscribe(CreateShipObserver));
-            _disposables.AddLast(KanColleClient.Current.Proxy.api_req_sortie_battleresult.TryParse<kcsapi_createship>().Subscribe(CreateShipObserver));
+            _disposables.AddLast(KanColleClient.Current.Proxy.api_get_member_kdock.TryParse<kcsapi_kdock[]>().Subscribe(CreateShipObserver));
+            _disposables.AddLast(KanColleClient.Current.Proxy.api_req_kousyou_createship.TryParse<kcsapi_createship>().Subscribe(CreateShipObserver));
+
+            CreateItemObserver = new Observers.ApiCreateItemObserver();
+            _disposables.AddLast(KanColleClient.Current.Proxy.api_req_kousyou_createitem.TryParse<kcsapi_createitem>().Subscribe(CreateItemObserver));
 
             Instance = this;
             if(_onInstanceCreate != null) _onInstanceCreate(this);
