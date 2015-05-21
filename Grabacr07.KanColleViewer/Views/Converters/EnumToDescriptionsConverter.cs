@@ -30,7 +30,7 @@ namespace Grabacr07.KanColleViewer.Views.Converters
                     }
                 }
             }
-            return value.ToString();
+            return value?.ToString();
         }
 
         private string[] ConvertFlag(object value)

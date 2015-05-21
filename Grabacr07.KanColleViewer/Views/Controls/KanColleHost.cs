@@ -98,6 +98,12 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 		public KanColleHost()
 		{
 			this.Loaded += (sender, args) => this.Update();
+            Models.Settings.Current.PropertyChanged += (o, e) => {
+                if (e.PropertyName == nameof(Models.Settings.Current.FlashQuality)) ApplyStyleSheet();
+                if (e.PropertyName == nameof(Models.Settings.Current.FlashRenderMode)) ApplyStyleSheet();
+            };
+            Fiddler.FiddlerApplication.BeforeRequest += InjectScript_BeforeRequest;
+            Fiddler.FiddlerApplication.BeforeResponse += InjectScript_BeforeResponse;
 		}
 
 		public override void OnApplyTemplate()
@@ -188,22 +194,51 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 				var gameFrame = document.getElementById("game_frame");
 				if (gameFrame == null)
 				{
-					if (document.url.Contains(".swf?"))
+					if (document.url.Contains(".swf?") || document.url.Contains("osapi.dmm.com/gadgets/ifr?"))
 					{
 						gameFrame = document.body;
 					}
 				}
 
-				if (gameFrame != null)
-				{
-					var target = gameFrame.document as HTMLDocument;
-					if (target != null)
-					{
-						target.createStyleSheet().cssText = Properties.Settings.Default.OverrideStyleSheet;
-						this.styleSheetApplied = true;
-						return;
-					}
-				}
+                if (gameFrame != null) {
+                    var target = gameFrame.document as HTMLDocument;
+                    if (target != null) {
+                        target.createStyleSheet().cssText = Properties.Settings.Default.OverrideStyleSheet;
+                        this.styleSheetApplied = true;
+
+                        var qualityControlMode = Models.Settings.Current.FlashOverrideMode;
+                        if(qualityControlMode == FlashOverrideMode.Dispatch || qualityControlMode == FlashOverrideMode.Reload) {
+                            var frame = (gameFrame as IHTMLFrameBase2)?.contentWindow;
+
+                            IServiceProvider psp = frame as IServiceProvider;
+                            if (psp == null) return;
+
+                            object objBrowser;
+                            psp.QueryService(typeof(IWebBrowserApp).GUID, typeof(IWebBrowser2).GUID, out objBrowser);
+
+                            var pDocument = (objBrowser as IWebBrowser2)?.Document as HTMLDocument;
+                            if (pDocument == null) return;
+
+                            dynamic ele = pDocument.getElementById("externalswf");
+                            if(ele != null && qualityControlMode == FlashOverrideMode.Dispatch) {
+                                if (Models.Settings.Current.FlashQuality != FlashQuality.Default)
+                                    ele.Quality2 = Models.Settings.Current.FlashQuality.ToString();
+
+                                if (Models.Settings.Current.FlashRenderMode != FlashRenderMode.Default)
+                                    ele.WMode = Models.Settings.Current.FlashRenderMode.ToString();
+
+                                ele.style.zIndex = 1;
+
+                                StatusService.Current.Notify("Flash rendering mode set via COM interface: " + ele.Quality2 + "/" + ele.WMode);
+                            } else {
+                                dynamic wnd = pDocument.parentWindow;
+                                wnd.eval(string.Format(Properties.Settings.Default.QualityScript, Models.Settings.Current.FlashOverrideMode, Models.Settings.Current.FlashQuality, Models.Settings.Current.FlashRenderMode));
+                            }
+                        }
+
+                        return;
+                    }
+                }
 			}
 			catch (Exception ex)
 			{
@@ -212,5 +247,32 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 
 			return;
 		}
+
+        private static void InjectScript_BeforeRequest(Fiddler.Session oSession)
+        {
+            if (Models.Settings.Current.FlashOverrideMode != FlashOverrideMode.Intercept) return;
+            if (oSession.url.Contains("osapi.dmm.com/gadgets/ifr?")) {
+                oSession.bBufferResponse = true;
+                return;
+            }
+            if (oSession.host == "kancolleviewer.local") {
+                oSession.utilCreateResponseAndBypassServer();
+                oSession.utilSetResponseBody(string.Format(Properties.Settings.Default.QualityScript, FlashOverrideMode.Intercept, Models.Settings.Current.FlashQuality, Models.Settings.Current.FlashRenderMode));
+                oSession.oResponse.headers.HTTPResponseCode = 200;
+                oSession.oResponse.headers.HTTPResponseStatus = "200 OK";
+                oSession.oResponse.headers["Content-Type"] = "text/javascript";
+                return;
+            }
+        }
+
+        private static void InjectScript_BeforeResponse(Fiddler.Session oSession)
+        {
+            if (Models.Settings.Current.FlashOverrideMode != FlashOverrideMode.Intercept) return;
+            if (oSession.url.Contains("osapi.dmm.com/gadgets/ifr?")) {
+                oSession.utilDecodeResponse();
+                oSession.utilReplaceInResponse("</head>", Properties.Settings.Default.InjectScriptTag + "</head>");
+                return;
+            }
+        }
 	}
 }

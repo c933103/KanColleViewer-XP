@@ -54,7 +54,7 @@ namespace Grabacr07.KanColleViewer
 			KanColleClient.Current.Proxy.Startup(/*AppSettings.Default.LocalProxyPort*/);
 			KanColleClient.Current.Proxy.UpstreamProxySettings = Settings.Current.ProxySettings;
 
-			ResourceService.Current.ChangeCulture(Settings.Current.Culture);
+            ResourceService.Current.ChangeCulture(Settings.Current.Culture);
 			ThemeService.Current.Initialize(this, Theme.Dark, Accent.Purple);
 
             ViewModelRoot = new MainWindowViewModel();
@@ -64,7 +64,7 @@ namespace Grabacr07.KanColleViewer
 			this.MainWindow.Show();
 		}
 
-		protected override void OnExit(ExitEventArgs e)
+        protected override void OnExit(ExitEventArgs e)
 		{
 			base.OnExit(e);
 
@@ -99,6 +99,6 @@ ERROR, date = {0}, sender = {1},
                 if(fatal) MessageBox.Show(ex.ToString(), "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error);
                 Debug.WriteLine(ex);
             }
-		}
-	}
+        }
+    }
 }

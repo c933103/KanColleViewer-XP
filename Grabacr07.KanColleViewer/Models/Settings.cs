@@ -382,7 +382,43 @@ namespace Grabacr07.KanColleViewer.Models
             }
         }
 
-		public void Save()
+        private FlashQuality _flashQuality = FlashQuality.Default;
+        public FlashQuality FlashQuality
+        {
+            get { return _flashQuality; }
+            set
+            {
+                if (value == _flashQuality) return;
+                _flashQuality = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private FlashRenderMode _flashRenderMode = FlashRenderMode.Default;
+        public FlashRenderMode FlashRenderMode
+        {
+            get { return _flashRenderMode; }
+            set
+            {
+                if (value == _flashRenderMode) return;
+                _flashRenderMode = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private FlashOverrideMode _flashOverrideMode = FlashOverrideMode.Dispatch;
+        public FlashOverrideMode FlashOverrideMode
+        {
+            get { return _flashOverrideMode; }
+            set
+            {
+                if (value == _flashOverrideMode) return;
+                _flashOverrideMode = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public void Save()
 		{
 			try
 			{

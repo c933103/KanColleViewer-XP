@@ -25,6 +25,7 @@
             <Converters:HasFlagConverter x:Key="HasFlagConverter" />
             <Converters:BoolToIntSelector x:Key="BoolToIntSelector" />
             <Converters:EnumToDescriptionsConverter x:Key="EnumToDescriptionsConverter" />
+            <Converters:MultiBindingEqualityConverter x:Key="MultiBindingEqualityConverter" />
 
         </ResourceDictionary>
 	</Application.Resources>

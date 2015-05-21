@@ -65,7 +65,7 @@ namespace Grabacr07.KanColleWrapper
 
 		public void Startup(int proxy = 0)
 		{
-            if(proxy < 1024) proxy = new Random().Next(49152, 65535);
+            if(proxy < 1024) proxy = new Random().Next(1024, 65535);
 			FiddlerApplication.Startup(proxy, false, false, false);
 			FiddlerApplication.BeforeRequest += this.SetUpstreamProxyHandler;
             FiddlerApplication.OnReadRequestBuffer += FiddlerApplication_OnReadRequestBuffer;

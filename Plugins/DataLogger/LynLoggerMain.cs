@@ -44,7 +44,7 @@ namespace LynLogger
 
         public LynLoggerMain()
         {
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve; //Somehow BinaryFormatter can't find our assembly despite the fact that we're the one who called it.
+            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve; //Somehow BinaryFormatter can't find our assembly despite the fact that we're the one who called it.
 
             _disposables.AddLast(KanColleClient.Current.Proxy.api_port.TryParse<kcsapi_port>().Subscribe(new Observers.ApiPortObserver()));
             _disposables.AddLast(KanColleClient.Current.Proxy.api_get_member_ship2.TryParse<kcsapi_ship2[]>().Subscribe(new Observers.ApiShip2Observer()));

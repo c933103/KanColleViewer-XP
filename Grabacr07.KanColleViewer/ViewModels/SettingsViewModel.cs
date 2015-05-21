@@ -18,6 +18,7 @@ using Livet.Messaging;
 using Livet.Messaging.IO;
 using MetroRadiance;
 using Settings = Grabacr07.KanColleViewer.Models.Settings;
+using System.Windows.Input;
 
 namespace Grabacr07.KanColleViewer.ViewModels
 {
@@ -169,11 +170,31 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			}
 		}
 
-		#endregion
+        #endregion
 
-		#region BrowserZoomFactor 変更通知プロパティ
+        #region Flash相关
 
-		private BrowserZoomFactor _BrowserZoomFactor;
+        public FlashQuality[] FlashQualitySettings { get { return (FlashQuality[])Enum.GetValues(typeof(FlashQuality)); } }
+        public FlashRenderMode[] FlashRenderModes { get { return (FlashRenderMode[])Enum.GetValues(typeof(FlashRenderMode)); } }
+        public FlashOverrideMode[] FlashOverrideModes { get { return (FlashOverrideMode[])Enum.GetValues(typeof(FlashOverrideMode)); } }
+
+        private ICommand _setFlashQuality = null;
+        public ICommand SetFlashQuality { get { return _setFlashQuality ?? (_setFlashQuality = new SetFlashQualityCommand()); } }
+        public FlashQuality FlashQuality { get { return Settings.Current.FlashQuality; } set { Settings.Current.FlashQuality = value; } }
+
+        private ICommand _setFlashRenderMode = null;
+        public ICommand SetFlashRenderMode { get { return _setFlashRenderMode ?? (_setFlashRenderMode = new SetFlashRenderModeCommand()); } }
+        public FlashRenderMode FlashRenderMode { get { return Settings.Current.FlashRenderMode; } set { Settings.Current.FlashRenderMode = value; } }
+
+        private ICommand _setFlashOverrideMode = null;
+        public ICommand SetFlashOverrideMode { get { return _setFlashOverrideMode ?? (_setFlashOverrideMode = new SetFlashOverrideModeCommand()); } }
+        public FlashOverrideMode FlashOverrideMode { get { return Settings.Current.FlashOverrideMode; } set { Settings.Current.FlashOverrideMode = value; } }
+
+        #endregion
+
+        #region BrowserZoomFactor 変更通知プロパティ
+
+        private BrowserZoomFactor _BrowserZoomFactor;
 
 		public BrowserZoomFactor BrowserZoomFactor
 		{
@@ -324,6 +345,11 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
             KanColleClient.Current.Proxy.OnBytesReceived += i => ReceivedBytes += i;
             KanColleClient.Current.Proxy.OnBytesSent += i => SentBytes += i;
+            Settings.Current.PropertyChanged += (o, e) => {
+                if (e.PropertyName == nameof(Settings.Current.FlashQuality)) RaisePropertyChanged(e.PropertyName);
+                if (e.PropertyName == nameof(Settings.Current.FlashRenderMode)) RaisePropertyChanged(e.PropertyName);
+                if (e.PropertyName == nameof(Settings.Current.FlashOverrideMode)) RaisePropertyChanged(e.PropertyName);
+            };
 		}
 
 
@@ -404,6 +430,45 @@ namespace Grabacr07.KanColleViewer.ViewModels
 				this.Logic = logic;
 				this.selected = Settings.Current.KanColleClientSettings.ViewRangeCalcType == logic.Id;
 			}
-		}
-	}
+        }
+
+        private class SetFlashQualityCommand : ICommand
+        {
+            public event EventHandler CanExecuteChanged;
+            public bool CanExecute(object parameter) { return true; }
+
+            public void Execute(object parameter)
+            {
+                if (parameter is FlashQuality) {
+                    Settings.Current.FlashQuality = (FlashQuality)parameter;
+                }
+            }
+        }
+
+        private class SetFlashRenderModeCommand : ICommand
+        {
+            public event EventHandler CanExecuteChanged;
+            public bool CanExecute(object parameter) { return true; }
+
+            public void Execute(object parameter)
+            {
+                if (parameter is FlashRenderMode) {
+                    Settings.Current.FlashRenderMode = (FlashRenderMode)parameter;
+                }
+            }
+        }
+
+        private class SetFlashOverrideModeCommand : ICommand
+        {
+            public event EventHandler CanExecuteChanged;
+            public bool CanExecute(object parameter) { return true; }
+
+            public void Execute(object parameter)
+            {
+                if (parameter is FlashOverrideMode) {
+                    Settings.Current.FlashOverrideMode = (FlashOverrideMode)parameter;
+                }
+            }
+        }
+    }
 }

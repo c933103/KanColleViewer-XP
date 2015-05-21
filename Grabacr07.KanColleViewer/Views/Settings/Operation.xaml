@@ -60,30 +60,30 @@
 				   Style="{DynamicResource SettingsHeaderTextStyleKey}"
 				   Margin="0,10" />
 
-		<StackPanel Margin="20,0,0,0">
-			<TextBlock Text="艦隊の索敵値の算出に使用する計算式は、以下を使用する" />
+        <StackPanel Margin="20,0,0,0">
+            <TextBlock Text="艦隊の索敵値の算出に使用する計算式は、以下を使用する" />
 
-			<ItemsControl ItemsSource="{Binding ViewRangeSettingsCollection}"
+            <ItemsControl ItemsSource="{Binding ViewRangeSettingsCollection}"
 						  Margin="0,5">
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<RadioButton IsChecked="{Binding Selected}"
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <RadioButton IsChecked="{Binding Selected}"
 									 Margin="0,5"
 									 GroupName="ViewRangeCalcLogicSelection">
-							<TextBlock Style="{DynamicResource DefaultTextStyleKey}"
+                            <TextBlock Style="{DynamicResource DefaultTextStyleKey}"
 									   LineHeight="18">
 								<Run Text="{Binding Logic.Name, Mode=OneWay}"
 									 Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}, Path=Foreground}" />
 								<LineBreak />
 								<Run Text="{Binding Logic.Description, Mode=OneWay}" />
-							</TextBlock>
-						</RadioButton>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
-		</StackPanel>
+                            </TextBlock>
+                        </RadioButton>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
 
-		<Rectangle Height="1"
+        <Rectangle Height="1"
 				   Style="{DynamicResource SeparatorRectangleStyleKey}" />
 	</StackPanel>
 </UserControl>
