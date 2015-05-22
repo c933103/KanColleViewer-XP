@@ -29,8 +29,8 @@
     z-index:1;
 }</Value>
     </Setting>
-    <Setting Name="FirebugLiteScript" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">(function(F,i,r,e,b,u,g,L,I,T,E){if(F.getElementById(b))return;E=F[i+'NS']&amp;&amp;F.documentElement.namespaceURI;E=E?F[i+'NS'](E,'script'):F[i]('script');E[r]('id',b);E[r]('src',I+g+T);E[r](b,u);(F[e]('head')[0]||F[e]('body')[0]).appendChild(E);E=new Image;E[r]('src',I+L);})(document,'createElement','setAttribute','getElementsByTagName','FirebugLite','4','firebug-lite.js','releases/lite/latest/skin/xp/sprite.png','https://getfirebug.com/','#startInNewWindow');</Value>
+    <Setting Name="QualityShimTag" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">&lt;script type="text/javascript" src="http://kancolleviewer.local/flash_quality.js"&gt;&lt;/script&gt;</Value>
     </Setting>
     <Setting Name="QualityScript" Type="System.String" Scope="Application">
       <Value Profile="(Default)">(function() {{
@@ -111,7 +111,7 @@ var shockwaveSetQualityAndWModeDispatch = function(quality, wmode) {{
   swf.style.zIndex = 1;
 }};
 
-var shockwaveSetQualityAndWModeIntercept = function(quality, wmode) {{
+var shockwaveSetQualityAndWModeShim = function(quality, wmode) {{
   var origEmbedFlash = window.gadgets.flash.embedFlash;
   gadgets.flash.embedFlash = function(url, container, version, params) {{
     if(typeof(params) == "undefined") params = {{}};
@@ -124,9 +124,6 @@ var shockwaveSetQualityAndWModeIntercept = function(quality, wmode) {{
 shockwaveSetQualityAndWMode{0}("{1}", "{2}");
 }})();
 </Value>
-    </Setting>
-    <Setting Name="InjectScriptTag" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">&lt;script type="text/javascript" src="http://kancolleviewer.local/flash_quality.js"&gt;&lt;/script&gt;</Value>
     </Setting>
   </Settings>
 </SettingsFile>

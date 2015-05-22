@@ -250,14 +250,14 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 
         private static void InjectScript_BeforeRequest(Fiddler.Session oSession)
         {
-            if (Models.Settings.Current.FlashOverrideMode != FlashOverrideMode.Intercept) return;
+            if (Models.Settings.Current.FlashOverrideMode != FlashOverrideMode.Shim) return;
             if (oSession.url.Contains("osapi.dmm.com/gadgets/ifr?")) {
                 oSession.bBufferResponse = true;
                 return;
             }
             if (oSession.host == "kancolleviewer.local") {
                 oSession.utilCreateResponseAndBypassServer();
-                oSession.utilSetResponseBody(string.Format(Properties.Settings.Default.QualityScript, FlashOverrideMode.Intercept, Models.Settings.Current.FlashQuality, Models.Settings.Current.FlashRenderMode));
+                oSession.utilSetResponseBody(string.Format(Properties.Settings.Default.QualityScript, FlashOverrideMode.Shim, Models.Settings.Current.FlashQuality, Models.Settings.Current.FlashRenderMode));
                 oSession.oResponse.headers.HTTPResponseCode = 200;
                 oSession.oResponse.headers.HTTPResponseStatus = "200 OK";
                 oSession.oResponse.headers["Content-Type"] = "text/javascript";
@@ -267,10 +267,10 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 
         private static void InjectScript_BeforeResponse(Fiddler.Session oSession)
         {
-            if (Models.Settings.Current.FlashOverrideMode != FlashOverrideMode.Intercept) return;
+            if (Models.Settings.Current.FlashOverrideMode != FlashOverrideMode.Shim) return;
             if (oSession.url.Contains("osapi.dmm.com/gadgets/ifr?")) {
                 oSession.utilDecodeResponse();
-                oSession.utilReplaceInResponse("</head>", Properties.Settings.Default.InjectScriptTag + "</head>");
+                oSession.utilReplaceInResponse("</head>", Properties.Settings.Default.QualityShimTag + "</head>");
                 return;
             }
         }

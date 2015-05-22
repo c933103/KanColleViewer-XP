@@ -9,14 +9,15 @@ namespace Grabacr07.KanColleViewer.Models
 {
     public enum FlashOverrideMode
     {
-        [Description("通过IDispatch接口修改Flash参数，可能白屏")]
+        [Description("通过COM接口修改Flash参数，修改渲染模式时可能白屏")]
         Dispatch,
 
         [Description("删除并重建Flash标记，会刷新Flash，可能卡黑船")]
         Reload,
 
-        [Description("拦截网络通信，直接注入脚本，不能实时修改")]
-        Intercept
+        [System.Xml.Serialization.XmlEnum("Intercept")]
+        [Description("拦截网络通信并注入脚本，不能实时修改")]
+        Shim
     }
 
     public enum FlashQuality

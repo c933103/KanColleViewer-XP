@@ -87,6 +87,10 @@ namespace LynLogger.Views
 
                 var EndShips = Battle.OurShipBattleEndHp.ToList();
                 MvpRange = EndShips.Aggregate(new FuzzyDouble(), (range, ship) => FuzzyDouble.UpperRange(range, ship.DeliveredDamage));
+                var fuzzy = EndShips.Select(x => x.DeliveredDamage).Where(x => x.LowerBound != x.UpperBound);
+                if(fuzzy.Count() != 0) {
+                    MvpRange.LowerBound = Math.Max(MvpRange.LowerBound, fuzzy.Max(x => x.UpperBound) / fuzzy.Count());
+                }
 
                 var inRangeState = EndShips.Count(x => (x.DeliveredDamage >= MvpRange) != TriState.No) == 1 ? TriState.Yes : TriState.DK;
                 foreach(var ship in EndShips) {

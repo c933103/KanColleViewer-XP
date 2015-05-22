@@ -63,10 +63,11 @@ namespace Grabacr07.KanColleViewer.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"(function(F,i,r,e,b,u,g,L,I,T,E){if(F.getElementById(b))return;E=F[i+'NS']&&F.documentElement.namespaceURI;E=E?F[i+'NS'](E,'script'):F[i]('script');E[r]('id',b);E[r]('src',I+g+T);E[r](b,u);(F[e]('head')[0]||F[e]('body')[0]).appendChild(E);E=new Image;E[r]('src',I+L);})(document,'createElement','setAttribute','getElementsByTagName','FirebugLite','4','firebug-lite.js','releases/lite/latest/skin/xp/sprite.png','https://getfirebug.com/','#startInNewWindow');")]
-        public string FirebugLiteScript {
+        [global::System.Configuration.DefaultSettingValueAttribute("<script type=\"text/javascript\" src=\"http://kancolleviewer.local/flash_quality.js\"" +
+            "></script>")]
+        public string QualityShimTag {
             get {
-                return ((string)(this["FirebugLiteScript"]));
+                return ((string)(this["QualityShimTag"]));
             }
         }
         
@@ -104,26 +105,16 @@ namespace Grabacr07.KanColleViewer.Properties {
             "WModeDispatch(quality, wmode);\n    }}, 1000);\n    return;\n  }}\n  if(quality.toLo" +
             "werCase() !== \"default\") {{\n    swf.Quality2 = quality;\n  }}\n  if(wmode.toLowerC" +
             "ase() !== \"default\") {{\n    swf.WMode = wmode;\n  }}\n  swf.style.zIndex = 1;\n}};\n" +
-            "\nvar shockwaveSetQualityAndWModeIntercept = function(quality, wmode) {{\n  var or" +
-            "igEmbedFlash = window.gadgets.flash.embedFlash;\n  gadgets.flash.embedFlash = fun" +
-            "ction(url, container, version, params) {{\n    if(typeof(params) == \"undefined\") " +
-            "params = {{}};\n    if(quality.toLowerCase() != \"default\") params.quality = quali" +
-            "ty;\n    if(wmode.toLowerCase() != \"default\") params.wmode = wmode;\n    origEmbed" +
-            "Flash(url, container, version, params);\n  }};\n}};\n\nshockwaveSetQualityAndWMode{0" +
-            "}(\"{1}\", \"{2}\");\n}})();\n")]
+            "\nvar shockwaveSetQualityAndWModeShim = function(quality, wmode) {{\n  var origEmb" +
+            "edFlash = window.gadgets.flash.embedFlash;\n  gadgets.flash.embedFlash = function" +
+            "(url, container, version, params) {{\n    if(typeof(params) == \"undefined\") param" +
+            "s = {{}};\n    if(quality.toLowerCase() != \"default\") params.quality = quality;\n " +
+            "   if(wmode.toLowerCase() != \"default\") params.wmode = wmode;\n    origEmbedFlash" +
+            "(url, container, version, params);\n  }};\n}};\n\nshockwaveSetQualityAndWMode{0}(\"{1" +
+            "}\", \"{2}\");\n}})();\n")]
         public string QualityScript {
             get {
                 return ((string)(this["QualityScript"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<script type=\"text/javascript\" src=\"http://kancolleviewer.local/flash_quality.js\"" +
-            "></script>")]
-        public string InjectScriptTag {
-            get {
-                return ((string)(this["InjectScriptTag"]));
             }
         }
     }
