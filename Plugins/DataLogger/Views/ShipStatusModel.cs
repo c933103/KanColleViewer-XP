@@ -12,7 +12,7 @@ namespace LynLogger.Views
 {
     public partial class ShipStatusModel : NotificationSourceObject
     {
-        private static readonly IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependencies =
+        private static readonly IDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependencies =
             new Dictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> {
                 [o => ((ShipStatusModel)o).Ships] = new List<Expression<Func<object, object>>> {
                     o => ((ShipStatusModel)o).ShipSortMode,
@@ -32,7 +32,7 @@ namespace LynLogger.Views
                     o => ((ShipStatusModel)o).SelectedShip }
             };
 
-        protected override IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency { get { return PropertyDependencies; } }
+        protected override IDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency { get { return PropertyDependencies; } }
 
         private Ship _selectedShip;
         private string _selectedMapArea = "1-1";

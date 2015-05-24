@@ -8,7 +8,7 @@ namespace LynLogger
 {
     public class ToolsModel : NotificationSourceObject
     {
-        public IReadOnlyList<TabViewItem> Pages { get; private set; }
+        public IList<TabViewItem> Pages { get; private set; }
 
         private TabViewItem _page;
         public TabViewItem SelectedPage

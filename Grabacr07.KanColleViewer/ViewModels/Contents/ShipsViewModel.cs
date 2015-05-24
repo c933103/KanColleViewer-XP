@@ -8,8 +8,8 @@ using Livet.EventListeners;
 
 namespace Grabacr07.KanColleViewer.ViewModels.Contents
 {
-	public class ShipsViewModel : ViewModel
-	{
+	public class ShipsViewModel : ViewModelEx
+    {
 		#region Count 変更通知プロパティ
 
 		private int _Count;

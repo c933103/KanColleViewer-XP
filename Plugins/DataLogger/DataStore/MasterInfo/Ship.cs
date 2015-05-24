@@ -65,7 +65,7 @@ namespace LynLogger.DataStore.MasterInfo
         public bool Locked { get { return bLocked != 0; } private set { bLocked = (byte)(value ? 1 : 0); } }
         
         /*Serialize37*/ internal EquiptInfo[] ZwEquipts;
-        public IReadOnlyList<EquiptInfo> Equipts { get { return ZwEquipts ?? (ZwEquipts = new EquiptInfo[0]); } }
+        public IList<EquiptInfo> Equipts { get { return ZwEquipts ?? (ZwEquipts = new EquiptInfo[0]); } }
         
         [Serialize(38)] public int MaxFuel { get; private set; }
         [Serialize(39)] public int MaxAmmo { get; private set; }
@@ -192,7 +192,7 @@ namespace LynLogger.DataStore.MasterInfo
             return Locked ^ (data.api_locked != 0);
         }
 
-        protected override IReadOnlyDictionary<ulong, HandlerInfo> CustomFieldHandlers
+        protected override IDictionary<ulong, HandlerInfo> CustomFieldHandlers
         {
             get
             {

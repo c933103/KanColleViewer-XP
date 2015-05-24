@@ -135,9 +135,9 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
 		#region Cultures 変更通知プロパティ
 
-		private IReadOnlyCollection<CultureViewModel> _Cultures;
+		private ICollection<CultureViewModel> _Cultures;
 
-		public IReadOnlyCollection<CultureViewModel> Cultures
+		public ICollection<CultureViewModel> Cultures
 		{
 			get { return this._Cultures; }
 			set

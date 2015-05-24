@@ -26,7 +26,7 @@ namespace LynLogger.Utilities
     {
         private delegate void UnboundHandler(TTarget @this);
 
-        private readonly WeakReference<TTarget> _target;
+        private readonly WeakReference _target;
         private readonly UnboundHandler _unboundHandler;
         private readonly Action<Action> _targetDead;
         private Action _handler;
@@ -35,7 +35,7 @@ namespace LynLogger.Utilities
 
         public WeakAction(Action a)
         {
-            _target = new WeakReference<TTarget>((TTarget)a.Target);
+            _target = new WeakReference((TTarget)a.Target);
             _unboundHandler = (UnboundHandler)Delegate.CreateDelegate(typeof(UnboundHandler), null, a.Method);
         }
 
@@ -46,8 +46,8 @@ namespace LynLogger.Utilities
 
         public void Invoke()
         {
-            TTarget target;
-            if(_target.TryGetTarget(out target)) {
+            TTarget target = _target.Target as TTarget;
+            if (target != null) {
                 _unboundHandler(target);
             } else {
                 if(_targetDead != null) {
@@ -67,7 +67,7 @@ namespace LynLogger.Utilities
     {
         private delegate void UnboundHandler(TTarget @this, TIn arg1);
 
-        private readonly WeakReference<TTarget> _target;
+        private readonly WeakReference _target;
         private readonly UnboundHandler _unboundHandler;
         private readonly Action<Action<TIn>> _targetDead;
         private Action<TIn> _handler;
@@ -76,7 +76,7 @@ namespace LynLogger.Utilities
 
         public WeakAction(Action<TIn> a)
         {
-            _target = new WeakReference<TTarget>((TTarget)a.Target);
+            _target = new WeakReference((TTarget)a.Target);
             _unboundHandler = (UnboundHandler)Delegate.CreateDelegate(typeof(UnboundHandler), null, a.Method);
         }
 
@@ -87,8 +87,8 @@ namespace LynLogger.Utilities
 
         public void Invoke(TIn arg)
         {
-            TTarget target;
-            if(_target.TryGetTarget(out target)) {
+            TTarget target = _target.Target as TTarget;
+            if(target != null) {
                 _unboundHandler(target, arg);
             } else {
                 if(_targetDead != null) {
@@ -108,7 +108,7 @@ namespace LynLogger.Utilities
     {
         private delegate void UnboundHandler(TTarget @this, TIn1 arg1, TIn2 arg2);
 
-        private readonly WeakReference<TTarget> _target;
+        private readonly WeakReference _target;
         private readonly UnboundHandler _unboundHandler;
         private readonly Action<Action<TIn1, TIn2>> _targetDead;
         private Action<TIn1, TIn2> _handler;
@@ -117,7 +117,7 @@ namespace LynLogger.Utilities
 
         public WeakAction(Action<TIn1, TIn2> a)
         {
-            _target = new WeakReference<TTarget>((TTarget)a.Target);
+            _target = new WeakReference((TTarget)a.Target);
             _unboundHandler = (UnboundHandler)Delegate.CreateDelegate(typeof(UnboundHandler), null, a.Method);
         }
 
@@ -128,8 +128,8 @@ namespace LynLogger.Utilities
 
         public void Invoke(TIn1 arg1, TIn2 arg2)
         {
-            TTarget target;
-            if(_target.TryGetTarget(out target)) {
+            TTarget target = _target.Target as TTarget;
+            if (target != null) {
                 _unboundHandler(target, arg1, arg2);
             } else {
                 if(_targetDead != null) {

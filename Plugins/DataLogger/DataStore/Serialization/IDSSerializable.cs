@@ -17,7 +17,7 @@ namespace LynLogger.DataStore.Serialization
         protected virtual ulong StructureVersion { get { return 0; } }
         protected ulong DeserializedStructureVersion { get; private set; }
 
-        protected virtual IReadOnlyDictionary<ulong, HandlerInfo> CustomFieldHandlers { get { return null; } }
+        protected virtual IDictionary<ulong, HandlerInfo> CustomFieldHandlers { get { return null; } }
 
         private static ConcurrentDictionary<ulong, HandlerInfo> _serializationHandlers = null;
         private IDictionary<ulong, Premitives.StoragePremitive> blackBox = new Dictionary<ulong, Premitives.StoragePremitive>();

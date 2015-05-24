@@ -54,7 +54,7 @@
                 </TextBlock>
                 <WrapPanel Orientation="Horizontal" Grid.Row="1">
                     <TextBlock Margin="3" Text="目标等级" />
-                    <TextBox Margin="3" Text="{Binding TargetLevel, Delay=500, UpdateSourceTrigger=PropertyChanged}" MinWidth="40"/>
+                    <TextBox Margin="3" Text="{Binding TargetLevel, UpdateSourceTrigger=PropertyChanged}" MinWidth="40"/>
                     <TextBlock Margin="3">
                         <Run Text="还需经验" />
                         <Run Text="{Binding RemainingExp, Mode=OneWay}" />

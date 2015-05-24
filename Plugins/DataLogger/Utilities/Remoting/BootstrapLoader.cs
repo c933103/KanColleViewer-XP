@@ -23,7 +23,7 @@ namespace LynLogger.Utilities.Remoting
             Assembly assembly;
             try {
                 assembly = AppDomain.CurrentDomain.Load(assemblyBinary);
-                comparer = assembly.GetCustomAttribute<ComparerClassAttribute>()?.ClassName;
+                comparer = (assembly.GetCustomAttributes(false).FirstOrDefault(x => x.GetType() == typeof(ComparerClassAttribute)) as ComparerClassAttribute)?.ClassName;
             } catch(Exception e) {
                 (new PermissionSet(PermissionState.Unrestricted)).Assert();
                 msgBuilder.Append("行0   列0   错误RT0001 : 无法加载程序集，发生异常 ");

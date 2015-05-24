@@ -6,7 +6,7 @@ using Livet;
 
 namespace Grabacr07.KanColleWrapper.Models
 {
-	public class ShipSlot : NotificationObject
+	public class ShipSlot : NotificationObjectEx
 	{
 		public SlotItem Item { get; private set; }
 

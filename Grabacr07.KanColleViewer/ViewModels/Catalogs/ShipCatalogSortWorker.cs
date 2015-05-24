@@ -8,8 +8,8 @@ using Livet;
 
 namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 {
-	public class ShipCatalogSortWorker : ViewModel
-	{
+	public class ShipCatalogSortWorker : ViewModelEx
+    {
 		#region static members
 
 		private const int selectorNum = 4;
@@ -179,8 +179,8 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 	}
 
 
-	public class SortableColumnSelector : ViewModel
-	{
+	public class SortableColumnSelector : ViewModelEx
+    {
 		internal Action<SortableColumnSelector> Updated { get; set; }
 
 		#region Current 変更通知プロパティ

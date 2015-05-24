@@ -77,8 +77,10 @@ namespace Grabacr07.KanColleViewer.Models
 
 		public static void SetMMCSSTask()
 		{
-			var index = 0u;
-			NativeMethods.AvSetMmThreadCharacteristics("Games", ref index);
+            try {
+                var index = 0u;
+                NativeMethods.AvSetMmThreadCharacteristics("Games", ref index);
+            } catch { } //Don't care if it failed.
 		}
 
 

@@ -13,12 +13,12 @@ namespace LynLogger.Models
     [Serializable]
     public abstract class NotificationSourceObject : INotifyPropertyChanged
     {
-        private static ConcurrentDictionary<Type, IReadOnlyDictionary<string, IReadOnlyCollection<string>>> _cache = new ConcurrentDictionary<Type, IReadOnlyDictionary<string, IReadOnlyCollection<string>>>();
+        private static ConcurrentDictionary<Type, IDictionary<string, ICollection<string>>> _cache = new ConcurrentDictionary<Type, IDictionary<string, ICollection<string>>>();
 
-        protected virtual IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency { get { return null; } }
+        protected virtual IDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency { get { return null; } }
 
         [NonSerialized]
-        private IReadOnlyDictionary<string, IReadOnlyCollection<string>> _propertyChangePath;
+        private IDictionary<string, ICollection<string>> _propertyChangePath;
 
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
@@ -37,7 +37,7 @@ namespace LynLogger.Models
             if(PropertyDependency == null) {
                 return;
             }
-            IReadOnlyDictionary<string, IReadOnlyCollection<string>> cached;
+            IDictionary<string, ICollection<string>> cached;
             if(_cache.TryGetValue(GetType(), out cached)) {
                 _propertyChangePath = cached;
                 return;
@@ -81,7 +81,7 @@ namespace LynLogger.Models
                 }
             }
 
-            _propertyChangePath = _cp.Select(x => new KeyValuePair<string, IReadOnlyCollection<string>>(x.Key, new Utilities.ReadOnlyCollectionWrapper<string>(x.Value))).ToDictionary(x => x.Key, x => x.Value);
+            _propertyChangePath = _cp.Select(x => new KeyValuePair<string, ICollection<string>>(x.Key, new Utilities.ReadOnlyCollectionWrapper<string>(x.Value))).ToDictionary(x => x.Key, x => x.Value);
             _cache.TryAdd(GetType(), _propertyChangePath);
         }
 

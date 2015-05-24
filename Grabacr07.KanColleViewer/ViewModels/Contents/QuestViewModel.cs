@@ -7,8 +7,8 @@ using Livet;
 
 namespace Grabacr07.KanColleViewer.ViewModels.Contents
 {
-	public class QuestViewModel : ViewModel
-	{
+	public class QuestViewModel : ViewModelEx
+    {
 		#region Type 変更通知プロパティ
 
 		private QuestType _Type;

@@ -10,8 +10,8 @@ using Livet.EventListeners;
 
 namespace Grabacr07.KanColleViewer.ViewModels
 {
-	public class VolumeViewModel : ViewModel
-	{
+	public class VolumeViewModel : ViewModelEx
+    {
 		private Volume volume;
 
 		#region IsMute 変更通知プロパティ

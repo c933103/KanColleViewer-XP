@@ -7,8 +7,8 @@ using Livet;
 
 namespace Grabacr07.KanColleViewer.ViewModels
 {
-	public class BindableTextViewModel : ViewModel
-	{
+	public class BindableTextViewModel : ViewModelEx
+    {
 		#region Text 変更通知プロパティ
 
 		private string _Text;

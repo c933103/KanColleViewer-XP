@@ -12,7 +12,7 @@ namespace Grabacr07.KanColleViewer.Models
 	/// <summary>
 	/// 主にメイン ウィンドウのステータス バーに表示する
 	/// </summary>
-	public class StatusService : NotificationObject
+	public class StatusService : Grabacr07.KanColleWrapper.NotificationObjectEx
 	{
 		#region static members
 

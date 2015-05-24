@@ -13,7 +13,7 @@ namespace Grabacr07.KanColleWrapper
 	/// <summary>
 	/// 艦娘と艦隊の編成を表します。
 	/// </summary>
-	public class Organization : NotificationObject
+	public class Organization : NotificationObjectEx
 	{
 		private readonly Homeport homeport;
 

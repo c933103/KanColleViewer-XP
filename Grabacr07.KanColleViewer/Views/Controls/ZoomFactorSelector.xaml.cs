@@ -31,7 +31,7 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 		private List<ZoomFactorSelectorItem> items;
 		private IDisposable zoomFactorNotifyListener;
 
-		internal class ZoomFactorSelectorItem : NotificationObject
+		internal class ZoomFactorSelectorItem : Grabacr07.KanColleWrapper.NotificationObjectEx
 		{
 			public Action SelectAction { get; set; }
 			public Size ScreenSize { get; set; }

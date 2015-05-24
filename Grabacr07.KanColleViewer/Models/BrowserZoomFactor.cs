@@ -7,7 +7,7 @@ using Livet;
 
 namespace Grabacr07.KanColleViewer.Models
 {
-	public class BrowserZoomFactor : NotificationObject, IZoomFactor
+	public class BrowserZoomFactor : Grabacr07.KanColleWrapper.NotificationObjectEx, IZoomFactor
 	{
 		private const double neutral = 1.0;
 
@@ -53,7 +53,7 @@ namespace Grabacr07.KanColleViewer.Models
 		public int CurrentParcentage
 		{
 			get { return this._CurrentParcentage; }
-			private set
+			set
 			{
 				if (this._CurrentParcentage != value)
 				{

@@ -17,7 +17,7 @@ namespace Grabacr07.KanColleViewer.Models
 		private string _Trademark;
 		private Version _Version;
 		private string _VersionString;
-		private IReadOnlyCollection<Library> _Libraries;
+		private ICollection<Library> _Libraries;
 
 		public string Title
 		{
@@ -77,7 +77,7 @@ namespace Grabacr07.KanColleViewer.Models
 #endif
 		}
 
-		public IReadOnlyCollection<Library> Libraries
+		public ICollection<Library> Libraries
 		{
 			get
 			{

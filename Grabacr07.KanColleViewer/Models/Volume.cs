@@ -4,13 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NAudioStripped.CoreAudioApi;
-using NAudioStripped.CoreAudioApi.Interfaces;
+using CoreAudioApi;
+using CoreAudioApi.Interfaces;
 using Livet;
 
 namespace Grabacr07.KanColleViewer.Models
 {
-	public class Volume : NotificationObject, IAudioSessionEvents
+	public class Volume : Grabacr07.KanColleWrapper.NotificationObjectEx, IAudioSessionEvents
 	{
 		private SimpleAudioVolume simpleAudioVolume;
 
@@ -61,16 +61,16 @@ namespace Grabacr07.KanColleViewer.Models
 			var processId = Process.GetCurrentProcess().Id;
 
 			var devenum = new MMDeviceEnumerator();
-			var device = devenum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+			var device = devenum.GetDefaultAudioEndpoint(EDataFlow.eRender, ERole.eMultimedia);
 
 			for (var i = 0; i < device.AudioSessionManager.Sessions.Count; i++)
 			{
 				var session = device.AudioSessionManager.Sessions[i];
-				if (session.GetProcessID == processId)
+				if (session.ProcessID == processId)
 				{
 					volume.simpleAudioVolume = session.SimpleAudioVolume;
 					volume.IsMute = session.SimpleAudioVolume.Mute;
-					volume.Value = (int)(session.SimpleAudioVolume.Volume * 100);
+					volume.Value = (int)(session.SimpleAudioVolume.MasterVolume * 100);
 					// ToDo: ↓ これ入れて通知受けるようにすると、通知が走ったタイミングでアプリが落ちる。意味不明。誰か助けて。
 					//session.RegisterAudioSessionNotification(volume);
 					return volume;
@@ -88,24 +88,24 @@ namespace Grabacr07.KanColleViewer.Models
 
 		public void SetVolume(int volume)
 		{
-			this.simpleAudioVolume.Volume = volume / 100.0f;
-			this.Value = (int)(this.simpleAudioVolume.Volume * 100);
+			this.simpleAudioVolume.MasterVolume = volume / 100.0f;
+			this.Value = (int)(this.simpleAudioVolume.MasterVolume * 100);
 		}
 
 		
 		#region IAudioSessionEvents
 
-		int IAudioSessionEvents.OnDisplayNameChanged(string newDisplayName, ref Guid eventContext)
+		int IAudioSessionEvents.OnDisplayNameChanged(string newDisplayName, Guid eventContext)
 		{
 			return 0;
 		}
 
-		int IAudioSessionEvents.OnIconPathChanged(string newIconPath, ref Guid eventContext)
+		int IAudioSessionEvents.OnIconPathChanged(string newIconPath, Guid eventContext)
 		{
 			return 0;
 		}
 
-		int IAudioSessionEvents.OnSimpleVolumeChanged(float newVolume, bool newMute, ref Guid eventContext)
+		int IAudioSessionEvents.OnSimpleVolumeChanged(float newVolume, bool newMute, Guid eventContext)
 		{
 			this.IsMute = newMute;
 			this.Value = (int)(newVolume * 100);
@@ -113,12 +113,12 @@ namespace Grabacr07.KanColleViewer.Models
 			return 0;
 		}
 
-		int IAudioSessionEvents.OnChannelVolumeChanged(uint channelCount, IntPtr newChannelVolumeArray, uint changedChannel, ref Guid eventContext)
+		int IAudioSessionEvents.OnChannelVolumeChanged(uint channelCount, IntPtr newChannelVolumeArray, uint changedChannel, Guid eventContext)
 		{
 			return 0;
 		}
 
-		int IAudioSessionEvents.OnGroupingParamChanged(ref Guid newGroupingParam, ref Guid eventContext)
+		int IAudioSessionEvents.OnGroupingParamChanged(Guid newGroupingParam, Guid eventContext)
 		{
 			return 0;
 		}

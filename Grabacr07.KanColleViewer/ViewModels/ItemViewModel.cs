@@ -6,8 +6,8 @@ using Livet;
 
 namespace Grabacr07.KanColleViewer.ViewModels
 {
-	public class ItemViewModel : ViewModel
-	{
+	public class ItemViewModel : ViewModelEx
+    {
 		#region IsSelected 変更通知プロパティ
 
 		private bool _IsSelected;

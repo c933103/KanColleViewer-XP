@@ -19,9 +19,7 @@ namespace Grabacr07.KanColleViewer.Plugins
 
 		public WindowsNotifier()
 		{
-			this.notifier = Windows8Notifier.IsSupported
-				? (INotifier) new Windows8Notifier()
-				: new Windows7Notifier();
+			this.notifier = new Windows7Notifier();
 		}
 
 		public void Dispose()

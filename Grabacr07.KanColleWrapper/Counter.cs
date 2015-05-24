@@ -9,7 +9,7 @@ using Livet;
 
 namespace Grabacr07.KanColleWrapper
 {
-	public abstract class CounterBase : NotificationObject
+	public abstract class CounterBase : NotificationObjectEx
 	{
 		#region Count 変更通知プロパティ
 

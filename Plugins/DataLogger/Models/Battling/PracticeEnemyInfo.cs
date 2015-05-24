@@ -12,7 +12,7 @@ namespace LynLogger.Models.Battling
         internal EnemyShipInfo[] ZwEnemyShips;
         internal string ZwRawData;
 
-        public IReadOnlyList<EnemyShipInfo> EnemyShips { get { return ZwEnemyShips; } }
+        public IList<EnemyShipInfo> EnemyShips { get { return ZwEnemyShips; } }
         public string RawData { get { return ZwRawData; } }
 
         public int DrillBasicExp

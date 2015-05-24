@@ -14,7 +14,7 @@ namespace LynLogger.Views
 
         private Func<IEnumerable<KeyValuePair<long, double>>> _histogramFactory;
 
-        public IReadOnlyList<TabViewItem> Pages { get; private set; }
+        public IList<TabViewItem> Pages { get; private set; }
 
         private TabViewItem _page;
         public TabViewItem SelectedPage

@@ -9,8 +9,8 @@ using Livet;
 
 namespace Counter
 {
-	public class CounterViewModel : ViewModel
-	{
+	public class CounterViewModel : Grabacr07.KanColleViewer.ViewModels.ViewModelEx
+    {
 		#region Counters 変更通知プロパティ
 
 		private ObservableCollection<CounterBase> _Counters;

@@ -8,8 +8,8 @@ using Livet;
 
 namespace Grabacr07.KanColleViewer.ViewModels
 {
-	public class StartContentViewModel : ViewModel
-	{
+	public class StartContentViewModel : ViewModelEx
+    {
 		#region singleton 
 
 		private static readonly StartContentViewModel instance = new StartContentViewModel();

@@ -9,7 +9,7 @@ using Livet;
 namespace Grabacr07.KanColleWrapper
 {
 	[Serializable]
-	public class KanColleClientSettings : NotificationObject
+	public class KanColleClientSettings : NotificationObjectEx
 	{
 		#region NotificationShorteningTime 変更通知プロパティ
 

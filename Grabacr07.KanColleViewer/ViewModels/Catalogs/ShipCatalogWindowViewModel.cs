@@ -18,7 +18,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 		private readonly Homeport homeport = KanColleClient.Current.Homeport;
 
 		public ShipCatalogSortWorker SortWorker { get; private set; }
-		public IReadOnlyCollection<ShipTypeViewModel> ShipTypes { get; private set; }
+		public ICollection<ShipTypeViewModel> ShipTypes { get; private set; }
 
 		public ShipLevelFilter ShipLevelFilter { get; private set; }
 		public ShipLockFilter ShipLockFilter { get; private set; }
@@ -40,9 +40,9 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 
 		#region Ships 変更通知プロパティ
 
-		private IReadOnlyCollection<ShipViewModel> _Ships;
+		private ICollection<ShipViewModel> _Ships;
 
-		public IReadOnlyCollection<ShipViewModel> Ships
+		public ICollection<ShipViewModel> Ships
 		{
 			get { return this._Ships; }
 			set

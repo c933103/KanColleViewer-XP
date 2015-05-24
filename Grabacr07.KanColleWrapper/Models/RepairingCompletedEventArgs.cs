@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Grabacr07.KanColleWrapper.Models
 {
-	public class RepairingCompletedEventArgs
+	public class RepairingCompletedEventArgs : EventArgs
 	{
 		/// <summary>
 		/// 入渠が完了したドックを一意に識別する ID を取得します。

@@ -15,6 +15,21 @@ namespace Grabacr07.KanColleViewer.Models
 		event EventHandler GoBackRequested;
 		event EventHandler GoForwardRequested;
 		event EventHandler RefreshRequested;
-		event EventHandler<Uri> UriRequested;
+		event EventHandler<UriEventArgs> UriRequested;
 	}
+
+    public class UriEventArgs : EventArgs
+    {
+        private Uri _uri;
+
+        public static implicit operator Uri(UriEventArgs e)
+        {
+            return e._uri;
+        }
+
+        public static implicit operator UriEventArgs(Uri e)
+        {
+            return new UriEventArgs { _uri = e };
+        }
+    }
 }

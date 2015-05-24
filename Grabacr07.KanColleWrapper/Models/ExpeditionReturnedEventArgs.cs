@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Grabacr07.KanColleWrapper.Models
 {
-	public class ExpeditionReturnedEventArgs
+	public class ExpeditionReturnedEventArgs : EventArgs
 	{
 		public string FleetName { get; private set; }
 

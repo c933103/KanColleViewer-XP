@@ -10,8 +10,8 @@ using Livet.Messaging.Windows;
 
 namespace Grabacr07.KanColleViewer.ViewModels
 {
-	public class WindowViewModel : ViewModel
-	{
+	public class WindowViewModel : ViewModelEx
+    {
 		#region Title 変更通知プロパティ
 
 		private string _Title = "Window";

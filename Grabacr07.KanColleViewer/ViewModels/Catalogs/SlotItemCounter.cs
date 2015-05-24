@@ -14,7 +14,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 
 		public SlotItemInfo Target { get; private set; }
 
-		public IReadOnlyCollection<SlotItemCounterByLevel> Levels
+		public ICollection<SlotItemCounterByLevel> Levels
 		{
 			get { return this.itemsByLevel.OrderBy(x => x.Key).Select(x => x.Value).ToList(); }
 		}
@@ -50,7 +50,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 
 		public int Level { get; set; }
 
-		public IReadOnlyCollection<SlotItemCounterByShip> Ships
+		public ICollection<SlotItemCounterByShip> Ships
 		{
 			get { return this.itemsByShip.Values.OrderByDescending(x => x.Ship.Level).ThenBy(x => x.Ship.SortNumber).ToList(); }
 		}

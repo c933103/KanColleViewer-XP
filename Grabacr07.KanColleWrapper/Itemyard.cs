@@ -11,7 +11,7 @@ using Livet;
 
 namespace Grabacr07.KanColleWrapper
 {
-	public class Itemyard : NotificationObject
+	public class Itemyard : NotificationObjectEx
 	{
 		/// <summary>
 		/// 出撃中にドロップで入手した装備の数。

@@ -80,7 +80,7 @@ namespace LynLogger.DataStore.LogBook
             if(UpdateTime == 0) UpdateTime = Helpers.UnixTimestamp;
         }
 
-        protected override IReadOnlyDictionary<ulong, HandlerInfo> CustomFieldHandlers
+        protected override IDictionary<ulong, HandlerInfo> CustomFieldHandlers
         {
             get
             {

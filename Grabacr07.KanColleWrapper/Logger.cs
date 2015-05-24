@@ -13,7 +13,7 @@ using Livet;
 
 namespace Grabacr07.KanColleWrapper
 {
-	public class Logger : NotificationObject
+	public class Logger : NotificationObjectEx
 	{
 		public bool EnableLogging { get; set; }
 

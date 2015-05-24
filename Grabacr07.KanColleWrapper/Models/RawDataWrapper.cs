@@ -10,7 +10,7 @@ namespace Grabacr07.KanColleWrapper.Models
 	/// 艦これ API からの応答に含まれる api_data (生のデータ) をラップします。
 	/// </summary>
 	/// <typeparam name="T">ラップする api_data (生のデータ) の型。</typeparam>
-	public abstract class RawDataWrapper<T> : NotificationObject
+	public abstract class RawDataWrapper<T> : NotificationObjectEx
 	{
 		/// <summary>
 		/// 艦これ API からの応答に含まれる api_data をパースした生のデータを取得します。

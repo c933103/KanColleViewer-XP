@@ -11,7 +11,7 @@ namespace Grabacr07.KanColleViewer.Models
 	/// <summary>
 	/// 多言語化されたリソースへのアクセスを提供します。
 	/// </summary>
-	public class ResourceService : NotificationObject
+	public class ResourceService : Grabacr07.KanColleWrapper.NotificationObjectEx
 	{
 		#region static members
 
@@ -36,7 +36,7 @@ namespace Grabacr07.KanColleViewer.Models
 		};
 
 		private readonly Resources _Resources = new Resources();
-		private readonly IReadOnlyCollection<CultureInfo> _SupportedCultures;
+		private readonly ICollection<CultureInfo> _SupportedCultures;
 
 		/// <summary>
 		/// 多言語化されたリソースを取得します。
@@ -49,7 +49,7 @@ namespace Grabacr07.KanColleViewer.Models
 		/// <summary>
 		/// サポートされているカルチャを取得します。
 		/// </summary>
-		public IReadOnlyCollection<CultureInfo> SupportedCultures
+		public ICollection<CultureInfo> SupportedCultures
 		{
 			get { return this._SupportedCultures; }
 		}

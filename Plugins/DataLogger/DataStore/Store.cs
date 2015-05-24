@@ -52,7 +52,7 @@ namespace LynLogger.DataStore
                             input.ReadFully(buf);
                             if(buf.SequenceEqual(_masterHeader)) {
                                 //deserialize
-                                using (DSReader rdr = new DSReader(input, true)) {
+                                using (DSReader rdr = new DSReader(input)) {
                                     store = new Store(Premitives.StoragePremitive.Parse(rdr), new LinkedList<object>());
                                     goto register;
                                 }
@@ -84,7 +84,7 @@ namespace LynLogger.DataStore
                         input.ReadFully(buf);
                         if(buf.SequenceEqual(_logHeader)) {
                             //deserialize
-                            using (DSReader rdr = new DSReader(input, true)) {
+                            using (DSReader rdr = new DSReader(input)) {
                                 return new Logbook(Premitives.StoragePremitive.Parse(rdr), new LinkedList<object>());
                             }
                         }
@@ -109,7 +109,7 @@ namespace LynLogger.DataStore
             return string.Format("{0}-{1}.logbook", Encoding.UTF8.GetBytes(memberId).Base32Encode(), seq);
         }
         
-        private Dictionary<ulong, WeakReference<Logbook>> _logbooks = new Dictionary<ulong, WeakReference<Logbook>>();
+        private Dictionary<ulong, WeakReference> _logbooks = new Dictionary<ulong, WeakReference>();
         private HashSet<Logbook> _dirtyLogbooks = new HashSet<Logbook>();
         [Serialize(0)] public string MemberId { get; private set; }
         /*Serialize1*/ internal SortedSet<ulong> _logbookSequence;
@@ -124,7 +124,7 @@ namespace LynLogger.DataStore
         public LogbookAccessor Logbooks { get; }
 
         public ShipsAccessor Ships { get; }
-        public IReadOnlyCollection<ulong> LogbookSequence { get; }
+        public ICollection<ulong> LogbookSequence { get; }
 
         public Store(Premitives.StoragePremitive info, LinkedList<object> serializationPath) : base(info, serializationPath)
         {
@@ -161,7 +161,7 @@ namespace LynLogger.DataStore
             try {
                 using (Stream output = File.OpenWrite(Path.Combine(_dataDir, MasterTableFilename(MemberId)))) {
                     output.Write(_masterHeader, 0, _masterHeader.Length);
-                    using (DSWriter wr = new DSWriter(output, true)) {
+                    using (DSWriter wr = new DSWriter(output)) {
                         GetSerializationInfo().Serialize(wr);
                     }
                 }
@@ -172,7 +172,7 @@ namespace LynLogger.DataStore
                 try {
                     using (Stream output = File.OpenWrite(Path.Combine(_dataDir, LogbookFilename(book.MemberId, book.SequenceId)))) {
                         output.Write(_logHeader, 0, _logHeader.Length);
-                        using (DSWriter wr = new DSWriter(output, true)) {
+                        using (DSWriter wr = new DSWriter(output)) {
                             book.GetSerializationInfo().Serialize(wr);
                         }
                     }
@@ -190,7 +190,7 @@ namespace LynLogger.DataStore
             if(_onShipDataChange != null) _onShipDataChange(this, id);
         }
 
-        protected override IReadOnlyDictionary<ulong, HandlerInfo> CustomFieldHandlers
+        protected override IDictionary<ulong, HandlerInfo> CustomFieldHandlers
         {
             get
             {
@@ -242,15 +242,15 @@ namespace LynLogger.DataStore
                 {
                     if(seq == 0) return _store.Weekbook;
 
-                    WeakReference<Logbook> _reference;
+                    WeakReference _reference;
                     if(_store._logbooks.TryGetValue(seq, out _reference)) {
-                        Logbook _target;
-                        if(_reference.TryGetTarget(out _target)) {
+                        Logbook _target = _reference.Target as Logbook;
+                        if(_target != null) {
                             return _target;
                         }
                     }
                     Logbook newBook = LoadLogbook(_store, seq);
-                    _store._logbooks[seq] = new WeakReference<Logbook>(newBook);
+                    _store._logbooks[seq] = new WeakReference(newBook);
                     _store._logbookSequence.Add(seq);
                     _store._dirtyLogbooks.Add(newBook); //TODO Remove this.
                     return newBook;

@@ -10,7 +10,7 @@ namespace LynLogger.DataStore.IO
 {
     public class DSWriter : BinaryWriter
     {
-        public DSWriter(Stream output, bool leaveOpen = false) : base(output, Encoding.Unicode, leaveOpen) { }
+        public DSWriter(Stream output) : base(output, Encoding.Unicode) { }
 
         public void Write7b(ulong val)
         {

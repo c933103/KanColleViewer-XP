@@ -10,7 +10,7 @@ namespace LynLogger.DataStore.IO
 {
     public class DSReader : BinaryReader
     {
-        public DSReader(Stream input, bool leaveOpen = false) : base(input, Encoding.Unicode, leaveOpen) { }
+        public DSReader(Stream input) : base(input, Encoding.Unicode) { }
         
         public long Read7bInt()
         {

@@ -8,7 +8,7 @@ namespace LynLogger.Views
 {
     public class BattleNetaModel : Models.NotificationSourceObject
     {
-        private static readonly IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependencies =
+        private static readonly IDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependencies =
             new Dictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> {
                 [o => ((BattleNetaModel)o).EstimatedExp] = new List<Expression<Func<object, object>>> {
                     o => ((BattleNetaModel)o).Battle},
@@ -16,7 +16,7 @@ namespace LynLogger.Views
                     o => ((BattleNetaModel)o).Battle},
             };
 
-        protected override IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency { get { return PropertyDependencies; } }
+        protected override IDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency { get { return PropertyDependencies; } }
 
         private ViewState _state = ViewState.AnticipateBattle;
 

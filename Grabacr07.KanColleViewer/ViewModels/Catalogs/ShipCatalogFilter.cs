@@ -9,7 +9,7 @@ using Livet;
 
 namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 {
-	public abstract class ShipCatalogFilter : NotificationObject
+	public abstract class ShipCatalogFilter : Grabacr07.KanColleWrapper.NotificationObjectEx
 	{
 		private readonly Action action;
 

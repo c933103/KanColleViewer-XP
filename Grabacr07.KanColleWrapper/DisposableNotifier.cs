@@ -6,7 +6,7 @@ using Livet;
 
 namespace Grabacr07.KanColleWrapper
 {
-	public class DisposableNotifier : NotificationObject, IDisposable
+	public class DisposableNotifier : NotificationObjectEx, IDisposable
 	{
 		protected LivetCompositeDisposable CompositeDisposable { get; private set; }
 

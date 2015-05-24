@@ -9,8 +9,8 @@ using Livet;
 
 namespace Grabacr07.KanColleViewer.ViewModels
 {
-	public class MainContentViewModel : ViewModel
-	{
+	public class MainContentViewModel : ViewModelEx
+    {
 		public AdmiralViewModel Admiral { get; private set; }
 		public MaterialsViewModel Materials { get; private set; }
 		public ShipsViewModel Ships { get; private set; }

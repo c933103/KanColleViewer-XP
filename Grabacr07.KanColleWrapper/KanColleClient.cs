@@ -11,7 +11,7 @@ using Livet;
 
 namespace Grabacr07.KanColleWrapper
 {
-	public class KanColleClient : NotificationObject
+	public class KanColleClient : NotificationObjectEx
 	{
 		#region singleton
 
@@ -128,8 +128,8 @@ namespace Grabacr07.KanColleWrapper
 
 			proxy.api_start2.FirstAsync().Subscribe(async session =>
 			{
-				var timeout = Task.Delay(TimeSpan.FromSeconds(20));
-				var canInitialize = await Task.WhenAny(new Task[] { basic, kdock, sitem }.WhenAll(), timeout) != timeout;
+				var timeout = TaskEx.Delay(TimeSpan.FromSeconds(20));
+				var canInitialize = await TaskEx.WhenAny(new Task[] { basic, kdock, sitem }.WhenAll(), timeout) != timeout;
 
 				// タイムアウト仕掛けてるのは、今後のアップデートで basic, kdock, slot_item のいずれかが来なくなったときに
 				// 起動できなくなる (IsStarted を true にできなくなる) のを防ぐため

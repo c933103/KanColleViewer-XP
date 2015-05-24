@@ -43,7 +43,7 @@ namespace LynLogger.DataStore
             foreach(var k in keys) _ships.Remove(k);
         }
 
-        protected override IReadOnlyDictionary<ulong, HandlerInfo> CustomFieldHandlers
+        protected override IDictionary<ulong, HandlerInfo> CustomFieldHandlers
         {
             get
             {

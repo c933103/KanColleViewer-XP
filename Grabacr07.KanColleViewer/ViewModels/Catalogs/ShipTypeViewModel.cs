@@ -7,8 +7,8 @@ using Livet;
 
 namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 {
-	public class ShipTypeViewModel : ViewModel
-	{
+	public class ShipTypeViewModel : ViewModelEx
+    {
 		public Action SelectionChangedAction { get; set; }
 
 		#region Id 変更通知プロパティ

@@ -70,7 +70,7 @@ namespace Grabacr07.KanColleViewer.Views.Behaviors
 			}
 		}
 
-		private void NavigatorOnUriRequested(object sender, Uri uri)
+		private void NavigatorOnUriRequested(object sender, UriEventArgs uri)
 		{
 			this.AssociatedObject.Navigate(uri);
 		}

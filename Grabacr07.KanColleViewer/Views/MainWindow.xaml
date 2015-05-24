@@ -13,6 +13,7 @@
 				   xmlns:behaviors="clr-namespace:Grabacr07.KanColleViewer.Views.Behaviors"
 				   xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls"
 				   xmlns:models="clr-namespace:Grabacr07.KanColleViewer.Models"
+                   xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell"
 				   mc:Ignorable="d"
 				   d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
 				   Title="{Binding Title}"
@@ -94,7 +95,7 @@
 							Orientation="Horizontal"
 							HorizontalAlignment="Right"
 							VerticalAlignment="Top"
-							WindowChrome.IsHitTestVisibleInChrome="True">
+							shell:WindowChrome.IsHitTestVisibleInChrome="True">
 
                     <Path x:Name="DLIndicator" Data="M 3,15 L 7,15 7,21 10,21 5,27 0,21 3,21 Z" Stroke="Gray" Fill="Transparent">
                         <Path.Style>

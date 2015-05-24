@@ -10,7 +10,7 @@ using Livet.Commands;
 
 namespace Grabacr07.KanColleViewer.ViewModels
 {
-	public class NavigatorViewModel : ViewModel, INavigator
+	public class NavigatorViewModel : ViewModelEx, INavigator
 	{
 		#region Source 変更通知プロパティ
 
@@ -126,7 +126,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 		public event EventHandler GoBackRequested;
 		public event EventHandler GoForwardRequested;
 		public event EventHandler RefreshRequested;
-		public event EventHandler<Uri> UriRequested;
+		public event EventHandler<UriEventArgs> UriRequested;
 
 		public void GoBack()
 		{

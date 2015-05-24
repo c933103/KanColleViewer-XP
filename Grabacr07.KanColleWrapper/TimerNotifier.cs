@@ -13,7 +13,7 @@ namespace Grabacr07.KanColleWrapper
 	/// <summary>
 	/// 1 秒刻みのタイマー機能をサポートする変更通知オブジェクトを表します。
 	/// </summary>
-	public class TimerNotifier : NotificationObject, IDisposable
+	public class TimerNotifier : NotificationObjectEx, IDisposable
 	{
 		#region static members
 

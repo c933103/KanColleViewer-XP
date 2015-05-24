@@ -13,7 +13,7 @@ namespace Grabacr07.KanColleWrapper
 	/// 整数値の ID をキーとして使用する、艦これユーザー データ用のテーブルを定義します。
 	/// </summary>
 	/// <typeparam name="TValue">ユーザー データの型。</typeparam>
-	public class MemberTable<TValue> : IReadOnlyDictionary<int, TValue> where TValue : class, IIdentifiable
+	public class MemberTable<TValue> : IDictionary<int, TValue> where TValue : class, IIdentifiable
 	{
 		private readonly IDictionary<int, TValue> dictionary;
 
@@ -23,9 +23,9 @@ namespace Grabacr07.KanColleWrapper
 		public TValue this[int key]
 		{
 			get { return this.dictionary.ContainsKey(key) ? this.dictionary[key] : null; }
-		}
-
-
+            set { throw new InvalidOperationException(); }
+        }
+        
 		public MemberTable() : this(new List<TValue>()) { }
 
 		public MemberTable(IEnumerable<TValue> source)
@@ -50,7 +50,7 @@ namespace Grabacr07.KanColleWrapper
 		}
 
 
-		#region IReadOnlyDictionary<TK, TV> members
+		#region IDictionary<TK, TV> members
 
 		public IEnumerator<KeyValuePair<int, TValue>> GetEnumerator()
 		{
@@ -77,16 +77,53 @@ namespace Grabacr07.KanColleWrapper
 			return this.dictionary.TryGetValue(key, out value);
 		}
 
-		public IEnumerable<int> Keys
+        public ICollection<int> Keys
 		{
 			get { return this.dictionary.Keys; }
 		}
 
-		public IEnumerable<TValue> Values
+		public ICollection<TValue> Values
 		{
 			get { return this.dictionary.Values; }
-		}
+        }
 
-		#endregion
-	}
+        bool ICollection<KeyValuePair<int, TValue>>.Contains(KeyValuePair<int, TValue> item)
+        {
+            return dictionary.Contains(item);
+        }
+
+        void ICollection<KeyValuePair<int, TValue>>.CopyTo(KeyValuePair<int, TValue>[] array, int arrayIndex)
+        {
+            dictionary.CopyTo(array, arrayIndex);
+        }
+
+        bool ICollection<KeyValuePair<int, TValue>>.IsReadOnly { get { return true; } }
+
+        void IDictionary<int, TValue>.Add(int key, TValue value)
+        {
+            throw new InvalidOperationException();
+        }
+
+        bool IDictionary<int, TValue>.Remove(int key)
+        {
+            throw new InvalidOperationException();
+        }
+
+        void ICollection<KeyValuePair<int, TValue>>.Add(KeyValuePair<int, TValue> item)
+        {
+            throw new InvalidOperationException();
+        }
+
+        void ICollection<KeyValuePair<int, TValue>>.Clear()
+        {
+            throw new InvalidOperationException();
+        }
+
+        bool ICollection<KeyValuePair<int, TValue>>.Remove(KeyValuePair<int, TValue> item)
+        {
+            throw new InvalidOperationException();
+        }
+
+        #endregion
+    }
 }

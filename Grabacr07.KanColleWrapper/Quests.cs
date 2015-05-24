@@ -18,15 +18,15 @@ using Livet;
 
 namespace Grabacr07.KanColleWrapper
 {
-	public class Quests : NotificationObject
+	public class Quests : NotificationObjectEx
 	{
 		private readonly List<ConcurrentDictionary<int, Quest>> questPages;
 
 		#region All 変更通知プロパティ
 
-		private IReadOnlyCollection<Quest> _All;
+		private ICollection<Quest> _All;
 
-		public IReadOnlyCollection<Quest> All
+		public ICollection<Quest> All
 		{
 			get { return this._All; }
 			set
@@ -43,12 +43,12 @@ namespace Grabacr07.KanColleWrapper
 
 		#region Current 変更通知プロパティ
 
-		private IReadOnlyCollection<Quest> _Current;
+		private ICollection<Quest> _Current;
 
 		/// <summary>
 		/// 現在遂行中の任務のリストを取得します。未取得の任務がある場合、リスト内に null が含まれることに注意してください。
 		/// </summary>
-		public IReadOnlyCollection<Quest> Current
+		public ICollection<Quest> Current
 		{
 			get { return this._Current; }
 			set

@@ -8,7 +8,7 @@ using Livet;
 
 namespace Grabacr07.KanColleViewer.ViewModels.Composition
 {
-	public abstract class PluginViewModelBase<TPlugin> : ViewModel where TPlugin : IPlugin
+	public abstract class PluginViewModelBase<TPlugin> : ViewModelEx where TPlugin : IPlugin
 	{
 		protected TPlugin Plugin { get; private set; }
 

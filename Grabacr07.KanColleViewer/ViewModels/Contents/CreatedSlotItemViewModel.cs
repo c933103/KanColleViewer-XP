@@ -7,8 +7,8 @@ using Livet;
 
 namespace Grabacr07.KanColleViewer.ViewModels.Contents
 {
-	public class CreatedSlotItemViewModel : ViewModel
-	{
+	public class CreatedSlotItemViewModel : ViewModelEx
+    {
 		#region Succeed 変更通知プロパティ
 
 		private bool? _Succeed;

@@ -17,9 +17,9 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 
 		#region SlotItems 変更通知プロパティ
 
-		private IReadOnlyCollection<SlotItemCounter> _SlotItems;
+		private ICollection<SlotItemCounter> _SlotItems;
 
-		public IReadOnlyCollection<SlotItemCounter> SlotItems
+		public ICollection<SlotItemCounter> SlotItems
 		{
 			get { return this._SlotItems; }
 			set

@@ -7,8 +7,8 @@ using Livet;
 
 namespace Grabacr07.KanColleViewer.ViewModels
 {
-	public class StatusBarViewModel : ViewModel
-	{
+	public class StatusBarViewModel : ViewModelEx
+    {
 		#region NotificationMessage 変更通知プロパティ
 
 		private string _NotificationMessage;
