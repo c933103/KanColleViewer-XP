@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using Grabacr07.Portable;
+//using Grabacr07.Portable;
 
 namespace Grabacr07.Desktop.Metro.Converters
 {
@@ -27,13 +27,15 @@ namespace Grabacr07.Desktop.Metro.Converters
 				if (pValue != null)
 				{
 					var p = pValue.Split(':');
-					if (p.Length >= 1)
-					{
+					if (p.Length >= 1) {
+                        Enum.TryParse(p[0], true, out result);
+                        /* WTF
 						// 最初のパラメーターに Visible 以外が設定されていたら、true に対応する Visibility を上書き
 						if (p[0].Compare("Hidden")) result = Visibility.Hidden;
 						else if (p[0].Compare("Collapsed")) result = Visibility.Collapsed;
-					}
-				}
+                        */
+                    }
+                }
 			}
 			else
 			{
@@ -42,13 +44,15 @@ namespace Grabacr07.Desktop.Metro.Converters
 				if (pValue != null)
 				{
 					var p = pValue.Split(':');
-					if (p.Length >= 2)
-					{
-						// 2 番目のパラメーターに Collapsed 以外が設定されていたら、false に対応する Visibility を上書き
-						if (p[1].Compare("Visible")) result = Visibility.Visible;
+					if (p.Length >= 2) {
+                        Enum.TryParse(p[0], true, out result);
+                        /* WTF
+                        // 2 番目のパラメーターに Collapsed 以外が設定されていたら、false に対応する Visibility を上書き
+                        if (p[1].Compare("Visible")) result = Visibility.Visible;
 						else if (p[1].Compare("Hidden")) result = Visibility.Hidden;
-					}
-				}
+                        */
+                    }
+                }
 			}
 
 			return result;
