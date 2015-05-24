@@ -115,7 +115,9 @@ namespace Grabacr07.KanColleWrapper
 			NativeMethods.InternetSetOption(IntPtr.Zero, INTERNET_OPTION_PROXY, proxyInfoPtr, proxyInfoSize);
 
             Marshal.FreeCoTaskMem(proxyInfoPtr);
-		}
+            Marshal.FreeHGlobal(proxyInfo.proxy);
+            Marshal.FreeHGlobal(proxyInfo.proxyBypass);
+        }
 
 		/// <summary>
 		/// Fiddler からのリクエスト発行時にプロキシを挟む設定を行います。
