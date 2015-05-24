@@ -45,7 +45,7 @@ namespace Grabacr07.Desktop.Metro.Converters
 				{
 					var p = pValue.Split(':');
 					if (p.Length >= 2) {
-                        Enum.TryParse(p[0], true, out result);
+                        Enum.TryParse(p[1], true, out result);
                         /* WTF
                         // 2 番目のパラメーターに Collapsed 以外が設定されていたら、false に対応する Visibility を上書き
                         if (p[1].Compare("Visible")) result = Visibility.Visible;
