@@ -289,18 +289,10 @@ namespace Grabacr07.KanColleViewer.ViewModels
         #endregion
 
         private long _receivedBytes = 0;
-        private long _sentBytes = 0;
-        public long ReceivedBytes
-        {
-            get { return _receivedBytes; }
-            set { _receivedBytes = value; RaisePropertyChanged(); }
-        }
+        public long ReceivedBytes { get { return _receivedBytes; } }
 
-        public long SentBytes
-        {
-            get { return _sentBytes; }
-            set { _sentBytes = value; RaisePropertyChanged(); }
-        }
+        private long _sentBytes = 0;
+        public long SentBytes { get { return _sentBytes; } }
 
 		public SettingsViewModel()
 		{
@@ -343,8 +335,8 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
 			this.ReloadPlugins();
 
-            KanColleClient.Current.Proxy.OnBytesReceived += i => ReceivedBytes += i;
-            KanColleClient.Current.Proxy.OnBytesSent += i => SentBytes += i;
+            Fiddler.FiddlerApplication.OnReadRequestBuffer += (_, e) => { System.Threading.Interlocked.Add(ref _sentBytes, e.iCountOfBytes);RaisePropertyChanged(nameof(SentBytes)); };
+            Fiddler.FiddlerApplication.OnReadResponseBuffer += (_, e) => { System.Threading.Interlocked.Add(ref _receivedBytes, e.iCountOfBytes); RaisePropertyChanged(nameof(ReceivedBytes)); };
             Settings.Current.PropertyChanged += (o, e) => {
                 if (e.PropertyName == nameof(Settings.Current.FlashQuality)) RaisePropertyChanged(e.PropertyName);
                 if (e.PropertyName == nameof(Settings.Current.FlashRenderMode)) RaisePropertyChanged(e.PropertyName);
