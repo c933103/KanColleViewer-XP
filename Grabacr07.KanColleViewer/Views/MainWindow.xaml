@@ -97,42 +97,51 @@
 							VerticalAlignment="Top"
 							shell:WindowChrome.IsHitTestVisibleInChrome="True">
 
-                    <Path x:Name="DLIndicator" Data="M 3,15 L 7,15 7,21 10,21 5,27 0,21 3,21 Z" Stroke="Gray" Fill="Transparent">
-                        <Path.Style>
-                            <Style>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding DownloadActive}" Value="True">
-                                        <DataTrigger.EnterActions>
-                                            <StopStoryboard BeginStoryboardName="DLExit" />
-                                            <BeginStoryboard x:Name="DLEnter" Storyboard="{StaticResource DLActive}" />
-                                        </DataTrigger.EnterActions>
-                                        <DataTrigger.ExitActions>
-                                            <StopStoryboard BeginStoryboardName="DLEnter" />
-                                            <BeginStoryboard x:Name="DLExit" Storyboard="{StaticResource DLActive}" />
-                                        </DataTrigger.ExitActions>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Path.Style>
-                    </Path>
-                    <Path x:Name="ULIndicator" Data="M 3,15 L 7,15 7,9 10,9 5,3 0,9 3,9 Z" Stroke="Gray" Fill="Transparent" Margin="-3,0,0,0">
-                        <Path.Style>
-                            <Style>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding UploadActive}" Value="True">
-                                        <DataTrigger.EnterActions>
-                                            <StopStoryboard BeginStoryboardName="ULExit" />
-                                            <BeginStoryboard x:Name="ULEnter" Storyboard="{StaticResource ULActive}" />
-                                        </DataTrigger.EnterActions>
-                                        <DataTrigger.ExitActions>
-                                            <StopStoryboard BeginStoryboardName="ULEnter" />
-                                            <BeginStoryboard x:Name="ULExit" Storyboard="{StaticResource ULActive}" />
-                                        </DataTrigger.ExitActions>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Path.Style>
-                    </Path>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10px" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <UniformGrid Grid.Row="0" Columns="2">
+                            <Path x:Name="ULIndicator" Data="M 2.5,10 L 5.5,10 5.5,6 8,6 4,0 0,6 2.5,6 Z" Stroke="Gray" Fill="Transparent" HorizontalAlignment="Right">
+                                <Path.Style>
+                                    <Style>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding UploadActive}" Value="True">
+                                                <DataTrigger.EnterActions>
+                                                    <StopStoryboard BeginStoryboardName="ULExit" />
+                                                    <BeginStoryboard x:Name="ULEnter" Storyboard="{StaticResource ULActive}" />
+                                                </DataTrigger.EnterActions>
+                                                <DataTrigger.ExitActions>
+                                                    <StopStoryboard BeginStoryboardName="ULEnter" />
+                                                    <BeginStoryboard x:Name="ULExit" Storyboard="{StaticResource ULActive}" />
+                                                </DataTrigger.ExitActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Path.Style>
+                            </Path>
+                            <Path x:Name="DLIndicator" Data="M 2.5,0 L 5.5,0 5.5,4 8,4 4,10 0,4 2.5,4 Z" Stroke="Gray" Fill="Transparent" HorizontalAlignment="Left">
+                                <Path.Style>
+                                    <Style>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding DownloadActive}" Value="True">
+                                                <DataTrigger.EnterActions>
+                                                    <StopStoryboard BeginStoryboardName="DLExit" />
+                                                    <BeginStoryboard x:Name="DLEnter" Storyboard="{StaticResource DLActive}" />
+                                                </DataTrigger.EnterActions>
+                                                <DataTrigger.ExitActions>
+                                                    <StopStoryboard BeginStoryboardName="DLEnter" />
+                                                    <BeginStoryboard x:Name="DLExit" Storyboard="{StaticResource DLActive}" />
+                                                </DataTrigger.ExitActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Path.Style>
+                            </Path>
+                        </UniformGrid>
+                        <TextBlock Text="{Binding OutstandingRequests}" Grid.Row="1" HorizontalAlignment="Center" FontSize="10"/>
+                    </Grid>
                     
 					<controls:ZoomFactorSelector ZoomFactor="{Binding Settings.BrowserZoomFactor, Mode=OneWay}"
 												 ToolTip="{Binding Source={x:Static models:ResourceService.Current}, Path=Resources.ZoomFactorSelector_Tooltip}"

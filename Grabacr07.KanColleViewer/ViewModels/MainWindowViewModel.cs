@@ -144,6 +144,9 @@ namespace Grabacr07.KanColleViewer.ViewModels
         private bool _uploadActivity = false;
         public bool UploadActive { get { return _uploadActivity = !_uploadActivity; } set { RaisePropertyChanged(); } }
 
+        private volatile int _outstandingRequests = 0;
+        public int OutstandingRequests { get { return _outstandingRequests; } }
+
         public MainWindowViewModel()
 		{
 			this.Title = App.ProductInfo.Title;
@@ -163,8 +166,11 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			this.UpdateMode();
             Models.Settings.Current.PropertyChanged += (_, __) => this.UpdateLayout(Models.Settings.Current.LRSplit);
 
-            KanColleClient.Current.Proxy.OnBytesReceived += x => DownloadActive = true;
-            KanColleClient.Current.Proxy.OnBytesSent += x => UploadActive = true;
+            Fiddler.FiddlerApplication.OnReadResponseBuffer += (_, e) => DownloadActive = true;
+            Fiddler.FiddlerApplication.OnReadRequestBuffer += (_, e) => UploadActive = true;
+            Fiddler.FiddlerApplication.BeforeRequest += _ => { System.Threading.Interlocked.Increment(ref _outstandingRequests); RaisePropertyChanged(nameof(OutstandingRequests)); };
+            Fiddler.FiddlerApplication.BeforeResponse += _ => { System.Threading.Interlocked.Decrement(ref _outstandingRequests); RaisePropertyChanged(nameof(OutstandingRequests)); };
+            Fiddler.FiddlerApplication.BeforeReturningError += _ => { if (_.state == Fiddler.SessionStates.Aborted) return; System.Threading.Interlocked.Decrement(ref _outstandingRequests); RaisePropertyChanged(nameof(OutstandingRequests)); };
         }
 
 		public void TakeScreenshot()

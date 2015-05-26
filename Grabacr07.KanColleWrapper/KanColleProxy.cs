@@ -14,9 +14,6 @@ namespace Grabacr07.KanColleWrapper
 {
 	public partial class KanColleProxy
 	{
-        public event Action<int> OnBytesReceived;
-        public event Action<int> OnBytesSent;
-
 		private readonly IConnectableObservable<Session> connectableSessionSource;
 		private readonly IConnectableObservable<Session> apiSource;
 		private readonly LivetCompositeDisposable compositeDisposable;
@@ -66,26 +63,21 @@ namespace Grabacr07.KanColleWrapper
 		public void Startup(int proxy = 0)
 		{
             if(proxy < 1024) proxy = new Random().Next(1024, 65535);
-			FiddlerApplication.Startup(proxy, false, false, false);
+
+            var flags = FiddlerCoreStartupFlags.Default;
+            flags &= ~FiddlerCoreStartupFlags.DecryptSSL;
+            flags &= ~FiddlerCoreStartupFlags.AllowRemoteClients;
+            flags &= ~FiddlerCoreStartupFlags.RegisterAsSystemProxy;
+            flags |= FiddlerCoreStartupFlags.ChainToUpstreamGateway;
+
+            FiddlerApplication.Startup(proxy, flags);
 			FiddlerApplication.BeforeRequest += this.SetUpstreamProxyHandler;
-            FiddlerApplication.OnReadRequestBuffer += FiddlerApplication_OnReadRequestBuffer;
-            FiddlerApplication.OnReadResponseBuffer += FiddlerApplication_OnReadResponseBuffer;
 
             SetIESettings("localhost:" + proxy);
 
 			this.compositeDisposable.Add(this.connectableSessionSource.Connect());
 			this.compositeDisposable.Add(this.apiSource.Connect());
 		}
-
-        private void FiddlerApplication_OnReadResponseBuffer(object sender, RawReadEventArgs e)
-        {
-            OnBytesReceived(e.iCountOfBytes);
-        }
-
-        private void FiddlerApplication_OnReadRequestBuffer(object sender, RawReadEventArgs e)
-        {
-            OnBytesSent(e.iCountOfBytes);
-        }
 
         public void Shutdown()
 		{
@@ -137,7 +129,8 @@ namespace Grabacr07.KanColleWrapper
 				: string.Format("{0}:{1}", settings.Host, settings.Port);
 
 			requestingSession["X-OverrideGateway"] = gateway;
-		}
+            requestingSession.bBufferResponse = false;
+        }
 
 		/// <summary>
 		/// セッションが SSL 接続を使用しているかどうかを返します。
