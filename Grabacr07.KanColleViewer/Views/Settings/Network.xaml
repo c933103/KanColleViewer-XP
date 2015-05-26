@@ -115,11 +115,11 @@
         <StackPanel>
             <TextBlock FontFamily="Lucida Console" FontSize="13.333">
                 <Run Text="Bytes received: " />
-                <Run Text="{Binding ReceivedBytes, StringFormat={}{0,11:N0}}"/>
+                <Run Text="{Binding ReceivedBytes, Mode=OneWay, StringFormat={}{0,11:N0}}"/>
             </TextBlock>
             <TextBlock FontFamily="Lucida Console" FontSize="13.333">
                 <Run Text="Bytes sent:     " />
-                <Run Text="{Binding SentBytes, StringFormat={}{0,11:N0}}"/>
+                <Run Text="{Binding SentBytes, Mode=OneWay, StringFormat={}{0,11:N0}}"/>
             </TextBlock>
         </StackPanel>
 	</StackPanel>
