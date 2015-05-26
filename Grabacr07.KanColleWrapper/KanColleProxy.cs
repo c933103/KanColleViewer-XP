@@ -137,7 +137,8 @@ namespace Grabacr07.KanColleWrapper
 				: string.Format("{0}:{1}", settings.Host, settings.Port);
 
 			requestingSession["X-OverrideGateway"] = gateway;
-		}
+            requestingSession.bBufferResponse = false;
+        }
 
 		/// <summary>
 		/// セッションが SSL 接続を使用しているかどうかを返します。
