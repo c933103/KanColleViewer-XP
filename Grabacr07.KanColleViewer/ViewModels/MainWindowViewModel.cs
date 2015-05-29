@@ -170,7 +170,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
             Fiddler.FiddlerApplication.OnReadRequestBuffer += (_, e) => UploadActive = true;
             Fiddler.FiddlerApplication.BeforeRequest += _ => { System.Threading.Interlocked.Increment(ref _outstandingRequests); RaisePropertyChanged(nameof(OutstandingRequests)); };
             Fiddler.FiddlerApplication.BeforeResponse += _ => { System.Threading.Interlocked.Decrement(ref _outstandingRequests); RaisePropertyChanged(nameof(OutstandingRequests)); };
-            Fiddler.FiddlerApplication.BeforeReturningError += _ => { if (_.state == Fiddler.SessionStates.Aborted) return; System.Threading.Interlocked.Decrement(ref _outstandingRequests); RaisePropertyChanged(nameof(OutstandingRequests)); };
+            Fiddler.FiddlerApplication.BeforeReturningError += _ => { if (_.responseCode == 408) return; System.Threading.Interlocked.Decrement(ref _outstandingRequests); RaisePropertyChanged(nameof(OutstandingRequests)); };
         }
 
 		public void TakeScreenshot()

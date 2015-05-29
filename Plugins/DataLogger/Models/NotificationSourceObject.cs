@@ -81,7 +81,7 @@ namespace LynLogger.Models
                 }
             }
 
-            _propertyChangePath = _cp.Select(x => new KeyValuePair<string, ICollection<string>>(x.Key, new Utilities.ReadOnlyCollectionWrapper<string>(x.Value))).ToDictionary(x => x.Key, x => x.Value);
+            _propertyChangePath = _cp.ToDictionary(x => x.Key, x => new Utilities.ReadOnlyCollectionWrapper<string>(x.Value) as ICollection<string>);
             _cache.TryAdd(GetType(), _propertyChangePath);
         }
 
