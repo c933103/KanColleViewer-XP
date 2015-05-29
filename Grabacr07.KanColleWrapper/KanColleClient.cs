@@ -126,31 +126,27 @@ namespace Grabacr07.KanColleWrapper
 			var kdock = proxy.api_get_member_kdock.TryParse<kcsapi_kdock[]>().FirstAsync().ToTask();
 			var sitem = proxy.api_get_member_slot_item.TryParse<kcsapi_slotitem[]>().FirstAsync().ToTask();
 
-			proxy.api_start2.FirstAsync().Subscribe(async session =>
-			{
-				var timeout = Task.Delay(TimeSpan.FromSeconds(20));
-				var canInitialize = await Task.WhenAny(new Task[] { basic, kdock, sitem }.WhenAll(), timeout) != timeout;
+            proxy.api_start2.FirstAsync().Subscribe(async session => {
+                var timeout = Task.Delay(TimeSpan.FromSeconds(30));
+                await Task.WhenAny(new Task[] { basic, kdock, sitem }.WhenAll(), timeout);
 
-				// タイムアウト仕掛けてるのは、今後のアップデートで basic, kdock, slot_item のいずれかが来なくなったときに
-				// 起動できなくなる (IsStarted を true にできなくなる) のを防ぐため
-				// -----
-				// ま、そんな規模の変更があったらそもそもまともに動作せんだろうがな ☝(◞‸◟)☝ 野良ツールはつらいよ
+                // タイムアウト仕掛けてるのは、今後のアップデートで basic, kdock, slot_item のいずれかが来なくなったときに
+                // 起動できなくなる (IsStarted を true にできなくなる) のを防ぐため
+                // -----
+                // ま、そんな規模の変更があったらそもそもまともに動作せんだろうがな ☝(◞‸◟)☝ 野良ツールはつらいよ
 
-				SvData<kcsapi_start2> svd;
-				if (!SvData.TryParse(session, out svd)) return;
+                SvData<kcsapi_start2> svd;
+                if (!SvData.TryParse(session, out svd)) return;
 
-				this.Master = new Master(svd.Data);
-				if (this.Homeport == null) this.Homeport = new Homeport(proxy);
+                this.Master = new Master(svd.Data);
+                if (this.Homeport == null) this.Homeport = new Homeport(proxy);
 
-				if (canInitialize)
-				{
-					this.Homeport.UpdateAdmiral((await basic).Data);
-					this.Homeport.Itemyard.Update((await sitem).Data);
-					this.Homeport.Dockyard.Update((await kdock).Data);
-				}
+                if (basic.Status == TaskStatus.RanToCompletion) this.Homeport.UpdateAdmiral(basic.Result.Data);
+                if (sitem.Status == TaskStatus.RanToCompletion) this.Homeport.Itemyard.Update(sitem.Result.Data);
+                if (kdock.Status == TaskStatus.RanToCompletion) this.Homeport.Dockyard.Update(kdock.Result.Data);
 
-				this.IsStarted = true;
-			});
+                this.IsStarted = true;
+            });
 		}
 	}
 }
