@@ -103,14 +103,13 @@ namespace LynLogger.Observers
                         }
                     }
                 } else if(data.api_flare_pos()) { //夜战
-                    var r = new BattleStatus.NightWarInfo() {
+                    var r = new BattleStatus.NightWarInfo(result) {
                         ZwOurShips = result.ZwOurShips,
                         ZwEnemyShips = result.ZwEnemyShips,
                         ZwRawData = json,
                         ZwBombard = ConvertBombards(result, data.api_hougeki),
                         ZwOurReconnInTouch = (int)data.api_touch_plane[0],
-                        ZwEnemyReconnInTouch = (int)data.api_touch_plane[1],
-                        _parent = result
+                        ZwEnemyReconnInTouch = (int)data.api_touch_plane[1]
                     };
                     if(r.ZwOurReconnInTouch < 0) {
                         r.ZwOurReconnInTouchName = "没有舰载机";

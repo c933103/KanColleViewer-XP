@@ -12,27 +12,30 @@ namespace LynLogger.Views
 {
     public partial class ShipStatusModel : NotificationSourceObject
     {
-        private static readonly IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependencies =
-            new Dictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> {
-                [o => ((ShipStatusModel)o).Ships] = new List<Expression<Func<object, object>>> {
-                    o => ((ShipStatusModel)o).ShipSortMode,
-                    o => ((ShipStatusModel)o).CustomComparerSource},
-                [o => ((ShipStatusModel)o).RemainingExp] = new List<Expression<Func<object, object>>> {
-                    o => ((ShipStatusModel)o).SelectedShip,
-                    o => ((ShipStatusModel)o).TargetLevel },
-                [o => ((ShipStatusModel)o).RamaingCount] = new List<Expression<Func<object, object>>> {
-                    o => ((ShipStatusModel)o).RemainingExp,
-                    o => ((ShipStatusModel)o).IsFlagship,
-                    o => ((ShipStatusModel)o).IsMvp,
-                    o => ((ShipStatusModel)o).SelectedMapArea,
-                    o => ((ShipStatusModel)o).TargetRank },
-                [o => ((ShipStatusModel)o).FuelReq] = new List<Expression<Func<object, object>>> {
-                    o => ((ShipStatusModel)o).SelectedShip },
-                [o => ((ShipStatusModel)o).AmmoReq] = new List<Expression<Func<object, object>>> {
-                    o => ((ShipStatusModel)o).SelectedShip }
-            };
-
-        protected override IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency { get { return PropertyDependencies; } }
+        protected override IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency
+        {
+            get
+            {
+                return new Dictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> {
+                    [o => ((ShipStatusModel)o).Ships] = new List<Expression<Func<object, object>>> {
+                        o => ((ShipStatusModel)o).ShipSortMode,
+                        o => ((ShipStatusModel)o).CustomComparerSource},
+                    [o => ((ShipStatusModel)o).RemainingExp] = new List<Expression<Func<object, object>>> {
+                        o => ((ShipStatusModel)o).SelectedShip,
+                        o => ((ShipStatusModel)o).TargetLevel },
+                    [o => ((ShipStatusModel)o).RamaingCount] = new List<Expression<Func<object, object>>> {
+                        o => ((ShipStatusModel)o).RemainingExp,
+                        o => ((ShipStatusModel)o).IsFlagship,
+                        o => ((ShipStatusModel)o).IsMvp,
+                        o => ((ShipStatusModel)o).SelectedMapArea,
+                        o => ((ShipStatusModel)o).TargetRank },
+                    [o => ((ShipStatusModel)o).FuelReq] = new List<Expression<Func<object, object>>> {
+                        o => ((ShipStatusModel)o).SelectedShip },
+                    [o => ((ShipStatusModel)o).AmmoReq] = new List<Expression<Func<object, object>>> {
+                        o => ((ShipStatusModel)o).SelectedShip }
+                };
+            }
+        }
 
         private Ship _selectedShip;
         private string _selectedMapArea = "1-1";

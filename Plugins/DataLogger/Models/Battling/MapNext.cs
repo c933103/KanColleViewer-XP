@@ -17,16 +17,19 @@ namespace LynLogger.Models.Battling
         [Serialize(3)] internal int ZwMapLocId;
         public int MapLocId { get { return ZwMapLocId; } }
 
-        [Serialize(4)] internal EventType ZwEvent;
+        [Serialize(4)] internal int ZwEnemyId;
+        public int EnemyId { get { return ZwEnemyId; } }
+
+        [Serialize(5)] internal EventType ZwEvent;
         public EventType Event { get { return ZwEvent; } }
 
-        [Serialize(5)] internal ItemGetLostInfo ZwItemGetLost;
+        [Serialize(6)] internal ItemGetLostInfo ZwItemGetLost;
         public ItemGetLostInfo ItemGetLost { get { return ZwItemGetLost; } }
 
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(string.Format("{0}-{1}-{2}", MapAreaId, MapSectionId, MapLocId));
+            sb.AppendLine(string.Format("{0}-{1}-{2}/{3}", MapAreaId, MapSectionId, MapLocId, EnemyId));
             switch(Event) {
                 case EventType.Battle:
                     sb.Append("来！战个痛！快！");
@@ -67,6 +70,7 @@ namespace LynLogger.Models.Battling
             [Serialize(2)] internal string ZwItemName;
             public string ItemName { get { return ZwItemName; } }
         }
+
         public enum EventType { ItemGet = 2, ItemLost = 3, Battle = 4, BossBattle = 5, NightBattle = -4, NightBossBattle = -5, Nothing = 6 }
     }
 }

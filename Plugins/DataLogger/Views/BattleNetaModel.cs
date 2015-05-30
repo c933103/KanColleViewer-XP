@@ -8,15 +8,25 @@ namespace LynLogger.Views
 {
     public class BattleNetaModel : Models.NotificationSourceObject
     {
-        private static readonly IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependencies =
-            new Dictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> {
-                [o => ((BattleNetaModel)o).EstimatedExp] = new List<Expression<Func<object, object>>> {
-                    o => ((BattleNetaModel)o).Battle},
-                [o => ((BattleNetaModel)o).OurEndMvpStatus] = new List<Expression<Func<object, object>>> {
-                    o => ((BattleNetaModel)o).Battle},
-            };
-
-        protected override IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency { get { return PropertyDependencies; } }
+        protected override IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency
+        {
+            get
+            {
+                return new Dictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> {
+                    [o => ((BattleNetaModel)o).EstimatedExp] = new List<Expression<Func<object, object>>> {
+                        o => ((BattleNetaModel)o).Battle },
+                    [o => ((BattleNetaModel)o).OurEndMvpStatus] = new List<Expression<Func<object, object>>> {
+                        o => ((BattleNetaModel)o).Battle },
+                    [o => ((BattleNetaModel)o).ShowBattleResult] = new List<Expression<Func<object, object>>> {
+                        o => ((BattleNetaModel)o).Battle,
+                        o => ((BattleNetaModel)o).MapNext,
+                        o => ((BattleNetaModel)o).PracticeEnemy },
+                    [o => ((BattleNetaModel)o).ShowBattleStatus] = new List<Expression<Func<object, object>>> {
+                        o => ((BattleNetaModel)o).MapNext,
+                        o => ((BattleNetaModel)o).PracticeEnemy }
+                };
+            }
+        }
 
         private ViewState _state = ViewState.AnticipateBattle;
 
@@ -28,6 +38,42 @@ namespace LynLogger.Views
             {
                 if(value == _mapNext) return;
                 _mapNext = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private BattleResult _battleResult;
+        public BattleResult BattleResult
+        {
+            get { return _battleResult; }
+            set
+            {
+                if (value == _battleResult) return;
+                _battleResult = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _showBattleResult = false;
+        public bool ShowBattleResult
+        {
+            get { var t = _showBattleResult; _showBattleResult = false; return t; }
+            set
+            {
+                if (_showBattleResult == value) return;
+                _showBattleResult = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _showBattleStatus = false;
+        public bool ShowBattleStatus
+        {
+            get { var t = _showBattleStatus; _showBattleStatus = false; return t; }
+            set
+            {
+                if (_showBattleStatus == value) return;
+                _showBattleStatus = value;
                 RaisePropertyChanged();
             }
         }
@@ -123,7 +169,7 @@ namespace LynLogger.Views
                         }
                         break;
                     case ViewShowInfo.PracticeEnemyInfo:
-                        basic = PracticeEnemy.DrillBasicExp;
+                        basic = Battle.DrillBasicExp;
                         switch(Battle.Rank) {
                             case Ranking.S:
                                 return (int)(basic * 1.2);
@@ -173,6 +219,11 @@ namespace LynLogger.Views
                             RaiseMultiPropertyChanged(() => Battle);
                             break;
                     }
+                    ShowBattleStatus = true;
+                };
+                i.BattleResultObserver.OnBattleResult += a => {
+                    BattleResult = a;
+                    ShowBattleResult = true;
                 };
             };
         }

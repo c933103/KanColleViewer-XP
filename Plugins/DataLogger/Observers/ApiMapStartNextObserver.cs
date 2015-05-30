@@ -38,6 +38,9 @@ namespace LynLogger.Observers
                     ZwEvent = (MapNext.EventType)((int)data.api_event_id * ((int)data.api_event_kind == 2 ? -1 : 1)),
                     ZwRawData = json
                 };
+                if(data.api_enemy() && data.api_enemy != null) {
+                    mapNext.ZwEnemyId = (int)data.api_enemy.api_enemy_id;
+                }
                 if(mapNext.ZwEvent == MapNext.EventType.ItemGet) {
                     mapNext.ZwItemGetLost = new MapNext.ItemGetLostInfo() {
                         ZwAmount = (int)data.api_itemget.api_getcount,
