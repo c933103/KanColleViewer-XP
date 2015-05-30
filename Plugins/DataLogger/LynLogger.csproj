@@ -135,6 +135,7 @@
     <Compile Include="DataStore\WeekBook.cs" />
     <Compile Include="Data\LevelExperienceTable.cs" />
     <Compile Include="Data\MapExperienceTable.cs" />
+    <Compile Include="Models\Battling\BattleStatus.Serialization.cs" />
     <Compile Include="Models\Battling\PracticeEnemyInfo.cs" />
     <Compile Include="Observers\ApiCreateItemObserver.cs" />
     <Compile Include="Observers\ApiCreateShipObserver.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LogbookSequenceToDescriptionConverter.cs" />
     <Compile Include="Views\SettingsModel.cs" />
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>

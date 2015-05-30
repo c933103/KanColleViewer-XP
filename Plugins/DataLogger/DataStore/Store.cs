@@ -128,6 +128,7 @@ namespace LynLogger.DataStore
 
         public Store(Premitives.StoragePremitive info, LinkedList<object> serializationPath) : base(info, serializationPath)
         {
+            _logbookSequence.Add(0);
             Ships = new ShipsAccessor(this);
             Logbooks = new LogbookAccessor(this);
             LogbookSequence = new ReadOnlyCollectionWrapper<ulong>(_logbookSequence);
@@ -142,6 +143,7 @@ namespace LynLogger.DataStore
             Settings = new Settings();
             Weekbook = new Weekbook(this);
 
+            _logbookSequence.Add(0);
             Ships = new ShipsAccessor(this);
             Logbooks = new LogbookAccessor(this);
             LogbookSequence = new ReadOnlyCollectionWrapper<ulong>(_logbookSequence);

@@ -12,7 +12,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <local:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
-        
+
         <DataTemplate DataType="{x:Type battleData:BattleStatus+BombardInfo}">
             <Grid Margin="0,8,0,0">
                 <Grid.ColumnDefinitions>
@@ -127,9 +127,9 @@
     </UserControl.DataContext>
 
     <StackPanel>
-        <Expander Header="下一张地图" Margin="0,0,0,5">
+        <Expander Header="下一张地图" Margin="0,3">
             <StackPanel Margin="20,0,0,0" DataContext="{Binding MapNext, Mode=OneWay}">
-                <ContentControl Content="{Binding Mode=OneTime}" Margin="0,0,0,5" />
+                <ContentControl Content="{Binding Mode=OneTime}" Margin="0,3" />
                 <Expander Header="原始数据">
                     <TextBox Text="{Binding RawData, Mode=OneTime}" TextWrapping="Wrap" IsReadOnly="True" Margin="20,0,0,15"/>
                 </Expander>
@@ -144,13 +144,13 @@
                 </Style>
             </Expander.Style>
         </Expander>
-        <Expander Header="演习信息" Margin="0,0,0,5">
+        <Expander Header="演习信息" Margin="0,3">
             <StackPanel Margin="20,0,0,0" DataContext="{Binding PracticeEnemy, Mode=OneWay}">
                 <TextBlock FontSize="15">
                     <Run Text="基本经验: 约" />
                     <Run Text="{Binding DrillBasicExp, Mode=OneTime}" />
                 </TextBlock>
-                <ItemsControl ItemsSource="{Binding EnemyShips, Mode=OneTime}" Margin="0,0,0,5">
+                <ItemsControl ItemsSource="{Binding EnemyShips, Mode=OneTime}" Margin="0,3">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>
@@ -179,7 +179,32 @@
                 </Style>
             </Expander.Style>
         </Expander>
-        <Expander Header="战果速报 ( 计算值 )" IsExpanded="True">
+        <Expander Header="战斗结算" IsExpanded="{Binding ShowBattleResult}" Margin="0,3">
+            <StackPanel Margin="20,0,0,0" DataContext="{Binding BattleResult}">
+                <TextBlock>
+                    <Run Text="{Binding MapName, Mode=OneTime}"/>
+                    <Run Text="/"/>
+                    <Run Text="{Binding FleetName, Mode=OneTime}"/>
+                </TextBlock>
+                <TextBlock>
+                    <Run Text="评级:"/>
+                    <Run Text="{Binding Rank, Mode=OneTime}" />
+                </TextBlock>
+                <TextBlock>
+                    <Run Text="提督经验:"/>
+                    <Run Text="{Binding AdmiralExp, Mode=OneTime}" />
+                </TextBlock>
+                <TextBlock>
+                    <Run Text="基本经验:"/>
+                    <Run Text="{Binding BaseExp, Mode=OneTime}" />
+                </TextBlock>
+                <TextBlock>
+                    <Run Text="掉落:"/>
+                    <Run Text="{Binding DropShip.ShipName, Mode=OneTime, FallbackValue=(空气)}" />
+                </TextBlock>
+            </StackPanel>
+        </Expander>
+        <Expander x:Name="calculatedResult" Header="战果速报 ( 计算值 )" Margin="0,3" IsExpanded="{Binding ShowBattleStatus}">
             <Grid Margin="20,0,0,15">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -283,7 +308,7 @@
                 </StackPanel>
             </Grid>
         </Expander>
-        <Expander Header="战斗过程" IsExpanded="True" Margin="0,5,0,5">
+        <Expander Header="战斗过程" IsExpanded="{Binding IsExpanded, ElementName=calculatedResult}" Margin="0,3">
             <StackPanel Margin="20,0,0,0">
                 <Expander Header="战前简报" IsExpanded="True" DataContext="{Binding Battle}">
                     <Grid Margin="20,0,0,15">
@@ -695,7 +720,7 @@
                 </Expander>
                 <Expander Header="炮击战" IsExpanded="True" DataContext="{Binding Battle}">
                     <StackPanel Margin="20,0,0,15" Grid.IsSharedSizeScope="True">
-                        <TextBlock FontSize="16" Margin="0,0,0,5">
+                        <TextBlock FontSize="16" Margin="0,3">
                             <Run Text="交战形态: " />
                             <Run Text="{Binding Encounter, Mode=OneTime, Converter={StaticResource EnumToDescriptionConverter}}" />
                         </TextBlock>

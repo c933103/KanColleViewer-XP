@@ -20,8 +20,8 @@ namespace LynLogger.Views
     /// </summary>
     public partial class HistogramPlotter : UserControl
     {
-        public static readonly DependencyProperty dpPlotData = DependencyProperty.Register("PlotData", typeof(IEnumerable<KeyValuePair<long, double>>), typeof(HistogramPlotter), new PropertyMetadata(new PropertyChangedCallback(PlotChanged)));
-        public static readonly DependencyProperty dpAverageDelta = DependencyProperty.Register("AverageDelta", typeof(bool?), typeof(HistogramPlotter), new PropertyMetadata(new PropertyChangedCallback(PlotChanged)));
+        public static readonly DependencyProperty dpPlotData = DependencyProperty.Register(nameof(PlotData), typeof(IEnumerable<KeyValuePair<long, double>>), typeof(HistogramPlotter), new PropertyMetadata(new PropertyChangedCallback(PlotChanged)));
+        public static readonly DependencyProperty dpAverageDelta = DependencyProperty.Register(nameof(AverageDelta), typeof(bool?), typeof(HistogramPlotter), new PropertyMetadata(new PropertyChangedCallback(PlotChanged)));
 
         private Size plotArea;
 
