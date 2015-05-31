@@ -660,11 +660,6 @@
     <Resource Include="Assets\app.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="KanColleViewer.VisualElementsManifest.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="license.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
