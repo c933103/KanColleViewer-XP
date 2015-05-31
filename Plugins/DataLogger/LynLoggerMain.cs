@@ -25,11 +25,11 @@ namespace LynLogger
         {
             get
             {
-                return "3.8.2-1.1(1)X"
+                return "3.8.2-1.1(1)X1"
 #if DEBUG
                      + "d"
 #endif
-                     + "1";
+                     ;
             }
         }
 
