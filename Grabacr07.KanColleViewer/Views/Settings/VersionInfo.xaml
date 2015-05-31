@@ -50,9 +50,13 @@
 					 FontFamily="Segoe UI Light"
 					 FontSize="20"
 					 Foreground="{DynamicResource ActiveForegroundBrushKey}" />
-			</TextBlock>
+				<Run Text="{Binding Source={x:Static root:App.ProductInfo}, Path=ReleaseTrain, StringFormat=rel. {0}, Mode=OneWay}"
+						FontFamily="Consolas"
+						FontSize="12"
+						Foreground="{DynamicResource ActiveForegroundBrushKey}" />
+            </TextBlock>
 
-			<Rectangle Height="1"
+            <Rectangle Height="1"
 					   Margin="0,10"
 					   Style="{DynamicResource SeparatorRectangleStyleKey}" />
 		</StackPanel>
