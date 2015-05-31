@@ -25,7 +25,7 @@ namespace LynLogger
         {
             get
             {
-                return "3.8.2-1.1(1)M1"
+                return "3.8.2-1.1(M2)"
 #if DEBUG
                      + "d"
 #endif
@@ -36,7 +36,7 @@ namespace LynLogger
         private static Action<LynLoggerMain> _onInstanceCreate;
         public static event Action<LynLoggerMain> OnInstanceCreate
         {
-            add { _onInstanceCreate += value.MakeWeak(x => _onInstanceCreate -= x); }
+            add { _onInstanceCreate += value.MakeWeak(x => _onInstanceCreate -= x); if (Instance != null) value(Instance); }
             remove { }
         }
 
@@ -54,8 +54,6 @@ namespace LynLogger
 
         public LynLoggerMain()
         {
-            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve; //Somehow BinaryFormatter can't find our assembly despite the fact that we're the one who called it.
-
             _disposables.AddLast(KanColleClient.Current.Proxy.api_port.TryParse<kcsapi_port>().Subscribe(new Observers.ApiPortObserver()));
             _disposables.AddLast(KanColleClient.Current.Proxy.api_get_member_ship2.TryParse<kcsapi_ship2[]>().Subscribe(new Observers.ApiShip2Observer()));
 
@@ -86,10 +84,6 @@ namespace LynLogger
 
             Instance = this;
             if(_onInstanceCreate != null) _onInstanceCreate(this);
-
-            //DataStore.Store.SwitchMember("19053428");
-            //DataStore.Store.Current.CurrentLogbook.GetHashCode();
-            //DataStore.Store.Current.SaveData();
         }
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
