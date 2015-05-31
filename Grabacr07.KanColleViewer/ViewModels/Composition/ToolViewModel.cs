@@ -8,17 +8,20 @@ using Grabacr07.KanColleViewer.Composition;
 namespace Grabacr07.KanColleViewer.ViewModels.Composition
 {
 	public class ToolViewModel : PluginViewModelBase<IToolPlugin>
-	{
+    {
+        private string _name;
+        private object _view;
+
 		public ToolViewModel(Lazy<IToolPlugin, IPluginMetadata> plugin) : base(plugin) { }
 
 		public string ToolName
 		{
-			get { return this.Plugin.ToolName; }
+			get { return _name ?? (_name = this.Plugin.ToolName); }
 		}
 
 		public object View
 		{
-			get { return this.Plugin.GetToolView(); }
+			get { return _view ?? (_view = this.Plugin.GetToolView()); }
 		}
 
 		public override string ToString()
