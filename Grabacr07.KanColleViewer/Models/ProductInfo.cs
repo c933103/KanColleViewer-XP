@@ -67,7 +67,7 @@ namespace Grabacr07.KanColleViewer.Models
 #if DEBUG
                      + "d"
 #endif
-                    ;
+                     + "1";
             }
         }
 

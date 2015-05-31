@@ -13,7 +13,7 @@
         <LineBreak />
         <Run Text="By 某蠢琳" />
         <LineBreak />
-        <Run Text="{Binding Source={x:Static plugin:LynLoggerMain.Instance}, Path=Version, Mode=OneTime, StringFormat=ver. {0}}" />
+        <Run Text="{Binding Source={x:Static plugin:LynLoggerMain.Version}, Mode=OneTime, StringFormat=ver. {0}}" />
         <LineBreak />
         <LineBreak />
         <LineBreak />
