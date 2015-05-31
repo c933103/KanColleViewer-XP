@@ -21,7 +21,7 @@ namespace LynLogger
     public class LynLoggerMain : IToolPlugin, IDisposable
     {
         public static LynLoggerMain Instance { get; private set; }
-        public string Version
+        public static string Version
         {
             get
             {
@@ -29,7 +29,7 @@ namespace LynLogger
 #if DEBUG
                      + "d"
 #endif
-                    ;
+                     + "1";
             }
         }
 
@@ -51,7 +51,6 @@ namespace LynLogger
         internal Observers.ApiCreateShipObserver CreateShipObserver { get; private set; }
 
         private LinkedList<IDisposable> _disposables = new LinkedList<IDisposable>();
-        private ToolsModel model = new ToolsModel();
 
         public LynLoggerMain()
         {
@@ -108,7 +107,7 @@ namespace LynLogger
 
         public object GetToolView()
         {
-            return new ToolsView() { DataContext = model };
+            return new ToolsView();
         }
 
         public object GetSettingsView()

@@ -188,7 +188,7 @@
                             </TextBlock>
 
                             <TextBlock Margin="0,8,0,0">
-								<Run Text="{Binding Source={x:Static root:App.ProductInfo}, Path=ReleaseTrain, StringFormat=rel. {0}, Mode=OneWay}"
+								<Run Text="{Binding Source={x:Static root:App.ProductInfo}, Path=ReleaseTrain, StringFormat=Rel. {0}, Mode=OneWay}"
 									 FontFamily="Lucida Console"
 									 FontSize="12"
 									 Foreground="{DynamicResource ActiveForegroundBrushKey}" />
