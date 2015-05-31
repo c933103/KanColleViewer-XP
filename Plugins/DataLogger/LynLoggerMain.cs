@@ -25,7 +25,7 @@ namespace LynLogger
         {
             get
             {
-                return "3.8.2-1.1(M2)"
+                return "3.8.2-1.1(T2)"
 #if DEBUG
                      + "d"
 #endif
@@ -51,6 +51,7 @@ namespace LynLogger
         internal Observers.ApiCreateShipObserver CreateShipObserver { get; private set; }
 
         private LinkedList<IDisposable> _disposables = new LinkedList<IDisposable>();
+        private ToolsView _view = new ToolsView();
 
         public LynLoggerMain()
         {
@@ -101,7 +102,7 @@ namespace LynLogger
 
         public object GetToolView()
         {
-            return new ToolsView();
+            return _view;
         }
 
         public object GetSettingsView()
