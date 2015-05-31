@@ -178,16 +178,23 @@
 								<LineBreak />
 								<Run Text="{Binding Source={x:Static root:App.ProductInfo}, Path=Title, Mode=OneWay}"
 									 FontSize="16" />
-							</TextBlock>
+                            </TextBlock>
 
-							<TextBlock Margin="0,8,0,0">
+                            <TextBlock Margin="0,8,0,0">
 								<Run Text="{Binding Source={x:Static root:App.ProductInfo}, Path=VersionString, StringFormat=Version {0}, Mode=OneWay}"
 									 FontFamily="Segoe UI Light"
 									 FontSize="20"
 									 Foreground="{DynamicResource ActiveForegroundBrushKey}" />
-							</TextBlock>
+                            </TextBlock>
 
-							<Rectangle Height="1"
+                            <TextBlock Margin="0,8,0,0">
+								<Run Text="{Binding Source={x:Static root:App.ProductInfo}, Path=ReleaseTrain, StringFormat=rel. {0}, Mode=OneWay}"
+									 FontFamily="Lucida Console"
+									 FontSize="12"
+									 Foreground="{DynamicResource ActiveForegroundBrushKey}" />
+                            </TextBlock>
+
+                            <Rectangle Height="1"
 									   Margin="0,12"
 									   Style="{DynamicResource SeparatorRectangleStyleKey}" />
 

@@ -27,7 +27,7 @@
         <ComboBox ItemsSource="{Binding Books}" SelectedItem="{Binding SelectedBook}" Grid.ColumnSpan="2" Margin="0,0,0,10">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Converter={StaticResource LogbookSequenceToDescriptionConverter}, Mode=OneTime}" />
+                    <TextBlock Text="{Binding Converter={StaticResource LogbookSequenceToDescriptionConverter}, Mode=OneWay}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>

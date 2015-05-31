@@ -15,6 +15,21 @@ namespace LynLogger.Models.Battling
         public IList<EnemyShipInfo> EnemyShips { get { return ZwEnemyShips; } }
         public string RawData { get { return ZwRawData; } }
 
+        public int DrillBasicExp
+        {
+            get
+            {
+                var bi = Data.LevelExperienceTable.Accumulated[EnemyShips[0].Level] / 100;
+                if(EnemyShips.Count > 1) {
+                    bi += Data.LevelExperienceTable.Accumulated[EnemyShips[1].Level] / 300;
+                }
+                if(bi > 500) {
+                    bi = 500 + (int)Math.Sqrt(bi - 500);
+                }
+                return bi;
+            }
+        }
+
         public struct EnemyShipInfo
         {
             internal int ZwId;

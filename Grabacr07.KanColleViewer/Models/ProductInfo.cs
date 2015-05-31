@@ -59,6 +59,18 @@ namespace Grabacr07.KanColleViewer.Models
 			get { return this._VersionString ?? (this._VersionString = string.Format("{0}{1}{2}", this.Version.ToString(3), this.IsBetaRelease ? " β" : "", this.Version.Revision == 0 ? "" : " rev." + this.Version.Revision)); }
 		}
 
+        public string ReleaseTrain
+        {
+            get
+            {
+                return "1.1(1)X"
+#if DEBUG
+                     + "d"
+#endif
+                    ;
+            }
+        }
+
 		public bool IsBetaRelease
 		{
 #if BETA

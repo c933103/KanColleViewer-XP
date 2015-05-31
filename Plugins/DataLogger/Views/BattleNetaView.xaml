@@ -187,19 +187,13 @@
                     <Run Text="{Binding FleetName, Mode=OneTime}"/>
                 </TextBlock>
                 <TextBlock>
-                    <Run Text="评级:"/>
+                    <Run Text="评级"/>
                     <Run Text="{Binding Rank, Mode=OneTime}" />
-                </TextBlock>
-                <TextBlock>
-                    <Run Text="提督经验:"/>
+                    <Run Text=" 提督经验"/>
                     <Run Text="{Binding AdmiralExp, Mode=OneTime}" />
-                </TextBlock>
-                <TextBlock>
-                    <Run Text="基本经验:"/>
+                    <Run Text=" 基本经验"/>
                     <Run Text="{Binding BaseExp, Mode=OneTime}" />
-                </TextBlock>
-                <TextBlock>
-                    <Run Text="掉落:"/>
+                    <Run Text=" 掉落"/>
                     <Run Text="{Binding DropShip.ShipName, Mode=OneTime, FallbackValue=(空气)}" />
                 </TextBlock>
             </StackPanel>

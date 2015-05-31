@@ -21,6 +21,17 @@ namespace LynLogger
     public class LynLoggerMain : IToolPlugin, IDisposable
     {
         public static LynLoggerMain Instance { get; private set; }
+        public string Version
+        {
+            get
+            {
+                return "3.8.2-1.1(1)X"
+#if DEBUG
+                     + "d"
+#endif
+                    ;
+            }
+        }
 
         private static Action<LynLoggerMain> _onInstanceCreate;
         public static event Action<LynLoggerMain> OnInstanceCreate
@@ -62,6 +73,7 @@ namespace LynLogger
 
             BattleResultObserver = new Observers.ApiBattleResultObserver();
             _disposables.AddLast(KanColleClient.Current.Proxy.api_req_sortie_battleresult.TryParse<kcsapi_battleresult>().Subscribe(BattleResultObserver));
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_practice/battle_result").TryParse<kcsapi_battleresult>().Subscribe(BattleResultObserver));
 
             PracticeEnemyInfoObserver = new Observers.ApiPracticeEnemyInfoObserver();
             _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_member/get_practice_enemyinfo").Subscribe(PracticeEnemyInfoObserver));

@@ -253,14 +253,18 @@ namespace Grabacr07.KanColleViewer.Views.Controls
             if (Models.Settings.Current.FlashOverrideMode != FlashOverrideMode.Shim) return;
             if (oSession.url.Contains("osapi.dmm.com/gadgets/ifr?")) {
                 oSession.bBufferResponse = true;
+                StatusService.Current.Notify("Preparing to inject shim");
                 return;
             }
             if (oSession.host == "kancolleviewer.local") {
+                var q = Models.Settings.Current.FlashQuality;
+                var m = Models.Settings.Current.FlashRenderMode;
                 oSession.utilCreateResponseAndBypassServer();
-                oSession.utilSetResponseBody(string.Format(Properties.Settings.Default.QualityScript, FlashOverrideMode.Shim, Models.Settings.Current.FlashQuality, Models.Settings.Current.FlashRenderMode));
+                oSession.utilSetResponseBody(string.Format(Properties.Settings.Default.QualityScript, FlashOverrideMode.Shim, q, m));
                 oSession.oResponse.headers.HTTPResponseCode = 200;
                 oSession.oResponse.headers.HTTPResponseStatus = "200 OK";
                 oSession.oResponse.headers["Content-Type"] = "text/javascript";
+                StatusService.Current.Notify(string.Format("Shim script injected with settings: {0}/{1}", q, m));
                 return;
             }
         }
@@ -271,6 +275,7 @@ namespace Grabacr07.KanColleViewer.Views.Controls
             if (oSession.url.Contains("osapi.dmm.com/gadgets/ifr?")) {
                 oSession.utilDecodeResponse();
                 oSession.utilReplaceInResponse("</head>", Properties.Settings.Default.QualityShimTag + "</head>");
+                StatusService.Current.Notify("Shim loader tag injected");
                 return;
             }
         }
