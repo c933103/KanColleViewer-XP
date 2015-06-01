@@ -43,7 +43,7 @@ namespace Grabacr07.KanColleViewer.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("9000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
         public int FeatureBrowserEmulation {
             get {
                 return ((int)(this["FeatureBrowserEmulation"]));
@@ -52,9 +52,9 @@ namespace Grabacr07.KanColleViewer.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("body {\n    margin:0;\n    overflow:hidden\n}\n\n#ntg-recommend {\n    display: none;\n}" +
-            "\n\n#game_frame {\n    position:fixed;\n    left:50%;\n    top:-16px;\n    margin-left" +
-            ":-450px;\n    z-index:1;\n}")]
+        [global::System.Configuration.DefaultSettingValueAttribute("body {\n    margin:0;\n    overflow:hidden;\n}\n\n#ntg-recommend {\n    display: none;\n" +
+            "}\n\n#game_frame {\n    position:fixed;\n    left:50%;\n    top:-16px;\n    margin-lef" +
+            "t:-450px;\n    z-index:1;\n}")]
         public string OverrideStyleSheet {
             get {
                 return ((string)(this["OverrideStyleSheet"]));
@@ -115,6 +115,15 @@ namespace Grabacr07.KanColleViewer.Properties {
         public string QualityScript {
             get {
                 return ((string)(this["QualityScript"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("html { touch-action: none; }")]
+        public string DisableTouchActionStyleSheet {
+            get {
+                return ((string)(this["DisableTouchActionStyleSheet"]));
             }
         }
     }

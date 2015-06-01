@@ -190,6 +190,9 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 			{
 				var document = this.WebBrowser.Document as HTMLDocument;
 				if (document == null) return;
+                if (Models.Settings.Current.DisableBrowserTouchAction) {
+                    document.createStyleSheet().cssText = Properties.Settings.Default.DisableTouchActionStyleSheet;
+                }
 
 				var gameFrame = document.getElementById("game_frame");
 				if (gameFrame == null)

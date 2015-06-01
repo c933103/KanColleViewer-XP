@@ -418,6 +418,18 @@ namespace Grabacr07.KanColleViewer.Models
             }
         }
 
+        private bool _disableBrowserTouchAction = false;
+        public bool DisableBrowserTouchAction
+        {
+            get { return _disableBrowserTouchAction; }
+            set
+            {
+                if (value == _disableBrowserTouchAction) return;
+                _disableBrowserTouchAction = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public void Save()
 		{
 			try

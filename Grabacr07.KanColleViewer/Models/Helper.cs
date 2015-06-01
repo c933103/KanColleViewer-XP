@@ -50,24 +50,42 @@ namespace Grabacr07.KanColleViewer.Models
 					: ".png");
 
 			return filePath;
-		}
+        }
 
 
-		/// <summary>
-		/// HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION
-		/// に WebBrowser コントロールの動作バージョンを設定します。
-		/// </summary>
-		public static void SetRegistryFeatureBrowserEmulation()
+        /// <summary>
+        /// HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION
+        /// に WebBrowser コントロールの動作バージョンを設定します。
+        /// </summary>
+        public static void SetRegistryFeatureLegacyInputModel()
+        {
+            const string key = @"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_NINPUT_LEGACYMODE";
+
+            try {
+                var valueName = Process.GetCurrentProcess().ProcessName + ".exe";
+                //if (Registry.GetValue(key, valueName, null) == null) {
+                    Registry.SetValue(key, valueName, 0, RegistryValueKind.DWord);
+                //}
+            } catch (Exception ex) {
+                Debug.WriteLine(ex);
+            }
+        }
+
+
+        /// <summary>
+        /// HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION
+        /// に WebBrowser コントロールの動作バージョンを設定します。
+        /// </summary>
+        public static void SetRegistryFeatureBrowserEmulation()
 		{
 			const string key = @"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION";
 
 			try
 			{
 				var valueName = Process.GetCurrentProcess().ProcessName + ".exe";
-				if (Registry.GetValue(key, valueName, null) == null)
-				{
+				//if (Registry.GetValue(key, valueName, null) == null) {
 					Registry.SetValue(key, valueName, Properties.Settings.Default.FeatureBrowserEmulation, RegistryValueKind.DWord);
-				}
+				//}
 			}
 			catch (Exception ex)
 			{
