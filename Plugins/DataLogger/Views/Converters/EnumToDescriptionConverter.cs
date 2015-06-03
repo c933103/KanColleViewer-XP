@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Data;
 
-namespace LynLogger.Views
+namespace LynLogger.Views.Converters
 {
     public class EnumToDescriptionConverter : IValueConverter
     {

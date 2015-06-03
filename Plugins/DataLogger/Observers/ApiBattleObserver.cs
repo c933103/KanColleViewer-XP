@@ -12,8 +12,8 @@ namespace LynLogger.Observers
 {
     class ApiBattleObserver : IObserver<Fiddler.Session>
     {
-        private Action<BattleStatus> _onBattle;
-        public event Action<BattleStatus> OnBattle
+        private Action<BattleProcess> _onBattle;
+        public event Action<BattleProcess> OnBattle
         {
             add { _onBattle += value.MakeWeak(x => _onBattle -= x); }
             remove { }
@@ -31,7 +31,7 @@ namespace LynLogger.Observers
 
                 var data = res.api_data;
 
-                BattleStatus result = new BattleStatus();
+                BattleProcess result = new BattleProcess();
                 result.ZwRawData = json;
 
                 int fleetId;
@@ -44,14 +44,14 @@ namespace LynLogger.Observers
                 result.ZwEnemyShips = ConvertEnemyFleet(data.api_ship_ke, data.api_ship_lv, data.api_nowhps, data.api_maxhps, data.api_eParam, data.api_eKyouka, data.api_eSlot);
 
                 if(data.api_formation()) {
-                    result.ZwOurFormation = (BattleStatus.Formation)(int)data.api_formation[0];
-                    result.ZwEnemyFormation = (BattleStatus.Formation)(int)data.api_formation[1];
-                    result.ZwEncounter = (BattleStatus.EncounterForm)(int)data.api_formation[2];
+                    result.ZwOurFormation = (BattleProcess.Formation)(int)data.api_formation[0];
+                    result.ZwEnemyFormation = (BattleProcess.Formation)(int)data.api_formation[1];
+                    result.ZwEncounter = (BattleProcess.EncounterForm)(int)data.api_formation[2];
                 }
                 if(data.api_hourai_flag()) { //昼战
                     result.ZwAirWarfare = ConvertAirWarfare(result, data.api_kouku);
-                    result.ZwOurReconn = (BattleStatus.ReconnResult)(int)data.api_search[0];
-                    result.ZwEnemyReconn = (BattleStatus.ReconnResult)(int)data.api_search[1];
+                    result.ZwOurReconn = (BattleProcess.ReconnResult)(int)data.api_search[0];
+                    result.ZwEnemyReconn = (BattleProcess.ReconnResult)(int)data.api_search[1];
                     result.ZwHasNightWar = data.api_midnight_flag > 0;
 
                     if(data.api_opening_flag == 1) {
@@ -66,13 +66,13 @@ namespace LynLogger.Observers
                     if(data.api_hourai_flag[0] == 1) {
                         result.ZwBombardRound1 = ConvertBombards(result, data.api_hougeki1);
                     }
-                    result.ZwSupportType = (BattleStatus.SupportInfo.Type)(int)(data.api_support_flag() ? data.api_support_flag : 0);
+                    result.ZwSupportType = (BattleProcess.SupportInfo.Type)(int)(data.api_support_flag() ? data.api_support_flag : 0);
                     if(data.api_support_info() && (data.api_support_info != null)) {
                         int supportDeckId = (int)(data.api_support_info.api_support_airatack?.api_deck_id ?? data.api_support_info.api_support_hourai.api_deck_id);
-                        result.ZwSupport = new BattleStatus.SupportInfo() {
+                        result.ZwSupport = new BattleProcess.SupportInfo() {
                             ZwSupportShips = KanColleClient.Current.Homeport.Organization.Fleets[supportDeckId].Ships.Select((x, i) => {
                                 var localShip = DataStore.Store.Current.Ships[x.Id];
-                                return new BattleStatus.ShipInfo() {
+                                return new BattleProcess.ShipInfo() {
                                     ZwShipTypeName = x.Info.ShipType.Name,
                                     ZwShipName = x.Info.Name,
                                     ZwShipId = x.Info.Id,
@@ -80,13 +80,13 @@ namespace LynLogger.Observers
                                     ZwLv = x.Level,
                                     ZwCurrentHp = x.HP.Current,
                                     ZwMaxHp = x.HP.Maximum,
-                                    ZwParameter = new BattleStatus.ShipInfo.ParameterInfo() {
+                                    ZwParameter = new BattleProcess.ShipInfo.ParameterInfo() {
                                         ZwPower = x.Firepower.Current,
                                         ZwTorpedo = x.Torpedo.Current,
                                         ZwAntiAir = x.AA.Current,
                                         ZwDefense = x.Armer.Current
                                     },
-                                    ZwEnhancement = new BattleStatus.ShipInfo.ParameterInfo() {
+                                    ZwEnhancement = new BattleProcess.ShipInfo.ParameterInfo() {
                                         ZwAntiAir = localShip.EnhancedAntiAir,
                                         ZwDefense = localShip.EnhancedDefense,
                                         ZwPower = localShip.EnhancedPower,
@@ -103,7 +103,7 @@ namespace LynLogger.Observers
                         }
                     }
                 } else if(data.api_flare_pos()) { //夜战
-                    var r = new BattleStatus.NightWarInfo(result) {
+                    var r = new BattleProcess.NightWarInfo(result) {
                         ZwOurShips = result.ZwOurShips,
                         ZwEnemyShips = result.ZwEnemyShips,
                         ZwRawData = json,
@@ -134,11 +134,11 @@ namespace LynLogger.Observers
             }
         }
 
-        private BattleStatus.ShipInfo[] ConvertOurFleet(int fleetId, dynamic nowHps, dynamic maxHps, dynamic param)
+        private BattleProcess.ShipInfo[] ConvertOurFleet(int fleetId, dynamic nowHps, dynamic maxHps, dynamic param)
         {
             return KanColleClient.Current.Homeport.Organization.Fleets[fleetId].Ships.Select((x, i) => {
                 var localShip = DataStore.Store.Current.Ships[x.Id];
-                return new BattleStatus.ShipInfo() {
+                return new BattleProcess.ShipInfo() {
                     ZwShipTypeName = x.Info.ShipType.Name,
                     ZwShipName = x.Info.Name,
                     ZwShipId = x.Info.Id,
@@ -146,13 +146,13 @@ namespace LynLogger.Observers
                     ZwLv = x.Level,
                     ZwCurrentHp = (int)nowHps[i+1],
                     ZwMaxHp = (int)maxHps[i+1],
-                    ZwParameter = new BattleStatus.ShipInfo.ParameterInfo() {
+                    ZwParameter = new BattleProcess.ShipInfo.ParameterInfo() {
                         ZwPower = (int)param[i][0],
                         ZwTorpedo = (int)param[i][1],
                         ZwAntiAir = (int)param[i][2],
                         ZwDefense = (int)param[i][3]
                     },
-                    ZwEnhancement = new BattleStatus.ShipInfo.ParameterInfo() {
+                    ZwEnhancement = new BattleProcess.ShipInfo.ParameterInfo() {
                         ZwAntiAir = localShip.EnhancedAntiAir,
                         ZwDefense = localShip.EnhancedDefense,
                         ZwPower = localShip.EnhancedPower,
@@ -163,9 +163,9 @@ namespace LynLogger.Observers
             }).ToArray();
         }
 
-        private BattleStatus.ShipInfo[] ConvertEnemyFleet(dynamic types, dynamic levels, dynamic nowHps, dynamic maxHps, dynamic param, dynamic enhance, dynamic slots)
+        private BattleProcess.ShipInfo[] ConvertEnemyFleet(dynamic types, dynamic levels, dynamic nowHps, dynamic maxHps, dynamic param, dynamic enhance, dynamic slots)
         {
-            List<BattleStatus.ShipInfo> r = new List<BattleStatus.ShipInfo>(6);
+            List<BattleProcess.ShipInfo> r = new List<BattleProcess.ShipInfo>(6);
             for(int i = 0; i < 6; i++) {
                 if(types[i+1] <= 0) break;
                 int shipId = (int)types[i+1];
@@ -177,16 +177,16 @@ namespace LynLogger.Observers
                     equipts.Add(new EquiptInfo(KanColleClient.Current.Master.SlotItems[equiptId], ship.Slots[j]));
                 }
 
-                r.Add(new BattleStatus.ShipInfo() {
+                r.Add(new BattleProcess.ShipInfo() {
                     ZwCurrentHp = (int)nowHps[i+7],
                     ZwMaxHp = (int)maxHps[i+7],
-                    ZwEnhancement = new BattleStatus.ShipInfo.ParameterInfo() {
+                    ZwEnhancement = new BattleProcess.ShipInfo.ParameterInfo() {
                         ZwPower = (int)enhance[i][0],
                         ZwTorpedo = (int)enhance[i][1],
                         ZwAntiAir = (int)enhance[i][2],
                         ZwDefense = (int)enhance[i][3]
                     },
-                    ZwParameter = new BattleStatus.ShipInfo.ParameterInfo() {
+                    ZwParameter = new BattleProcess.ShipInfo.ParameterInfo() {
                         ZwPower = (int)param[i][0],
                         ZwTorpedo = (int)param[i][1],
                         ZwAntiAir = (int)param[i][2],
@@ -203,19 +203,19 @@ namespace LynLogger.Observers
             return r.ToArray();
         }
 
-        private BattleStatus.AirWarfareInfo CreateSupportAttackInfo(BattleStatus holder, dynamic data)
+        private BattleProcess.AirWarfareInfo CreateSupportAttackInfo(BattleProcess holder, dynamic data)
         {
             List<double> enemyDamage = new List<double>(6);
             List<bool> enemyBombed = new List<bool>(6);
             List<bool> enemyTorpedoed = new List<bool>(6);
             for(int i = 1; i < 7; i++) {
                 if(data.api_damage.IsDefined(i) && data.api_damage[i] >= 0) {
-                    enemyBombed.Add(holder.SupportType == BattleStatus.SupportInfo.Type.GunFight);
-                    enemyTorpedoed.Add(holder.SupportType == BattleStatus.SupportInfo.Type.Torpedo);
+                    enemyBombed.Add(holder.SupportType == BattleProcess.SupportInfo.Type.GunFight);
+                    enemyTorpedoed.Add(holder.SupportType == BattleProcess.SupportInfo.Type.Torpedo);
                     enemyDamage.Add(data.api_damage[i]);
                 }
             }
-            return new BattleStatus.AirWarfareInfo(holder) {
+            return new BattleProcess.AirWarfareInfo(holder) {
                 ZwEnemyCarrierShip      = new int[0],
                 ZwEnemyStage1Engaged    = 0,
                 ZwEnemyStage1Lost       = 0,
@@ -231,7 +231,7 @@ namespace LynLogger.Observers
                 ZwOurStage1Lost         = 0,
                 ZwOurStage2Engaged      = 0,
                 ZwOurStage2Lost         = 0,
-                ZwOurAirspaceControl    = BattleStatus.AirWarfareInfo.AirspaceControl.None,
+                ZwOurAirspaceControl    = BattleProcess.AirWarfareInfo.AirspaceControl.None,
 
                 ZwEnemyShipBombed       = enemyBombed.ToArray(),
                 ZwEnemyShipDamages      = enemyDamage.ToArray(),
@@ -242,7 +242,7 @@ namespace LynLogger.Observers
             };
         }
 
-        private BattleStatus.AirWarfareInfo ConvertAirWarfare(BattleStatus holder, dynamic data)
+        private BattleProcess.AirWarfareInfo ConvertAirWarfare(BattleProcess holder, dynamic data)
         {
             List<int> planeFrom = new List<int>(12);
             if(data.api_plane_from != null) {
@@ -275,28 +275,28 @@ namespace LynLogger.Observers
                     }
                 }
             }
-            BattleStatus.AirWarfareInfo.AirspaceControl ac = BattleStatus.AirWarfareInfo.AirspaceControl.None;
+            BattleProcess.AirWarfareInfo.AirspaceControl ac = BattleProcess.AirWarfareInfo.AirspaceControl.None;
             if (data.api_stage1 != null && data.api_stage1.api_disp_seiku()) {
                 switch ((int)(data.api_stage1.api_disp_seiku)) {
                     case 0:
-                        ac = BattleStatus.AirWarfareInfo.AirspaceControl.Parity;
+                        ac = BattleProcess.AirWarfareInfo.AirspaceControl.Parity;
                         break;
                     case 3:
                     case 4:
-                        ac = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)(data.api_stage1.api_disp_seiku + 1);
+                        ac = (BattleProcess.AirWarfareInfo.AirspaceControl)(int)(data.api_stage1.api_disp_seiku + 1);
                         break;
                     case 1:
                     case 2:
-                        ac = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)data.api_stage1.api_disp_seiku;
+                        ac = (BattleProcess.AirWarfareInfo.AirspaceControl)(int)data.api_stage1.api_disp_seiku;
                         break;
                     default:
-                        ac = (BattleStatus.AirWarfareInfo.AirspaceControl)(int)-Math.Abs(data.api_stage1.api_disp_seiku);
+                        ac = (BattleProcess.AirWarfareInfo.AirspaceControl)(int)-Math.Abs(data.api_stage1.api_disp_seiku);
                         break;
                 }
             }
-            BattleStatus.AirWarfareInfo r;
+            BattleProcess.AirWarfareInfo r;
             if (data.api_deck_id()) { //航空支援
-                r = new BattleStatus.AirWarfareInfo(holder) {
+                r = new BattleProcess.AirWarfareInfo(holder) {
                     ZwEnemyCarrierShip      = planeFrom.Where(x => x > 6).Select(x => x - 7).ToArray(),
                     ZwEnemyStage1Engaged    = (int)(data.api_stage1?.api_e_count        ?? 0),
                     ZwEnemyStage1Lost       = (int)(data.api_stage1?.api_e_lostcount    ?? 0),
@@ -312,7 +312,7 @@ namespace LynLogger.Observers
                     ZwOurStage1Lost         = (int)(data.api_stage1?.api_f_lostcount    ?? 0),
                     ZwOurStage2Engaged      = (int)(data.api_stage2?.api_f_count        ?? 0),
                     ZwOurStage2Lost         = (int)(data.api_stage2?.api_f_lostcount    ?? 0),
-                    ZwOurAirspaceControl    = BattleStatus.AirWarfareInfo.AirspaceControl.None,
+                    ZwOurAirspaceControl    = BattleProcess.AirWarfareInfo.AirspaceControl.None,
 
                     ZwEnemyShipBombed       = enemyBombed.ToArray(),
                     ZwEnemyShipDamages      = enemyDamage.ToArray(),
@@ -322,7 +322,7 @@ namespace LynLogger.Observers
                     ZwOurShipTorpedoed      = new bool[0]
                 };
             } else {
-                r = new BattleStatus.AirWarfareInfo(holder) {
+                r = new BattleProcess.AirWarfareInfo(holder) {
                     ZwEnemyCarrierShip      = planeFrom.Where(x => x > 6).Select(x => x - 7).ToArray(),
                     ZwEnemyReconnInTouch    = (int)(data.api_stage1?.api_touch_plane[1] ?? -1),
                     ZwEnemyStage1Engaged    = (int)(data.api_stage1?.api_e_count        ?? 0),
@@ -347,7 +347,7 @@ namespace LynLogger.Observers
                 };
                 if (data.api_stage2 != null && data.api_stage2.api_air_fire() && data.api_stage2.api_air_fire != null) {//对空CI
                     r.ZwCutInShipNo = (int)data.api_stage2.api_air_fire.api_idx;
-                    r.ZwCutInType = (BattleStatus.AirWarfareInfo.AaCutInType)(int)data.api_stage2.api_air_fire.api_kind;
+                    r.ZwCutInType = (BattleProcess.AirWarfareInfo.AaCutInType)(int)data.api_stage2.api_air_fire.api_kind;
                     List<int> ciEquipts = new List<int>();
                     for (int i = 0; data.api_stage2.api_air_fire.api_use_items.IsDefined(i); i++) {
                         ciEquipts.Add((int)data.api_stage2.api_air_fire.api_use_items[i]);
@@ -370,19 +370,19 @@ namespace LynLogger.Observers
             return r;
         }
 
-        private BattleStatus.TorpedoInfo[] ConvertTorpedoInfo(BattleStatus holder, dynamic data)
+        private BattleProcess.TorpedoInfo[] ConvertTorpedoInfo(BattleProcess holder, dynamic data)
         {
-            var r = new List<BattleStatus.TorpedoInfo>(12);
+            var r = new List<BattleProcess.TorpedoInfo>(12);
             for(int i = 1; i < 7; i++) {
                 if(data.api_frai.IsDefined(i) && (data.api_frai[i] > 0)) {
-                    r.Add(new BattleStatus.TorpedoInfo(holder) {
+                    r.Add(new BattleProcess.TorpedoInfo(holder) {
                         ZwFrom = i,
                         ZwTo = (int)data.api_frai[i] + 6,
                         ZwDamage = data.api_fydam[i]
                     });
                 }
                 if(data.api_erai.IsDefined(i) && (data.api_erai[i] > 0)) {
-                    r.Add(new BattleStatus.TorpedoInfo(holder) {
+                    r.Add(new BattleProcess.TorpedoInfo(holder) {
                         ZwFrom = i+6,
                         ZwTo = (int)data.api_erai[i],
                         ZwDamage = data.api_eydam[i]
@@ -392,9 +392,9 @@ namespace LynLogger.Observers
             return r.ToArray();
         }
 
-        private BattleStatus.BombardInfo[] ConvertBombards(BattleStatus holder, dynamic data)
+        private BattleProcess.BombardInfo[] ConvertBombards(BattleProcess holder, dynamic data)
         {
-            List<BattleStatus.BombardInfo> r = new List<BattleStatus.BombardInfo>(12);
+            List<BattleProcess.BombardInfo> r = new List<BattleProcess.BombardInfo>(12);
             for(int i = 1; data.api_at_list.IsDefined(i); i++) {
                 List<double> dmgs = new List<double>(2);
                 List<int> tgts = new List<int>(2);
@@ -419,12 +419,12 @@ namespace LynLogger.Observers
                     attackType = (int)-data.api_sp_list[i];
                 }
 
-                r.Add(new BattleStatus.BombardInfo(holder) {
+                r.Add(new BattleProcess.BombardInfo(holder) {
                     ZwFrom = (int)data.api_at_list[i],
                     ZwTo = tgts.ToArray(),
                     ZwDamage = dmgs.ToArray(),
                     ZwEquipts = sis.Select(x => new EquiptInfo(KanColleClient.Current.Master.SlotItems[x], x)).ToArray(),
-                    ZwType = (BattleStatus.BombardInfo.AttackType)attackType
+                    ZwType = (BattleProcess.BombardInfo.AttackType)attackType
                 });
             }
             return r.ToArray();
@@ -433,7 +433,7 @@ namespace LynLogger.Observers
         public void OnCompleted() { }
         public void OnError(Exception error) { }
 
-        private static readonly BattleStatus.AirWarfareInfo _dummyAirwarfare = new BattleStatus.AirWarfareInfo(null) {
+        private static readonly BattleProcess.AirWarfareInfo _dummyAirwarfare = new BattleProcess.AirWarfareInfo(null) {
             ZwEnemyCarrierShip = new int[0],
             ZwEnemyReconnInTouch = -1,
             ZwEnemyStage1Engaged = 0,
@@ -446,7 +446,7 @@ namespace LynLogger.Observers
             ZwOurStage1Lost = 0,
             ZwOurStage2Engaged = 0,
             ZwOurStage2Lost = 0,
-            ZwOurAirspaceControl = BattleStatus.AirWarfareInfo.AirspaceControl.None,
+            ZwOurAirspaceControl = BattleProcess.AirWarfareInfo.AirspaceControl.None,
             ZwEnemyShipBombed = new bool[6],
             ZwEnemyShipDamages = new double[6],
             ZwEnemyShipTorpedoed = new bool[6],

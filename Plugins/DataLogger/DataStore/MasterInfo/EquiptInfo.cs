@@ -18,7 +18,7 @@ namespace LynLogger.DataStore.MasterInfo
         [Serialize(4)] public int AsControl { get; private set; }
         [Serialize(5)] public string EquiptName { get; private set; }
 
-        public int SlotAsControl { get { return (int)(Math.Sqrt(EquiptCount) * AsControl); } }
+        public int SlotAsControl => (int)(Math.Sqrt(EquiptCount) * AsControl);
 
         public EquiptInfo(SlotItemInfo info, int count, int id = 0)
         {

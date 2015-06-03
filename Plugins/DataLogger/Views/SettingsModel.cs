@@ -8,20 +8,8 @@ namespace LynLogger.Views
 {
     public class SettingsModel : NotificationSourceObject
     {
-        /*private CleanupDataByCountCommand cleanCountCmd;
-        public ICommand CleanupByCount { get { return cleanCountCmd ?? (cleanCountCmd = new CleanupDataByCountCommand()); } }
-
-        private CleanupDataByTimeCommand cleanTimeCmd;
-        public ICommand CleanupByTime { get { return cleanTimeCmd ?? (cleanTimeCmd = new CleanupDataByTimeCommand()); } }
-
-        private CleanupDataRemoveNonExistenceCommand cleanDeadCmd;
-        public ICommand CleanupDead { get { return cleanDeadCmd ?? (cleanDeadCmd = new CleanupDataRemoveNonExistenceCommand()); } }*/
-
         private SaveDataCommand saveDataCmd;
-        public ICommand SaveData { get { return saveDataCmd ?? (saveDataCmd = new SaveDataCommand()); } }
-
-        //private BrowseFileCommand browseFileCmd;
-        //public ICommand BrowseFile { get { return browseFileCmd ?? (browseFileCmd = new BrowseFileCommand()); } }
+        public ICommand SaveData => saveDataCmd ?? (saveDataCmd = new SaveDataCommand());
 
         public int BasicInfoLoggingInterval
         {

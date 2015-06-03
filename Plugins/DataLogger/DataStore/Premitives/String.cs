@@ -13,8 +13,8 @@ namespace LynLogger.DataStore.Premitives
     {
         private string value = "";
 
-        public override IEnumerable<TypeIdentifier> Type { get { return Collections.AsEnumerable(TypeIdentifier.String); } }
-        public string Value { get { return value; } }
+        public override IEnumerable<TypeIdentifier> Type => Collections.AsEnumerable(TypeIdentifier.String);
+        public string Value => value;
 
         public String() { }
         public String(string value) { this.value = value; }

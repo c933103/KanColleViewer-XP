@@ -25,7 +25,7 @@ namespace LynLogger
         {
             get
             {
-                return "3.8.2-1.1(T4)"
+                return "3.8.2-1.1(T5)"
 #if DEBUG
                      + "d"
 #endif
@@ -40,22 +40,30 @@ namespace LynLogger
             remove { }
         }
 
-        private static readonly Logger.BasicInfoLogger bil = new Logger.BasicInfoLogger();
-        private static readonly Logger.ShipDataLogger sdl = new Logger.ShipDataLogger();
-
         internal Observers.ApiBattleObserver BattleObserver { get; private set; }
         internal Observers.ApiBattleResultObserver BattleResultObserver { get; private set; }
         internal Observers.ApiMapStartNextObserver MapStartNextObserver { get; private set; }
         internal Observers.ApiPracticeEnemyInfoObserver PracticeEnemyInfoObserver { get; private set; }
         internal Observers.ApiCreateItemObserver CreateItemObserver { get; private set; }
         internal Observers.ApiCreateShipObserver CreateShipObserver { get; private set; }
+        internal Observers.ApiPortObserver PortObserver { get; private set; }
 
         private LinkedList<IDisposable> _disposables = new LinkedList<IDisposable>();
-        private ToolsView _view = new ToolsView();
+        private ToolsView _view;
+
+        static LynLoggerMain()
+        {
+            Logger.BasicInfoLogger.Init();
+            Logger.ShipDataLogger.Init();
+            Logger.SortieLogger.Init();
+            Logger.DrillLogger.Init();
+        }
 
         public LynLoggerMain()
         {
-            _disposables.AddLast(KanColleClient.Current.Proxy.api_port.TryParse<kcsapi_port>().Subscribe(new Observers.ApiPortObserver()));
+            PortObserver = new Observers.ApiPortObserver();
+            _disposables.AddLast(KanColleClient.Current.Proxy.api_port.TryParse<kcsapi_port>().Subscribe(PortObserver));
+
             _disposables.AddLast(KanColleClient.Current.Proxy.api_get_member_ship2.TryParse<kcsapi_ship2[]>().Subscribe(new Observers.ApiShip2Observer()));
 
             BattleObserver = new Observers.ApiBattleObserver();
@@ -95,14 +103,11 @@ namespace LynLogger
             return null;
         }
 
-        public string ToolName
-        {
-            get { return "LynLogger"; }
-        }
+        public string ToolName => "LynLogger";
 
         public object GetToolView()
         {
-            return _view;
+            return _view ?? (_view = new ToolsView());
         }
 
         public object GetSettingsView()
@@ -146,10 +151,7 @@ namespace LynLogger
             _className = className;
         }
 
-        public string ClassName
-        {
-            get { return _className; }
-        }
+        public string ClassName => _className;
     }
 
     public enum TriState
@@ -168,6 +170,9 @@ namespace LynLogger
     {
         [Serialize(0)] public double UpperBound { get; set; }
         [Serialize(1)] public double LowerBound { get; set; }
+
+        public FuzzyDouble() { }
+        internal FuzzyDouble(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { }
 
         public static FuzzyDouble operator +(FuzzyDouble a, FuzzyDouble b)
         {

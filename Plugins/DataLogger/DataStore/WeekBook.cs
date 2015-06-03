@@ -14,11 +14,16 @@ namespace LynLogger.DataStore
     {
         [Serialize(0)] public BasicInfo BasicInfo { get; private set; }
         /*Serialize1*/ private SortedDictionary<int, Ship> _ships;
-        public ulong SequenceId { get { return 0; } }
-        public string MemberId { get { return _holder.MemberId; } }
-        public long EndTimestamp { get { return Helpers.UnixTimestamp; } }
-        public long StartTimestamp { get { return EndTimestamp - 7*86400; } }
+        public ulong SequenceId => 0;
+        public string MemberId => _holder.MemberId;
+        public long EndTimestamp => Helpers.UnixTimestamp;
+        public long StartTimestamp => EndTimestamp - 7*86400;
         public IShipsLogAccessor Ships { get; }
+        [Serialize(2)] private Histogram<SortieInfo> _sortieLog;
+        [Serialize(3)] private Histogram<DrillInfo> _drillLog;
+
+        public Histogram<SortieInfo> SortieLog => _sortieLog ?? (_sortieLog = new Histogram<SortieInfo>(this));
+        public Histogram<DrillInfo> DrillLog => _drillLog ?? (_drillLog = new Histogram<DrillInfo>(this));
 
         private Store _holder;
 
@@ -45,7 +50,7 @@ namespace LynLogger.DataStore
             {
                 return new Dictionary<ulong, HandlerInfo>() {
                     [1] = new HandlerInfo(
-                        x => x._ships.GetSerializationInfo(k => new Premitives.SignedInteger(k)),
+                        (x, p) => x._ships.GetSerializationInfo(p, (k, p1) => new Premitives.SignedInteger(k)),
                         (o, i, p) => o._ships = new SortedDictionary<int, Ship>(((Premitives.Dictionary<Premitives.SignedInteger, Premitives.Compound>)i).Convert(x => (int)x.Value, x => new Ship(x, p)))),
                 };
             }

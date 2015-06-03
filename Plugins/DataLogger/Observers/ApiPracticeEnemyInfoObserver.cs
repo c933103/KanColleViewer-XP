@@ -45,6 +45,9 @@ namespace LynLogger.Observers
 
                 PracticeEnemyInfo result = new PracticeEnemyInfo() {
                     ZwEnemyShips = enemyShips.ToArray(),
+                    ZwEnemyName = data.api_nickname,
+                    ZwEnemyLevel = (int)data.api_level,
+                    ZwEnemyFleetName = data.api_deckname,
                     ZwRawData = json
                 };
                 _onPracticeEnemyInfo(result);

@@ -85,7 +85,7 @@ namespace LynLogger.DataStore.LogBook
             get
             {
                 return new Dictionary<ulong, HandlerInfo>() {
-                    [1] = new HandlerInfo(x => null, (o, i, p) => { }),
+                    [1] = HandlerInfo.NoOp,
                 };
             }
         }

@@ -3,14 +3,18 @@ using LynLogger.DataStore.LogBook;
 
 namespace LynLogger.Logger
 {
-    public class ShipDataLogger
+    static class ShipDataLogger
     {
-        public ShipDataLogger()
+        static bool _initialized;
+
+        public static void Init()
         {
+            if (_initialized) return;
+            _initialized = true;
             Store.OnDataStoreCreate += (sid, store) => store.OnShipDataChange += (sender, x) => ProcShipDataChanged(sender, x);
         }
 
-        void ProcShipDataChanged(Store ds, int shipId)
+        static void ProcShipDataChanged(Store ds, int shipId)
         {
             var ship = ds.Ships[shipId];
             var histo = new IShipsLogAccessor[] { ds.CurrentLogbook.Ships, ds.Weekbook.Ships };

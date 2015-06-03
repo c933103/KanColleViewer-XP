@@ -13,8 +13,8 @@ namespace LynLogger.DataStore.Premitives
     {
         private ulong value;
 
-        public override IEnumerable<TypeIdentifier> Type { get { return Collections.AsEnumerable(TypeIdentifier.UInt); } }
-        public ulong Value { get { return value; } }
+        public override IEnumerable<TypeIdentifier> Type => Collections.AsEnumerable(TypeIdentifier.UInt);
+        public ulong Value => value;
 
         public UnsignedInteger() { }
         public UnsignedInteger(ulong value) { this.value = value; }

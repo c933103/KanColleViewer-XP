@@ -14,48 +14,44 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LynLogger.Views
+namespace LynLogger.Views.Controls
 {
     /// <summary>
     /// VerticalTabViewControl.xaml 的交互逻辑
     /// </summary>
     public partial class VerticalTabViewControl : UserControl, INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public VerticalTabViewControl()
         {
             InitializeComponent();
         }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public static readonly DependencyProperty dpTabViewItems = DependencyProperty.Register("TabViewItems", typeof(IList<TabViewItem>), typeof(VerticalTabViewControl));
-        public static readonly DependencyProperty dpTabViewSelected = DependencyProperty.Register("TabViewSelected", typeof(TabViewItem), typeof(VerticalTabViewControl));
+        public static readonly DependencyProperty dpTabViewItems = DependencyProperty.Register(nameof(TabViewItems), typeof(IList<TabViewItem>), typeof(VerticalTabViewControl), new PropertyMetadata((o, e) => ((VerticalTabViewControl)o).RaisePropertyChanged(e.Property.Name)));
+        public static readonly DependencyProperty dpTabViewSelected = DependencyProperty.Register(nameof(TabViewSelected), typeof(TabViewItem), typeof(VerticalTabViewControl), new PropertyMetadata((o, e) => ((VerticalTabViewControl)o).RaisePropertyChanged(e.Property.Name)));
 
         public IList<TabViewItem> TabViewItems
         {
             get { return (IList<TabViewItem>)GetValue(dpTabViewItems); }
-            set
-            {
-                SetValue(dpTabViewItems, value);
-                if(PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("TabViewItems"));
-            }
+            set { SetValue(dpTabViewItems, value); }
         }
 
         public TabViewItem TabViewSelected
         {
             get { return (TabViewItem)GetValue(dpTabViewSelected); }
-            set
-            {
-                SetValue(dpTabViewSelected, value);
-                if(PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("TabViewSelected"));
-            }
+            set { SetValue(dpTabViewSelected, value); }
         }
 
         private void Grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             TabViewSelected = (TabViewItem)((Border)sender).DataContext;
+        }
+
+        private void RaisePropertyChanged(string name)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(name));
         }
     }
 }
