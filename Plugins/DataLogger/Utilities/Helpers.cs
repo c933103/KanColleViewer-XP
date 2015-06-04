@@ -10,7 +10,7 @@ namespace LynLogger
     public static class Helpers
     {
         public static readonly DateTimeOffset Epoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, 0, TimeSpan.Zero);
-        public static long UnixTimestamp { get { return ToUnixTimestamp(DateTimeOffset.UtcNow); } }
+        public static long UnixTimestamp => ToUnixTimestamp(DateTimeOffset.UtcNow);
 
         public static long ToUnixTimestamp(this DateTimeOffset dt)
         {
@@ -207,6 +207,7 @@ namespace LynLogger
 
         public static T Clone<T>(this T s) where T :ICloneable
         {
+            if (s == null) return default(T);
             return (T)s.Clone();
         }
 

@@ -46,9 +46,9 @@ namespace LynLogger.Views
         private List<SortRequest<Ship>> sortMode;
         private List<ComparerBase<Ship>> avaliableSorts;
 
-        public IEnumerable<string> MapAreas { get { return Data.MapExperienceTable.Instance.Keys; } }
-        public IEnumerable<Ranking> Ranks { get { return _ranks; } }
-        public IEnumerable<SortRequest<Ship>> ShipSortMode { get { return new LinkedList<SortRequest<Ship>>(sortMode); } }
+        public IEnumerable<string> MapAreas => Data.MapExperienceTable.Instance.Keys;
+        public IEnumerable<Ranking> Ranks => _ranks;
+        public IEnumerable<SortRequest<Ship>> ShipSortMode => new LinkedList<SortRequest<Ship>>(sortMode);
         
         public IEnumerable<Ship> Ships
         {
@@ -190,8 +190,8 @@ namespace LynLogger.Views
             }
         }
 
-        public int FuelReq { get { return SelectedShip == null ? 0 : SelectedShip.Fuel - SelectedShip.MaxFuel; } }
-        public int AmmoReq { get { return SelectedShip == null ? 0 : SelectedShip.Ammo - SelectedShip.MaxAmmo; } }
+        public int FuelReq => SelectedShip == null ? 0 : SelectedShip.Fuel - SelectedShip.MaxFuel;
+        public int AmmoReq => SelectedShip == null ? 0 : SelectedShip.Ammo - SelectedShip.MaxAmmo;
 
         public ShipStatusModel()
         {
@@ -306,7 +306,7 @@ namespace LynLogger.Views
             }
 
             public SortRequest(ShipStatusModel parent) { this.parent = parent; }
-            public IEnumerable<ComparerBase<Ship>> SortModes { get { return parent.avaliableSorts; } }
+            public IEnumerable<ComparerBase<Ship>> SortModes => parent.avaliableSorts;
         }
     }
 }

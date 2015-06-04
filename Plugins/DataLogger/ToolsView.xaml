@@ -4,16 +4,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:vm="clr-namespace:Grabacr07.KanColleViewer.ViewModels;assembly=KanColleViewer"
 			 xmlns:local="clr-namespace:LynLogger"
-			 xmlns:localViews="clr-namespace:LynLogger.Views"
+			 xmlns:controls="clr-namespace:LynLogger.Views.Controls"
              xmlns:Custom="http://schemes.grabacr.net/winfx/2014/controls"
              x:Class="LynLogger.ToolsView" 
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="640"
              ScrollViewer.VerticalScrollBarVisibility="Hidden"
              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-             Height="{Binding ViewportHeight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}}">
+             Height="{Binding ViewportHeight, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type ScrollViewer}}}">
     <UserControl.DataContext>
         <local:ToolsModel/>
     </UserControl.DataContext>
-    <localViews:HorizontalTabViewControl Grid.Row="1" TabViewItems="{Binding Pages, Mode=OneWay}" TabViewSelected="{Binding SelectedPage, Mode=TwoWay}"/>
+    <controls:HorizontalTabViewControl TabViewItems="{Binding Pages, Mode=OneWay}" TabViewSelected="{Binding SelectedPage, Mode=TwoWay}"/>
 </UserControl>

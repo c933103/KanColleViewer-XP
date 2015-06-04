@@ -1,4 +1,6 @@
-﻿using LynLogger.DataStore.MasterInfo;
+﻿using LynLogger.DataStore.Extensions;
+using LynLogger.DataStore.MasterInfo;
+using LynLogger.DataStore.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +9,19 @@ using System.Threading.Tasks;
 
 namespace LynLogger.Models.Battling
 {
-    public class PracticeEnemyInfo
+    public class PracticeEnemyInfo : AbstractDSSerializable<PracticeEnemyInfo>
     {
-        internal EnemyShipInfo[] ZwEnemyShips;
-        internal string ZwRawData;
+        [Serialize(0)] internal int ZwEnemyLevel;
+        [Serialize(1)] internal string ZwEnemyName;
+        [Serialize(2)] internal string ZwEnemyFleetName;
+        /*[Serialize(3)]*/ internal EnemyShipInfo[] ZwEnemyShips;
+        [Serialize(4, DepthLimit = 2)] internal string ZwRawData;
 
-        public IList<EnemyShipInfo> EnemyShips { get { return ZwEnemyShips; } }
-        public string RawData { get { return ZwRawData; } }
+        public int EnemyLevel => ZwEnemyLevel;
+        public string EnemyName => ZwEnemyName;
+        public string EnemyFleetName => ZwEnemyFleetName;
+        public IList<EnemyShipInfo> EnemyShips => ZwEnemyShips;
+        public string RawData => ZwRawData;
 
         public int DrillBasicExp
         {
@@ -30,17 +38,34 @@ namespace LynLogger.Models.Battling
             }
         }
 
-        public struct EnemyShipInfo
+        internal PracticeEnemyInfo() { }
+        internal PracticeEnemyInfo(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { }
+        protected override IDictionary<ulong, HandlerInfo> CustomFieldHandlers
         {
-            internal int ZwId;
-            internal int ZwLevel;
-            internal ShipNameType ZwShipType;
-            internal int ZwStar;
+            get
+            {
+                return new Dictionary<ulong, HandlerInfo>() {
+                    [3] = new HandlerInfo(
+                        (x, p) => x.ZwEnemyShips.GetSerializationInfo(p),
+                        (o, i, p) => o.ZwEnemyShips = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i).Convert(x => new EnemyShipInfo(x, p)).ToArray()),
+                };
+            }
+        }
 
-            public int Id { get { return ZwId; } }
-            public int Level { get { return ZwLevel; } }
-            public ShipNameType ShipType { get { return ZwShipType; } }
-            public int Star { get { return ZwStar; } }
+        public class EnemyShipInfo : AbstractDSSerializable<EnemyShipInfo>
+        {
+            [Serialize(0)] internal int ZwId;
+            [Serialize(1)] internal int ZwLevel;
+            [Serialize(2)] internal ShipNameType ZwShipType;
+            [Serialize(3)] internal int ZwStar;
+
+            public int Id => ZwId;
+            public int Level => ZwLevel;
+            public ShipNameType ShipType => ZwShipType;
+            public int Star => ZwStar;
+
+            internal EnemyShipInfo() { }
+            internal EnemyShipInfo(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { }
         }
     }
 }

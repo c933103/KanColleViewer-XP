@@ -15,7 +15,7 @@ namespace LynLogger.Models
     {
         private static ConcurrentDictionary<Type, IDictionary<string, ICollection<string>>> _cache = new ConcurrentDictionary<Type, IDictionary<string, ICollection<string>>>();
 
-        protected virtual IDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency { get { return null; } }
+        protected virtual IDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency => null;
 
         [NonSerialized]
         private IDictionary<string, ICollection<string>> _propertyChangePath;

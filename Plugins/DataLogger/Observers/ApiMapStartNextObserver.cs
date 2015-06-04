@@ -34,6 +34,7 @@ namespace LynLogger.Observers
                     ZwMapAreaId = (int)data.api_maparea_id,
                     ZwMapSectionId = (int)data.api_mapinfo_no,
                     ZwMapLocId = (int)data.api_no,
+                    ZwNextNodeCount = (int)data.api_next,
                     //ZwMapBossLocId = (int)data.api_bosscell_no,
                     ZwEvent = (MapNext.EventType)((int)data.api_event_id * ((int)data.api_event_kind == 2 ? -1 : 1)),
                     ZwRawData = json

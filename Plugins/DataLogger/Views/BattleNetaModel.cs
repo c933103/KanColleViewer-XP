@@ -13,15 +13,15 @@ namespace LynLogger.Views
             get
             {
                 return new Dictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> {
-                    [o => ((BattleNetaModel)o).EstimatedExp] = new List<Expression<Func<object, object>>> {
+                    [o => ((BattleNetaModel)o).BasicExp] = new List<Expression<Func<object, object>>> {
                         o => ((BattleNetaModel)o).Battle },
-                    [o => ((BattleNetaModel)o).OurEndMvpStatus] = new List<Expression<Func<object, object>>> {
+                    [o => ((BattleNetaModel)o).IsDrill] = new List<Expression<Func<object, object>>> {
                         o => ((BattleNetaModel)o).Battle },
                     [o => ((BattleNetaModel)o).ShowBattleResult] = new List<Expression<Func<object, object>>> {
                         o => ((BattleNetaModel)o).Battle,
                         o => ((BattleNetaModel)o).MapNext,
                         o => ((BattleNetaModel)o).PracticeEnemy },
-                    [o => ((BattleNetaModel)o).ShowBattleStatus] = new List<Expression<Func<object, object>>> {
+                    [o => ((BattleNetaModel)o).ShowBattleProcess] = new List<Expression<Func<object, object>>> {
                         o => ((BattleNetaModel)o).MapNext,
                         o => ((BattleNetaModel)o).PracticeEnemy }
                 };
@@ -66,20 +66,20 @@ namespace LynLogger.Views
             }
         }
 
-        private bool _showBattleStatus = false;
-        public bool ShowBattleStatus
+        private bool _showBattleProcess = false;
+        public bool ShowBattleProcess
         {
-            get { var t = _showBattleStatus; _showBattleStatus = false; return t; }
+            get { var t = _showBattleProcess; _showBattleProcess = false; return t; }
             set
             {
-                if (_showBattleStatus == value) return;
-                _showBattleStatus = value;
+                if (_showBattleProcess == value) return;
+                _showBattleProcess = value;
                 RaisePropertyChanged();
             }
         }
 
-        private BattleStatus _battle;
-        public BattleStatus Battle
+        private BattleProcess _battle;
+        public BattleProcess Battle
         {
             get { return _battle; }
             set
@@ -114,79 +114,24 @@ namespace LynLogger.Views
             }
         }
 
-        private FuzzyDouble _mvpRange;
-        public FuzzyDouble MvpRange
-        {
-            get { return _mvpRange; }
-            private set
-            {
-                _mvpRange = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public IEnumerable<KeyValuePair<BattleStatus.ShipHpStatus, TriState>> OurEndMvpStatus
-        {
-            get
-            {
-                if(Battle == null) yield break;
-
-                var EndShips = Battle.OurShipBattleEndHp.ToList();
-                MvpRange = EndShips.Aggregate(new FuzzyDouble(), (range, ship) => FuzzyDouble.UpperRange(range, ship.DeliveredDamage));
-                var fuzzy = EndShips.Select(x => x.DeliveredDamage).Where(x => x.LowerBound != x.UpperBound);
-                if(fuzzy.Count() != 0) {
-                    MvpRange.LowerBound = Math.Max(MvpRange.LowerBound, fuzzy.Max(x => x.UpperBound) / fuzzy.Count());
-                }
-
-                var inRangeState = EndShips.Count(x => (x.DeliveredDamage >= MvpRange) != TriState.No) == 1 ? TriState.Yes : TriState.DK;
-                foreach(var ship in EndShips) {
-                    yield return new KeyValuePair<BattleStatus.ShipHpStatus, TriState>(ship, (ship.DeliveredDamage >= MvpRange) != TriState.No ? inRangeState : TriState.No);
-                }
-            }
-        }
-
-        public int EstimatedExp
+        public int BasicExp
         {
             get
             {
                 if(Battle == null) return 2;
-                int basic;
                 switch(ShowInfo) {
                     case ViewShowInfo.MapNext:
-                        basic = Data.MapExperienceTable.Instance[string.Format("{0}-{1}", MapNext.MapAreaId, MapNext.MapSectionId)];
-                        switch(Battle.Rank) {
-                            case Ranking.S:
-                                return (int)(basic * 1.2);
-                            case Ranking.A:
-                            case Ranking.B:
-                                return basic;
-                            case Ranking.C:
-                                return (int)(basic * 0.8);
-                            case Ranking.D:
-                                return (int)(basic * 0.7);
-                            case Ranking.E:
-                                return (int)(basic * 0.5);
-                        }
-                        break;
+                        return Data.MapExperienceTable.Instance[string.Format("{0}-{1}", MapNext.MapAreaId, MapNext.MapSectionId)];
                     case ViewShowInfo.PracticeEnemyInfo:
-                        basic = Battle.DrillBasicExp;
-                        switch(Battle.Rank) {
-                            case Ranking.S:
-                                return (int)(basic * 1.2);
-                            case Ranking.A:
-                            case Ranking.B:
-                                return basic;
-                            case Ranking.C:
-                                return (int)(basic * 0.64);
-                            case Ranking.D:
-                                return (int)(basic * 0.56);
-                            case Ranking.E:
-                                return (int)(basic * 0.4);
-                        }
-                        break;
+                        return Battle.DrillBasicExp;
                 }
                 return 2;
             }
+        }
+
+        public bool IsDrill
+        {
+            get { return ShowInfo == ViewShowInfo.PracticeEnemyInfo; }
         }
 
         public BattleNetaModel()
@@ -215,11 +160,12 @@ namespace LynLogger.Views
                         case ViewState.AnticipateNightBattle:
                             if(a.NightWar == null) goto case ViewState.AnticipateBattle;
                             _state = ViewState.AnticipateBattle;
-                            Battle.NightWar = a.NightWar;
-                            RaiseMultiPropertyChanged(() => Battle);
+                            var b = Battle.Clone();
+                            b.NightWar = a.NightWar;
+                            Battle = b;
                             break;
                     }
-                    ShowBattleStatus = true;
+                    ShowBattleProcess = true;
                 };
                 i.BattleResultObserver.OnBattleResult += a => {
                     BattleResult = a;

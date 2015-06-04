@@ -16,6 +16,11 @@ namespace LynLogger.DataStore
         [Serialize(1)] public ulong SequenceId { get; private set; }
         [Serialize(2)] public BasicInfo BasicInfo { get; private set; }
         /*Serialize3*/ private SortedDictionary<int, Ship> _ships;
+        [Serialize(4)] private Histogram<SortieInfo> _sortieLog;
+        [Serialize(5)] private Histogram<DrillInfo> _drillLog;
+
+        public Histogram<SortieInfo> SortieLog => _sortieLog ?? (_sortieLog = new Histogram<SortieInfo>(this));
+        public Histogram<DrillInfo> DrillLog => _drillLog ?? (_drillLog = new Histogram<DrillInfo>(this));
         public long StartTimestamp { get; }
         public long EndTimestamp { get; }
 
@@ -49,7 +54,7 @@ namespace LynLogger.DataStore
             {
                 return new Dictionary<ulong, HandlerInfo>() {
                     [3] = new HandlerInfo(
-                        x => x._ships.GetSerializationInfo(k => new Premitives.SignedInteger(k)),
+                        (x, p) => x._ships.GetSerializationInfo(p, (k, p1) => new Premitives.SignedInteger(k)),
                         (o, i, p) => o._ships = new SortedDictionary<int, Ship>(((Premitives.Dictionary<Premitives.SignedInteger, Premitives.Compound>)i).Convert(x => (int)x.Value, x => new Ship(x, p)))),
                 };
             }
@@ -86,6 +91,8 @@ namespace LynLogger.DataStore
         IShipsLogAccessor Ships { get; }
         long StartTimestamp { get; }
         long EndTimestamp { get; }
+        Histogram<SortieInfo> SortieLog { get; }
+        Histogram<DrillInfo> DrillLog { get; }
     }
 
     public interface IShipsLogAccessor : IEnumerable<Ship>

@@ -17,7 +17,8 @@ namespace LynLogger.Models.Battling
         [Serialize(3)] public ShipNameType DropShip { get; private set; }
         [Serialize(4)] public string FleetName { get; private set; }
         [Serialize(5)] public string MapName { get; private set; }
-
+        [Serialize(6)] public int MvpId { get; private set; }
+        
         public BattleResult(kcsapi_battleresult raw)
         {
             Rank = (Ranking)Enum.Parse(typeof(Ranking), raw.api_win_rank, true);
@@ -25,9 +26,12 @@ namespace LynLogger.Models.Battling
             BaseExp = raw.api_get_base_exp;
             MapName = raw.api_quest_name ?? "";
             FleetName = raw.api_enemy_info?.api_deck_name ?? "";
-            if(raw.api_get_ship != null) {
+            MvpId = raw.api_mvp;
+            if (raw.api_get_ship != null) {
                 DropShip = new ShipNameType(raw.api_get_ship.api_ship_id);
             }
         }
+
+        internal BattleResult(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { }
     }
 }

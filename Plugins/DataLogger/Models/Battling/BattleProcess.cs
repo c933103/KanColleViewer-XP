@@ -1,4 +1,4 @@
-using Grabacr07.KanColleWrapper.Models;
+﻿using Grabacr07.KanColleWrapper.Models;
 using LynLogger.DataStore.MasterInfo;
 using LynLogger.DataStore.Serialization;
 using System;
@@ -10,22 +10,22 @@ namespace LynLogger.Models.Battling
 {
     public interface IShipInfoHolder
     {
-        IList<BattleStatus.ShipInfo> EnemyShips { get; }
-        IList<BattleStatus.ShipInfo> OurShips { get; }
+        IList<BattleProcess.ShipInfo> EnemyShips { get; }
+        IList<BattleProcess.ShipInfo> OurShips { get; }
     }
 
-    public partial class BattleStatus : AbstractDSSerializable<BattleStatus>, ICloneable, IShipInfoHolder
+    public partial class BattleProcess : AbstractDSSerializable<BattleProcess>, ICloneable, IShipInfoHolder
     {
         /*[Serialize(0)]*/ internal ShipInfo[] ZwEnemyShips;
         /*[Serialize(1)]*/ internal ShipInfo[] ZwOurShips;
         [Serialize(2)] internal Formation ZwOurFormation;
         [Serialize(3)] internal Formation ZwEnemyFormation;
-        [Serialize(4)] internal EncounterForm ZwEncounter;
-        [Serialize(5)] internal AirWarfareInfo ZwAirWarfare;
-        [Serialize(6)] internal SupportInfo.Type ZwSupportType;
-        [Serialize(7)] internal SupportInfo ZwSupport;
-        [Serialize(8)] internal ReconnResult ZwOurReconn;
-        [Serialize(9)] internal ReconnResult ZwEnemyReconn;
+        [Serialize(4, DepthLimit = 3)] internal EncounterForm ZwEncounter;
+        [Serialize(5, DepthLimit = 3)] internal AirWarfareInfo ZwAirWarfare;
+        [Serialize(6, DepthLimit = 3)] internal SupportInfo.Type ZwSupportType;
+        [Serialize(7, DepthLimit = 3)] internal SupportInfo ZwSupport;
+        [Serialize(8, DepthLimit = 3)] internal ReconnResult ZwOurReconn;
+        [Serialize(9, DepthLimit = 3)] internal ReconnResult ZwEnemyReconn;
         /*[Serialize(10)]*/ internal TorpedoInfo[] ZwOpeningTorpedoAttack;
         /*[Serialize(11)]*/ internal BombardInfo[] ZwBombardRound1;
         /*[Serialize(12)]*/ internal BombardInfo[] ZwBombardRound2;
@@ -33,33 +33,33 @@ namespace LynLogger.Models.Battling
         /*[Serialize(14)]*/ internal TorpedoInfo[] ZwClosingTorpedoAttack;
         /*[Serialize(15)]*/ internal ShipHpStatus[] ZwOurShipBattleEndHp;
         /*[Serialize(16)]*/ internal ShipHpStatus[] ZwEnemyShipBattleEndHp;
-        [Serialize(17)] internal bool ZwHasNightWar;
-        [Serialize(18)] internal NightWarInfo ZwNightWar;
-        [Serialize(19)] internal string ZwRawData;
+        [Serialize(17, DepthLimit = 3)] internal bool ZwHasNightWar;
+        [Serialize(18, DepthLimit = 3)] internal NightWarInfo ZwNightWar;
+        [Serialize(19, DepthLimit = 3)] internal string ZwRawData;
 
-        public IList<ShipInfo> EnemyShips { get { return ZwEnemyShips; } }
-        public IList<ShipInfo> OurShips { get { return ZwOurShips; } }
-        public Formation OurFormation { get { return ZwOurFormation; } }
-        public Formation EnemyFormation { get { return ZwEnemyFormation; } }
-        public EncounterForm Encounter { get { return ZwEncounter; } }
-        public AirWarfareInfo AirWarfare { get { return ZwAirWarfare; } }
-        public SupportInfo.Type SupportType { get { return ZwSupportType; } }
-        public SupportInfo Support { get { return ZwSupport; } }
-        public ReconnResult OurReconn { get { return ZwOurReconn; } }
-        public ReconnResult EnemyReconn { get { return ZwEnemyReconn; } }
-        public IList<TorpedoInfo> OpeningTorpedoAttack { get { return ZwOpeningTorpedoAttack ?? (ZwOpeningTorpedoAttack = new TorpedoInfo[0]); } }
-        public IList<TorpedoInfo> ClosingTorpedoAttack { get { return ZwClosingTorpedoAttack ?? (ZwClosingTorpedoAttack = new TorpedoInfo[0]); } }
-        public IList<ShipHpStatus> OurShipBattleEndHp { get { return ZwOurShipBattleEndHp ?? (ZwOurShipBattleEndHp = Helpers.Sequence().Take(OurShips.Count).Select(x => new ShipHpStatus(x+1, this)).ToArray()); } }
-        public IList<ShipHpStatus> EnemyShipBattleEndHp { get { return ZwEnemyShipBattleEndHp ?? (ZwEnemyShipBattleEndHp = Helpers.Sequence().Take(EnemyShips.Count).Select(x => new ShipHpStatus(x+7, this)).ToArray()); } }
-        public LimitedValue OurGuage { get { return new LimitedValue(EnemyShipBattleEndHp.Sum(x => x.OrigInfo.CurrentHp - x.HpCurrent), EnemyShips.Sum(x => x.CurrentHp), 0); } }
-        public LimitedValue EnemyGuage { get { return new LimitedValue(OurShipBattleEndHp.Sum(x => x.OrigInfo.CurrentHp - x.HpCurrent), OurShips.Sum(x => x.CurrentHp), 0); } }
+        public IList<ShipInfo> EnemyShips => ZwEnemyShips;
+        public IList<ShipInfo> OurShips => ZwOurShips;
+        public Formation OurFormation => ZwOurFormation;
+        public Formation EnemyFormation => ZwEnemyFormation;
+        public EncounterForm Encounter => ZwEncounter;
+        public AirWarfareInfo AirWarfare => ZwAirWarfare;
+        public SupportInfo.Type SupportType => ZwSupportType;
+        public SupportInfo Support => ZwSupport;
+        public ReconnResult OurReconn => ZwOurReconn;
+        public ReconnResult EnemyReconn => ZwEnemyReconn;
+        public IList<TorpedoInfo> OpeningTorpedoAttack => ZwOpeningTorpedoAttack ?? (ZwOpeningTorpedoAttack = new TorpedoInfo[0]);
+        public IList<TorpedoInfo> ClosingTorpedoAttack => ZwClosingTorpedoAttack ?? (ZwClosingTorpedoAttack = new TorpedoInfo[0]);
+        public IList<ShipHpStatus> OurShipBattleEndHp => ZwOurShipBattleEndHp ?? (ZwOurShipBattleEndHp = Helpers.Sequence().Take(OurShips.Count).Select(x => new ShipHpStatus(x+1, this)).ToArray());
+        public IList<ShipHpStatus> EnemyShipBattleEndHp => ZwEnemyShipBattleEndHp ?? (ZwEnemyShipBattleEndHp = Helpers.Sequence().Take(EnemyShips.Count).Select(x => new ShipHpStatus(x+7, this)).ToArray());
+        public LimitedValue OurGuage => new LimitedValue(EnemyShipBattleEndHp.Sum(x => x.OrigInfo.CurrentHp - x.HpCurrent), EnemyShips.Sum(x => x.CurrentHp), 0);
+        public LimitedValue EnemyGuage => new LimitedValue(OurShipBattleEndHp.Sum(x => x.OrigInfo.CurrentHp - x.HpCurrent), OurShips.Sum(x => x.CurrentHp), 0);
         public int OurGuagePerMil { get { var guage = OurGuage; return guage.Current * 1000 / guage.Maximum; } }
         public int EnemyGuagePerMil { get { var guage = EnemyGuage; return guage.Current * 1000 / guage.Maximum; } }
-        public IList<BombardInfo> BombardRound1 { get { return ZwBombardRound1; } }
-        public IList<BombardInfo> BombardRound2 { get { return ZwBombardRound2; } }
-        public string RawData { get { return ZwRawData; } }
+        public IList<BombardInfo> BombardRound1 => ZwBombardRound1;
+        public IList<BombardInfo> BombardRound2 => ZwBombardRound2;
+        public string RawData => ZwRawData;
 
-        public bool HasNightWar { get { return ZwHasNightWar; } }
+        public bool HasNightWar => ZwHasNightWar;
         public NightWarInfo NightWar
         {
             get { return ZwNightWar; }
@@ -142,18 +142,18 @@ namespace LynLogger.Models.Battling
             [Serialize(4)] internal int ZwOurReconnInTouch;
             [Serialize(5)] internal string ZwEnemyReconnInTouchName;
             [Serialize(6)] internal int ZwEnemyReconnInTouch;
-            [Serialize(7)] internal string ZwRawData;
+            [Serialize(7, DepthLimit = 4)] internal string ZwRawData;
 
             internal IShipInfoHolder _parent;
 
-            public IList<ShipInfo> EnemyShips { get { return _parent?.EnemyShips ?? ZwEnemyShips; } }
-            public IList<ShipInfo> OurShips { get { return _parent?.OurShips ?? ZwOurShips; } }
-            public IList<BombardInfo> Bombard { get { return ZwBombard ?? (ZwBombard = new BombardInfo[0]); } }
-            public int OurReconnInTouch { get { return ZwOurReconnInTouch; } }
-            public string OurReconnInTouchName { get { return ZwOurReconnInTouchName; } }
-            public int EnemyReconnInTouch { get { return ZwEnemyReconnInTouch; } }
-            public string EnemyReconnInTouchName { get { return ZwEnemyReconnInTouchName; } }
-            public string RawData { get { return ZwRawData; } }
+            public IList<ShipInfo> EnemyShips => _parent?.EnemyShips ?? ZwEnemyShips;
+            public IList<ShipInfo> OurShips => _parent?.OurShips ?? ZwOurShips;
+            public IList<BombardInfo> Bombard => ZwBombard ?? (ZwBombard = new BombardInfo[0]);
+            public int OurReconnInTouch => ZwOurReconnInTouch;
+            public string OurReconnInTouchName => ZwOurReconnInTouchName;
+            public int EnemyReconnInTouch => ZwEnemyReconnInTouch;
+            public string EnemyReconnInTouchName => ZwEnemyReconnInTouchName;
+            public string RawData => ZwRawData;
 
             internal NightWarInfo(IShipInfoHolder p) { _parent = p; }
         }
@@ -171,29 +171,29 @@ namespace LynLogger.Models.Battling
             [Serialize(8)] internal ParameterInfo ZwEnhancement;
             /*[Serialize(9)]*/ internal EquiptInfo[] ZwEquipts;
 
-            public int Id { get { return ZwId; } }
-            public int ShipId { get { return ZwShipId; } }
-            public string ShipTypeName { get { return ZwShipTypeName; } }
-            public string ShipName { get { return ZwShipName; } }
-            public int Lv { get { return ZwLv; } }
-            public int CurrentHp { get { return ZwCurrentHp; } }
-            public int MaxHp { get { return ZwMaxHp; } }
-            public ParameterInfo Parameter { get { return ZwParameter; } }
-            public ParameterInfo Enhancement { get { return ZwEnhancement; } }
-            public IList<EquiptInfo> Equipts { get { return ZwEquipts; } }
-            public int ShipAsControl { get { return Equipts.Sum(x => x.SlotAsControl); } }
+            public int Id => ZwId;
+            public int ShipId => ZwShipId;
+            public string ShipTypeName => ZwShipTypeName;
+            public string ShipName => ZwShipName;
+            public int Lv => ZwLv;
+            public int CurrentHp => ZwCurrentHp;
+            public int MaxHp => ZwMaxHp;
+            public ParameterInfo Parameter => ZwParameter;
+            public ParameterInfo Enhancement => ZwEnhancement;
+            public IList<EquiptInfo> Equipts => ZwEquipts;
+            public int ShipAsControl => Equipts.Sum(x => x.SlotAsControl);
 
-            public partial class ParameterInfo : AbstractDSSerializable<ShipInfo>, ICloneable
+            public partial class ParameterInfo : AbstractDSSerializable<ParameterInfo>, ICloneable
             {
                 [Serialize(0)] internal int ZwPower;
                 [Serialize(1)] internal int ZwTorpedo;
                 [Serialize(2)] internal int ZwAntiAir;
                 [Serialize(3)] internal int ZwDefense;
 
-                public int Power { get { return ZwPower; } }
-                public int Torpedo { get { return ZwTorpedo; } }
-                public int AntiAir { get { return ZwAntiAir; } }
-                public int Defense { get { return ZwDefense; } }
+                public int Power => ZwPower;
+                public int Torpedo => ZwTorpedo;
+                public int AntiAir => ZwAntiAir;
+                public int Defense => ZwDefense;
             }
         }
 
@@ -231,37 +231,33 @@ namespace LynLogger.Models.Battling
             /*[Serialize(24)]*/ internal Stage3Report[] ZwOurStage3Report;
             /*[Serialize(25)]*/ internal Stage3Report[] ZwEnemyStage3Report;
 
-            public AirspaceControl OurAirspaceControl { get { return ZwOurAirspaceControl; } }
-            public AirspaceControl EnemyAirspaceControl { get { return (AirspaceControl)(6 - (int)ZwOurAirspaceControl); } }
+            public AirspaceControl OurAirspaceControl => ZwOurAirspaceControl;
+            public AirspaceControl EnemyAirspaceControl => (AirspaceControl)(6 - (int)ZwOurAirspaceControl);
 
-            public IEnumerable<ShipInfo> OurCarrierShip { get { return ZwOurCarrierShip.Select(x => _parent.OurShips[x]); } }
-            public int OurStage1Engaged { get { return ZwOurStage1Engaged; } }
-            public int OurStage1Lost { get { return ZwOurStage1Lost; } }
-            public int OurReconnInTouch { get { return ZwOurReconnInTouch; } }
-            public int OurStage2Engaged { get { return ZwOurStage2Engaged; } }
-            public int OurStage2Lost { get { return ZwOurStage2Lost; } }
-            public string OurReconnInTouchName { get { return ZwOurReconnInTouchName; } }
+            public IEnumerable<ShipInfo> OurCarrierShip => ZwOurCarrierShip.Select(x => _parent.OurShips[x]);
+            public int OurStage1Engaged => ZwOurStage1Engaged;
+            public int OurStage1Lost => ZwOurStage1Lost;
+            public int OurReconnInTouch => ZwOurReconnInTouch;
+            public int OurStage2Engaged => ZwOurStage2Engaged;
+            public int OurStage2Lost => ZwOurStage2Lost;
+            public string OurReconnInTouchName => ZwOurReconnInTouchName;
 
-            public IEnumerable<ShipInfo> EnemyCarrierShip { get { return ZwEnemyCarrierShip.Select(x => _parent.EnemyShips[x]); } }
-            public int EnemyStage1Engaged { get { return ZwEnemyStage1Engaged; } }
-            public int EnemyStage1Lost { get { return ZwEnemyStage1Lost; } }
-            public int EnemyReconnInTouch { get { return ZwEnemyReconnInTouch; } }
-            public int EnemyStage2Engaged { get { return ZwEnemyStage2Engaged; } }
-            public int EnemyStage2Lost { get { return ZwEnemyStage2Lost; } }
-            public string EnemyReconnInTouchName { get { return ZwEnemyReconnInTouchName; } }
+            public IEnumerable<ShipInfo> EnemyCarrierShip => ZwEnemyCarrierShip.Select(x => _parent.EnemyShips[x]);
+            public int EnemyStage1Engaged => ZwEnemyStage1Engaged;
+            public int EnemyStage1Lost => ZwEnemyStage1Lost;
+            public int EnemyReconnInTouch => ZwEnemyReconnInTouch;
+            public int EnemyStage2Engaged => ZwEnemyStage2Engaged;
+            public int EnemyStage2Lost => ZwEnemyStage2Lost;
+            public string EnemyReconnInTouchName => ZwEnemyReconnInTouchName;
 
-            public ShipInfo CutInShip { get { return (ZwCutInShipNo < 0 || ZwCutInShipNo > 5) ? null : _parent.OurShips[ZwCutInShipNo]; } }
-            public AaCutInType CutInType { get { return ZwCutInType; } }
-            public IList<EquiptInfo> CutInEquipts { get { return ZwCutInEquipts; } }
+            public ShipInfo CutInShip => (ZwCutInShipNo < 0 || ZwCutInShipNo > 5) ? null : _parent.OurShips[ZwCutInShipNo];
+            public AaCutInType CutInType => ZwCutInType;
+            public IList<EquiptInfo> CutInEquipts => ZwCutInEquipts;
 
-            public int OurAsControlValue { get { return OurCarrierShip.Sum(x => x.ShipAsControl); } }
-            public int EnemyAsControlValue { get { return EnemyCarrierShip.Sum(x => x.ShipAsControl); } }
+            public int OurAsControlValue => OurCarrierShip.Sum(x => x.ShipAsControl);
+            public int EnemyAsControlValue => EnemyCarrierShip.Sum(x => x.ShipAsControl);
 
-            public IList<Stage3Report> OurStage3Report
-            {
-                get
-                {
-                    return ZwOurStage3Report ?? (ZwOurStage3Report = Helpers.Zip(ZwOurShipDamages, ZwOurShipBombed, ZwOurShipTorpedoed, Helpers.Sequence(),
+            public IList<Stage3Report> OurStage3Report => ZwOurStage3Report ?? (ZwOurStage3Report = Helpers.Zip(ZwOurShipDamages, ZwOurShipBombed, ZwOurShipTorpedoed, Helpers.Sequence(),
                         (damage, bombed, torpedoed, ship) =>
                             new Stage3Report() {
                                 ZwShip = ship+1,
@@ -271,14 +267,8 @@ namespace LynLogger.Models.Battling
                                 _parent = _parent
                             }
                     ).Where(x => x.Bombed || x.Torpedoed).ToArray());
-                }
-            }
 
-            public IList<Stage3Report> EnemyStage3Report
-            {
-                get
-                {
-                    return ZwEnemyStage3Report ?? (ZwEnemyStage3Report = Helpers.Zip(ZwEnemyShipDamages, ZwEnemyShipBombed, ZwEnemyShipTorpedoed, Helpers.Sequence(),
+            public IList<Stage3Report> EnemyStage3Report => ZwEnemyStage3Report ?? (ZwEnemyStage3Report = Helpers.Zip(ZwEnemyShipDamages, ZwEnemyShipBombed, ZwEnemyShipTorpedoed, Helpers.Sequence(),
                         (damage, bombed, torpedoed, ship) =>
                             new Stage3Report() {
                                 ZwShip = ship+7,
@@ -288,8 +278,6 @@ namespace LynLogger.Models.Battling
                                 _parent = _parent
                             }
                     ).Where(x => x.Bombed || x.Torpedoed).ToArray());
-                }
-            }
 
             internal IShipInfoHolder _parent;
             public AirWarfareInfo(IShipInfoHolder parent) { _parent = parent; }
@@ -303,10 +291,10 @@ namespace LynLogger.Models.Battling
 
                 internal IShipInfoHolder _parent;
 
-                public ShipInfo Ship { get { return ZwShip > 6 ? _parent.EnemyShips[ZwShip - 7] : _parent.OurShips[ZwShip - 1]; } }
-                public bool Bombed { get { return ZwBombed; } }
-                public bool Torpedoed { get { return ZwTorpedoed; } }
-                public double Damage { get { return ZwDamage; } }
+                public ShipInfo Ship => ZwShip > 6 ? _parent.EnemyShips[ZwShip - 7] : _parent.OurShips[ZwShip - 1];
+                public bool Bombed => ZwBombed;
+                public bool Torpedoed => ZwTorpedoed;
+                public double Damage => ZwDamage;
             }
 
             public enum AirspaceControl
@@ -379,9 +367,9 @@ namespace LynLogger.Models.Battling
             [Serialize(1)] internal int ZwTo;
             [Serialize(2)] internal double ZwDamage;
 
-            public ShipInfo From { get { return ZwFrom > 6 ? _parent.EnemyShips[ZwFrom - 7] : _parent.OurShips[ZwFrom - 1]; } }
-            public ShipInfo To { get { return ZwTo > 6 ? _parent.EnemyShips[ZwTo - 7] : _parent.OurShips[ZwTo - 1]; } }
-            public double Damage { get { return ZwDamage; } }
+            public ShipInfo From => ZwFrom > 6 ? _parent.EnemyShips[ZwFrom - 7] : _parent.OurShips[ZwFrom - 1];
+            public ShipInfo To => ZwTo > 6 ? _parent.EnemyShips[ZwTo - 7] : _parent.OurShips[ZwTo - 1];
+            public double Damage => ZwDamage;
 
             internal IShipInfoHolder _parent;
             public TorpedoInfo(IShipInfoHolder parent) { _parent = parent; ZwDamage = ZwFrom = ZwTo = 0; }
@@ -395,12 +383,12 @@ namespace LynLogger.Models.Battling
             /*[Serialize(3)]*/ internal EquiptInfo[] ZwEquipts;
             /*[Serialize(4)]*/ internal double[] ZwDamage;
 
-            public ShipInfo From { get { return ZwFrom > 6 ? _parent.EnemyShips[ZwFrom - 7] : _parent.OurShips[ZwFrom - 1]; } }
-            public IEnumerable<ShipInfo> To { get { return ZwTo.Select(x => x > 6 ? _parent.EnemyShips[x - 7] : _parent.OurShips[x - 1]); } }
-            public AttackType Type { get { return ZwType; } }
-            public IList<EquiptInfo> Equipts { get { return ZwEquipts; } }
-            public IList<double> Damage { get { return ZwDamage; } }
-            public IEnumerable<KeyValuePair<ShipInfo, double>> AttackInfos { get { return Enumerable.Zip(To, Damage, (a, b) => new KeyValuePair<ShipInfo, double>(a, b)); } }
+            public ShipInfo From => ZwFrom > 6 ? _parent.EnemyShips[ZwFrom - 7] : _parent.OurShips[ZwFrom - 1];
+            public IEnumerable<ShipInfo> To => ZwTo.Select(x => x > 6 ? _parent.EnemyShips[x - 7] : _parent.OurShips[x - 1]);
+            public AttackType Type => ZwType;
+            public IList<EquiptInfo> Equipts => ZwEquipts;
+            public IList<double> Damage => ZwDamage;
+            public IEnumerable<KeyValuePair<ShipInfo, double>> AttackInfos => Enumerable.Zip(To, Damage, (a, b) => new KeyValuePair<ShipInfo, double>(a, b));
 
             internal IShipInfoHolder _parent;
             public BombardInfo(IShipInfoHolder parent) { _parent = parent; }
@@ -450,8 +438,8 @@ namespace LynLogger.Models.Battling
             /*[Serialize(0)]*/ internal ShipInfo[] ZwSupportShips;
             [Serialize(1)] internal AirWarfareInfo ZwAttackInfo;
 
-            public IList<ShipInfo> SupportShips { get { return ZwSupportShips; } }
-            public AirWarfareInfo AttackInfo { get { return ZwAttackInfo; } }
+            public IList<ShipInfo> SupportShips => ZwSupportShips;
+            public AirWarfareInfo AttackInfo => ZwAttackInfo;
 
             public enum Type
             {
@@ -471,28 +459,28 @@ namespace LynLogger.Models.Battling
 
         public partial class ShipHpStatus : AbstractDSSerializable<ShipHpStatus>, ICloneable
         {
-            private FuzzyDouble ZwDeliveredDamage;
-            internal int ZwOrigShipId;
-            public int HpCurrent { get; private set; }
+            [Serialize(0)] private FuzzyDouble ZwDeliveredDamage;
+            [Serialize(1)] internal int ZwOrigShipId;
+            [Serialize(2)] public int HpCurrent { get; private set; }
 
-            internal BattleStatus _parent;
+            internal BattleProcess _parent;
 
-            public ShipInfo OrigInfo { get { return ZwOrigShipId > 6 ? _parent.EnemyShips[ZwOrigShipId - 7] : _parent.OurShips[ZwOrigShipId - 1]; } }
-            public int Id { get { return OrigInfo.Id; } }
-            public string TypeName { get { return OrigInfo.ShipTypeName; } }
-            public string ShipName { get { return OrigInfo.ShipName; } }
-            public int HpMax { get { return OrigInfo.MaxHp; } }
+            public ShipInfo OrigInfo => ZwOrigShipId > 6 ? _parent.EnemyShips[ZwOrigShipId - 7] : _parent.OurShips[ZwOrigShipId - 1];
+            public int Id => OrigInfo.Id;
+            public string TypeName => OrigInfo.ShipTypeName;
+            public string ShipName => OrigInfo.ShipName;
+            public int HpMax => OrigInfo.MaxHp;
 
-            public LimitedValue Hp { get { return new LimitedValue(HpCurrent, HpMax, 0); } }
-            public FuzzyDouble DeliveredDamage { get { return ZwDeliveredDamage; } }
+            public LimitedValue Hp => new LimitedValue(HpCurrent, HpMax, 0);
+            public FuzzyDouble DeliveredDamage => ZwDeliveredDamage;
 
-            public ShipHpStatus(int oid, BattleStatus parent)
+            public ShipHpStatus(int oid, BattleProcess parent)
             {
                 _parent = parent; ZwOrigShipId = oid; HpCurrent = OrigInfo.CurrentHp; ZwDeliveredDamage = new FuzzyDouble();
                 ProcessBattle(parent);
             }
 
-            private ShipHpStatus ProcessBattle(BattleStatus report)
+            private ShipHpStatus ProcessBattle(BattleProcess report)
             {
                 ShipInfo a = OrigInfo;
 

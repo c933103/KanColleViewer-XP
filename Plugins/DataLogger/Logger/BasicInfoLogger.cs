@@ -1,14 +1,18 @@
 using LynLogger.DataStore;
 namespace LynLogger.Logger
 {
-    public class BasicInfoLogger
+    static class BasicInfoLogger
     {
-        public BasicInfoLogger()
+        static bool _initialized;
+
+        public static void Init()
         {
+            if (_initialized) return;
+            _initialized = true;
             Store.OnDataStoreCreate += (sid, store) => store.OnBasicInfoChange += sender => ProcBasicInfoChanged(sender);
         }
 
-        private static void ProcBasicInfoChanged(Store ds)
+        static void ProcBasicInfoChanged(Store ds)
         {
             var procs = new DataStore.LogBook.BasicInfo[] { ds.Weekbook.BasicInfo, ds.CurrentLogbook.BasicInfo };
             foreach(var hist in procs) {

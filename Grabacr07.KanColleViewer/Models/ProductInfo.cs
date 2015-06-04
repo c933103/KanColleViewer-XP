@@ -63,7 +63,7 @@ namespace Grabacr07.KanColleViewer.Models
         {
             get
             {
-                return "1.1(XT4)"
+                return "1.1(XT5)"
 #if DEBUG
                      + "d"
 #endif

@@ -29,14 +29,14 @@ namespace LynLogger.Utilities
         private readonly WeakReference _target;
         private readonly UnboundHandler _unboundHandler;
         private readonly Action<Action> _targetDead;
-        private Action _handler;
 
-        public Action Handler { get { return _handler ?? (_handler = Invoke); } }
+        public Action Handler { get; }
 
         public WeakAction(Action a)
         {
             _target = new WeakReference((TTarget)a.Target);
             _unboundHandler = (UnboundHandler)Delegate.CreateDelegate(typeof(UnboundHandler), null, a.Method);
+            Handler = Invoke;
         }
 
         public WeakAction(Action a, Action<Action> targetDead) : this(a)
@@ -51,7 +51,7 @@ namespace LynLogger.Utilities
                 _unboundHandler(target);
             } else {
                 if(_targetDead != null) {
-                    _targetDead(_handler);
+                    _targetDead(Handler);
                 }
             }
         }
@@ -70,14 +70,14 @@ namespace LynLogger.Utilities
         private readonly WeakReference _target;
         private readonly UnboundHandler _unboundHandler;
         private readonly Action<Action<TIn>> _targetDead;
-        private Action<TIn> _handler;
 
-        public Action<TIn> Handler { get { return _handler ?? (_handler = Invoke); } }
+        public Action<TIn> Handler { get; }
 
         public WeakAction(Action<TIn> a)
         {
             _target = new WeakReference((TTarget)a.Target);
             _unboundHandler = (UnboundHandler)Delegate.CreateDelegate(typeof(UnboundHandler), null, a.Method);
+            Handler = Invoke;
         }
 
         public WeakAction(Action<TIn> a, Action<Action<TIn>> targetDead) : this(a)
@@ -92,7 +92,7 @@ namespace LynLogger.Utilities
                 _unboundHandler(target, arg);
             } else {
                 if(_targetDead != null) {
-                    _targetDead(_handler);
+                    _targetDead(Handler);
                 }
             }
         }
@@ -111,14 +111,14 @@ namespace LynLogger.Utilities
         private readonly WeakReference _target;
         private readonly UnboundHandler _unboundHandler;
         private readonly Action<Action<TIn1, TIn2>> _targetDead;
-        private Action<TIn1, TIn2> _handler;
 
-        public Action<TIn1, TIn2> Handler { get { return _handler ?? (_handler = Invoke); } }
+        public Action<TIn1, TIn2> Handler { get; }
 
         public WeakAction(Action<TIn1, TIn2> a)
         {
             _target = new WeakReference((TTarget)a.Target);
             _unboundHandler = (UnboundHandler)Delegate.CreateDelegate(typeof(UnboundHandler), null, a.Method);
+            Handler = Invoke;
         }
 
         public WeakAction(Action<TIn1, TIn2> a, Action<Action<TIn1, TIn2>> targetDead) : this(a)
@@ -133,7 +133,7 @@ namespace LynLogger.Utilities
                 _unboundHandler(target, arg1, arg2);
             } else {
                 if(_targetDead != null) {
-                    _targetDead(_handler);
+                    _targetDead(Handler);
                 }
             }
         }

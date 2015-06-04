@@ -22,13 +22,13 @@ namespace LynLogger.DataStore.Serialization
             foreach(var field in fields) {
                 var attr = (SerializeAttribute)field.GetCustomAttributes(false).FirstOrDefault(a => a.GetType() == typeof(SerializeAttribute));
                 var constructionType = attr.ConstructionType ?? field.FieldType;
-                r[attr.FieldId] = new HandlerInfo(GenerateSerializer(field, constructionType), GenerateDeserializer(field, constructionType, field.FieldType));
+                r[attr.FieldId] = new HandlerInfo(attr.DepthLimit, GenerateSerializer(field, constructionType), GenerateDeserializer(field, constructionType, field.FieldType));
             }
 
             foreach(var prop in properties) {
                 var attr = (SerializeAttribute)prop.GetCustomAttributes(false).FirstOrDefault(a => a.GetType() == typeof(SerializeAttribute));
                 var constructionType = attr.ConstructionType ?? prop.PropertyType;
-                r[attr.FieldId] = new HandlerInfo(GenerateSerializer(prop, constructionType), GenerateDeserializer(prop, constructionType, prop.PropertyType));
+                r[attr.FieldId] = new HandlerInfo(attr.DepthLimit, GenerateSerializer(prop, constructionType), GenerateDeserializer(prop, constructionType, prop.PropertyType));
             }
 
             return r;

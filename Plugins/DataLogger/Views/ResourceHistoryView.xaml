@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:LynLogger.Views"
              xmlns:Controls="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:converters="clr-namespace:LynLogger.Views.Converters"
+             xmlns:controls="clr-namespace:LynLogger.Views.Controls"
+             xmlns:contents="clr-namespace:LynLogger.Views.Contents"
              x:Class="LynLogger.Views.ResourceHistoryView" 
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="300">
@@ -13,7 +16,7 @@
         <local:ResourceHistoryModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
-        <local:LogbookSequenceToDescriptionConverter x:Key="LogbookSequenceToDescriptionConverter" />
+        <converters:LogbookSequenceToDescriptionConverter x:Key="LogbookSequenceToDescriptionConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -31,7 +34,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <local:VerticalTabViewControl TabViewItems="{Binding Pages, Mode=OneWay}" TabViewSelected="{Binding SelectedPage, Mode=TwoWay}" Grid.Column="0" Grid.Row="1" />
-        <local:HistogramPlotter PlotData="{Binding ActiveHistogram, Mode=OneWay}" AverageDelta="True" Grid.Column="1" Grid.Row="1"/>
+        <controls:VerticalTabViewControl TabViewItems="{Binding Pages, Mode=OneWay}" TabViewSelected="{Binding SelectedPage, Mode=TwoWay}" Grid.Column="0" Grid.Row="1" />
+        <contents:HistogramPlotter PlotData="{Binding ActiveHistogram, Mode=OneWay}" AverageDelta="True" Grid.Column="1" Grid.Row="1"/>
     </Grid>
 </UserControl>

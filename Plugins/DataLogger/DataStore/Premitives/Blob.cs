@@ -11,11 +11,10 @@ namespace LynLogger.DataStore.Premitives
     [Serializable]
     class Blob : StoragePremitive
     {
+        public override IEnumerable<TypeIdentifier> Type => Collections.AsEnumerable(TypeIdentifier.Blob);
+
         private byte[] data;
-
-        public override IEnumerable<TypeIdentifier> Type { get { return Collections.AsEnumerable(TypeIdentifier.Blob); } }
-
-        public byte[] Data { get { return (byte[])data.Clone(); } }
+        public byte[] Data => (byte[])data.Clone();
 
         public Blob() { data = new byte[0]; }
         public Blob(byte[] data) { this.data = (byte[])data.Clone(); }

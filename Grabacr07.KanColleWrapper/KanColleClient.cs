@@ -126,7 +126,8 @@ namespace Grabacr07.KanColleWrapper
 			var kdock = proxy.api_get_member_kdock.TryParse<kcsapi_kdock[]>().FirstAsync().ToTask();
 			var sitem = proxy.api_get_member_slot_item.TryParse<kcsapi_slotitem[]>().FirstAsync().ToTask();
 
-            proxy.api_start2.FirstAsync().Subscribe(async session => {
+            IDisposable disposable = null;
+            disposable = proxy.api_start2.Subscribe(async session => {
                 var timeout = TaskEx.Delay(TimeSpan.FromSeconds(30));
                 await TaskEx.WhenAny(new Task[] { basic, kdock, sitem }.WhenAll(), timeout);
 
@@ -146,6 +147,7 @@ namespace Grabacr07.KanColleWrapper
                 if (kdock.Status == TaskStatus.RanToCompletion) this.Homeport.Dockyard.Update(kdock.Result.Data);
 
                 this.IsStarted = true;
+                disposable.Dispose();
             });
 		}
 	}

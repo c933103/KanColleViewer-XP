@@ -36,14 +36,12 @@ namespace LynLogger.Data
             ["6-1"] = 380,
             ["6-2"] = 420,
         };
+        
+        public int this[string k] => (k != null && table.ContainsKey(k)) ? table[k] : 2;
+        public IEnumerable<string> Keys => table.Keys;
 
-        public int this[string k] { get { return (k != null && table.ContainsKey(k)) ? table[k] : 2; } }
-
-        public IEnumerable<string> Keys { get { return table.Keys; } }
-
+        public static MapExperienceTable Instance => _instance;
         private static readonly MapExperienceTable _instance = new MapExperienceTable();
-
-        public static MapExperienceTable Instance { get { return _instance; } }
 
         private MapExperienceTable() { }
     }

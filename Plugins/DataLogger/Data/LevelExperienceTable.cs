@@ -11,8 +11,8 @@ namespace LynLogger.Data
         private static readonly LevelExperienceTable _instance = new LevelExperienceTable();
         private static readonly LevelExperienceTable _accumulated = new AccumulatedLevelExperienceTable();
 
-        public static LevelExperienceTable Instance { get { return _instance; } }
-        public static LevelExperienceTable Accumulated { get { return _accumulated; } }
+        public static LevelExperienceTable Instance => _instance;
+        public static LevelExperienceTable Accumulated => _accumulated;
 
         private LevelExperienceTable() { }
 

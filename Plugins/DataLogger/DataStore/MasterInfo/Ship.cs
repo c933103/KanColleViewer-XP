@@ -61,11 +61,10 @@ namespace LynLogger.DataStore.MasterInfo
         [Serialize(34)] public int EnhancedDefense { get; private set; }
         [Serialize(35)] public int EnhancedLuck { get; private set; }
     
-        [Serialize(36)] private byte bLocked = 0;
-        public bool Locked { get { return bLocked != 0; } private set { bLocked = (byte)(value ? 1 : 0); } }
+        [Serialize(36)] public bool Locked { get; private set; }
         
         /*Serialize37*/ internal EquiptInfo[] ZwEquipts;
-        public IList<EquiptInfo> Equipts { get { return ZwEquipts ?? (ZwEquipts = new EquiptInfo[0]); } }
+        public IList<EquiptInfo> Equipts => ZwEquipts ?? (ZwEquipts = new EquiptInfo[0]);
         
         [Serialize(38)] public int MaxFuel { get; private set; }
         [Serialize(39)] public int MaxAmmo { get; private set; }
@@ -198,7 +197,7 @@ namespace LynLogger.DataStore.MasterInfo
             {
                 return new Dictionary<ulong, HandlerInfo>() {
                     [37] = new HandlerInfo(
-                        x => x.ZwEquipts.GetSerializationInfo(k => (Premitives.Compound)k.GetSerializationInfo()),
+                        (x, p) => x.ZwEquipts.GetSerializationInfo(p, (k, p1) => (Premitives.Compound)k.GetSerializationInfo(p1)),
                         (o, i, p) => o.ZwEquipts = ((Premitives.List<Premitives.Compound>)i).Convert(x => new EquiptInfo(x, p)).ToArray()),
                 };
             }

@@ -24,7 +24,7 @@ namespace LynLogger.DataStore
         public event Action<Store> OnBasicInfoChange { add { _onBasicInfoChange += value.MakeWeak(x => _onBasicInfoChange -= x); } remove { } }
         public event Action<Store, int> OnShipDataChange { add { _onShipDataChange += value.MakeWeak(x => _onShipDataChange -= x); } remove { } }
 
-        public static Store Current { get { if (_ds.ContainsKey(_memberId)) return _ds[_memberId]; return null; } }
+        public static Store Current { get { Store s; if(_ds.TryGetValue(_memberId, out s)) return s; return null; } }
 
         private static readonly Dictionary<string, Store> _ds = new Dictionary<string, Store>() { { "", null } };
         private static string _memberId = "";
@@ -66,9 +66,9 @@ namespace LynLogger.DataStore
                 if(_onDataStoreCreate != null) _onDataStoreCreate(memberId, store);
                 _ds.Add(memberId, store);
             }
-            
-            if(_onDataStoreSwitch != null) _onDataStoreSwitch(memberId, Current);
+
             _memberId = memberId;
+            if (_onDataStoreSwitch != null) _onDataStoreSwitch(memberId, Current);
         }
 
         private static Logbook LoadLogbook(Store s, ulong seq)
@@ -112,7 +112,7 @@ namespace LynLogger.DataStore
         private Dictionary<ulong, WeakReference> _logbooks = new Dictionary<ulong, WeakReference>();
         private HashSet<Logbook> _dirtyLogbooks = new HashSet<Logbook>();
         [Serialize(0)] public string MemberId { get; private set; }
-        /*Serialize1*/ internal SortedSet<ulong> _logbookSequence;
+        /*Serialize1*/ internal NotifyingSortedSet<ulong> _logbookSequence;
         /*Serialize2*/ private Dictionary<int, Ship> _ships;
         [Serialize(3)] public BasicInfo BasicInfo { get; private set; }
         [Serialize(4)] public Settings Settings { get; private set; }
@@ -120,7 +120,7 @@ namespace LynLogger.DataStore
         [Serialize(5, ConstructionType = typeof(Weekbook))]
         public ILogbook Weekbook { get; private set; }
         
-        public ILogbook CurrentLogbook { get { return Logbooks[DateTimeOffset.UtcNow.ToLogbookSequence()]; } }
+        public ILogbook CurrentLogbook => Logbooks[DateTimeOffset.UtcNow.ToLogbookSequence()];
         public LogbookAccessor Logbooks { get; }
 
         public ShipsAccessor Ships { get; }
@@ -131,14 +131,14 @@ namespace LynLogger.DataStore
             _logbookSequence.Add(0);
             Ships = new ShipsAccessor(this);
             Logbooks = new LogbookAccessor(this);
-            LogbookSequence = new ReadOnlyCollectionWrapper<ulong>(_logbookSequence);
+            LogbookSequence = new NotifyingReadOnlyCollectionWrapper<ulong>(_logbookSequence, _logbookSequence);
         }
 
         public Store(string memId)
         {
             MemberId = memId;
             _ships = new Dictionary<int, Ship>();
-            _logbookSequence = new SortedSet<ulong>();
+            _logbookSequence = new NotifyingSortedSet<ulong>();
             BasicInfo = new BasicInfo(this);
             Settings = new Settings();
             Weekbook = new Weekbook(this);
@@ -146,7 +146,7 @@ namespace LynLogger.DataStore
             _logbookSequence.Add(0);
             Ships = new ShipsAccessor(this);
             Logbooks = new LogbookAccessor(this);
-            LogbookSequence = new ReadOnlyCollectionWrapper<ulong>(_logbookSequence);
+            LogbookSequence = new NotifyingReadOnlyCollectionWrapper<ulong>(_logbookSequence, _logbookSequence);
         }
 
         public void SaveData()
@@ -161,10 +161,10 @@ namespace LynLogger.DataStore
 
             //Write master table.
             try {
-                using (Stream output = File.OpenWrite(Path.Combine(_dataDir, MasterTableFilename(MemberId)))) {
+                using (Stream output = File.Open(Path.Combine(_dataDir, MasterTableFilename(MemberId)), FileMode.Create, FileAccess.Write, FileShare.None)) {
                     output.Write(_masterHeader, 0, _masterHeader.Length);
                     using (DSWriter wr = new DSWriter(output)) {
-                        GetSerializationInfo().Serialize(wr);
+                        GetSerializationInfo(null).Serialize(wr);
                     }
                 }
             } catch (IOException) { }
@@ -172,10 +172,10 @@ namespace LynLogger.DataStore
             //Write logbooks.
             foreach(var book in dirtyLogbooks) {
                 try {
-                    using (Stream output = File.OpenWrite(Path.Combine(_dataDir, LogbookFilename(book.MemberId, book.SequenceId)))) {
+                    using (Stream output = File.Open(Path.Combine(_dataDir, LogbookFilename(book.MemberId, book.SequenceId)), FileMode.Create, FileAccess.Write, FileShare.None)) {
                         output.Write(_logHeader, 0, _logHeader.Length);
                         using (DSWriter wr = new DSWriter(output)) {
-                            book.GetSerializationInfo().Serialize(wr);
+                            book.GetSerializationInfo(null).Serialize(wr);
                         }
                     }
                 } catch (IOException) { }
@@ -198,10 +198,10 @@ namespace LynLogger.DataStore
             {
                 return new Dictionary<ulong, HandlerInfo>() {
                     [1] = new HandlerInfo(
-                        x => x.LogbookSequence.GetSerializationInfo(v => new Premitives.UnsignedInteger(v)),
-                        (o, i, p) => o._logbookSequence = new SortedSet<ulong>(((Premitives.List<Premitives.UnsignedInteger>)i).Convert(x => x.Value))),
+                        (x, p) => x.LogbookSequence.GetSerializationInfo(p, (v, p1) => new Premitives.UnsignedInteger(v)),
+                        (o, i, p) => o._logbookSequence = new NotifyingSortedSet<ulong>(((Premitives.List<Premitives.UnsignedInteger>)i).Convert(x => x.Value))),
                     [2] = new HandlerInfo(
-                        x => x._ships.Where(kv => kv.Value != null).GetSerializationInfo(k => new Premitives.SignedInteger(k)),
+                        (x, p) => x._ships.Where(kv => kv.Value != null).GetSerializationInfo(p, (k, p1) => new Premitives.SignedInteger(k)),
                         (o, i, p) => o._ships = ((Premitives.Dictionary<Premitives.SignedInteger, Premitives.Compound>)i).Convert(x => (int)x.Value, x => new Ship(x, p))),
                 };
             }
@@ -226,7 +226,7 @@ namespace LynLogger.DataStore
                 }
             }
 
-            internal IEnumerable<int> AllIds { get { return mst._ships.Where(x => x.Value != null).Select(x => x.Key); } }
+            internal IEnumerable<int> AllIds => mst._ships.Where(x => x.Value != null).Select(x => x.Key);
 
             public ShipsAccessor(Store mst) { this.mst = mst; }
 

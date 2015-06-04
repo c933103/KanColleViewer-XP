@@ -13,8 +13,8 @@ namespace LynLogger.DataStore.Premitives
     {
         private decimal value;
 
-        public override IEnumerable<TypeIdentifier> Type { get { return Collections.AsEnumerable(TypeIdentifier.Decimal); } }
-        public decimal Value { get { return value; } }
+        public override IEnumerable<TypeIdentifier> Type => Collections.AsEnumerable(TypeIdentifier.Decimal);
+        public decimal Value => value;
 
         public Decimal() { }
         public Decimal(decimal value) { this.value = value; }

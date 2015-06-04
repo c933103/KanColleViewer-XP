@@ -1,4 +1,5 @@
 ﻿using LynLogger.Models;
+using LynLogger.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace LynLogger.Views
         public IList<TabViewItem> Pages { get; private set; }
 
         private ulong _selectedBook;
-        public ICollection<ulong> Books { get { return DataStore.Store.Current?.LogbookSequence; } }
+        public ICollection<ulong> Books => DataStore.Store.Current?.LogbookSequence;
         public ulong SelectedBook
         {
             get { return _selectedBook; }

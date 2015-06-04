@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="LynLogger.Views.Contents.BattleCalcResultPresenter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LynLogger.Views.Contents"
+             xmlns:converters="clr-namespace:LynLogger.Views.Converters"
+             xmlns:kcvControls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls;assembly=KanColleViewer"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
+    </UserControl.Resources>
+    
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:BattleCalcResultPresenter}}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <TextBlock FontSize="16" Text="我方舰队" Margin="0,0,0,4"/>
+            <TextBlock Margin="0,0,0,2">
+                <Run Text="{Binding Battle.OurGuage.Current, Mode=OneWay}" />
+                <Run Text="/" />
+                <Run Text="{Binding Battle.OurGuage.Maximum, Mode=OneWay}" />
+                <Run Text="(" />
+                <Run Text="{Binding Battle.OurGuagePerMil, Mode=OneWay}" />
+                <Run Text=") 评级:" />
+                <Run Text="{Binding Battle.Rank, Mode=OneWay}" />
+                <Run Text=" 经验:" />
+                <Run Text="{Binding EstimatedExp, Mode=OneWay}" />
+            </TextBlock>
+            <ProgressBar Margin="0,0,20,4" Height="10" Maximum="{Binding Battle.OurGuage.Maximum, Mode=OneWay}" Minimum="0" Value="{Binding Battle.OurGuage.Current, Mode=OneWay}" Background="White" BorderBrush="{x:Null}" Foreground="#FF047519" />
+            <ItemsControl ItemsSource="{Binding OurEndMvpStatus, Mode=OneWay}" Grid.IsSharedSizeScope="True">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="ResultShipHp" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.ColumnSpan="2">
+                                <!--<Run Text="["/>
+                                <Run Text="{Binding Key.Id, Mode=OneTime}"/>
+                                <Run Text="]"/>
+                                <Run Text="{Binding Key.TypeName, Mode=OneTime}"/>-->
+                                <Run Text="{Binding Key.ShipName, Mode=OneTime}"/>
+                                <Run Text="MVP:"/>
+                                <Run Text="{Binding Value, Mode=OneTime, Converter={StaticResource EnumToDescriptionConverter}}" />
+                                <Run Text=" 输出:"/>
+                                <Run Text="{Binding Key.DeliveredDamage, Mode=OneTime}" />
+                            </TextBlock>
+                            <TextBlock Grid.Row="1">
+                                <Run Text="HP:"/>
+                                <Run Text="{Binding Key.HpCurrent, Mode=OneTime}" />
+                                <Run Text="/"/>
+                                <Run Text="{Binding Key.HpMax, Mode=OneTime}" />
+                            </TextBlock>
+                            <kcvControls:ColorIndicator Grid.Row="1" Grid.Column="1" LimitedValue="{Binding Key.Hp, Mode=OneTime}" Height="7" Margin="7,3,20,0" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+        <StackPanel Grid.Column="1" DataContext="{Binding Battle, Mode=OneWay}">
+            <TextBlock FontSize="16" Text="敌方舰队" Margin="0,0,0,4"/>
+            <TextBlock Margin="0,0,0,2">
+                <Run Text="{Binding EnemyGuage.Current, Mode=OneTime}" />
+                <Run Text="/" />
+                <Run Text="{Binding EnemyGuage.Maximum, Mode=OneTime}" />
+                <Run Text="(" />
+                <Run Text="{Binding EnemyGuagePerMil, Mode=OneTime}" />
+                <Run Text=")" />
+            </TextBlock>
+            <ProgressBar Margin="0,0,20,4" Height="10" Maximum="{Binding EnemyGuage.Maximum, Mode=OneTime}" Minimum="0" Value="{Binding EnemyGuage.Current, Mode=OneTime}" Background="White" BorderBrush="{x:Null}" Foreground="#FFB00606" />
+            <ItemsControl ItemsSource="{Binding EnemyShipBattleEndHp, Mode=OneTime}" Grid.IsSharedSizeScope="True">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="ResultShipHp" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.ColumnSpan="2">
+                                <!--<Run Text="["/>
+                                <Run Text="{Binding Id, Mode=OneTime}"/>
+                                <Run Text="]"/>
+                                <Run Text="{Binding TypeName, Mode=OneTime}"/>-->
+                                <Run Text="{Binding ShipName, Mode=OneTime}"/>
+                                <Run Text=" 输出:"/>
+                                <Run Text="{Binding DeliveredDamage, Mode=OneTime}" />
+                            </TextBlock>
+                            <TextBlock Grid.Row="1">
+                                <Run Text="HP:"/>
+                                <Run Text="{Binding HpCurrent, Mode=OneTime}" />
+                                <Run Text="/"/>
+                                <Run Text="{Binding HpMax, Mode=OneTime}" />
+                            </TextBlock>
+                            <kcvControls:ColorIndicator Grid.Row="1" Grid.Column="1" LimitedValue="{Binding Hp, Mode=OneTime}" Height="7" Margin="7,3,20,0" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Grid>
+</UserControl>

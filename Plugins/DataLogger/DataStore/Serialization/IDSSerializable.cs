@@ -7,17 +7,17 @@ namespace LynLogger.DataStore.Serialization
 {
     public interface IDSSerializable
     {
-        Premitives.StoragePremitive GetSerializationInfo();
+        Premitives.StoragePremitive GetSerializationInfo(LinkedList<object> _path);
     }
 
     [Serializable]
     public abstract partial class AbstractDSSerializable<T> : IDSSerializable
         where T : AbstractDSSerializable<T>
     {
-        protected virtual ulong StructureVersion { get { return 0; } }
+        protected virtual ulong StructureVersion => 0;
         protected ulong DeserializedStructureVersion { get; private set; }
 
-        protected virtual IDictionary<ulong, HandlerInfo> CustomFieldHandlers { get { return null; } }
+        protected virtual IDictionary<ulong, HandlerInfo> CustomFieldHandlers => null;
 
         private static ConcurrentDictionary<ulong, HandlerInfo> _serializationHandlers = null;
         private IDictionary<ulong, Premitives.StoragePremitive> blackBox = new Dictionary<ulong, Premitives.StoragePremitive>();
@@ -30,17 +30,20 @@ namespace LynLogger.DataStore.Serialization
 
             serializationPath.AddFirst(this);
             var info = (Premitives.Compound)storage;
-            foreach(var kv in info) {
-                if(!_serializationHandlers.ContainsKey(kv.Key)) {
+            var depth = serializationPath.Count;
+            foreach (var kv in info) {
+                HandlerInfo handler;
+                if(!_serializationHandlers.TryGetValue(kv.Key, out handler)) {
                     blackBox.Add(kv.Key, kv.Value);
                 } else {
-                    _serializationHandlers[kv.Key].Deserialize((T)this, kv.Value, serializationPath);
+                    if (depth > handler.DepthLimit) continue;
+                    handler.Deserialize((T)this, kv.Value, serializationPath);
                 }
             }
             serializationPath.RemoveFirst();
         }
 
-        public virtual Premitives.StoragePremitive GetSerializationInfo()
+        public virtual Premitives.StoragePremitive GetSerializationInfo(LinkedList<object> serializationPath)
         {
             InitHandlers();
 
@@ -48,9 +51,16 @@ namespace LynLogger.DataStore.Serialization
             foreach(var kv in blackBox) {
                 r[kv.Key] = kv.Value;
             }
-            foreach(var kv in _serializationHandlers) {
-                r[kv.Key] = kv.Value.Serialize((T)this);
+
+            if (serializationPath == null) serializationPath = new LinkedList<object>();
+            serializationPath.AddFirst(this);
+            var depth = serializationPath.Count;
+            foreach (var kv in _serializationHandlers) {
+                if (depth > kv.Value.DepthLimit) continue;
+                r[kv.Key] = kv.Value.Serialize((T)this, serializationPath);
             }
+            serializationPath.RemoveFirst();
+
             return r;
         }
 
@@ -59,7 +69,7 @@ namespace LynLogger.DataStore.Serialization
             if(_serializationHandlers != null) return;
 
             var localHandlers = new ConcurrentDictionary<ulong, HandlerInfo> {
-                [0] = new HandlerInfo(x => new Premitives.UnsignedInteger(x.StructureVersion), (o, i, p) => o.DeserializedStructureVersion = ((Premitives.UnsignedInteger)i).Value)
+                [0] = new HandlerInfo((x, p) => new Premitives.UnsignedInteger(x.StructureVersion), (o, i, p) => o.DeserializedStructureVersion = ((Premitives.UnsignedInteger)i).Value)
             };
             foreach(var kv in DiscoverFields()) {
                 localHandlers[kv.Key+16] = kv.Value;
@@ -74,13 +84,18 @@ namespace LynLogger.DataStore.Serialization
 
         protected class HandlerInfo
         {
-            public Func<T, Premitives.StoragePremitive> Serialize;
-            public Action<T, Premitives.StoragePremitive, LinkedList<object>> Deserialize;
+            public readonly Func<T, LinkedList<object>, Premitives.StoragePremitive> Serialize;
+            public readonly Action<T, Premitives.StoragePremitive, LinkedList<object>> Deserialize;
+            public readonly int DepthLimit;
 
-            public HandlerInfo(Func<T, Premitives.StoragePremitive> s, Action<T, Premitives.StoragePremitive, LinkedList<object>> d)
+            public HandlerInfo(Func<T, LinkedList<object>, Premitives.StoragePremitive> s, Action<T, Premitives.StoragePremitive, LinkedList<object>> d) : this(int.MaxValue, s, d) { }
+
+            public HandlerInfo(int l, Func<T, LinkedList<object>, Premitives.StoragePremitive> s, Action<T, Premitives.StoragePremitive, LinkedList<object>> d)
             {
-                Serialize = s; Deserialize = d;
+                DepthLimit = l; Serialize = s; Deserialize = d;
             }
+
+            public static readonly HandlerInfo NoOp = new HandlerInfo(0, null, null);
         }
     }
 
@@ -94,11 +109,9 @@ namespace LynLogger.DataStore.Serialization
             this.fieldId = fieldId;
         }
 
-        public ulong FieldId
-        {
-            get { return fieldId; }
-        }
+        public ulong FieldId => fieldId;
 
         public Type ConstructionType { get; set; }
+        public int DepthLimit { get; set; } = int.MaxValue;
     }
 }

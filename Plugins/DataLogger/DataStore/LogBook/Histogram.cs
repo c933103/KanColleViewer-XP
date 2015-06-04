@@ -13,7 +13,7 @@ namespace LynLogger.DataStore.LogBook
     {
         private readonly SortedDictionary<long, T> backend = new SortedDictionary<long, T>();
         private readonly ILogbook _holder;
-        private static readonly Func<T, StoragePremitive> converter;
+        private static readonly Func<T, LinkedList<object>, StoragePremitive> converter;
         private static readonly Func<StoragePremitive, LinkedList<object>, T> revConverter;
 
         static Histogram()
@@ -27,7 +27,7 @@ namespace LynLogger.DataStore.LogBook
             revConverter = ExpressionGenerator<T>.Deserializer;
         }
 
-        public int Count { get { return backend.Count; } }
+        public int Count => backend.Count;
 
         public Histogram(ILogbook log) { _holder=log; }
         /*public Histogram(ILogbook log, IEnumerable<KeyValuePair<long, T>> data)
@@ -78,12 +78,18 @@ namespace LynLogger.DataStore.LogBook
             return (backend as System.Collections.IEnumerable).GetEnumerator();
         }
         
-        public StoragePremitive GetSerializationInfo()
+        public StoragePremitive GetSerializationInfo(LinkedList<object> _path)
         {
             var lastKey = backend.LastOrDefault().Key;
-            return backend.SkipWhile(x => x.Key < _holder.StartTimestamp && x.Key != lastKey)
-                          .TakeWhile(x => x.Key < _holder.EndTimestamp || x.Key == lastKey)
-                          .GetSerializationInfo(x => new SignedInteger(x), converter);
+
+            if (_path == null) _path = new LinkedList<object>();
+            _path.AddFirst(this);
+            var r = backend.SkipWhile(x => x.Key < _holder.StartTimestamp && x.Key != lastKey)
+                           .TakeWhile(x => x.Key < _holder.EndTimestamp || x.Key == lastKey)
+                           .GetSerializationInfo(_path, (x, p) => new SignedInteger(x), converter);
+            _path.RemoveFirst();
+
+            return r;
         }
     }
 }

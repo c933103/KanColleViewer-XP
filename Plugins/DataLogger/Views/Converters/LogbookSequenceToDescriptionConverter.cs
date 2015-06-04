@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace LynLogger.Views
+namespace LynLogger.Views.Converters
 {
     class LogbookSequenceToDescriptionConverter : IValueConverter
     {
