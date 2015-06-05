@@ -29,7 +29,7 @@ namespace Grabacr07.KanColleViewer.Models
 			try
 			{
 				Current = filePath.ReadXml<Settings>();
-			}
+            }
 			catch (Exception ex)
 			{
 				Current = GetInitialSettings();
@@ -253,11 +253,7 @@ namespace Grabacr07.KanColleViewer.Models
 			set { this.ProxySettings.IsEnabled = value; }
 		}
 
-		public bool EnableSSLProxy
-		{
-			get { return this.ProxySettings.IsEnabledOnSSL; }
-			set { this.ProxySettings.IsEnabledOnSSL = value; }
-		}
+		public bool EnableSSLProxy { get { return true; } set { } }
 
 		public string ProxyHost
 		{
@@ -402,18 +398,6 @@ namespace Grabacr07.KanColleViewer.Models
             {
                 if (value == _flashRenderMode) return;
                 _flashRenderMode = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private FlashOverrideMode _flashOverrideMode = FlashOverrideMode.Dispatch;
-        public FlashOverrideMode FlashOverrideMode
-        {
-            get { return _flashOverrideMode; }
-            set
-            {
-                if (value == _flashOverrideMode) return;
-                _flashOverrideMode = value;
                 RaisePropertyChanged();
             }
         }

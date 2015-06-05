@@ -9,7 +9,6 @@ using System.Windows.Markup;
 using System.Windows.Navigation;
 using Grabacr07.KanColleViewer.Models;
 using MetroRadiance.Core;
-using mshtml;
 using SHDocVw;
 using IServiceProvider = Grabacr07.KanColleViewer.Win32.IServiceProvider;
 using WebBrowser = System.Windows.Controls.WebBrowser;
@@ -53,11 +52,13 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 			if (oldBrowser != null)
 			{
 				oldBrowser.LoadCompleted -= instance.HandleLoadCompleted;
-			}
+                newBrowser.Navigating -= NoTouchActionStylesheet_BrowserNavigating;
+            }
 			if (newBrowser != null)
 			{
 				newBrowser.LoadCompleted += instance.HandleLoadCompleted;
-			}
+                newBrowser.Navigating += NoTouchActionStylesheet_BrowserNavigating;
+            }
 			if (instance.scrollViewer != null)
 			{
 				instance.scrollViewer.Content = newBrowser;
@@ -98,13 +99,15 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 		public KanColleHost()
 		{
 			this.Loaded += (sender, args) => this.Update();
-            Models.Settings.Current.PropertyChanged += (o, e) => {
-                if (e.PropertyName == nameof(Models.Settings.Current.FlashQuality)) ApplyStyleSheet();
-                if (e.PropertyName == nameof(Models.Settings.Current.FlashRenderMode)) ApplyStyleSheet();
-            };
-            Fiddler.FiddlerApplication.BeforeRequest += InjectScript_BeforeRequest;
-            Fiddler.FiddlerApplication.BeforeResponse += InjectScript_BeforeResponse;
-		}
+
+            Fiddler.FiddlerApplication.BeforeRequest += QualityScript_BeforeRequest;
+            Fiddler.FiddlerApplication.BeforeRequest += OverrideStylesheet_BeforeRequest;
+            Fiddler.FiddlerApplication.BeforeRequest += NoTouchActionStylesheet_BeforeRequest;
+
+            Fiddler.FiddlerApplication.BeforeResponse += QualityScript_BeforeResponse;
+            Fiddler.FiddlerApplication.BeforeResponse += OverrideStylesheet_BeforeResponse;
+            Fiddler.FiddlerApplication.BeforeResponse += NoTouchActionStylesheet_BeforeResponse;
+        }
 
 		public override void OnApplyTemplate()
 		{
@@ -172,9 +175,10 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 		}
 
 		private void HandleLoadCompleted(object sender, NavigationEventArgs e)
-		{
-			this.ApplyStyleSheet();
-			WebBrowserHelper.SetScriptErrorsSuppressed(this.WebBrowser, true);
+        {
+            styleSheetApplied = styleSheetApplied || e.Uri.AbsoluteUri == Properties.Settings.Default.KanColleGamePage.AbsoluteUri || e.Uri.AbsolutePath.Contains(".swf");
+
+            WebBrowserHelper.SetScriptErrorsSuppressed(this.WebBrowser, true);
 
 			this.Update();
 
@@ -184,103 +188,60 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 			}
 		}
 
-		private void ApplyStyleSheet()
-		{
-			try
-			{
-				var document = this.WebBrowser.Document as HTMLDocument;
-				if (document == null) return;
-                if (Models.Settings.Current.DisableBrowserTouchAction) {
-                    document.createStyleSheet().cssText = Properties.Settings.Default.DisableTouchActionStyleSheet;
-                }
-
-				var gameFrame = document.getElementById("game_frame");
-				if (gameFrame == null)
-				{
-					if (document.url.Contains(".swf?") || document.url.Contains("osapi.dmm.com/gadgets/ifr?"))
-					{
-						gameFrame = document.body;
-					}
-				}
-
-                if (gameFrame != null) {
-                    var target = gameFrame.document as HTMLDocument;
-                    if (target != null) {
-                        target.createStyleSheet().cssText = Properties.Settings.Default.OverrideStyleSheet;
-                        this.styleSheetApplied = true;
-
-                        var qualityControlMode = Models.Settings.Current.FlashOverrideMode;
-                        if(qualityControlMode == FlashOverrideMode.Dispatch || qualityControlMode == FlashOverrideMode.Reload) {
-                            var frame = (gameFrame as IHTMLFrameBase2)?.contentWindow;
-
-                            IServiceProvider psp = frame as IServiceProvider;
-                            if (psp == null) return;
-
-                            object objBrowser;
-                            psp.QueryService(typeof(IWebBrowserApp).GUID, typeof(IWebBrowser2).GUID, out objBrowser);
-
-                            var pDocument = (objBrowser as IWebBrowser2)?.Document as HTMLDocument;
-                            if (pDocument == null) return;
-
-                            dynamic ele = pDocument.getElementById("externalswf");
-                            if(ele != null && qualityControlMode == FlashOverrideMode.Dispatch) {
-                                if (Models.Settings.Current.FlashQuality != FlashQuality.Default)
-                                    ele.Quality2 = Models.Settings.Current.FlashQuality.ToString();
-
-                                if (Models.Settings.Current.FlashRenderMode != FlashRenderMode.Default)
-                                    ele.WMode = Models.Settings.Current.FlashRenderMode.ToString();
-
-                                ele.style.zIndex = 1;
-
-                                StatusService.Current.Notify("Flash rendering mode set via COM interface: " + ele.Quality2 + "/" + ele.WMode);
-                            } else {
-                                dynamic wnd = pDocument.parentWindow;
-                                wnd.eval(string.Format(Properties.Settings.Default.QualityScript, Models.Settings.Current.FlashOverrideMode, Models.Settings.Current.FlashQuality, Models.Settings.Current.FlashRenderMode));
-                            }
-                        }
-
-                        return;
-                    }
-                }
-			}
-			catch (Exception ex)
-			{
-				StatusService.Current.Notify("failed to apply css: " + ex.Message);
-			}
-
-			return;
-		}
-
-        private static void InjectScript_BeforeRequest(Fiddler.Session oSession)
+        #region Inject shim script for controlling Flash render mode
+        private static void QualityScript_BeforeRequest(Fiddler.Session oSession)
         {
-            if (Models.Settings.Current.FlashOverrideMode != FlashOverrideMode.Shim) return;
-            if (oSession.url.Contains("osapi.dmm.com/gadgets/ifr?")) {
-                oSession.bBufferResponse = true;
-                StatusService.Current.Notify("Preparing to inject shim");
-                return;
-            }
-            if (oSession.host == "kancolleviewer.local") {
-                var q = Models.Settings.Current.FlashQuality;
-                var m = Models.Settings.Current.FlashRenderMode;
-                oSession.utilCreateResponseAndBypassServer();
-                oSession.utilSetResponseBody(string.Format(Properties.Settings.Default.QualityScript, FlashOverrideMode.Shim, q, m));
-                oSession.oResponse.headers.HTTPResponseCode = 200;
-                oSession.oResponse.headers.HTTPResponseStatus = "200 OK";
-                oSession.oResponse.headers["Content-Type"] = "text/javascript";
-                StatusService.Current.Notify(string.Format("Shim script injected with settings: {0}/{1}", q, m));
-                return;
-            }
+            if (!oSession.url.Contains("osapi.dmm.com/gadgets/ifr?")) return;
+            oSession.bBufferResponse = true;
         }
 
-        private static void InjectScript_BeforeResponse(Fiddler.Session oSession)
+        private static void QualityScript_BeforeResponse(Fiddler.Session oSession)
         {
-            if (Models.Settings.Current.FlashOverrideMode != FlashOverrideMode.Shim) return;
-            if (oSession.url.Contains("osapi.dmm.com/gadgets/ifr?")) {
-                oSession.utilDecodeResponse();
-                oSession.utilReplaceInResponse("</head>", Properties.Settings.Default.QualityShimTag + "</head>");
-                StatusService.Current.Notify("Shim loader tag injected");
-                return;
-            }
+            if (!oSession.url.Contains("osapi.dmm.com/gadgets/ifr?")) return;
+
+            var q = Models.Settings.Current.FlashQuality;
+            var m = Models.Settings.Current.FlashRenderMode;
+            oSession.utilDecodeResponse();
+            oSession.utilReplaceInResponse("</head>", string.Format(Properties.Settings.Default.TagQualityShim, q, m) + "</head>");
         }
-	}
+        #endregion
+
+        #region Inject OverrideStyleSheet
+        private static void OverrideStylesheet_BeforeRequest(Fiddler.Session oSession)
+        {
+            if (oSession.fullUrl != Properties.Settings.Default.KanColleGamePage.AbsoluteUri) return;
+            oSession.bBufferResponse = true;
+        }
+
+        private static void OverrideStylesheet_BeforeResponse(Fiddler.Session oSession)
+        {
+            if (oSession.fullUrl != Properties.Settings.Default.KanColleGamePage.AbsoluteUri) return;
+            oSession.utilDecodeResponse();
+            oSession.utilReplaceInResponse("</head>", Properties.Settings.Default.TagOverrideStylesheet + "</head>");
+        }
+        #endregion
+
+        #region Inject NoTouchActionStylesheet
+        static string uri;
+        private static void NoTouchActionStylesheet_BrowserNavigating(object s, NavigatingCancelEventArgs e)
+        {
+            uri = e.Uri.AbsoluteUri;
+        }
+
+        private static void NoTouchActionStylesheet_BeforeRequest(Fiddler.Session oSession)
+        {
+            if (!Models.Settings.Current.DisableBrowserTouchAction) return;
+            if (oSession.fullUrl != uri) return;
+            oSession.bBufferResponse = true;
+        }
+
+        private static void NoTouchActionStylesheet_BeforeResponse(Fiddler.Session oSession)
+        {
+            if (!Models.Settings.Current.DisableBrowserTouchAction) return;
+            if (oSession.fullUrl != uri) return;
+            oSession.utilDecodeResponse();
+            oSession.utilReplaceInResponse("</head>", Properties.Settings.Default.TagNoTouchAction + "</head>");
+        }
+        #endregion
+    }
 }

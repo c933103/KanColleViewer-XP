@@ -17,6 +17,7 @@ namespace Grabacr07.KanColleWrapper
 		private readonly IConnectableObservable<Session> connectableSessionSource;
 		private readonly IConnectableObservable<Session> apiSource;
 		private readonly LivetCompositeDisposable compositeDisposable;
+        private readonly Dictionary<string, Action<Session>> localRequestHandlers = new Dictionary<string, Action<Session>>();
 
 		public IObservable<Session> SessionSource
 		{
@@ -71,7 +72,7 @@ namespace Grabacr07.KanColleWrapper
             flags |= FiddlerCoreStartupFlags.ChainToUpstreamGateway;
 
             FiddlerApplication.Startup(proxy, flags);
-			FiddlerApplication.BeforeRequest += this.SetUpstreamProxyHandler;
+            FiddlerApplication.BeforeRequest += this.Fiddler_BeforeRequest;
 
             SetIESettings("localhost:" + proxy);
 
@@ -83,7 +84,7 @@ namespace Grabacr07.KanColleWrapper
 		{
 			this.compositeDisposable.Dispose();
 
-			FiddlerApplication.BeforeRequest -= this.SetUpstreamProxyHandler;
+			FiddlerApplication.BeforeRequest -= this.Fiddler_BeforeRequest;
 			FiddlerApplication.Shutdown();
 		}
 
@@ -115,13 +116,31 @@ namespace Grabacr07.KanColleWrapper
 		/// Fiddler からのリクエスト発行時にプロキシを挟む設定を行います。
 		/// </summary>
 		/// <param name="requestingSession">通信を行おうとしているセッション。</param>
-		private void SetUpstreamProxyHandler(Session requestingSession)
+		private void Fiddler_BeforeRequest(Session requestingSession)
 		{
-			var settings = this.UpstreamProxySettings;
-			if (settings == null) return;
+            if(requestingSession.hostname == "kancolleviewer.local") {
+                requestingSession.utilCreateResponseAndBypassServer();
+                var path = requestingSession.PathAndQuery;
+                var queryIndex = path.IndexOf('?');
+                if(queryIndex >= 0) {
+                    path = path.Substring(0, queryIndex);
+                }
 
-			var useGateway = !string.IsNullOrEmpty(settings.Host) && settings.IsEnabled;
-			if (!useGateway || (IsSessionSSL(requestingSession) && !settings.IsEnabledOnSSL)) return;
+                Action<Session> handler;
+                if (localRequestHandlers.TryGetValue(path, out handler)) {
+                    requestingSession.oResponse.headers.HTTPResponseCode = 200;
+                    requestingSession.oResponse.headers.HTTPResponseStatus = "200 OK";
+                    handler?.Invoke(requestingSession);
+                } else {
+                    requestingSession.oResponse.headers.HTTPResponseCode = 410;
+                    requestingSession.oResponse.headers.HTTPResponseStatus = "410 Gone";
+                }
+                return;
+            }
+
+			var settings = this.UpstreamProxySettings;
+            if (settings?.IsEnabled != true) return;
+            if (string.IsNullOrEmpty(settings.Host)) return;
 
 			var gateway = settings.Host.Contains(":")
 				// IPv6 アドレスをプロキシホストにした場合はホストアドレス部分を [] で囲う形式にする。
@@ -132,15 +151,13 @@ namespace Grabacr07.KanColleWrapper
             requestingSession.bBufferResponse = false;
         }
 
-		/// <summary>
-		/// セッションが SSL 接続を使用しているかどうかを返します。
-		/// </summary>
-		/// <param name="session">セッション。</param>
-		/// <returns>セッションが SSL 接続を使用する場合は true、そうでない場合は false。</returns>
-		internal static bool IsSessionSSL(Session session)
-		{
-			// 「http://www.dmm.com:433/」の場合もあり、これは Session.isHTTPS では判定できない
-			return session.isHTTPS || session.fullUrl.StartsWith("https:") || session.fullUrl.Contains(":443");
-		}
+        public void SetLocalRerquestHandler(string path, Action<Session> proc)
+        {
+            if (proc != null) {
+                localRequestHandlers[path] = proc;
+            } else {
+                localRequestHandlers.Remove(path);
+            }
+        }
 	}
 }

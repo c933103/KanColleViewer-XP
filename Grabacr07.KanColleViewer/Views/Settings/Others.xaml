@@ -139,45 +139,6 @@
 				   Margin="0,10" />
 
         <StackPanel Margin="20,0,0,0">
-            <TextBlock Text="设置方式" />
-            <ItemsControl ItemsSource="{Binding FlashOverrideModes, Mode=OneTime}" Margin="0,5">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <RadioButton Margin="5,5" GroupName="FlashOverrideMode" Command="{Binding DataContext.SetFlashOverrideMode, RelativeSource={RelativeSource AncestorType={x:Type self:Others}}}" CommandParameter="{Binding}">
-                            <TextBlock Style="{DynamicResource DefaultTextStyleKey}" LineHeight="18" Text="{Binding}"/>
-                            <RadioButton.ToolTip>
-                                <ToolTip>
-                                    <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionsConverter}}"/>
-                                </ToolTip>
-                            </RadioButton.ToolTip>
-                            <RadioButton.Style>
-                                <Style BasedOn="{StaticResource {x:Type RadioButton}}" TargetType="{x:Type RadioButton}">
-                                    <Setter Property="IsChecked" Value="False"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Value="True">
-                                            <DataTrigger.Binding>
-                                                <MultiBinding Converter="{StaticResource MultiBindingEqualityConverter}">
-                                                    <Binding Mode="OneTime"/>
-                                                    <Binding Mode="OneWay" Path="DataContext.FlashOverrideMode" RelativeSource="{RelativeSource AncestorType={x:Type self:Others}}"/>
-                                                </MultiBinding>
-                                            </DataTrigger.Binding>
-                                            <Setter Property="IsChecked" Value="True"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </RadioButton.Style>
-                        </RadioButton>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
-
-        <StackPanel Margin="20,0,0,0">
             <TextBlock Text="渲染质量" />
             <ItemsControl ItemsSource="{Binding FlashQualitySettings, Mode=OneTime}" Margin="0,5">
                 <ItemsControl.ItemsPanel>
