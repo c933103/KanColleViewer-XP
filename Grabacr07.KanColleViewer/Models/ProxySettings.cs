@@ -29,26 +29,7 @@ namespace Grabacr07.KanColleViewer.Models
 		}
 
 		#endregion
-
-		#region IsEnabledOnSSL 変更通知プロパティ
-
-		private bool _IsEnabledOnSSL;
-
-		public bool IsEnabledOnSSL
-		{
-			get { return this._IsEnabledOnSSL; }
-			set
-			{
-				if (this._IsEnabledOnSSL != value)
-				{
-					this._IsEnabledOnSSL = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		#endregion
-
+        
 		#region Host 変更通知プロパティ
 
 		private string _Host;
@@ -156,6 +137,8 @@ namespace Grabacr07.KanColleViewer.Models
 			}
 		}
 
-		#endregion
-	}
+        #endregion
+
+        public bool IsEnabledOnSSL { get { return true; } set { } }
+    }
 }

@@ -32,46 +32,42 @@
 				  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=ProxySettings.IsEnabled}" />
 		<StackPanel IsEnabled="{Binding IsChecked, ElementName=CheckBoxUseProxy}"
 					Margin="20,6,0,6">
-			<Grid Margin="0,4">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto" />
-					<ColumnDefinition Width="*" />
-					<ColumnDefinition Width="15" />
-					<ColumnDefinition Width="Auto" />
-					<ColumnDefinition Width="Auto" />
-				</Grid.ColumnDefinitions>
+            <Grid Margin="0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="15" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-				<TextBlock Grid.Column="0">
+                <TextBlock Grid.Column="0">
 					<Run Text="{Binding Resources.Settings_Proxy_Host, Source={x:Static models:ResourceService.Current}, Mode=OneWay}" />
 					<Run Text=": " />
-				</TextBlock>
-				<metro:PromptTextBox Grid.Column="1"
+                </TextBlock>
+                <metro:PromptTextBox Grid.Column="1"
 									 Text="{Binding Source={x:Static models:Settings.Current}, Path=ProxySettings.Host, Mode=TwoWay}"
 									 Prompt="{Binding Resources.Settings_Proxy_Host, Source={x:Static models:ResourceService.Current}, Mode=OneWay}" />
-				<TextBlock Grid.Column="3">
+                <TextBlock Grid.Column="3">
 					<Run Text="{Binding Resources.Settings_Proxy_Port, Source={x:Static models:ResourceService.Current}, Mode=OneWay}" />
 					<Run Text=": " />
-				</TextBlock>
-				<metro:PromptTextBox Grid.Column="4"
+                </TextBlock>
+                <metro:PromptTextBox Grid.Column="4"
 									 Prompt="{Binding Resources.Settings_Proxy_Port, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
 									 Width="80">
-					<metro:PromptTextBox.Text>
-						<Binding Source="{x:Static models:Settings.Current}"
+                    <metro:PromptTextBox.Text>
+                        <Binding Source="{x:Static models:Settings.Current}"
 								 Path="ProxySettings.Port"
 								 UpdateSourceTrigger="PropertyChanged">
-							<Binding.ValidationRules>
-								<metro:Int32Rule Min="0" />
-							</Binding.ValidationRules>
-						</Binding>
-					</metro:PromptTextBox.Text>
-				</metro:PromptTextBox>
-			</Grid>
+                            <Binding.ValidationRules>
+                                <metro:Int32Rule Min="0" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </metro:PromptTextBox.Text>
+                </metro:PromptTextBox>
+            </Grid>
 
-			<CheckBox Content="{Binding Resources.Settings_Proxy_Enable_4_SSL, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
-					  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=ProxySettings.IsEnabledOnSSL}"
-					  Margin="0,4" />
-
-			<CheckBox x:Name="CheckBoxAuthRequired"
+            <CheckBox x:Name="CheckBoxAuthRequired"
 					  Content="プロキシ サーバーにユーザー名とパスワードが必要"
 					  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=ProxySettings.IsAuthRequired}"
 					  Margin="0,4" />

@@ -25,7 +25,7 @@ namespace Grabacr07.KanColleViewer.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://www.dmm.com/netgame/social/application/-/detail/=/app_id=854854/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://www.dmm.com/netgame_s/kancolle/")]
         public global::System.Uri KanColleUrl {
             get {
                 return ((global::System.Uri)(this["KanColleUrl"]));
@@ -52,78 +52,47 @@ namespace Grabacr07.KanColleViewer.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("body {\n    margin:0;\n    overflow:hidden;\n}\n\n#ntg-recommend {\n    display: none;\n" +
-            "}\n\n#game_frame {\n    position:fixed;\n    left:50%;\n    top:-16px;\n    margin-lef" +
-            "t:-450px;\n    z-index:1;\n}")]
-        public string OverrideStyleSheet {
+        [global::System.Configuration.DefaultSettingValueAttribute("<style type=\"text/css\">html { touch-action: none; }</style>")]
+        public string TagNoTouchAction {
             get {
-                return ((string)(this["OverrideStyleSheet"]));
+                return ((string)(this["TagNoTouchAction"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<script type=\"text/javascript\" src=\"http://kancolleviewer.local/flash_quality.js\"" +
-            "></script>")]
-        public string QualityShimTag {
+        [global::System.Configuration.DefaultSettingValueAttribute("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/")]
+        public global::System.Uri KanColleGamePage {
             get {
-                return ((string)(this["QualityShimTag"]));
+                return ((global::System.Uri)(this["KanColleGamePage"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("(function() {{\nvar shockwaveSetQualityAndWModeReload = function(quality, wmode) {" +
-            "{\n  var swf = document.getElementById(\'externalswf\');\n  if(swf == null) {{\n    s" +
-            "etTimeout(function() {{\n      shockwaveSetQualityAndWModeReload(quality, wmode);" +
-            "\n    }}, 1000);\n    return;\n  }}\n  var attrs = {{}};\n  var params = {{}};\n  if(s" +
-            "wf.tagName.toLowerCase() === \"embed\") {{\n    for(var i = 0; i < swf.attributes.l" +
-            "ength; i++) {{\n      params[swf.attributes[i].name.toLowerCase()] = swf.attribut" +
-            "es[i].value;\n    }}\n  }} else if(swf.tagName.toLowerCase() === \"object\") {{\n    " +
-            "for(var i = 0; i < swf.attributes.length; i++) {{\n      attrs[swf.attributes[i]." +
-            "name.toLowerCase()] = swf.attributes[i].value;\n    }}\n    for(var i = 0; i < swf" +
-            ".childNodes.length; i++) {{\n      if(swf.childNodes[i].nodeType !== 1) continue;" +
-            "\n      if(swf.childNodes[i].tagName.toLowerCase() !== \"param\") continue;\n      i" +
-            "f(!swf.childNodes[i].hasAttribute(\"name\")) continue;\n      if(!swf.childNodes[i]" +
-            ".hasAttribute(\"value\")) continue;\n      params[swf.childNodes[i].getAttribute(\"n" +
-            "ame\").toLowerCase()] = swf.childNodes[i].getAttribute(\"value\");\n    }}\n  }}\n  if" +
-            "(quality.toLowerCase() !== \"default\") {{\n    params.quality = quality;\n  }}\n  if" +
-            "(wmode.toLowerCase() !== \"default\") {{\n    params.wmode = wmode;\n  }}\n  var newN" +
-            "ode;\n  if(swf.tagName.toLowerCase() === \"embed\") {{\n    newNode = document.creat" +
-            "eElement(\"embed\");\n    for(var key in params) {{\n      if(params.hasOwnProperty(" +
-            "key)) {{\n        newNode.setAttribute(key, params[key]);\n      }}\n    }}\n  }} el" +
-            "se if(swf.tagName.toLowerCase() === \"object\") {{\n    newNode = document.createEl" +
-            "ement(\"object\");\n    for(var key in attrs) {{\n      if(attrs.hasOwnProperty(key)" +
-            ") {{\n        newNode.setAttribute(key, attrs[key]);\n      }}\n    }}\n    for(var " +
-            "key in params) {{\n      if(params.hasOwnProperty(key)) {{\n        var paramNode " +
-            "= document.createElement(\"param\");\n        paramNode.setAttribute(\"name\", key);\n" +
-            "        paramNode.setAttribute(\"value\", params[key]);\n        newNode.appendChil" +
-            "d(paramNode);\n      }}\n    }}\n  }}\n  newNode.style.zIndex = 1;\n  swf.parentNode." +
-            "replaceChild(newNode, swf);\n}};\n\nvar shockwaveSetQualityAndWModeDispatch = funct" +
-            "ion(quality, wmode) {{\n  var swf = document.getElementById(\'externalswf\');\n  if(" +
-            "swf == null) {{\n    setTimeout(function() {{\n      window.shockwaveSetQualityAnd" +
-            "WModeDispatch(quality, wmode);\n    }}, 1000);\n    return;\n  }}\n  if(quality.toLo" +
-            "werCase() !== \"default\") {{\n    swf.Quality2 = quality;\n  }}\n  if(wmode.toLowerC" +
-            "ase() !== \"default\") {{\n    swf.WMode = wmode;\n  }}\n  swf.style.zIndex = 1;\n}};\n" +
-            "\nvar shockwaveSetQualityAndWModeShim = function(quality, wmode) {{\n  var origEmb" +
-            "edFlash = window.gadgets.flash.embedFlash;\n  gadgets.flash.embedFlash = function" +
-            "(url, container, version, params) {{\n    if(typeof(params) == \"undefined\") param" +
-            "s = {{}};\n    if(quality.toLowerCase() != \"default\") params.quality = quality;\n " +
-            "   if(wmode.toLowerCase() != \"default\") params.wmode = wmode;\n    origEmbedFlash" +
-            "(url, container, version, params);\n  }};\n}};\n\nshockwaveSetQualityAndWMode{0}(\"{1" +
-            "}\", \"{2}\");\n}})();\n")]
-        public string QualityScript {
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<script type=""text/javascript"">(function(quality, wmode) {{
+  var origEmbedFlash = window.gadgets.flash.embedFlash;
+  gadgets.flash.embedFlash = function(url, container, version, params) {{
+    if(typeof(params) == ""undefined"") params = {{}};
+    if(quality.toLowerCase() != ""default"") params.quality = quality;
+    if(wmode.toLowerCase() != ""default"") params.wmode = wmode;
+    origEmbedFlash(url, container, version, params);
+  }};
+}})(""{0}"", ""{1}"");</script>")]
+        public string TagQualityShim {
             get {
-                return ((string)(this["QualityScript"]));
+                return ((string)(this["TagQualityShim"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("html { touch-action: none; }")]
-        public string DisableTouchActionStyleSheet {
+        [global::System.Configuration.DefaultSettingValueAttribute("<style type=\"text/css\">\nbody {\n  margin:0;\n  overflow:hidden;\n}\n\n#ntg-recommend {" +
+            "\n  display: none;\n}\n\n#game_frame {\n  position:fixed;\n  left:50%;\n  top:-16px;\n  " +
+            "margin-left:-450px;\n  z-index:1;\n}\n</style>")]
+        public string TagOverrideStylesheet {
             get {
-                return ((string)(this["DisableTouchActionStyleSheet"]));
+                return ((string)(this["TagOverrideStylesheet"]));
             }
         }
     }

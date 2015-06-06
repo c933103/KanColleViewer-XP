@@ -51,16 +51,16 @@ namespace Grabacr07.KanColleViewer.Views.Behaviors
 		protected override void OnAttached()
 		{
 			base.OnAttached();
-			this.AssociatedObject.LoadCompleted += this.AssociatedObjectOnLoadCompleted;
+			this.AssociatedObject.Navigated += this.AssociatedObjectNavigated;
 		}
 
 		protected override void OnDetaching()
 		{
 			base.OnDetaching();
-			this.AssociatedObject.LoadCompleted -= this.AssociatedObjectOnLoadCompleted;
+			this.AssociatedObject.Navigated -= this.AssociatedObjectNavigated;
 		}
 
-		private void AssociatedObjectOnLoadCompleted(object sender, NavigationEventArgs navigationEventArgs)
+		private void AssociatedObjectNavigated(object sender, NavigationEventArgs navigationEventArgs)
 		{
 			if (this.Navigator != null)
 			{

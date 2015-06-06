@@ -176,7 +176,6 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
         public FlashQuality[] FlashQualitySettings { get { return (FlashQuality[])Enum.GetValues(typeof(FlashQuality)); } }
         public FlashRenderMode[] FlashRenderModes { get { return (FlashRenderMode[])Enum.GetValues(typeof(FlashRenderMode)); } }
-        public FlashOverrideMode[] FlashOverrideModes { get { return (FlashOverrideMode[])Enum.GetValues(typeof(FlashOverrideMode)); } }
 
         private ICommand _setFlashQuality = null;
         public ICommand SetFlashQuality { get { return _setFlashQuality ?? (_setFlashQuality = new SetFlashQualityCommand()); } }
@@ -185,10 +184,6 @@ namespace Grabacr07.KanColleViewer.ViewModels
         private ICommand _setFlashRenderMode = null;
         public ICommand SetFlashRenderMode { get { return _setFlashRenderMode ?? (_setFlashRenderMode = new SetFlashRenderModeCommand()); } }
         public FlashRenderMode FlashRenderMode { get { return Settings.Current.FlashRenderMode; } set { Settings.Current.FlashRenderMode = value; } }
-
-        private ICommand _setFlashOverrideMode = null;
-        public ICommand SetFlashOverrideMode { get { return _setFlashOverrideMode ?? (_setFlashOverrideMode = new SetFlashOverrideModeCommand()); } }
-        public FlashOverrideMode FlashOverrideMode { get { return Settings.Current.FlashOverrideMode; } set { Settings.Current.FlashOverrideMode = value; } }
 
         #endregion
 
@@ -340,7 +335,6 @@ namespace Grabacr07.KanColleViewer.ViewModels
             Settings.Current.PropertyChanged += (o, e) => {
                 if (e.PropertyName == nameof(Settings.Current.FlashQuality)) RaisePropertyChanged(e.PropertyName);
                 if (e.PropertyName == nameof(Settings.Current.FlashRenderMode)) RaisePropertyChanged(e.PropertyName);
-                if (e.PropertyName == nameof(Settings.Current.FlashOverrideMode)) RaisePropertyChanged(e.PropertyName);
             };
 		}
 
@@ -446,19 +440,6 @@ namespace Grabacr07.KanColleViewer.ViewModels
             {
                 if (parameter is FlashRenderMode) {
                     Settings.Current.FlashRenderMode = (FlashRenderMode)parameter;
-                }
-            }
-        }
-
-        private class SetFlashOverrideModeCommand : ICommand
-        {
-            public event EventHandler CanExecuteChanged;
-            public bool CanExecute(object parameter) { return true; }
-
-            public void Execute(object parameter)
-            {
-                if (parameter is FlashOverrideMode) {
-                    Settings.Current.FlashOverrideMode = (FlashOverrideMode)parameter;
                 }
             }
         }
