@@ -565,6 +565,159 @@ namespace Grabacr07.KanColleViewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 任務画面の全ページにアクセスしてください。.
+        /// </summary>
+        public static string ProxyRuleActionBlock {
+            get {
+                return ResourceManager.GetString("ProxyRuleActionBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Goto rule No. 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleActionGoto {
+            get {
+                return ResourceManager.GetString("ProxyRuleActionGoto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Goto rule with name 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleActionGotoName {
+            get {
+                return ResourceManager.GetString("ProxyRuleActionGotoName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Use proxy server 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleActionProxy {
+            get {
+                return ResourceManager.GetString("ProxyRuleActionProxy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Set Proxy-Authorization 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleActionSetProxyAuth {
+            get {
+                return ResourceManager.GetString("ProxyRuleActionSetProxyAuth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Use system proxy settings 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleActionSystemProxy {
+            get {
+                return ResourceManager.GetString("ProxyRuleActionSystemProxy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Full Url 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleItemFullUrl {
+            get {
+                return ResourceManager.GetString("ProxyRuleItemFullUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Host 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleItemHost {
+            get {
+                return ResourceManager.GetString("ProxyRuleItemHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Host + Port 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleItemHostAndPort {
+            get {
+                return ResourceManager.GetString("ProxyRuleItemHostAndPort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Request method 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleItemMethod {
+            get {
+                return ResourceManager.GetString("ProxyRuleItemMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Request path 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleItemPath {
+            get {
+                return ResourceManager.GetString("ProxyRuleItemPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Path + Query 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleItemPathAndQuery {
+            get {
+                return ResourceManager.GetString("ProxyRuleItemPathAndQuery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Port 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleItemPort {
+            get {
+                return ResourceManager.GetString("ProxyRuleItemPort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Query string 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleItemQuery {
+            get {
+                return ResourceManager.GetString("ProxyRuleItemQuery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Anything 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleTypeAny {
+            get {
+                return ResourceManager.GetString("ProxyRuleTypeAny", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Regular Expression 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleTypeRegex {
+            get {
+                return ResourceManager.GetString("ProxyRuleTypeRegex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Wildcard 的本地化字符串。
+        /// </summary>
+        public static string ProxyRuleTypeShExp {
+            get {
+                return ResourceManager.GetString("ProxyRuleTypeShExp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 任務画面の全ページにアクセスしてください。 的本地化字符串。
         /// </summary>
         public static string Quest_Detail_Untaken {

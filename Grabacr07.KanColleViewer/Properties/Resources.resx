@@ -480,4 +480,55 @@
   <data name="Fleets_ViewRange" xml:space="preserve">
     <value>索敵能力</value>
   </data>
+  <data name="ProxyRuleActionBlock" xml:space="preserve">
+    <value>Deny access</value>
+  </data>
+  <data name="ProxyRuleActionGoto" xml:space="preserve">
+    <value>Goto rule No.</value>
+  </data>
+  <data name="ProxyRuleActionGotoName" xml:space="preserve">
+    <value>Goto rule with name</value>
+  </data>
+  <data name="ProxyRuleActionProxy" xml:space="preserve">
+    <value>Use proxy server</value>
+  </data>
+  <data name="ProxyRuleActionSetProxyAuth" xml:space="preserve">
+    <value>Set Proxy-Authorization</value>
+  </data>
+  <data name="ProxyRuleActionSystemProxy" xml:space="preserve">
+    <value>Use system proxy settings</value>
+  </data>
+  <data name="ProxyRuleItemFullUrl" xml:space="preserve">
+    <value>Full Url</value>
+  </data>
+  <data name="ProxyRuleItemHost" xml:space="preserve">
+    <value>Host</value>
+  </data>
+  <data name="ProxyRuleItemHostAndPort" xml:space="preserve">
+    <value>Host + Port</value>
+  </data>
+  <data name="ProxyRuleItemMethod" xml:space="preserve">
+    <value>Request method</value>
+  </data>
+  <data name="ProxyRuleItemPath" xml:space="preserve">
+    <value>Request path</value>
+  </data>
+  <data name="ProxyRuleItemPathAndQuery" xml:space="preserve">
+    <value>Path + Query</value>
+  </data>
+  <data name="ProxyRuleItemPort" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="ProxyRuleItemQuery" xml:space="preserve">
+    <value>Query string</value>
+  </data>
+  <data name="ProxyRuleTypeAny" xml:space="preserve">
+    <value>Anything</value>
+  </data>
+  <data name="ProxyRuleTypeRegex" xml:space="preserve">
+    <value>Regular Expression</value>
+  </data>
+  <data name="ProxyRuleTypeShExp" xml:space="preserve">
+    <value>Wildcard</value>
+  </data>
 </root>

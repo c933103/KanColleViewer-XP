@@ -319,7 +319,7 @@
 					Visibility="{Binding ElementName=SettingsTab, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
 				<ScrollViewer VerticalScrollBarVisibility="Auto"
 							  PanningMode="Both">
-					<TabControl Width="640"
+					<TabControl Width="800"
 								HorizontalAlignment="Left"
 								Style="{StaticResource VerticalTabControlStyleKey}">
 						<TabControl.Resources>
@@ -364,9 +364,17 @@
 										   Style="{DynamicResource TabHeaderTextStyleKey}" />
 							</TabItem.Header>
 							<settings:Network Margin="10,9" />
-						</TabItem>
+                        </TabItem>
 
-						<TabItem>
+                        <TabItem>
+                            <TabItem.Header>
+                                <TextBlock Text="代理规则"
+							   Style="{StaticResource TabHeaderTextStyleKey}" />
+                            </TabItem.Header>
+                            <settings:ProxyRules Margin="10,0" />
+                        </TabItem>
+
+                        <TabItem>
 							<TabItem.Header>
 								<TextBlock Text="{Binding Resources.Settings_Other, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
 										   Style="{DynamicResource TabHeaderTextStyleKey}" />

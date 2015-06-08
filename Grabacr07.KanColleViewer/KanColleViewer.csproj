@@ -227,6 +227,7 @@
     <Compile Include="ViewModels\Messages\ZoomMessage.cs" />
     <Compile Include="ViewModels\NavigatorViewModel.cs" />
     <Compile Include="ViewModels\NullViewModel.cs" />
+    <Compile Include="ViewModels\ProxyRulesViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Contents\ShipsViewModel.cs" />
     <Compile Include="ViewModels\Contents\SlotItemsViewModel.cs" />
@@ -287,6 +288,7 @@
     </Compile>
     <Compile Include="Views\Converters\BoolToIntSelector.cs" />
     <Compile Include="Views\Converters\EnumToDescriptionsConverter.cs" />
+    <Compile Include="Views\Converters\EnumToResourceStringConverter.cs" />
     <Compile Include="Views\Converters\HasFlagConverter.cs" />
     <Compile Include="Views\Converters\MultiBindingEqualityConverter.cs" />
     <Compile Include="Views\Converters\QuestCategoryToColorConverter.cs" />
@@ -313,6 +315,9 @@
     </Compile>
     <Compile Include="Views\Settings\PluginInfo.xaml.cs">
       <DependentUpon>PluginInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\ProxyRules.xaml.cs">
+      <DependentUpon>ProxyRules.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\VersionInfo.xaml.cs">
       <DependentUpon>VersionInfo.xaml</DependentUpon>
@@ -495,6 +500,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Settings\PluginInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\ProxyRules.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

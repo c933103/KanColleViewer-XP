@@ -24,8 +24,9 @@ namespace Grabacr07.KanColleViewer.Models
 				{
 					this._IsEnabled = value;
 					this.RaisePropertyChanged();
-				}
-			}
+                }
+                UpdateRule();
+            }
 		}
 
 		#endregion
@@ -44,8 +45,9 @@ namespace Grabacr07.KanColleViewer.Models
 				{
 					this._Host = value;
 					this.RaisePropertyChanged();
-				}
-			}
+                }
+                UpdateRule();
+            }
 		}
 
 		#endregion
@@ -63,8 +65,9 @@ namespace Grabacr07.KanColleViewer.Models
 				{
 					this._Port = value;
 					this.RaisePropertyChanged();
-				}
-			}
+                }
+                UpdateRule();
+            }
 		}
 
 		#endregion
@@ -82,8 +85,9 @@ namespace Grabacr07.KanColleViewer.Models
 				{
 					this._IsAuthRequired = value;
 					this.RaisePropertyChanged();
-				}
-			}
+                }
+                UpdateRule();
+            }
 		}
 
 		#endregion
@@ -101,44 +105,54 @@ namespace Grabacr07.KanColleViewer.Models
 				{
 					this._Username = value;
 					this.RaisePropertyChanged();
-				}
-			}
+                }
+                UpdateRule();
+            }
 		}
 
 		#endregion
 
-		#region Password 変更通知プロパティ
+        #region ProtectedPassword 変更通知プロパティ
 
-		private const string passwordForEncryption = "4629A16F-C815-4307-B367-9C16FAC0A52F";
+        private string _Password;
 
-		[XmlIgnore]
-		public string Password
-		{
-			get { return Helper.DecryptString(this.ProtectedPassword, passwordForEncryption); }
-			set { this.ProtectedPassword = Helper.EncryptString(value, passwordForEncryption); }
-		}
-
-		#endregion
-
-		#region ProtectedPassword 変更通知プロパティ
-
-		private string _ProtectedPassword;
-
-		public string ProtectedPassword
-		{
-			get { return this._ProtectedPassword; }
+        public string Password
+        {
+			get { return this._Password; }
 			set
 			{
-				if (this._ProtectedPassword != value)
+				if (this._Password != value)
 				{
-					this._ProtectedPassword = value;
+					this._Password = value;
 					this.RaisePropertyChanged();
 				}
-			}
+                UpdateRule();
+            }
 		}
 
         #endregion
 
-        public bool IsEnabledOnSSL { get { return true; } set { } }
+        private void UpdateRule()
+        {
+            Rules[int.MaxValue] = new ProxyRule() {
+                Enabled = true,
+                Type = ProxyRule.MatchType.Any,
+                Action = (Host != null && IsEnabled) ? ProxyRule.MatchAction.Proxy : ProxyRule.MatchAction.SystemProxy,
+                ActionString = Host?.Contains(':') == true ? string.Format("[{0}]:{1}", Host, Port) : string.Format("{0}:{1}", Host, Port),
+            };
+            Rules[int.MaxValue - 1] = new ProxyRule() {
+                Enabled = IsAuthRequired && Username != null && Password != null,
+                Type = ProxyRule.MatchType.Any,
+                Action = ProxyRule.MatchAction.SetProxyAuth,
+                ActionString = "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(string.Format("{0}:{1}", Username, Password))),
+            };
+            RaisePropertyChanged(nameof(Rules));
+            ((IProxySettings)this).CompiledRules = null;
+        }
+
+        IDictionary<int, ProxyRule> IProxySettings.Rules => Rules;
+        ProxyRule[] IProxySettings.CompiledRules { get; set; }
+        
+        public Data.Xml.XmlSerializableDictionary<int, ProxyRule> Rules { get; set; } = new Data.Xml.XmlSerializableDictionary<int, ProxyRule>();
     }
 }
