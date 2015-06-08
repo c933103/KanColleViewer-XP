@@ -107,6 +107,8 @@ namespace Grabacr07.KanColleViewer.ViewModels
         public Array Actions => Enum.GetValues(typeof(ProxyRule.MatchAction));
         public ICommand InsertRuleCommand => new CmdInsertRule(this);
         public ICommand DeleteRuleCommand => new CmdDeleteRule(this);
+        public ICommand ExportRuleCommand => new CmdExportRule(this);
+        public ICommand ImportRuleCommand => new CmdImportRule(this);
 
         class CmdInsertRule : ICommand
         {
@@ -162,6 +164,77 @@ namespace Grabacr07.KanColleViewer.ViewModels
                 Settings.Current.ProxySettings.Rules.Remove(vm.RuleId);
                 ((IProxySettings)Settings.Current.ProxySettings).CompiledRules = null;
                 vm.RaisePropertyChanged(nameof(vm.Rules));
+            }
+        }
+
+        class CmdExportRule : ICommand
+        {
+            private readonly ProxyRulesViewModel vm;
+
+            public CmdExportRule(ProxyRulesViewModel vm)
+            {
+                this.vm = vm;
+            }
+
+            public event EventHandler CanExecuteChanged;
+
+            public bool CanExecute(object parameter)
+            {
+                return true;
+            }
+
+            public void Execute(object parameter)
+            {
+                Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
+                sfd.OverwritePrompt = true;
+                sfd.CheckPathExists = true;
+                sfd.ValidateNames = true;
+                if (sfd.ShowDialog() != true) return;
+
+                using (System.IO.Stream s = sfd.OpenFile()) {
+                    var list = vm.Rules.Where(x => x.Key < int.MaxValue - 1).Select(x => new Models.Data.Xml.XmlSerializableDictionary<int, ProxyRule>.LocalKeyValuePair(x.Key, x.Value)).ToList();
+                    System.Xml.Serialization.XmlSerializer xs = new System.Xml.Serialization.XmlSerializer(list.GetType());
+                    xs.Serialize(s, list);
+                }
+            }
+        }
+
+        class CmdImportRule : ICommand
+        {
+            private readonly ProxyRulesViewModel vm;
+
+            public CmdImportRule(ProxyRulesViewModel vm)
+            {
+                this.vm = vm;
+            }
+
+            public event EventHandler CanExecuteChanged;
+
+            public bool CanExecute(object parameter)
+            {
+                return true;
+            }
+
+            public void Execute(object parameter)
+            {
+                Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
+                ofd.CheckFileExists = true;
+                ofd.CheckPathExists = true;
+                ofd.ValidateNames = true;
+                ofd.Multiselect = false;
+                if (ofd.ShowDialog() != true) return;
+
+                using (System.IO.Stream s = ofd.OpenFile()) {
+                    List<Models.Data.Xml.XmlSerializableDictionary<int, ProxyRule>.LocalKeyValuePair> list = new List<Models.Data.Xml.XmlSerializableDictionary<int, ProxyRule>.LocalKeyValuePair>();
+                    System.Xml.Serialization.XmlSerializer xs = new System.Xml.Serialization.XmlSerializer(list.GetType());
+                    list = (List<Models.Data.Xml.XmlSerializableDictionary<int, ProxyRule>.LocalKeyValuePair>)xs.Deserialize(s);
+
+                    var rules = Settings.Current.ProxySettings.Rules;
+                    list.ForEach(kv => rules[kv.Key] = kv.Value);
+
+                    ((IProxySettings)Settings.Current.ProxySettings).CompiledRules = null;
+                    vm.RaisePropertyChanged(nameof(vm.Rules));
+                }
             }
         }
     }
