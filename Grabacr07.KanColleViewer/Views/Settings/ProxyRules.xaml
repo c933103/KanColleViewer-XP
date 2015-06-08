@@ -1,0 +1,133 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Grabacr07.KanColleViewer.Views.Settings"
+             xmlns:ViewModels="clr-namespace:Grabacr07.KanColleViewer.ViewModels" xmlns:Converters="clr-namespace:Grabacr07.KanColleViewer.Views.Converters" x:Class="Grabacr07.KanColleViewer.Views.Settings.ProxyRules"
+             mc:Ignorable="d" 
+			 d:DesignWidth="550">
+    <UserControl.Resources>
+
+        <Converters:EnumToResourceStringConverter x:Key="EnumToResourceStringConverter"/>
+
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <ViewModels:ProxyRulesViewModel/>
+    </UserControl.DataContext>
+    <StackPanel Margin="5">
+        <StackPanel Orientation="Horizontal" Margin="0,3">
+            <TextBlock Text="序号" />
+            <TextBox Text="{Binding RuleId}" MinWidth="100"/>
+            <TextBlock Text="名称" />
+            <TextBox Text="{Binding RuleName}" MinWidth="150" />
+            <CheckBox IsChecked="{Binding RuleEnabled}" Content="启用" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,3">
+            <TextBlock Text="当" />
+            <ComboBox ItemsSource="{Binding MatchPositions}" SelectedItem="{Binding RuleMatchItem}" MinWidth="130">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ConverterParameter=ProxyRuleItem, Converter={StaticResource EnumToResourceStringConverter}, Mode=OneWay}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ToggleButton IsChecked="{Binding RuleNegateMatch}">
+                <ToggleButton.Style>
+                    <Style TargetType="{x:Type ToggleButton}">
+                        <Setter Property="Content" Value="   匹配   " />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RuleNegateMatch}" Value="True">
+                                <Setter Property="Content" Value=" 不匹配 "/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,3">
+            <ComboBox ItemsSource="{Binding MatchTypes}" SelectedItem="{Binding RuleMatchType}" MinWidth="150">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ConverterParameter=ProxyRuleType, Converter={StaticResource EnumToResourceStringConverter}, Mode=OneWay}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBox Text="{Binding RuleMatchPattern}" MinWidth="150" />
+            <TextBlock Text="时" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,3">
+            <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding RuleAction}" MinWidth="190">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ConverterParameter=ProxyRuleAction, Converter={StaticResource EnumToResourceStringConverter}, Mode=OneWay}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBox Text="{Binding RuleActionString}" MinWidth="150" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,3">
+            <Button Content="添加/修改" Command="{Binding InsertRuleCommand}" Margin="5,0" />
+            <Button Content="删除" Command="{Binding DeleteRuleCommand}" Margin="5,0" />
+        </StackPanel>
+        <DataGrid ItemsSource="{Binding Rules}" SelectedItem="{Binding SelectedRule, Mode=OneWayToSource}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,0,10,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="序号" Binding="{Binding Key}" />
+                <DataGridTextColumn Header="名称" Binding="{Binding Value.Name}" />
+                <DataGridTextColumn Header="匹配参数" Binding="{Binding Value.MatchIn}" />
+                <DataGridTextColumn Header="反向匹配" Binding="{Binding Value.Negative}" />
+                <DataGridTextColumn Header="匹配类型" Binding="{Binding Value.Type}" />
+                <DataGridTextColumn Header="匹配模式" Binding="{Binding Value.Pattern}" />
+                <DataGridTextColumn Header="操作" Binding="{Binding Value.Action}" />
+                <DataGridTextColumn Header="参数" Binding="{Binding Value.ActionString}" />
+            </DataGrid.Columns>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridRow}">
+                                <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                    <SelectiveScrollingGrid>
+                                        <SelectiveScrollingGrid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </SelectiveScrollingGrid.ColumnDefinitions>
+                                        <SelectiveScrollingGrid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </SelectiveScrollingGrid.RowDefinitions>
+                                        <DataGridCellsPresenter Grid.Column="1" ItemsPanel="{TemplateBinding ItemsPanel}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                        <DataGridDetailsPresenter Grid.Column="1" Grid.Row="1" SelectiveScrollingGrid.SelectiveScrollingOrientation="{Binding AreRowDetailsFrozen, ConverterParameter={x:Static SelectiveScrollingOrientation.Vertical}, Converter={x:Static DataGrid.RowDetailsScrollingConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Visibility="{TemplateBinding DetailsVisibility}"/>
+                                        <DataGridRowHeader Grid.RowSpan="2" SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Row}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                                        <Path x:Name="cross" IsHitTestVisible="False" Grid.ColumnSpan="2" Visibility="Collapsed" Data="M0,0.5 L1,0.5" Stretch="Fill" Stroke="Gray" StrokeThickness="1" />
+                                        <Rectangle x:Name="fog" IsHitTestVisible="False" Grid.ColumnSpan="2" Visibility="Collapsed" Stretch="Fill" Fill="White" Opacity="0.5" />
+                                    </SelectiveScrollingGrid>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding Value.Enabled}" Value="False">
+                                        <Setter TargetName="cross" Property="Visibility" Value="Visible"/>
+                                        <Setter TargetName="fog" Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Value.Enabled}" Value="True" />
+                                            <Condition Binding="{Binding Value.Matcher.IsValid}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter TargetName="fog" Property="Visibility" Value="Visible"/>
+                                        <Setter TargetName="fog" Property="Fill" Value="Red"/>
+                                        <Setter TargetName="fog" Property="Opacity" Value="0.2"/>
+                                    </MultiDataTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Value.Enabled}" Value="False">
+                            <Setter Property="FontStyle" Value="Italic" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+    </StackPanel>
+</UserControl>

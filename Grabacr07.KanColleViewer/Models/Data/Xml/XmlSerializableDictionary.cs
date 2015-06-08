@@ -57,15 +57,16 @@ namespace Grabacr07.KanColleViewer.Models.Data.Xml
 			}
 		}
 
-		/// <summary>
-		/// ディクショナリ内のキーと値の型を使用した、キーと値のペアを表します。
-		/// </summary>
-		public class LocalKeyValuePair
+        /// <summary>
+        /// ディクショナリ内のキーと値の型を使用した、キーと値のペアを表します。
+        /// </summary>
+        [XmlType(TypeName = "Entry")]
+        public class LocalKeyValuePair
 		{
-			/// <summary>
-			/// キーを取得または設定します。
-			/// </summary>
-			public TKey Key { get; set; }
+            /// <summary>
+            /// キーを取得または設定します。
+            /// </summary>
+            public TKey Key { get; set; }
 
 			/// <summary>
 			/// キーに対応する値を取得または設定します。

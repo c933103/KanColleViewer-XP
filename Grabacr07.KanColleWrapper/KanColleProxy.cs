@@ -139,15 +139,27 @@ namespace Grabacr07.KanColleWrapper
             }
 
 			var settings = this.UpstreamProxySettings;
-            if (settings?.IsEnabled != true) return;
-            if (string.IsNullOrEmpty(settings.Host)) return;
+            if (settings == null) return;
 
-			var gateway = settings.Host.Contains(":")
-				// IPv6 アドレスをプロキシホストにした場合はホストアドレス部分を [] で囲う形式にする。
-				? string.Format("[{0}]:{1}", settings.Host, settings.Port)
-				: string.Format("{0}:{1}", settings.Host, settings.Port);
+            var compiled = settings.CompiledRules;
+            if (compiled == null) settings.CompiledRules = compiled = ProxyRule.CompileRule(settings.Rules);
+            var result = ProxyRule.ExecuteRules(compiled, requestingSession.RequestMethod, new Uri(requestingSession.fullUrl));
 
-			requestingSession["X-OverrideGateway"] = gateway;
+            if(result.Action == ProxyRule.MatchAction.Block) {
+                requestingSession.utilCreateResponseAndBypassServer();
+                requestingSession.oResponse.headers.HTTPResponseCode = 403;
+                requestingSession.oResponse.headers.HTTPResponseStatus = "403 Forbidden";
+                return;
+            }
+
+            if(result.Action == ProxyRule.MatchAction.Proxy && result.Proxy != null) {
+                requestingSession["X-OverrideGateway"] = result.Proxy;
+                if(result.ProxyAuth != null && !requestingSession.RequestHeaders.Exists("Proxy-Authorization")) {
+                    requestingSession["X-OverrideGateway"] = result.Proxy;
+                    requestingSession.RequestHeaders.Add("Proxy-Authorization", result.ProxyAuth);
+                }
+            }
+
             requestingSession.bBufferResponse = false;
         }
 
