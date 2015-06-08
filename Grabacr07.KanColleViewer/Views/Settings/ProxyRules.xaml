@@ -69,16 +69,56 @@
         <StackPanel Orientation="Horizontal" Margin="0,3">
             <Button Content="添加/修改" Command="{Binding InsertRuleCommand}" Margin="5,0" />
             <Button Content="删除" Command="{Binding DeleteRuleCommand}" Margin="5,0" />
+            <Button Content="导出" Command="{Binding ExportRuleCommand}" Margin="5,0" />
+            <Button Content="导入(合并)" Command="{Binding ImportRuleCommand}" Margin="5,0" />
         </StackPanel>
         <DataGrid ItemsSource="{Binding Rules}" SelectedItem="{Binding SelectedRule, Mode=OneWayToSource}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,0,10,0">
+            <DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                    <TextBlock DataContext="{Binding Item, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Text="{Binding Key}" FontStyle="Normal" HorizontalAlignment="Right">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Value.Enabled}" Value="False">
+                                        <Setter Property="Foreground" Value="Gray"/>
+                                    </DataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Value.Enabled}" Value="True" />
+                                            <Condition Binding="{Binding Value.Matcher.IsValid}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Foreground" Value="Red"/>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </DataTemplate>
+            </DataGrid.RowHeaderTemplate>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="序号" Binding="{Binding Key}" />
                 <DataGridTextColumn Header="名称" Binding="{Binding Value.Name}" />
-                <DataGridTextColumn Header="匹配参数" Binding="{Binding Value.MatchIn}" />
-                <DataGridTextColumn Header="反向匹配" Binding="{Binding Value.Negative}" />
-                <DataGridTextColumn Header="匹配类型" Binding="{Binding Value.Type}" />
+                <DataGridTextColumn Header="匹配参数" Binding="{Binding Value.MatchIn, Converter={StaticResource EnumToResourceStringConverter}, ConverterParameter=ProxyRuleItem}" />
+                <DataGridTemplateColumn Header="方式">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Text" Value="匹配" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Value.Negative}" Value="True">
+                                                <Setter Property="Text" Value="不匹配" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="匹配类型" Binding="{Binding Value.Type, Converter={StaticResource EnumToResourceStringConverter}, ConverterParameter=ProxyRuleType}" />
                 <DataGridTextColumn Header="匹配模式" Binding="{Binding Value.Pattern}" />
-                <DataGridTextColumn Header="操作" Binding="{Binding Value.Action}" />
+                <DataGridTextColumn Header="操作" Binding="{Binding Value.Action, Converter={StaticResource EnumToResourceStringConverter}, ConverterParameter=ProxyRuleAction}" />
                 <DataGridTextColumn Header="参数" Binding="{Binding Value.ActionString}" />
             </DataGrid.Columns>
             <DataGrid.RowStyle>
@@ -99,8 +139,8 @@
                                         <DataGridCellsPresenter Grid.Column="1" ItemsPanel="{TemplateBinding ItemsPanel}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                                         <DataGridDetailsPresenter Grid.Column="1" Grid.Row="1" SelectiveScrollingGrid.SelectiveScrollingOrientation="{Binding AreRowDetailsFrozen, ConverterParameter={x:Static SelectiveScrollingOrientation.Vertical}, Converter={x:Static DataGrid.RowDetailsScrollingConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Visibility="{TemplateBinding DetailsVisibility}"/>
                                         <DataGridRowHeader Grid.RowSpan="2" SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Row}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                                        <Path x:Name="cross" IsHitTestVisible="False" Grid.ColumnSpan="2" Visibility="Collapsed" Data="M0,0.5 L1,0.5" Stretch="Fill" Stroke="Gray" StrokeThickness="1" />
-                                        <Rectangle x:Name="fog" IsHitTestVisible="False" Grid.ColumnSpan="2" Visibility="Collapsed" Stretch="Fill" Fill="White" Opacity="0.5" />
+                                        <Path x:Name="cross" IsHitTestVisible="False" Grid.Column="1" Visibility="Collapsed" Data="M0,0.5 L1,0.5" Stretch="Fill" Stroke="Gray" StrokeThickness="1" />
+                                        <Rectangle x:Name="fog" IsHitTestVisible="False" Grid.Column="1" Visibility="Collapsed" Stretch="Fill" Fill="White" Opacity="0.5" />
                                     </SelectiveScrollingGrid>
                                 </Border>
                                 <ControlTemplate.Triggers>
