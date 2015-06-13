@@ -65,7 +65,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>signingkey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\signingkey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Grabacr07.KanColleViewer.App</StartupObject>
@@ -643,7 +643,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="signingkey.snk" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

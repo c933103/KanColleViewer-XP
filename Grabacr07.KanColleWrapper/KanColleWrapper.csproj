@@ -53,7 +53,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>signingkey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\signingkey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FiddlerCore4, Version=4.5.1.0, Culture=neutral, PublicKeyToken=67cb91587178ac5a, processorArchitecture=MSIL">
@@ -225,7 +225,6 @@
       <LastGenOutput>KanColleProxy.Endpoints.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
-    <None Include="signingkey.snk" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
