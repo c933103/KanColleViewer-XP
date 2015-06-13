@@ -17,6 +17,8 @@ namespace LynLogger.Views
                         o => ((BattleNetaModel)o).Battle },
                     [o => ((BattleNetaModel)o).IsDrill] = new List<Expression<Func<object, object>>> {
                         o => ((BattleNetaModel)o).Battle },
+                    [o => ((BattleNetaModel)o).SupplementMapNextInfo] = new List<Expression<Func<object, object>>> {
+                        o => ((BattleNetaModel)o).MapNext },
                     [o => ((BattleNetaModel)o).ShowBattleResult] = new List<Expression<Func<object, object>>> {
                         o => ((BattleNetaModel)o).Battle,
                         o => ((BattleNetaModel)o).MapNext,
@@ -121,11 +123,32 @@ namespace LynLogger.Views
                 if(Battle == null) return 2;
                 switch(ShowInfo) {
                     case ViewShowInfo.MapNext:
-                        return Data.MapExperienceTable.Instance[string.Format("{0}-{1}", MapNext.MapAreaId, MapNext.MapSectionId)];
+                        {
+                            var exp = Data.MapExperienceTable.Instance[string.Format("{0}-{1}", MapNext.MapLocation.MapAreaId, MapNext.MapLocation.MapSectId)];
+                            if (exp != 2) return exp;
+                            Models.BattleInfo inf;
+                            if(DataStore.Store.Current.EnemyInfo.TryGetValue(MapNext.MapLocation, out inf)) {
+                                return inf.BaseExp;
+                            }
+                            return 2;
+                        }
                     case ViewShowInfo.PracticeEnemyInfo:
                         return Battle.DrillBasicExp;
                 }
                 return 2;
+            }
+        }
+
+        public Models.BattleInfo? SupplementMapNextInfo
+        {
+            get
+            {
+                if (MapNext == null) return null;
+                Models.BattleInfo inf;
+                if (DataStore.Store.Current.EnemyInfo.TryGetValue(MapNext.MapLocation, out inf)) {
+                    return inf;
+                }
+                return null;
             }
         }
 

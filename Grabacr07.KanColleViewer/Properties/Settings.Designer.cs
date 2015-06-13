@@ -88,8 +88,8 @@ namespace Grabacr07.KanColleViewer.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("<style type=\"text/css\">\nbody {\n  margin:0;\n  overflow:hidden;\n}\n\n#ntg-recommend {" +
-            "\n  display: none;\n}\n\n#game_frame {\n  position:fixed;\n  left:50%;\n  top:-16px;\n  " +
-            "margin-left:-450px;\n  z-index:1;\n}\n</style>")]
+            "\n  display: none !important;\n}\n\n#game_frame {\n  position:fixed;\n  left:50%;\n  to" +
+            "p:-16px;\n  margin-left:-450px;\n  z-index:1;\n}\n</style>")]
         public string TagOverrideStylesheet {
             get {
                 return ((string)(this["TagOverrideStylesheet"]));

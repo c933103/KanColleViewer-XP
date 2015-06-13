@@ -104,8 +104,10 @@
     <Compile Include="Data\MapExperienceTable.cs" />
     <Compile Include="Logger\DrillLogger.cs" />
     <Compile Include="Logger\SortieLogger.cs" />
+    <Compile Include="Models\BattleInfo.cs" />
     <Compile Include="Models\Battling\BattleProcess.Serialization.cs" />
     <Compile Include="Models\Battling\PracticeEnemyInfo.cs" />
+    <Compile Include="Models\MapLocInfo.cs" />
     <Compile Include="Observers\ApiCreateItemObserver.cs" />
     <Compile Include="Observers\ApiCreateShipObserver.cs" />
     <Compile Include="Observers\ApiPracticeEnemyInfoObserver.cs" />
@@ -149,6 +151,9 @@
     </Compile>
     <Compile Include="Views\Contents\BattleProcessPresenter.xaml.cs">
       <DependentUpon>BattleProcessPresenter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\FleetInfoPresenter.xaml.cs">
+      <DependentUpon>FleetInfoPresenter.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Converters\LogbookSequenceToDescriptionConverter.cs" />
     <Compile Include="Views\Converters\UnixTimestampToStringConverter.cs" />
@@ -227,6 +232,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Contents\BattleProcessPresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\FleetInfoPresenter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
