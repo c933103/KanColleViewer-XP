@@ -14,7 +14,7 @@ namespace LynLogger.DataStore.Serialization
         {
             ParameterExpression paramInput = Expression.Parameter(typeof(T), "input");
             ParameterExpression paramPath = Expression.Parameter(typeof(LinkedList<object>), "path");
-            var prop = typeof(ExpressionGenerator<>).MakeGenericType(constructionType).GetProperty("Serializer");
+            var prop = typeof(ExpressionGenerator<>).MakeGenericType(constructionType).GetProperty(nameof(ExpressionGenerator<T>.Serializer));
 
             Expression body = Expression.Call(Expression.MakeMemberAccess(null, prop), prop.PropertyType.GetMethod("Invoke"), Expression.Convert(Expression.MakeMemberAccess(paramInput, field), constructionType), paramPath);
             return Expression.Lambda<Func<T, LinkedList<object>, Premitives.StoragePremitive>>(body, paramInput, paramPath).Compile();
@@ -25,7 +25,7 @@ namespace LynLogger.DataStore.Serialization
             ParameterExpression paramObj = Expression.Parameter(typeof(T), "object");
             ParameterExpression paramInfo = Expression.Parameter(typeof(Premitives.StoragePremitive), "info");
             ParameterExpression paramPath = Expression.Parameter(typeof(LinkedList<object>), "path");
-            var prop = typeof(ExpressionGenerator<>).MakeGenericType(constructionType).GetProperty("Deserializer");
+            var prop = typeof(ExpressionGenerator<>).MakeGenericType(constructionType).GetProperty(nameof(ExpressionGenerator<T>.Deserializer));
 
             return Expression.Lambda<Action<T, Premitives.StoragePremitive, LinkedList<object>>>(Expression.Assign(Expression.MakeMemberAccess(paramObj, field), Expression.Convert(Expression.Call(Expression.MakeMemberAccess(null, prop), prop.PropertyType.GetMethod("Invoke"), paramInfo, paramPath), fieldType)), paramObj, paramInfo, paramPath).Compile();
         }
@@ -79,7 +79,7 @@ namespace LynLogger.DataStore.Serialization
             if(typeof(Premitives.StoragePremitive).IsAssignableFrom(constructionType)) {
                 body = input;
             } else if(typeof(IDSSerializable).IsAssignableFrom(constructionType)) {
-                body = Expression.Call(Expression.Convert(input, typeof(IDSSerializable)), typeof(IDSSerializable).GetMethod("GetSerializationInfo"), path);
+                body = Expression.Call(Expression.Convert(input, typeof(IDSSerializable)), typeof(IDSSerializable).GetMethod(nameof(IDSSerializable.GetSerializationInfo)), path);
             } else if(premitiveType == typeof(Premitives.UnsignedInteger)) {
                 Expression conversion;
                 if(constructionType == typeof(bool)) {
@@ -116,17 +116,17 @@ namespace LynLogger.DataStore.Serialization
             if(typeof(IDSSerializable).IsAssignableFrom(constructionType)) {
                 body = Expression.New(constructionType.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[] { typeof(Premitives.StoragePremitive), typeof(LinkedList<object>) }, null), paramInfo, paramPath);
             } else if(premitiveType == typeof(Premitives.UnsignedInteger)) {
-                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.UnsignedInteger)), "Value");
+                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.UnsignedInteger)), nameof(Premitives.UnsignedInteger.Value));
             } else if(premitiveType == typeof(Premitives.SignedInteger)) {
-                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.SignedInteger)), "Value");
+                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.SignedInteger)), nameof(Premitives.SignedInteger.Value));
             } else if(premitiveType == typeof(Premitives.Decimal)) {
-                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.Decimal)), "Value");
+                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.Decimal)), nameof(Premitives.Decimal.Value));
             } else if(premitiveType == typeof(Premitives.Double)) {
-                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.Double)), "Value");
+                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.Double)), nameof(Premitives.Double.Value));
             } else if(premitiveType == typeof(Premitives.String)) {
-                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.String)), "Value");
+                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.String)), nameof(Premitives.String.Value));
             } else if(premitiveType == typeof(Premitives.Blob)) {
-                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.Blob)), "Data");
+                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.Blob)), nameof(Premitives.Blob.Data));
             } else {
                 //TODO Dictionary and List.
                 throw new NotImplementedException();

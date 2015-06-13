@@ -22,10 +22,31 @@
 
     <StackPanel>
         <Expander Header="下一张地图" Margin="0,3">
-            <StackPanel Margin="20,0,0,0" DataContext="{Binding MapNext, Mode=OneWay}">
-                <ContentControl Content="{Binding Mode=OneTime}" Margin="0,3" />
+            <StackPanel Margin="20,0,0,0">
+                <ContentControl Content="{Binding MapNext, Mode=OneWay}" Margin="0,3" />
+                <StackPanel DataContext="{Binding SupplementMapNextInfo, Mode=OneWay}">
+                    <TextBlock>
+                        <Run Text="扩展信息:  提督经验"/>
+                        <Run Text="{Binding AdmiralExp, Mode=OneTime}" />
+                        <Run Text=" 基本经验"/>
+                        <Run Text="{Binding BaseExp, Mode=OneTime}" />
+                        <Run Text=" 阵型"/>
+                        <Run Text="{Binding Formation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" />
+                    </TextBlock>
+                    <contents:FleetInfoPresenter Ships="{Binding EnemyShips, Mode=OneTime}" />
+                    <StackPanel.Style>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
                 <Expander Header="原始数据">
-                    <TextBox Text="{Binding RawData, Mode=OneTime}" TextWrapping="Wrap" IsReadOnly="True" Margin="20,0,0,15"/>
+                    <TextBox Text="{Binding MapNext.RawData, Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" Margin="20,0,0,15"/>
                 </Expander>
             </StackPanel>
             <Expander.Style>

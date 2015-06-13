@@ -164,21 +164,13 @@ namespace Grabacr07.KanColleWrapper
 
 		private void DropShip(kcsapi_battleresult source)
 		{
-		    try
-		    {
-		        if (source.api_get_ship == null) return;
+		    if (source.api_get_ship == null) return;
 
-		        var target = KanColleClient.Current.Master.Ships[source.api_get_ship.api_ship_id];
-		        if (target == null) return;
+		    var target = KanColleClient.Current.Master.Ships[source.api_get_ship.api_ship_id];
+		    if (target == null) return;
 
-		        this.droppedItemsCount += target.RawData.api_defeq.Count(x => x != -1);
-		        this.RaisePropertyChanged("SlotItemsCount");
-		    }
-		    catch (Exception ex)
-		    {
-                // defeq が消えてるっぽい暫定対応 (雑)
-                Debug.WriteLine(ex);
-		    }
+		    this.droppedItemsCount += target.RawData.api_defeq?.Count(x => x != -1) ?? 0;
+		    this.RaisePropertyChanged(nameof(SlotItemsCount));
 		}
 
 		private void RemodelSlotItem(kcsapi_remodel_slot source)

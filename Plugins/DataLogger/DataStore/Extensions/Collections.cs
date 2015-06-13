@@ -18,12 +18,20 @@ namespace LynLogger.DataStore.Extensions
             return new Premitives.Dictionary<TPremitiveKey, TPremitiveValue>(dict.Select(x => new KeyValuePair<TPremitiveKey, TPremitiveValue>(keyConverter(x.Key, _path), valueConverter(x.Value, _path))));
         }
 
-        public static Premitives.Dictionary<TPremitiveKey, Premitives.Compound> GetSerializationInfo<TKey, TValue, TPremitiveKey>(this IEnumerable<KeyValuePair<TKey, TValue>> dict, LinkedList<object> _path, Func<TKey, LinkedList<object>, TPremitiveKey> keyConverter)
-            where TPremitiveKey : Premitives.StoragePremitive, new()
-            where TValue : AbstractDSSerializable<TValue>
+        public static Premitives.Dictionary<Premitives.StoragePremitive, Premitives.StoragePremitive> GetSerializationInfo<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> dict, LinkedList<object> _path)
+            where TKey : IDSSerializable
+            where TValue : IDSSerializable
         {
             if (dict == null) return null;
-            return new Premitives.Dictionary<TPremitiveKey, Premitives.Compound>(dict.Select(x => new KeyValuePair<TPremitiveKey, Premitives.Compound>(keyConverter(x.Key, _path), (Premitives.Compound)x.Value.GetSerializationInfo(_path))));
+            return new Premitives.Dictionary<Premitives.StoragePremitive, Premitives.StoragePremitive>(dict.Select(x => new KeyValuePair<Premitives.StoragePremitive, Premitives.StoragePremitive>(x.Key.GetSerializationInfo(_path), x.Value.GetSerializationInfo(_path))));
+        }
+
+        public static Premitives.Dictionary<TPremitiveKey, Premitives.StoragePremitive> GetSerializationInfo<TKey, TValue, TPremitiveKey>(this IEnumerable<KeyValuePair<TKey, TValue>> dict, LinkedList<object> _path, Func<TKey, LinkedList<object>, TPremitiveKey> keyConverter)
+            where TPremitiveKey : Premitives.StoragePremitive, new()
+            where TValue : IDSSerializable
+        {
+            if (dict == null) return null;
+            return new Premitives.Dictionary<TPremitiveKey, Premitives.StoragePremitive>(dict.Select(x => new KeyValuePair<TPremitiveKey, Premitives.StoragePremitive>(keyConverter(x.Key, _path), x.Value.GetSerializationInfo(_path))));
         }
 
         public static Premitives.List<TPremitive> GetSerializationInfo<T, TPremitive>(this IEnumerable<T> list, LinkedList<object> _path, Func<T, LinkedList<object>, TPremitive> convert)

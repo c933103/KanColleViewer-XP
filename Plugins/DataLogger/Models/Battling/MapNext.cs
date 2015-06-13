@@ -9,18 +9,6 @@ namespace LynLogger.Models.Battling
         [Serialize(0, DepthLimit = 3)] internal string ZwRawData;
         public string RawData => ZwRawData;
 
-        [Serialize(1)] internal int ZwMapAreaId;
-        public int MapAreaId => ZwMapAreaId;
-
-        [Serialize(2)] internal int ZwMapSectionId;
-        public int MapSectionId => ZwMapSectionId;
-
-        [Serialize(3)] internal int ZwMapLocId;
-        public int MapLocId => ZwMapLocId;
-
-        [Serialize(4)] internal int ZwEnemyId;
-        public int EnemyId => ZwEnemyId;
-
         [Serialize(5)] internal EventType ZwEvent;
         public EventType Event => ZwEvent;
 
@@ -30,10 +18,34 @@ namespace LynLogger.Models.Battling
         [Serialize(7)] internal int ZwNextNodeCount;
         public int NextNodeCount => ZwNextNodeCount;
 
-        public string NodeId => string.Format("{0}-{1}-{2}/{3}", MapAreaId, MapSectionId, MapLocId, EnemyId);
+        [Serialize(8)] internal MapLocInfo ZwMapLocation;
+        public MapLocInfo MapLocation => ZwMapLocation;
+
+        public string NodeId => MapLocation.NodeId;
 
         internal MapNext() { }
         internal MapNext(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { }
+
+        protected override IDictionary<ulong, HandlerInfo> CustomFieldHandlers
+        {
+            get
+            {
+                return new Dictionary<ulong, HandlerInfo>() {
+                    [1] = new HandlerInfo(
+                        (x, p) => null,
+                        (o, i, p) => o.ZwMapLocation.MapAreaId = (int)(DataStore.Premitives.SignedInteger)i),
+                    [2] = new HandlerInfo(
+                        (x, p) => null,
+                        (o, i, p) => o.ZwMapLocation.MapSectId = (int)(DataStore.Premitives.SignedInteger)i),
+                    [3] = new HandlerInfo(
+                        (x, p) => null,
+                        (o, i, p) => o.ZwMapLocation.MapLocId = (int)(DataStore.Premitives.SignedInteger)i),
+                    [4] = new HandlerInfo(
+                        (x, p) => null,
+                        (o, i, p) => o.ZwMapLocation.EnemyId = (int)(DataStore.Premitives.SignedInteger)i),
+                };
+            }
+        }
 
         public override string ToString()
         {

@@ -80,5 +80,24 @@ namespace LynLogger.DataStore.Premitives
                     throw new ArgumentException();
             }
         }
+
+        /*public static implicit operator StoragePremitive(sbyte i) { return new SignedInteger(i); }
+        public static implicit operator StoragePremitive(short i) { return new SignedInteger(i); }
+        public static implicit operator StoragePremitive(int i) { return new SignedInteger(i); }
+        public static implicit operator StoragePremitive(long i) { return new SignedInteger(i); }
+
+        public static implicit operator StoragePremitive(byte i) { return new UnsignedInteger(i); }
+        public static implicit operator StoragePremitive(ushort i) { return new UnsignedInteger(i); }
+        public static implicit operator StoragePremitive(uint i) { return new UnsignedInteger(i); }
+        public static implicit operator StoragePremitive(ulong i) { return new UnsignedInteger(i); }
+
+        public static implicit operator StoragePremitive(string i) { return new String(i); }
+
+        public static implicit operator StoragePremitive(double i) { return new Double(i); }
+        public static implicit operator StoragePremitive(float i) { return new Double(i); }
+
+        public static implicit operator StoragePremitive(decimal i) { return new Decimal(i); }
+
+        public static implicit operator StoragePremitive(byte[] i) { return new Blob(i); }*/
     }
 }

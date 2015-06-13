@@ -31,16 +31,18 @@ namespace LynLogger.Observers
 
                 var data = res.api_data;
                 MapNext mapNext = new MapNext() {
-                    ZwMapAreaId = (int)data.api_maparea_id,
-                    ZwMapSectionId = (int)data.api_mapinfo_no,
-                    ZwMapLocId = (int)data.api_no,
+                    ZwMapLocation = new Models.MapLocInfo() {
+                        MapAreaId = (int)data.api_maparea_id,
+                        MapSectId = (int)data.api_mapinfo_no,
+                        MapLocId = (int)data.api_no,
+                    },
                     ZwNextNodeCount = (int)data.api_next,
                     //ZwMapBossLocId = (int)data.api_bosscell_no,
                     ZwEvent = (MapNext.EventType)((int)data.api_event_id * ((int)data.api_event_kind == 2 ? -1 : 1)),
                     ZwRawData = json
                 };
                 if(data.api_enemy() && data.api_enemy != null) {
-                    mapNext.ZwEnemyId = (int)data.api_enemy.api_enemy_id;
+                    mapNext.ZwMapLocation.EnemyId = (int)data.api_enemy.api_enemy_id;
                 }
                 if(mapNext.ZwEvent == MapNext.EventType.ItemGet) {
                     mapNext.ZwItemGetLost = new MapNext.ItemGetLostInfo() {
