@@ -156,8 +156,8 @@ namespace Grabacr07.KanColleWrapper
 
     class ShExpMatcher : IMatcher
     {
-        public enum Token { Start, End, Literal, Question, Asterisk }
-        struct ShellExpToken
+        private enum Token { Start, End, Literal, Question, Asterisk }
+        private struct ShellExpToken
         {
             public Token Type { get; set; }
             public string Literal { get; set; }
@@ -242,9 +242,10 @@ namespace Grabacr07.KanColleWrapper
                 } else {
                     switch (pattern[--i].Type) {
                         case Token.Asterisk:
-                            if (match[i] == match[i - 1]) return false;
-                            j = --match[i++];
-                            rewind = false;
+                            if (match[i] != match[i - 1]) {
+                                j = --match[i++];
+                                rewind = false;
+                            }
                             continue;
                         case Token.Start:
                             return false;
