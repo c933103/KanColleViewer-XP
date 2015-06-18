@@ -35,7 +35,8 @@ namespace Grabacr07.KanColleWrapper
 				if (this._Ships != value)
 				{
 					this._Ships = value;
-					this.RaisePropertyChanged();
+                    DroppedShips = 0;
+                    this.RaisePropertyChanged();
 				}
 			}
 		}
