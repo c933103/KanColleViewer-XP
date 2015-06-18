@@ -1,4 +1,6 @@
-﻿using LynLogger.Models;
+﻿using Grabacr07.KanColleViewer.Models.Data.Xml;
+using LynLogger.DataStore.Extensions;
+using LynLogger.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,12 @@ namespace LynLogger.Views
     {
         private SaveDataCommand saveDataCmd;
         public ICommand SaveData => saveDataCmd ?? (saveDataCmd = new SaveDataCommand());
+
+        private ExportEnemyInfoCommand expEnemyInfoCmd;
+        public ICommand ExportEnemyInfo => expEnemyInfoCmd ?? (expEnemyInfoCmd = new ExportEnemyInfoCommand());
+
+        private ImportEnemyInfoCommand impEnemyInfoCmd;
+        public ICommand ImportEnemyInfo => impEnemyInfoCmd ?? (impEnemyInfoCmd = new ImportEnemyInfoCommand());
 
         public int BasicInfoLoggingInterval
         {
@@ -35,41 +43,6 @@ namespace LynLogger.Views
             }
         }
 
-        /*private int _cleanupKeepDatapointCount = 2000;
-        public int CleanupKeepDatapointCount {
-            get { return _cleanupKeepDatapointCount; }
-            set
-            {
-                if(value == _cleanupKeepDatapointCount) return;
-                _cleanupKeepDatapointCount = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private int _cleanupKeepDatapointDays = 90;
-        public int CleanupKeepDatapointDays
-        {
-            get { return _cleanupKeepDatapointDays; }
-            set
-            {
-                if(value == _cleanupKeepDatapointDays) return;
-                _cleanupKeepDatapointDays = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private string _mergeFileName = "";
-        public string MergeFileName
-        {
-            get { return _mergeFileName; }
-            set
-            {
-                if(value == _mergeFileName) return;
-                _mergeFileName = value;
-                RaisePropertyChanged();
-            }
-        }*/
-
         public SettingsModel()
         {
             DataStore.Store.OnDataStoreSwitch += (_, ds) => RaiseMultiPropertyChanged();
@@ -81,117 +54,7 @@ namespace LynLogger.Views
         }
 
 #pragma warning disable 0067
-/*        public class CleanupDataByCountCommand : ICommand
-        {
-            public bool CanExecute(object parameter) { return true; }
-            public event EventHandler CanExecuteChanged;
-
-            public void Execute(object parameter)
-            {
-                DataStore.Store.Current.Cleanup(new Scavenger((int)parameter));
-                DataStore.Refresh();
-            }
-
-            [ScavengeTargetType(typeof(long), typeof(int))]
-            [ScavengeTargetType(typeof(long), typeof(double))]
-            [ScavengeTargetType(typeof(long), typeof(ShipNameType))]
-            private class Scavenger : IRampUpScavenger
-            {
-                private LinkedList<long> seenKeys;
-                private long seenObjectCount;
-                private long thredsholdAmount;
-                private bool keep;
-
-                public Scavenger(int keepAfter)
-                {
-                    thredsholdAmount = keepAfter;
-                }
-
-                public void Reset() { seenKeys = new LinkedList<long>(); seenObjectCount = 0; keep = false; }
-
-                public void RampUp(object key, object value)
-                {
-                    if(!(key is long)) return;
-                    seenKeys.AddLast((long)key);
-                    if(++seenObjectCount > thredsholdAmount) {
-                        seenKeys.RemoveFirst();
-                    }
-                }
-
-                public bool ShouldKeep(object key, object value)
-                {
-                    if(!(key is long)) return true;
-                    if((long)key == seenKeys.First.Value) {
-                        keep = true;
-                    }
-                    return keep;
-                }
-            }
-        }
-
-        public class CleanupDataByTimeCommand : ICommand
-        {
-            public bool CanExecute(object parameter) { return true; }
-            public event EventHandler CanExecuteChanged;
-
-            public void Execute(object parameter)
-            {
-                DataStore.Store.Current.Cleanup(new Scavenger(Helpers.UnixTimestamp - ((int)parameter) * 86400L));
-                DataStore.Refresh();
-            }
-
-            [ScavengeTargetType(typeof(long), typeof(int))]
-            [ScavengeTargetType(typeof(long), typeof(double))]
-            [ScavengeTargetType(typeof(long), typeof(ShipNameType))]
-            private class Scavenger : IScavenger
-            {
-                private long thredsholdTs;
-
-                public Scavenger(long keepAfter)
-                {
-                    thredsholdTs = keepAfter;
-                }
-
-                public void Reset() { }
-
-                public bool ShouldKeep(object key, object value)
-                {
-                    if(!(key is long)) return true;
-                    return (long)key >= thredsholdTs;
-                }
-            }
-        }
-
-        public class CleanupDataRemoveNonExistenceCommand : ICommand
-        {
-            public bool CanExecute(object parameter) { return true; }
-            public event EventHandler CanExecuteChanged;
-
-            public void Execute(object parameter)
-            {
-                DataStore.Store.Current.Cleanup(new Scavenger());
-                DataStore.Refresh();
-            }
-
-            [ScavengeTargetType(typeof(int), typeof(ShipHistory))]
-            private class Scavenger : IScavenger
-            {
-                public void Reset() { }
-
-                public bool ShouldKeep(object key, object value)
-                {
-                    var val = value as Models.ShipHistory;
-                    if(val == null) return true;
-
-                    return !(val.EnhancedAntiAir.Count == 1 && val.EnhancedDefense.Count == 1 && val.EnhancedLuck.Count == 1
-                        && val.EnhancedPower.Count == 1 && val.EnhancedTorpedo.Count == 1 && val.Exp.Count == 1
-                        && val.Level.Count == 1 && val.ShipNameType.Count == 1 && val.SRate.Count == 1
-                        && val.ExistenceLog.Last().Value == ShipExistenceStatus.NonExistence);
-                }
-            }
-        }*/
-
-        public class SaveDataCommand : ICommand
+        private class SaveDataCommand : ICommand
         {
             public bool CanExecute(object parameter) { return true; }
             public event EventHandler CanExecuteChanged;
@@ -202,23 +65,56 @@ namespace LynLogger.Views
             }
         }
 
-        /*public class BrowseFileCommand : ICommand
+        private class ExportEnemyInfoCommand : ICommand
         {
             public bool CanExecute(object parameter) { return true; }
             public event EventHandler CanExecuteChanged;
 
             public void Execute(object parameter)
             {
+                var info = DataStore.Store.Current?.EnemyInfo;
+                if (info == null) return;
+
+                Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
+                sfd.OverwritePrompt = true;
+                sfd.CheckPathExists = true;
+                sfd.ValidateNames = true;
+                if (sfd.ShowDialog() != true) return;
+
+                var dummy = new LinkedList<object>();
+                using (System.IO.Stream s = sfd.OpenFile())
+                using (DataStore.IO.DSWriter w = new DataStore.IO.DSWriter(s))
+                    info.GetSerializationInfo(dummy).Serialize(w);
+            }
+        }
+
+        private class ImportEnemyInfoCommand : ICommand
+        {
+            public bool CanExecute(object parameter) { return true; }
+            public event EventHandler CanExecuteChanged;
+
+            public void Execute(object parameter)
+            {
+                var info = DataStore.Store.Current?.EnemyInfo;
+                if (info == null) return;
+
                 Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
                 ofd.CheckFileExists = true;
                 ofd.CheckPathExists = true;
                 ofd.Multiselect = false;
-                ofd.ShowReadOnly = false;
                 ofd.ValidateNames = true;
-                if(ofd.ShowDialog() != true) return;
+                if (ofd.ShowDialog() != true) return;
 
-                ((SettingsModel)parameter).MergeFileName = ofd.FileName;
+                var dummy = new LinkedList<object>();
+                using (System.IO.Stream s = ofd.OpenFile()) {
+                    using(DataStore.IO.DSReader r = new DataStore.IO.DSReader(s)) {
+                        var dict = (DataStore.Premitives.Dictionary<DataStore.Premitives.StoragePremitive, DataStore.Premitives.StoragePremitive>)DataStore.Premitives.StoragePremitive.Parse(r);
+                        foreach (var kv in dict.Convert((k, v) => new { Key = new MapLocInfo(k, dummy), Value = new BattleInfo(v, dummy) })) {
+                            info[kv.Key] = kv.Value;
+                        }
+                    }
+                }
             }
-        }*/
+        }
     }
 }

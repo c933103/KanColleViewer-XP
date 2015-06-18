@@ -110,7 +110,8 @@ namespace Grabacr07.KanColleViewer.ViewModels
         public ICommand ExportRuleCommand => new CmdExportRule(this);
         public ICommand ImportRuleCommand => new CmdImportRule(this);
 
-        class CmdInsertRule : ICommand
+#pragma warning disable 0067
+        private class CmdInsertRule : ICommand
         {
             private readonly ProxyRulesViewModel vm;
 
@@ -143,7 +144,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
             }
         }
 
-        class CmdDeleteRule : ICommand
+        private class CmdDeleteRule : ICommand
         {
             private readonly ProxyRulesViewModel vm;
 
@@ -167,7 +168,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
             }
         }
 
-        class CmdExportRule : ICommand
+        private class CmdExportRule : ICommand
         {
             private readonly ProxyRulesViewModel vm;
 
@@ -199,7 +200,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
             }
         }
 
-        class CmdImportRule : ICommand
+        private class CmdImportRule : ICommand
         {
             private readonly ProxyRulesViewModel vm;
 

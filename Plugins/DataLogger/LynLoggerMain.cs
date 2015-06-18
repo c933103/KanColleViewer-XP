@@ -25,7 +25,7 @@ namespace LynLogger
         {
             get
             {
-                return "3.8.2-1.1(T8)"
+                return "3.8.2-1.1(T9)"
 #if DEBUG
                      + "d"
 #endif
