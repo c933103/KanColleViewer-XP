@@ -104,8 +104,19 @@ namespace Grabacr07.KanColleWrapper
 			}
 		}
 
-		#endregion
+        #endregion
 
+        private int _droppedShips;
+        public int DroppedShips
+        {
+            get { return _droppedShips; }
+            set
+            {
+                if (value == _droppedShips) return;
+                _droppedShips = value;
+                RaisePropertyChanged();
+            }
+        }
 
 		public Organization(Homeport parent, KanColleProxy proxy)
 		{
@@ -140,7 +151,10 @@ namespace Grabacr07.KanColleWrapper
 			proxy.api_req_hensei_combined.TryParse<kcsapi_hensei_combined>()
 				.Subscribe(x => this.Combined = x.Data.api_combined != 0);
 
-			this.SubscribeSortieSessions(proxy);
+            proxy.api_req_sortie_battleresult.TryParse<kcsapi_battleresult>().Subscribe(x => DroppedShips += x.Data.api_get_ship == null ? 0 : 1);
+            proxy.api_req_combined_battle_battleresult.TryParse<kcsapi_combined_battle_battleresult>().Subscribe(x => DroppedShips += x.Data.api_get_ship == null ? 0 : 1);
+
+            this.SubscribeSortieSessions(proxy);
 		}
 
 
