@@ -227,6 +227,7 @@
     <Compile Include="ViewModels\Catalogs\SlotItemCatalogViewModel.cs" />
     <Compile Include="ViewModels\Catalogs\SlotItemCounter.cs" />
     <Compile Include="ViewModels\Catalogs\ShipCatalogSortWorker.cs" />
+    <Compile Include="ViewModels\Contents\BrowserViewModel.cs" />
     <Compile Include="ViewModels\Contents\Fleets\CombinedFleetViewModel.cs" />
     <Compile Include="ViewModels\Composition\NotifierViewModel.cs" />
     <Compile Include="ViewModels\Composition\PluginViewModel.cs" />
@@ -254,7 +255,6 @@
     <Compile Include="ViewModels\CultureViewModel.cs" />
     <Compile Include="ViewModels\FleetWindowViewModel.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
-    <Compile Include="ViewModels\MainContentViewModel.cs" />
     <Compile Include="Models\INavigator.cs" />
     <Compile Include="ViewModels\Contents\MaterialsViewModel.cs" />
     <Compile Include="ViewModels\Messages\ScreenshotMessage.cs" />
@@ -276,6 +276,12 @@
     <Compile Include="Views\Behaviors\NavigatorBehavior.cs" />
     <Compile Include="Views\Behaviors\ScreenshotAction.cs" />
     <Compile Include="Views\Behaviors\SetWindowLocationAction.cs" />
+    <Compile Include="Views\Contents\Browser.xaml.cs">
+      <DependentUpon>Browser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Contents\StartContent.xaml.cs">
+      <DependentUpon>StartContent.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\StateDetailIndicator.xaml.cs">
       <DependentUpon>StateDetailIndicator.xaml</DependentUpon>
     </Compile>
@@ -359,9 +365,6 @@
     </Compile>
     <Compile Include="Views\Settings\Window.xaml.cs">
       <DependentUpon>Window.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\StartContent.xaml.cs">
-      <DependentUpon>StartContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
@@ -470,6 +473,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Contents\Browser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Contents\StartContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Contents\StateDetailIndicator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -550,10 +561,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\StartContent.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Settings\Settings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -591,7 +598,7 @@
     <Compile Include="ViewModels\Contents\Fleets\FleetsViewModel.cs" />
     <Compile Include="ViewModels\Contents\Fleets\FleetViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\StartContentViewModel.cs" />
+    <Compile Include="ViewModels\Contents\StartContentViewModel.cs" />
     <Compile Include="ViewModels\Contents\ShipViewModel.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Compile Include="Views\Behaviors\CountdownBehavior.cs" />

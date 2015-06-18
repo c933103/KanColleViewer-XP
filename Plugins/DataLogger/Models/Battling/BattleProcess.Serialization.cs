@@ -84,10 +84,10 @@ namespace LynLogger.Models.Battling
                             (o, i, p) => (o.ZwShipNameType ?? (o.ZwShipNameType = new ShipNameType(0))).ShipId = (int)(DataStore.Premitives.SignedInteger)i, true),
                         [2] = new HandlerInfo(
                             (x, p) => null,
-                            (o, i, p) => (o.ZwShipNameType ?? (o.ZwShipNameType = new ShipNameType(0))).TypeName = (string)(DataStore.Premitives.String)i, true),
+                            (o, i, p) => (o.ZwShipNameType ?? (o.ZwShipNameType = new ShipNameType(0))).TypeName = (DataStore.Premitives.String)i, true),
                         [3] = new HandlerInfo(
                             (x, p) => null,
-                            (o, i, p) => (o.ZwShipNameType ?? (o.ZwShipNameType = new ShipNameType(0))).ShipName = (string)(DataStore.Premitives.String)i, true),
+                            (o, i, p) => (o.ZwShipNameType ?? (o.ZwShipNameType = new ShipNameType(0))).ShipName = (DataStore.Premitives.String)i, true),
                         [9] = new HandlerInfo(
                             (x, p) => x.ZwEquipts.GetSerializationInfo(p),
                             (o, i, p) => o.ZwEquipts = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i).Convert(x => new EquiptInfo(x, p)).ToArray()),

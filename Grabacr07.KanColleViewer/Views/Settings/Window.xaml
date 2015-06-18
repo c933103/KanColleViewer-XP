@@ -26,10 +26,16 @@
 				   Style="{DynamicResource SettingsHeaderTextStyleKey}" />
 
         <CheckBox Content="{Binding Resources.Settings_Window_TopMost, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
-				  IsChecked="{Binding Source={x:Static kanColleViewer:App.ViewModelRoot}, Path=TopMost, Mode=TwoWay}"
+				  IsChecked="{Binding TopMost, Source={x:Static models:Settings.Current}, Mode=TwoWay}"
 				  Margin="20,0,0,10" />
+        <CheckBox Content="迷你模式（重启生效）"
+			IsChecked="{Binding MiniLayout, Mode=TwoWay, Source={x:Static models:Settings.Current}}"
+			Margin="20,0,0,10" />
         <CheckBox Content="左右分屏"
-			IsChecked="{Binding LRSplit, Mode=TwoWay, Source={x:Static kanColleViewer:App.ViewModelRoot}}"
+			IsChecked="{Binding LRSplit, Mode=TwoWay, Source={x:Static models:Settings.Current}}"
+			Margin="20,0,0,10" />
+        <CheckBox Content="主标签横向排列"
+			IsChecked="{Binding HorizontalTab, Mode=TwoWay, Source={x:Static models:Settings.Current}}"
 			Margin="20,0,0,10" />
         <CheckBox Content="浏览器内禁用触摸手势（刷新页面生效）"
 			IsChecked="{Binding DisableBrowserTouchAction, Mode=TwoWay, Source={x:Static models:Settings.Current}}"

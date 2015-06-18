@@ -122,15 +122,13 @@ namespace Grabacr07.KanColleWrapper
 		public void Initialieze()
 		{
 			var proxy = this.Proxy ?? (this.Proxy = new KanColleProxy());
-			var basic = proxy.api_get_member_basic.TryParse<kcsapi_basic>().FirstAsync().ToTask();
+            this.Homeport = new Homeport(proxy);
+            var basic = proxy.api_get_member_basic.TryParse<kcsapi_basic>().FirstAsync().ToTask();
 			var kdock = proxy.api_get_member_kdock.TryParse<kcsapi_kdock[]>().FirstAsync().ToTask();
 			var sitem = proxy.api_get_member_slot_item.TryParse<kcsapi_slotitem[]>().FirstAsync().ToTask();
 
             IDisposable disposable = null;
             disposable = proxy.api_start2.Subscribe(async session => {
-                var timeout = Task.Delay(TimeSpan.FromSeconds(30));
-                await Task.WhenAny(new Task[] { basic, kdock, sitem }.WhenAll(), timeout);
-
                 // タイムアウト仕掛けてるのは、今後のアップデートで basic, kdock, slot_item のいずれかが来なくなったときに
                 // 起動できなくなる (IsStarted を true にできなくなる) のを防ぐため
                 // -----
@@ -140,7 +138,10 @@ namespace Grabacr07.KanColleWrapper
                 if (!SvData.TryParse(session, out svd)) return;
 
                 this.Master = new Master(svd.Data);
-                if (this.Homeport == null) this.Homeport = new Homeport(proxy);
+                //if (this.Homeport == null) this.Homeport = new Homeport(proxy);
+
+                var timeout = Task.Delay(TimeSpan.FromSeconds(30));
+                await Task.WhenAny(new Task[] { basic, kdock, sitem }.WhenAll(), timeout);
 
                 if (basic.Status == TaskStatus.RanToCompletion) this.Homeport.UpdateAdmiral(basic.Result.Data);
                 if (sitem.Status == TaskStatus.RanToCompletion) this.Homeport.Itemyard.Update(sitem.Result.Data);

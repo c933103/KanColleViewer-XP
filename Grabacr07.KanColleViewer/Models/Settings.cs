@@ -364,7 +364,7 @@ namespace Grabacr07.KanColleViewer.Models
 			}
 		}
 
-		#endregion
+        #endregion
 
         private bool _LRSplit = false;
         public bool LRSplit
@@ -372,8 +372,32 @@ namespace Grabacr07.KanColleViewer.Models
             get { return _LRSplit; }
             set
             {
-                if(value == _LRSplit) return;
+                if (value == _LRSplit) return;
                 _LRSplit = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        private bool _horizontalTab = false;
+        public bool HorizontalTab
+        {
+            get { return _horizontalTab; }
+            set
+            {
+                if (value == _horizontalTab) return;
+                _horizontalTab = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        private bool _miniLayout = false;
+        public bool MiniLayout
+        {
+            get { return _miniLayout; }
+            set
+            {
+                if (value == _miniLayout) return;
+                _miniLayout = value;
                 this.RaisePropertyChanged();
             }
         }

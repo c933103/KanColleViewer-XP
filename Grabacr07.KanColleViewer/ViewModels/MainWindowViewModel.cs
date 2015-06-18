@@ -10,13 +10,15 @@ using Livet;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
 using MetroRadiance;
+using Grabacr07.KanColleViewer.ViewModels.Contents;
+using Grabacr07.KanColleViewer.ViewModels.Contents.Fleets;
+using System.Collections.ObjectModel;
 
 namespace Grabacr07.KanColleViewer.ViewModels
 {
 	public class MainWindowViewModel : WindowViewModel
 	{
 		private Mode currentMode;
-		private MainContentViewModel mainContent;
 
 		public NavigatorViewModel Navigator { get; private set; }
 		public SettingsViewModel Settings { get; private set; }
@@ -32,13 +34,14 @@ namespace Grabacr07.KanColleViewer.ViewModels
 				switch (value)
 				{
 					case Mode.NotStarted:
-						this.Content = StartContentViewModel.Instance;
-						this.StatusBar = StartContentViewModel.Instance;
+                        this.StatusBar = null;
 						StatusService.Current.Set(Properties.Resources.StatusBar_NotStarted);
 						ThemeService.Current.ChangeAccent(Accent.Purple);
 						break;
 					case Mode.Started:
-						this.Content = this.mainContent ?? (this.mainContent = new MainContentViewModel());
+                        if (SelectedItem == StartContentViewModel.Instance)
+                            SelectedItem = TabItems.FirstOrDefault(x => x != StartContentViewModel.Instance);
+                        DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => TabItems.Remove(StartContentViewModel.Instance)));
 						StatusService.Current.Set(Properties.Resources.StatusBar_Ready);
 						ThemeService.Current.ChangeAccent(Accent.Blue);
 						break;
@@ -48,25 +51,6 @@ namespace Grabacr07.KanColleViewer.ViewModels
 				}
 
 				this.RaisePropertyChanged();
-			}
-		}
-
-		#endregion
-
-		#region Content 変更通知プロパティ
-
-		private ViewModel _Content;
-
-		public ViewModel Content
-		{
-			get { return this._Content; }
-			set
-			{
-				if (this._Content != value)
-				{
-					this._Content = value;
-					this.RaisePropertyChanged();
-				}
 			}
 		}
 
@@ -110,35 +94,6 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
 		#endregion
 
-		#region TopMost 変更通知プロパティ
-
-		public bool TopMost
-		{
-			get { return Models.Settings.Current.TopMost; }
-			set
-			{
-				if (Models.Settings.Current.TopMost != value)
-				{
-					Models.Settings.Current.TopMost = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		#endregion
-
-        public bool LRSplit
-        {
-            get { return Models.Settings.Current.LRSplit; }
-            set
-            {
-                if(Models.Settings.Current.LRSplit != value) {
-                    Models.Settings.Current.LRSplit = value;
-                    this.RaisePropertyChanged();
-                }
-            }
-        }
-
         private bool _downloadActivity = false;
         public bool DownloadActive { get { return _downloadActivity = !_downloadActivity; } set { RaisePropertyChanged(); } }
         private bool _uploadActivity = false;
@@ -146,6 +101,42 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
         private volatile int _outstandingRequests = 0;
         public int OutstandingRequests { get { return _outstandingRequests; } }
+
+        public AdmiralViewModel Admiral { get; private set; }
+        public MaterialsViewModel Materials { get; private set; }
+        public ShipsViewModel Ships { get; private set; }
+        public SlotItemsViewModel SlotItems { get; private set; }
+
+        public FleetsViewModel Fleets { get; private set; }
+        public ShipyardViewModel Shipyard { get; private set; }
+        public QuestsViewModel Quests { get; private set; }
+        public ExpeditionsViewModel Expeditions { get; private set; }
+
+        public IList<TabItemViewModel> TabItems { get; set; }
+
+        public VolumeViewModel Volume { get; private set; }
+
+        public Views.Contents.Browser Browser { get; }
+
+        #region SelectedItem 変更通知プロパティ
+
+        private TabItemViewModel _SelectedItem;
+
+        public TabItemViewModel SelectedItem
+        {
+            get { return this._SelectedItem; }
+            set
+            {
+                if (this._SelectedItem != value) {
+                    this._SelectedItem = value;
+                    this.RaisePropertyChanged();
+
+                    StatusBar = value;
+                }
+            }
+        }
+
+        #endregion
 
         public MainWindowViewModel()
 		{
@@ -171,6 +162,42 @@ namespace Grabacr07.KanColleViewer.ViewModels
             Fiddler.FiddlerApplication.BeforeRequest += _ => { System.Threading.Interlocked.Increment(ref _outstandingRequests); RaisePropertyChanged(nameof(OutstandingRequests)); };
             Fiddler.FiddlerApplication.BeforeResponse += _ => { System.Threading.Interlocked.Decrement(ref _outstandingRequests); RaisePropertyChanged(nameof(OutstandingRequests)); };
             Fiddler.FiddlerApplication.BeforeReturningError += _ => { if (_.responseCode == 408) return; System.Threading.Interlocked.Decrement(ref _outstandingRequests); RaisePropertyChanged(nameof(OutstandingRequests)); };
+
+            this.Admiral = new AdmiralViewModel();
+            this.Materials = new MaterialsViewModel();
+            this.Ships = new ShipsViewModel();
+            this.SlotItems = new SlotItemsViewModel();
+
+            this.Fleets = new FleetsViewModel();
+            this.Shipyard = new ShipyardViewModel();
+            this.Quests = new QuestsViewModel();
+            this.Expeditions = new ExpeditionsViewModel(this.Fleets);
+
+            this.TabItems = new ObservableCollection<TabItemViewModel>
+            {
+                StartContentViewModel.Instance,
+                new OverviewViewModel(this),
+                this.Fleets,
+                this.Shipyard,
+                this.Quests,
+                this.Expeditions,
+                new ToolsViewModel(),
+                new SettingsViewModel(),
+                #region DEBUG
+#if false
+				new DebugTabViewModel(),
+#endif
+                #endregion
+            };
+            if(Models.Settings.Current.MiniLayout) {
+                TabItems.Insert(0, new BrowserViewModel());
+            } else {
+                Browser = new Views.Contents.Browser();
+            }
+
+            this.SelectedItem = this.TabItems.FirstOrDefault();
+
+            this.Volume = new VolumeViewModel();
         }
 
 		public void TakeScreenshot()
