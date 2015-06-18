@@ -25,5 +25,15 @@ namespace LynLogger.DataStore.Premitives
             output.Write(Type);
             output.Write(value);
         }
+
+        public static implicit operator string (String v)
+        {
+            return v?.Value;
+        }
+
+        public static implicit operator String(string v)
+        {
+            return new String(v);
+        }
     }
 }

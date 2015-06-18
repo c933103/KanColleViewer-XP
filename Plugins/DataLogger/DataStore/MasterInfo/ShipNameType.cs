@@ -5,29 +5,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LynLogger.DataStore.Serialization;
+using Grabacr07.KanColleWrapper.Models;
 
 namespace LynLogger.DataStore.MasterInfo
 {
     [Serializable]
     public class ShipNameType : AbstractDSSerializable<ShipNameType>
     {
-        [Serialize(0)] public int ShipId { get; private set; }
-        [Serialize(1)] public string ShipName { get; private set; }
-        [Serialize(2)] public string TypeName { get; private set; }
+        [Serialize(0)] public int ShipId { get; internal set; }
+        [Serialize(1)] public string ShipName { get; internal set; }
+        [Serialize(2)] public string TypeName { get; internal set; }
 
         public ShipNameType(Premitives.StoragePremitive info, LinkedList<object> serializationPath) : base(info, serializationPath) { }
 
-        public ShipNameType(int id)
+        public ShipNameType(int id) : this(KanColleClient.Current.Master.Ships[id], id) { }
+
+        public ShipNameType(ShipInfo ship, int id)
         {
-            var ship = KanColleClient.Current.Master.Ships[id];
             ShipId = id;
             ShipName = ship?.Name ?? ("Ship" + id);
-            TypeName = ship?.ShipType.Name ?? ("Type"+id);
-            if(ship != null) {
+            TypeName = ship?.ShipType.Name ?? ("Type" + id);
+            if (ship != null) {
                 ShipName = ship.Name;
                 TypeName = ship.ShipType.Name;
-                if(ship.RawData.api_yomi == "flagship" || ship.RawData.api_yomi == "elite") {
-                    ShipName += ship.RawData.api_yomi;
+                if (ship.Yomi == "flagship" || ship.Yomi == "elite") {
+                    ShipName += ship.Yomi;
                 }
             } else {
                 ShipName = "Ship" + id;

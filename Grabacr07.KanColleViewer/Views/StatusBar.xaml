@@ -34,10 +34,11 @@
 
 		<ContentControl Grid.Column="1"
 						Content="{Binding Source={x:Static root:App.ViewModelRoot}, Path=StatusBar}">
-			<ContentControl.Resources>
-				<DataTemplate DataType="{x:Type vm:StartContentViewModel}" />
-				<DataTemplate DataType="{x:Type vmContents:OverviewViewModel}" />
-				<DataTemplate DataType="{x:Type vmFleets:FleetsViewModel}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type vmContents:BrowserViewModel}" />
+                <DataTemplate DataType="{x:Type vmContents:StartContentViewModel}" />
+                <DataTemplate DataType="{x:Type vmContents:OverviewViewModel}" />
+                <DataTemplate DataType="{x:Type vmFleets:FleetsViewModel}">
 					<StackPanel Orientation="Horizontal"
 								DataContext="{Binding SelectedFleet}">
 						<StackPanel.Resources>

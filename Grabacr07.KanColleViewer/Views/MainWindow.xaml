@@ -19,8 +19,9 @@
 				   Title="{Binding Title}"
 				   Width="960"
 				   Height="945"
-				   MinWidth="{Binding ElementName=KanColleHost, Path=MinWidth}"
-				   Topmost="{Binding TopMost}"
+				   MinWidth="800"
+				   MinHeight="600"
+				   Topmost="{Binding TopMost, Source={x:Static models:Settings.Current}}"
 				   FontSize="12"
 				   Background="{DynamicResource ThemeBrushKey}"
 				   Foreground="{DynamicResource ActiveForegroundBrushKey}"
@@ -146,7 +147,7 @@
 					<controls:ZoomFactorSelector ZoomFactor="{Binding Settings.BrowserZoomFactor, Mode=OneWay}"
 												 ToolTip="{Binding Source={x:Static models:ResourceService.Current}, Path=Resources.ZoomFactorSelector_Tooltip}"
 												 Margin="4,0" />
-					<metro:CaptionButton IsChecked="{Binding TopMost, Mode=TwoWay}"
+                    <metro:CaptionButton IsChecked="{Binding TopMost, Source={x:Static models:Settings.Current}, Mode=TwoWay}"
 										 ToolTip="{Binding Resources.Settings_Window_TopMost, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
 										 Style="{DynamicResource PinButtonStyleKey}" />
 					<metro:SystemButtons />
@@ -165,42 +166,21 @@
                 <ColumnDefinition Width="*" Name="Col1Width" />
             </Grid.ColumnDefinitions>
 
-                    <controls:KanColleHost x:Name="KanColleHost"
-								   ZoomFactor="{Binding Settings.BrowserZoomFactor.Current}">
-				<i:Interaction.Triggers>
-					<livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
-													 MessageKey="WebBrowser/Zoom">
-						<behaviors:ZoomAction />
-					</livet:InteractionMessageTrigger>
-				</i:Interaction.Triggers>
-				<WebBrowser VerticalAlignment="Center" Grid.Row="0" Grid.Column="0">
-					<i:Interaction.Behaviors>
-						<behaviors:NavigatorBehavior Navigator="{Binding Navigator}" />
-						<livet:WebBrowserSetStateToControlBehavior Source="{Binding Source={x:Static properties:Settings.Default}, Path=KanColleUrl, Mode=OneTime}"
-																   Property="Source" />
-					</i:Interaction.Behaviors>
-					<i:Interaction.Triggers>
-						<livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
-														 MessageKey="Screenshot/Save">
-							<behaviors:ScreenshotAction />
-						</livet:InteractionMessageTrigger>
-					</i:Interaction.Triggers>
-				</WebBrowser>
-			</controls:KanColleHost>
+            <ContentControl Content="{Binding Browser, Mode=OneTime}" VerticalAlignment="Center">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding MiniLayout, Mode=OneTime, Source={x:Static models:Settings.Current}}" Value="True">
+                                <Setter Property="VerticalAlignment" Value="Top" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
 
-            <ContentControl Grid.Column="{Binding LRSplit, ConverterParameter=1:0, Converter={StaticResource BoolToIntSelector}, Mode=OneWay}"
-                            Grid.Row="{Binding LRSplit, ConverterParameter=0:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay}"
-							Content="{Binding Content}">
-				<ContentControl.Resources>
-					<DataTemplate DataType="{x:Type viewModels:StartContentViewModel}">
-						<views:StartContent />
-					</DataTemplate>
-
-					<DataTemplate DataType="{x:Type viewModels:MainContentViewModel}">
-						<views:MainContent />
-					</DataTemplate>
-				</ContentControl.Resources>
-			</ContentControl>
+            <views:MainContent Grid.Column="{Binding LRSplit, Source={x:Static models:Settings.Current}, ConverterParameter=1:0, Converter={StaticResource BoolToIntSelector}, Mode=OneWay}"
+                            Grid.Row="{Binding LRSplit, Source={x:Static models:Settings.Current}, ConverterParameter=0:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay}" />
 		</Grid>
 
 		<!-- region Status area -->

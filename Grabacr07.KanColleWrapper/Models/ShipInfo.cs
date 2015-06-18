@@ -28,6 +28,8 @@ namespace Grabacr07.KanColleWrapper.Models
 			get { return this.RawData.api_sortno; }
 		}
 
+        public string Yomi => RawData.api_yomi;
+
 		/// <summary>
 		/// 艦の名称を取得します。
 		/// </summary>
