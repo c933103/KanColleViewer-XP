@@ -418,6 +418,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			}
         }
 
+#pragma warning disable 0067
         private class SetFlashQualityCommand : ICommand
         {
             public event EventHandler CanExecuteChanged;
