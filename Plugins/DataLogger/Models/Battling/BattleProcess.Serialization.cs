@@ -79,6 +79,15 @@ namespace LynLogger.Models.Battling
                 get
                 {
                     return new Dictionary<ulong, HandlerInfo>() {
+                        [1] = new HandlerInfo(
+                            (x, p) => null,
+                            (o, i, p) => (o.ZwShipNameType ?? (o.ZwShipNameType = new ShipNameType(0))).ShipId = (int)(DataStore.Premitives.SignedInteger)i, true),
+                        [2] = new HandlerInfo(
+                            (x, p) => null,
+                            (o, i, p) => (o.ZwShipNameType ?? (o.ZwShipNameType = new ShipNameType(0))).TypeName = (string)(DataStore.Premitives.String)i, true),
+                        [3] = new HandlerInfo(
+                            (x, p) => null,
+                            (o, i, p) => (o.ZwShipNameType ?? (o.ZwShipNameType = new ShipNameType(0))).ShipName = (string)(DataStore.Premitives.String)i, true),
                         [9] = new HandlerInfo(
                             (x, p) => x.ZwEquipts.GetSerializationInfo(p),
                             (o, i, p) => o.ZwEquipts = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i).Convert(x => new EquiptInfo(x, p)).ToArray()),

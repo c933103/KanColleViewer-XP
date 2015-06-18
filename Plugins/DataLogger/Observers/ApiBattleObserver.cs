@@ -73,9 +73,7 @@ namespace LynLogger.Observers
                             ZwSupportShips = KanColleClient.Current.Homeport.Organization.Fleets[supportDeckId].Ships.Select((x, i) => {
                                 var localShip = DataStore.Store.Current.Ships[x.Id];
                                 return new BattleProcess.ShipInfo() {
-                                    ZwShipTypeName = x.Info.ShipType.Name,
-                                    ZwShipName = x.Info.Name,
-                                    ZwShipId = x.Info.Id,
+                                    ZwShipNameType = new ShipNameType(x.Info, i),
                                     ZwId = x.Id,
                                     ZwLv = x.Level,
                                     ZwCurrentHp = x.HP.Current,
@@ -139,9 +137,7 @@ namespace LynLogger.Observers
             return KanColleClient.Current.Homeport.Organization.Fleets[fleetId].Ships.Select((x, i) => {
                 var localShip = DataStore.Store.Current.Ships[x.Id];
                 return new BattleProcess.ShipInfo() {
-                    ZwShipTypeName = x.Info.ShipType.Name,
-                    ZwShipName = x.Info.Name,
-                    ZwShipId = x.Info.Id,
+                    ZwShipNameType = new ShipNameType(x.Info, i),
                     ZwId = x.Id,
                     ZwLv = x.Level,
                     ZwCurrentHp = (int)nowHps[i+1],
@@ -194,9 +190,7 @@ namespace LynLogger.Observers
                     },
                     ZwId = i+1,
                     ZwLv = (int)levels[i+1],
-                    ZwShipId = shipId,
-                    ZwShipName = ship.Name,
-                    ZwShipTypeName = ship.ShipType.Name,
+                    ZwShipNameType = new ShipNameType(shipId),
                     ZwEquipts = equipts.ToArray()
                 });
             }

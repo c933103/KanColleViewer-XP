@@ -33,16 +33,16 @@ namespace LynLogger.Models.Battling
                 return new Dictionary<ulong, HandlerInfo>() {
                     [1] = new HandlerInfo(
                         (x, p) => null,
-                        (o, i, p) => o.ZwMapLocation.MapAreaId = (int)(DataStore.Premitives.SignedInteger)i),
+                        (o, i, p) => o.ZwMapLocation.MapAreaId = (int)(DataStore.Premitives.SignedInteger)i, true),
                     [2] = new HandlerInfo(
                         (x, p) => null,
-                        (o, i, p) => o.ZwMapLocation.MapSectId = (int)(DataStore.Premitives.SignedInteger)i),
+                        (o, i, p) => o.ZwMapLocation.MapSectId = (int)(DataStore.Premitives.SignedInteger)i, true),
                     [3] = new HandlerInfo(
                         (x, p) => null,
-                        (o, i, p) => o.ZwMapLocation.MapLocId = (int)(DataStore.Premitives.SignedInteger)i),
+                        (o, i, p) => o.ZwMapLocation.MapLocId = (int)(DataStore.Premitives.SignedInteger)i, true),
                     [4] = new HandlerInfo(
                         (x, p) => null,
-                        (o, i, p) => o.ZwMapLocation.EnemyId = (int)(DataStore.Premitives.SignedInteger)i),
+                        (o, i, p) => o.ZwMapLocation.EnemyId = (int)(DataStore.Premitives.SignedInteger)i, true),
                 };
             }
         }

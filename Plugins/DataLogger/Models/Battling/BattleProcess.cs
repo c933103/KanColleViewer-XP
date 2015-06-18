@@ -161,20 +161,18 @@ namespace LynLogger.Models.Battling
         public partial class ShipInfo : AbstractDSSerializable<ShipInfo>, ICloneable
         {
             [Serialize(0)] internal int ZwId;
-            [Serialize(1)] internal int ZwShipId;
-            [Serialize(2)] internal string ZwShipTypeName;
-            [Serialize(3)] internal string ZwShipName;
             [Serialize(4)] internal int ZwLv;
             [Serialize(5)] internal int ZwCurrentHp;
             [Serialize(6)] internal int ZwMaxHp;
             [Serialize(7)] internal ParameterInfo ZwParameter;
             [Serialize(8)] internal ParameterInfo ZwEnhancement;
             /*[Serialize(9)]*/ internal EquiptInfo[] ZwEquipts;
+            [Serialize(10)] internal ShipNameType ZwShipNameType;
 
             public int Id => ZwId;
-            public int ShipId => ZwShipId;
-            public string ShipTypeName => ZwShipTypeName;
-            public string ShipName => ZwShipName;
+            public int ShipId => ZwShipNameType.ShipId;
+            public string ShipTypeName => ZwShipNameType.TypeName;
+            public string ShipName => ZwShipNameType.ShipName;
             public int Lv => ZwLv;
             public int CurrentHp => ZwCurrentHp;
             public int MaxHp => ZwMaxHp;
