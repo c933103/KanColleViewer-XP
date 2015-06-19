@@ -73,7 +73,7 @@ namespace Grabacr07.KanColleViewer.Views.Behaviors
 			}
 			else
 			{
-				var gameFrame = document.getElementById("game_frame").document as HTMLDocument;
+				var gameFrame = document.getElementById("game_frame")?.document as HTMLDocument;
 				if (gameFrame == null)
 				{
 					throw new Exception(notFoundMessage);
