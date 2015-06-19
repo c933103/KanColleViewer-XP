@@ -27,16 +27,8 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<StackPanel>
-		<views:BrowserNavigator />
-		<TextBlock Text="{Binding Resources.Settings_BrowserControl_Notice, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
-				   Style="{DynamicResource DefaultTextStyleKey}"
-				   Margin="43,-2,0,10" />
-
-		<Rectangle Height="1"
-				   Style="{DynamicResource SeparatorRectangleStyleKey}" />
-
-		<DockPanel Margin="0,10">
+    <StackPanel>
+        <DockPanel Margin="0,10">
 			<metro2:CallMethodButton DockPanel.Dock="Right"
 									 MethodName="ClearZoomFactor"
 									 Padding="20,4"
