@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 namespace Grabacr07.KanColleViewer.Models
 {
 	public class ProductInfo
-	{
-		private readonly Assembly assembly = Assembly.GetExecutingAssembly();
+    {
+        private const string Major = "3.8.2";
+        private const string Mod = "1.1";
+        private const string Revision = "11";
+        private const string Train = "T";
+
+        private readonly Assembly assembly = Assembly.GetExecutingAssembly();
 		private string _Title;
 		private string _Description;
 		private string _Company;
@@ -63,7 +68,7 @@ namespace Grabacr07.KanColleViewer.Models
         {
             get
             {
-                return "1.1(T10)"
+                return Major + "-" + Mod + "(" + Train + Revision + ")"
 #if DEBUG
                      + "d"
 #endif

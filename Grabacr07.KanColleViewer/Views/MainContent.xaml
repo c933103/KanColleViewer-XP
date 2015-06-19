@@ -37,10 +37,10 @@
             <contents:Homeport Margin="0,8">
                 <contents:Homeport.Style>
                     <Style TargetType="{x:Type contents:Homeport}">
-                        <Setter Property="Visibility" Value="Hidden" />
+                        <Setter Property="Visibility" Value="Visible" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Mode}" Value="Started">
-                                <Setter Property="Visibility" Value="Visible" />
+                            <DataTrigger Binding="{Binding Mode}" Value="NotStarted">
+                                <Setter Property="Visibility" Value="Hidden" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -50,10 +50,10 @@
             <TextBlock Text="等待载入" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Visibility" Value="Hidden" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Mode}" Value="Started">
-                                <Setter Property="Visibility" Value="Hidden" />
+                            <DataTrigger Binding="{Binding Mode}" Value="NotStarted">
+                                <Setter Property="Visibility" Value="Visible" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

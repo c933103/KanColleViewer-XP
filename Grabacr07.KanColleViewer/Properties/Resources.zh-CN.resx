@@ -510,4 +510,7 @@
   <data name="ProxyRuleTypeShExp" xml:space="preserve">
     <value>通配符表达式</value>
   </data>
+  <data name="Tab_Tool_Name" xml:space="preserve">
+    <value>插件</value>
+  </data>
 </root>

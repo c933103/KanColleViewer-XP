@@ -531,4 +531,7 @@
   <data name="ProxyRuleTypeShExp" xml:space="preserve">
     <value>Wildcard</value>
   </data>
+  <data name="Tab_Tool_Name" xml:space="preserve">
+    <value>ツール</value>
+  </data>
 </root>
