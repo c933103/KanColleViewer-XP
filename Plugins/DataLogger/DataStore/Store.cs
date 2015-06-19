@@ -16,8 +16,25 @@ namespace LynLogger.DataStore
     {
         private static Action<string, Store> _onDataStoreCreate;
         private static Action<string, Store> _onDataStoreSwitch;
-        public static event Action<string, Store> OnDataStoreCreate { add { _onDataStoreCreate += value.MakeWeak(x => _onDataStoreCreate -= x); } remove { } }
-        public static event Action<string, Store> OnDataStoreSwitch { add { _onDataStoreSwitch += value.MakeWeak(x => _onDataStoreSwitch -= x); } remove { } }
+
+        public static event Action<string, Store> OnDataStoreCreate {
+            add
+            {
+                var dss = _ds.ToList();
+                foreach (var ds in dss) if(ds.Value != null) value(ds.Key, ds.Value);
+                _onDataStoreCreate += value.MakeWeak(x => _onDataStoreCreate -= x);
+            }
+            remove { }
+        }
+
+        public static event Action<string, Store> OnDataStoreSwitch {
+            add
+            {
+                if (Current != null) value(_memberId, Current);
+                _onDataStoreSwitch += value.MakeWeak(x => _onDataStoreSwitch -= x);
+            }
+            remove { }
+        }
 
         private Action<Store> _onBasicInfoChange;
         private Action<Store, int> _onShipDataChange;

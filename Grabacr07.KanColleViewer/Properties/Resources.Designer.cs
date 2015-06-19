@@ -1267,6 +1267,15 @@ namespace Grabacr07.KanColleViewer.Properties {
         }
         
         /// <summary>
+        ///   查找类似 ツール 的本地化字符串。
+        /// </summary>
+        public static string Tab_Tool_Name {
+            get {
+                return ResourceManager.GetString("Tab_Tool_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 ズーム {0} % はサポートされていません。 的本地化字符串。
         /// </summary>
         public static string ZoomAction_OutOfRange {
