@@ -1,6 +1,9 @@
-﻿using Livet.Messaging;
+﻿using Grabacr07.KanColleViewer.Models;
+using Grabacr07.KanColleViewer.ViewModels.Messages;
+using Livet.Messaging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,8 +18,26 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents
             protected set { throw new NotImplementedException(); }
         }
 
-        public NavigatorViewModel Navigator => App.ViewModelRoot.Navigator;
+        public NavigatorViewModel Navigator { get; private set; }
+        public VolumeViewModel Volume { get; private set; }
 
-        public new InteractionMessenger Messenger => App.ViewModelRoot.Messenger;
+        public BrowserViewModel()
+        {
+            this.Navigator = new NavigatorViewModel();
+            this.Volume = new VolumeViewModel();
+        }
+
+        public void TakeScreenshot()
+        {
+            var path = Helper.CreateScreenshotFilePath();
+            var message = new ScreenshotMessage("Screenshot/Save") { Path = path, };
+
+            this.Messenger.Raise(message);
+
+            var notify = message.Response.IsSuccess
+                ? Properties.Resources.Screenshot_Saved + Path.GetFileName(path)
+                : Properties.Resources.Screenshot_Failed + message.Response.Exception.Message;
+            StatusService.Current.Notify(notify);
+        }
     }
 }

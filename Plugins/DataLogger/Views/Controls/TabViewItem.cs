@@ -11,7 +11,7 @@ namespace LynLogger.Views.Controls
         public virtual string TabName { get; set; }
 
         private object _view;
-        public virtual object TabView => _view ?? (_view = _viewFactory());
+        public virtual object TabView => _view ?? (_view = _viewFactory?.Invoke());
 
         private Func<object> _viewFactory;
         public Func<object> ViewFactory

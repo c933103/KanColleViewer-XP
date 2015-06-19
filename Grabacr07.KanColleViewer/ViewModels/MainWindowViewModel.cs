@@ -20,7 +20,6 @@ namespace Grabacr07.KanColleViewer.ViewModels
 	{
 		private Mode currentMode;
 
-		public NavigatorViewModel Navigator { get; private set; }
 		public SettingsViewModel Settings { get; private set; }
 
 		#region Mode 変更通知プロパティ
@@ -114,8 +113,6 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
         public IList<TabItemViewModel> TabItems { get; set; }
 
-        public VolumeViewModel Volume { get; private set; }
-
         public Views.Contents.Browser Browser { get; }
 
         #region SelectedItem 変更通知プロパティ
@@ -141,7 +138,6 @@ namespace Grabacr07.KanColleViewer.ViewModels
         public MainWindowViewModel()
 		{
 			this.Title = App.ProductInfo.Title;
-			this.Navigator = new NavigatorViewModel();
 			this.Settings = new SettingsViewModel();
 
 			this.CompositeDisposable.Add(new PropertyChangedEventListener(StatusService.Current)
@@ -192,28 +188,12 @@ namespace Grabacr07.KanColleViewer.ViewModels
             if(Models.Settings.Current.MiniLayout) {
                 TabItems.Insert(0, new BrowserViewModel());
             } else {
-                Browser = new Views.Contents.Browser();
+                Browser = new Views.Contents.Browser() { DataContext = new BrowserViewModel() };
             }
 
             this.SelectedItem = this.TabItems.FirstOrDefault();
-
-            this.Volume = new VolumeViewModel();
         }
-
-		public void TakeScreenshot()
-		{
-			var path = Helper.CreateScreenshotFilePath();
-			var message = new ScreenshotMessage("Screenshot/Save") { Path = path, };
-
-			this.Messenger.Raise(message);
-
-			var notify = message.Response.IsSuccess
-				? Properties.Resources.Screenshot_Saved + Path.GetFileName(path)
-				: Properties.Resources.Screenshot_Failed + message.Response.Exception.Message;
-			StatusService.Current.Notify(notify);
-		}
-
-
+        
 		/// <summary>
 		/// メイン ウィンドウをアクティブ化することを試みます。
 		/// </summary>
