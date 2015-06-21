@@ -13,25 +13,109 @@
 		     xmlns:properties="clr-namespace:Grabacr07.KanColleViewer.Properties"
 			 xmlns:root="clr-namespace:Grabacr07.KanColleViewer"
              xmlns:local="clr-namespace:Grabacr07.KanColleViewer.Views.Contents"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+			 xmlns:contents="clr-namespace:Grabacr07.KanColleViewer.Views.Contents"
+		     xmlns:vmContents="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{x:Type vmContents:BrowserViewModel}">
     <StackPanel>
+        <controls:KanColleHost x:Name="KanColleHost"
+							ZoomFactor="{Binding BrowserZoomFactor, Source={x:Static models:Settings.Current}}">
+            <i:Interaction.Triggers>
+                <livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
+													 MessageKey="WebBrowser/Zoom">
+                    <behaviors:ZoomAction />
+                </livet:InteractionMessageTrigger>
+            </i:Interaction.Triggers>
+            <WebBrowser VerticalAlignment="Center" Grid.Row="0" Grid.Column="0">
+                <i:Interaction.Behaviors>
+                    <behaviors:NavigatorBehavior Navigator="{Binding Navigator}" />
+                    <livet:WebBrowserSetStateToControlBehavior Source="{Binding Source={x:Static properties:Settings.Default}, Path=KanColleUrl, Mode=OneTime}"
+																   Property="Source" />
+                </i:Interaction.Behaviors>
+                <i:Interaction.Triggers>
+                    <livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
+														 MessageKey="Screenshot/Save">
+                        <behaviors:ScreenshotAction />
+                    </livet:InteractionMessageTrigger>
+                </i:Interaction.Triggers>
+            </WebBrowser>
+        </controls:KanColleHost>
+        
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel>
+            <StackPanel Visibility="{Binding ShowNavigator, Converter={StaticResource UniversalBooleanToVisibilityConverter}, ConverterParameter=Visible:Hidden}">
                 <views:BrowserNavigator />
                 <TextBlock Text="{Binding Resources.Settings_BrowserControl_Notice, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
 				       Style="{DynamicResource DefaultTextStyleKey}"
 				       Margin="43,-2,0,10" />
             </StackPanel>
 
+            <Grid Visibility="{Binding ShowNavigator, Converter={StaticResource UniversalBooleanToVisibilityConverter}, ConverterParameter=Hidden:Visible}">
+                <contents:Homeport Margin="0,8" DataContext="{Binding Source={x:Static root:App.ViewModelRoot}}">
+                    <contents:Homeport.Style>
+                        <Style TargetType="{x:Type contents:Homeport}">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Mode, Source={x:Static root:App.ViewModelRoot}}" Value="NotStarted">
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </contents:Homeport.Style>
+                </contents:Homeport>
+
+                <TextBlock Text="等待载入" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Mode, Source={x:Static root:App.ViewModelRoot}}" Value="NotStarted">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+
             <StackPanel Grid.Column="1"
 						Orientation="Horizontal"
 						Margin="8,0,8,10">
+                <metro2:CallMethodButton MethodName="ToggleNavigator"
+										 Style="{DynamicResource CircleButtonStyleKey}"
+										 Padding="6">
+                    <Viewbox Margin="8">
+                        <Path Stretch="Uniform" Width="20" Height="20"
+							  Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Path=Foreground}">
+                            <Path.Style>
+                                <Style TargetType="{x:Type Path}">
+                                    <Setter Property="Data" Value="F1 M0,0 M20,20
+                                            M2,10 A8,8,180,1,1,18,10 A8,8,180,1,1,2,10 L3,10 A6,6,180,1,0,17,10 A6,6,180,1,0,3,10 Z
+                                            M2,10 A8,2,180,1,0,18,10 A8,4,180,1,1,2,10 Z
+                                            M2,10 A8,4,180,1,1,18,10 A8,2,180,1,0,2,10 Z
+                                            M10,2 A2,8,180,1,0,10,18 A4,8,180,1,1,10,2 Z
+                                            M10,2 A4,8,180,1,1,10,18 A2,8,180,1,0,10,2 Z" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ShowNavigator}"
+													 Value="True">
+                                            <Setter Property="Data"
+													Value="F1 M0,0 M20,20
+                                                    M5,8 A5,5,180,1,1,15,8 A5,5,180,1,1,5,8 Z
+                                                    M10,8 L15,18 L5,18 Z
+                                                    M5.7,5 A1.3,1.3,270,1,1,8,3 L14,3 A1,1,180,1,1,14,5 Z" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Path.Style>
+                        </Path>
+                    </Viewbox>
+                </metro2:CallMethodButton>
+
                 <metro2:CallMethodButton DataContext="{Binding Volume}"
 										 MethodName="ToggleMute"
 										 Style="{DynamicResource CircleButtonStyleKey}"
@@ -67,28 +151,5 @@
                 </metro2:CallMethodButton>
             </StackPanel>
         </Grid>
-
-        <controls:KanColleHost x:Name="KanColleHost"
-							ZoomFactor="{Binding BrowserZoomFactor, Source={x:Static models:Settings.Current}}">
-            <i:Interaction.Triggers>
-                <livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
-													 MessageKey="WebBrowser/Zoom">
-                    <behaviors:ZoomAction />
-                </livet:InteractionMessageTrigger>
-            </i:Interaction.Triggers>
-            <WebBrowser VerticalAlignment="Center" Grid.Row="0" Grid.Column="0">
-                <i:Interaction.Behaviors>
-                    <behaviors:NavigatorBehavior Navigator="{Binding Navigator}" />
-                    <livet:WebBrowserSetStateToControlBehavior Source="{Binding Source={x:Static properties:Settings.Default}, Path=KanColleUrl, Mode=OneTime}"
-																   Property="Source" />
-                </i:Interaction.Behaviors>
-                <i:Interaction.Triggers>
-                    <livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
-														 MessageKey="Screenshot/Save">
-                        <behaviors:ScreenshotAction />
-                    </livet:InteractionMessageTrigger>
-                </i:Interaction.Triggers>
-            </WebBrowser>
-        </controls:KanColleHost>
     </StackPanel>
 </UserControl>

@@ -39,5 +39,22 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents
                 : Properties.Resources.Screenshot_Failed + message.Response.Exception.Message;
             StatusService.Current.Notify(notify);
         }
+
+        private bool _showNavigator = true;
+        public bool ShowNavigator
+        {
+            get { return _showNavigator; }
+            set
+            {
+                if (value == _showNavigator) return;
+                _showNavigator = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public void ToggleNavigator()
+        {
+            ShowNavigator = !_showNavigator;
+        }
     }
 }
