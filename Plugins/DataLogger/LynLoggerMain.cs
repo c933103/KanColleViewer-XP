@@ -22,7 +22,7 @@ namespace LynLogger
     {
         private const string Major = "3.8.2";
         private const string Mod = "1.1";
-        private const string Revision = "12";
+        private const string Revision = "13";
         private const string Train = "XT";
 
         public static LynLoggerMain Instance { get; private set; }
