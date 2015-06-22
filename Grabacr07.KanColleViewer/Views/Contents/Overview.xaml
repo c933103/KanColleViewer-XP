@@ -501,7 +501,7 @@
 											 Text="{Binding Remaining, StringFormat=- {0}, Mode=OneWay}" />
 									</TextBlock>
 									<DataTemplate.Triggers>
-										<DataTrigger Binding="{Binding Source={x:Static models:Settings.Current}, Path=CanDisplayBuildingShipName}"
+                                        <DataTrigger Binding="{Binding CanDisplayBuildingShipName, Source={x:Static models:Settings.Current}}"
 													 Value="False">
 											<Setter TargetName="ShipName"
 													Property="Text"

@@ -1004,13 +1004,13 @@
 							BorderThickness="1"
 							BorderBrush="{DynamicResource BorderBrushKey}"
 							Margin="8"
-							IsEnabled="{Binding Source={x:Static models:Helper.IsInDesignMode}, Mode=OneWay}"
+							IsEnabled="{x:Static models:Helper.IsInDesignMode}"
 							Visibility="{Binding Source={x:Static models:Helper.IsInDesignMode}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
 						<ContentControl d:DataContext="{d:DesignData /SampleData/ShipViewModelSampleData.xaml}">
 							<ContentControl.Style>
 								<Style TargetType="{x:Type ContentControl}">
 									<Style.Triggers>
-										<DataTrigger Binding="{Binding Source={x:Static models:Helper.IsInDesignMode}, Mode=OneWay}"
+                                        <DataTrigger Binding="{x:Static models:Helper.IsInDesignMode}"
 													 Value="True">
 											<Setter Property="Content"
 													Value="{Binding Ship}" />

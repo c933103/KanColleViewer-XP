@@ -73,7 +73,7 @@
                             <TextBlock Style="{DynamicResource DefaultTextStyleKey}"
 									   LineHeight="18">
 								<Run Text="{Binding Logic.Name, Mode=OneWay}"
-									 Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}, Path=Foreground}" />
+									 Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type RadioButton}}}" />
 								<LineBreak />
 								<Run Text="{Binding Logic.Description, Mode=OneWay}" />
                             </TextBlock>

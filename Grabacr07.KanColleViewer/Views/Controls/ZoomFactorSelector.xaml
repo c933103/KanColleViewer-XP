@@ -33,7 +33,7 @@
 						   Foreground="{DynamicResource ActiveForegroundBrushKey}"
 						   VerticalAlignment="Top"
 						   Margin="-2,0,0,0">
-					<Run Text="{Binding ElementName=ZoomController, Path=ZoomFactor.CurrentParcentage}"
+					<Run Text="{Binding ZoomFactor.CurrentParcentage, ElementName=ZoomController}"
 						 FontSize="15" />
 					<Run Text="%"
 						 FontSize="12" />
@@ -53,7 +53,7 @@
 			   Placement="Custom"
 			   PlacementTarget="{Binding ElementName=PopupButton}"
 			   PlacementRectangle="-9,20,0,0"
-			   IsOpen="{Binding ElementName=PopupButton, Path=IsChecked}"
+			   IsOpen="{Binding IsChecked, ElementName=PopupButton}"
 			   StaysOpen="False"
 			   PopupAnimation="Fade"
 			   AllowsTransparency="True">
@@ -69,7 +69,7 @@
 							BorderBrush="{DynamicResource AccentBrushKey}"
 							BorderThickness="1">
 						<StackPanel Margin="8">
-							<TextBlock Text="{Binding Source={x:Static models:ResourceService.Current}, Path=Resources.ZoomFactorSelector}" />
+                            <TextBlock Text="{Binding Resources.ZoomFactorSelector, Source={x:Static models:ResourceService.Current}}" />
 							<Rectangle Height="1"
 									   Fill="{DynamicResource InactiveForegroundBrushKey}"
 									   Margin="0,8" />

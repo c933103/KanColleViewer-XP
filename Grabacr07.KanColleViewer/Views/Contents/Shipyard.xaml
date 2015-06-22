@@ -304,7 +304,7 @@
 										</Grid>
 									</Border>
 									<DataTemplate.Triggers>
-										<DataTrigger Binding="{Binding Source={x:Static models:Settings.Current}, Path=CanDisplayBuildingShipName}"
+                                        <DataTrigger Binding="{Binding CanDisplayBuildingShipName, Source={x:Static models:Settings.Current}}"
 													 Value="False">
 											<Setter TargetName="ShipName"
 													Property="Text"
@@ -377,7 +377,7 @@
 										   Style="{DynamicResource HeaderTextStyleKey}" />
 								<CheckBox Margin="8,6"
 										  Content="{Binding Resources.Dockyard_Display_Reveal, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
-										  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=CanDisplayBuildingShipName, Mode=TwoWay}" />
+										  IsChecked="{Binding CanDisplayBuildingShipName, Source={x:Static models:Settings.Current}, Mode=TwoWay}" />
 							</StackPanel>
 
 							<StackPanel>

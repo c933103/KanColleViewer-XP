@@ -15,8 +15,8 @@
 			 xmlns:models="clr-namespace:Grabacr07.KanColleViewer.Models"
 			 mc:Ignorable="d"
 			 d:DesignWidth="600"
-			 d:DataContext="{d:DesignInstance viewModels:MainContentViewModel}">
-	<Grid>
+             d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}">
+    <Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="Auto" />

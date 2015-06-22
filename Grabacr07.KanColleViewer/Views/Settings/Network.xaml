@@ -29,7 +29,7 @@
 
 		<CheckBox x:Name="CheckBoxUseProxy"
 				  Content="{Binding Resources.Settings_Proxy_Enable, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
-				  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=ProxySettings.IsEnabled}" />
+				  IsChecked="{Binding ProxySettings.IsEnabled, Source={x:Static models:Settings.Current}}" />
 		<StackPanel IsEnabled="{Binding IsChecked, ElementName=CheckBoxUseProxy}"
 					Margin="20,6,0,6">
             <Grid Margin="0,4">
@@ -46,7 +46,7 @@
 					<Run Text=": " />
                 </TextBlock>
                 <metro:PromptTextBox Grid.Column="1"
-									 Text="{Binding Source={x:Static models:Settings.Current}, Path=ProxySettings.Host, Mode=TwoWay}"
+									 Text="{Binding ProxySettings.Host, Source={x:Static models:Settings.Current}, Mode=TwoWay}"
 									 Prompt="{Binding Resources.Settings_Proxy_Host, Source={x:Static models:ResourceService.Current}, Mode=OneWay}" />
                 <TextBlock Grid.Column="3">
 					<Run Text="{Binding Resources.Settings_Proxy_Port, Source={x:Static models:ResourceService.Current}, Mode=OneWay}" />
@@ -69,10 +69,10 @@
 
             <CheckBox x:Name="CheckBoxAuthRequired"
 					  Content="プロキシ サーバーにユーザー名とパスワードが必要"
-					  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=ProxySettings.IsAuthRequired}"
+					  IsChecked="{Binding ProxySettings.IsAuthRequired, Source={x:Static models:Settings.Current}}"
 					  Margin="0,4" />
 
-			<Grid IsEnabled="{Binding ElementName=CheckBoxAuthRequired, Path=IsChecked}"
+            <Grid IsEnabled="{Binding IsChecked, ElementName=CheckBoxAuthRequired}"
 				  Margin="0,4">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="20" />
@@ -88,7 +88,7 @@
 					<Run Text=": " />
 				</TextBlock>
 				<metro:PromptTextBox Grid.Column="2"
-									 Text="{Binding Source={x:Static models:Settings.Current}, Path=ProxySettings.Username, Mode=TwoWay}"
+									 Text="{Binding ProxySettings.Username, Source={x:Static models:Settings.Current}, Mode=TwoWay}"
 									 Prompt="ユーザー名" />
 				<TextBlock Grid.Column="4">
 					<Run Text="パスワード" />
@@ -98,7 +98,7 @@
 					<i:Interaction.Triggers>
 						<i:EventTrigger EventName="LostFocus">
 							<livet:PasswordBoxSetStateToSourceAction Property="Password"
-																	 Source="{Binding Source={x:Static models:Settings.Current}, Path=ProxySettings.Password, Mode=TwoWay}" />
+																	 Source="{Binding ProxySettings.Password, Source={x:Static models:Settings.Current}, Mode=TwoWay}" />
 						</i:EventTrigger>
 					</i:Interaction.Triggers>
 				</PasswordBox>
