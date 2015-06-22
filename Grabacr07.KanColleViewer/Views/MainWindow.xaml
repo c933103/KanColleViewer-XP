@@ -14,6 +14,8 @@
 				   xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls"
 				   xmlns:models="clr-namespace:Grabacr07.KanColleViewer.Models"
                    xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell"
+			       xmlns:contents="clr-namespace:Grabacr07.KanColleViewer.Views.Contents"
+			       xmlns:vmContents="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents"
 				   mc:Ignorable="d"
 				   d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
 				   Title="{Binding Title}"
@@ -145,7 +147,7 @@
                     </Grid>
                     
 					<controls:ZoomFactorSelector ZoomFactor="{Binding Settings.BrowserZoomFactor, Mode=OneWay}"
-												 ToolTip="{Binding Source={x:Static models:ResourceService.Current}, Path=Resources.ZoomFactorSelector_Tooltip}"
+												 ToolTip="{Binding Resources.ZoomFactorSelector_Tooltip, Source={x:Static models:ResourceService.Current}}"
 												 Margin="4,0" />
                     <metro:CaptionButton IsChecked="{Binding TopMost, Source={x:Static models:Settings.Current}, Mode=TwoWay}"
 										 ToolTip="{Binding Resources.Settings_Window_TopMost, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
@@ -177,6 +179,11 @@
                         </Style.Triggers>
                     </Style>
                 </ContentControl.Style>
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type vmContents:BrowserViewModel}">
+                        <contents:Browser />
+                    </DataTemplate>
+                </ContentControl.Resources>
             </ContentControl>
 
             <views:MainContent Grid.Column="{Binding LRSplit, Source={x:Static models:Settings.Current}, ConverterParameter=1:0, Converter={StaticResource BoolToIntSelector}, Mode=OneWay}"

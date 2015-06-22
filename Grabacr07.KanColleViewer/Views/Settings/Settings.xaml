@@ -23,7 +23,7 @@
 				   TargetType="{x:Type TextBlock}"
 				   BasedOn="{StaticResource DefaultTextStyleKey}">
 				<Setter Property="Foreground"
-						Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabItem}}, Path=Foreground}" />
+						Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" />
 				<Setter Property="Margin"
 						Value="12,0" />
 				<Setter Property="FontSize"

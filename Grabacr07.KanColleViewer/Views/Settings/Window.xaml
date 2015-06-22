@@ -53,7 +53,7 @@
 								 HorizontalAlignment="Left">
             <StackPanel>
                 <TextBlock Text="{Binding Resources.Settings_WindowControl_LocationLeftButton, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
-						   Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type metro2:CallMethodButton}}, Path=Foreground}"
+						   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type metro2:CallMethodButton}}}"
 						   FontSize="13"
 						   HorizontalAlignment="Center" />
                 <TextBlock Text="{Binding Resources.Settings_WindowControl_LocationLeftButton_Sub, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"

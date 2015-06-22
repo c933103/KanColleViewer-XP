@@ -36,7 +36,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
                         this.StatusBar = null;
 						StatusService.Current.Set(Properties.Resources.StatusBar_NotStarted);
 						ThemeService.Current.ChangeAccent(Accent.Purple);
-                        BrowserVm.ShowNavigator = true;
+                        _browser.ShowNavigator = true;
                         break;
 					case Mode.Started:
                         if (SelectedItem == StartContentViewModel.Instance)
@@ -44,11 +44,11 @@ namespace Grabacr07.KanColleViewer.ViewModels
                         DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => TabItems.Remove(StartContentViewModel.Instance)));
 						StatusService.Current.Set(Properties.Resources.StatusBar_Ready);
 						ThemeService.Current.ChangeAccent(Accent.Blue);
-                        BrowserVm.ShowNavigator = false;
+                        _browser.ShowNavigator = false;
                         break;
 					case Mode.InSortie:
 						ThemeService.Current.ChangeAccent(Accent.Orange);
-                        BrowserVm.ShowNavigator = false;
+                        _browser.ShowNavigator = false;
                         break;
 				}
 
@@ -114,11 +114,11 @@ namespace Grabacr07.KanColleViewer.ViewModels
         public QuestsViewModel Quests { get; private set; }
         public ExpeditionsViewModel Expeditions { get; private set; }
 
-        public BrowserViewModel BrowserVm { get; private set; }
+        private readonly bool _mini;
+        private readonly BrowserViewModel _browser;
+        public BrowserViewModel Browser => _mini ? null : _browser;
 
         public IList<TabItemViewModel> TabItems { get; set; }
-
-        public Views.Contents.Browser Browser { get; }
 
         #region SelectedItem 変更通知プロパティ
 
@@ -155,7 +155,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 				{ () => KanColleClient.Current.IsInSortie, (sender, args) => this.UpdateMode() },
 			});
 
-            this.BrowserVm = new BrowserViewModel();
+            this._browser = new BrowserViewModel();
 
             this.UpdateMode();
             Models.Settings.Current.PropertyChanged += (_, __) => this.UpdateLayout(Models.Settings.Current.LRSplit);
@@ -192,12 +192,9 @@ namespace Grabacr07.KanColleViewer.ViewModels
 #endif
                 #endregion
             };
-            if(Models.Settings.Current.MiniLayout) {
-                TabItems.Insert(0, BrowserVm);
-            } else {
-                Browser = new Views.Contents.Browser() { DataContext = BrowserVm };
+            if(_mini = Models.Settings.Current.MiniLayout) {
+                TabItems.Insert(0, _browser);
             }
-
             this.SelectedItem = this.TabItems.FirstOrDefault();
         }
         

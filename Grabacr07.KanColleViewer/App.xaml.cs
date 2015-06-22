@@ -61,7 +61,7 @@ namespace Grabacr07.KanColleViewer
             ViewModelRoot = new MainWindowViewModel();
             this.MainWindow = new MainWindow { DataContext = ViewModelRoot };
             Instance = this;
-            ViewModelRoot.UpdateLayout(Models.Settings.Current.LRSplit);
+            ViewModelRoot.UpdateLayout(Settings.Current.LRSplit);
 			this.MainWindow.Show();
 		}
 

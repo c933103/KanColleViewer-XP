@@ -15,7 +15,7 @@
 			 d:DesignWidth="700"
 			 d:DesignHeight="300"
 			 d:DataContext="{d:DesignInstance vmContents:QuestsViewModel}"
-			 Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}, Path=ActualWidth}">
+			 Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}">
 	<ScrollViewer VerticalScrollBarVisibility="Auto"
 				  PanningMode="Both">
 		<Grid>
@@ -156,20 +156,20 @@
 						<TabItem.Header>
 							<TextBlock Text="{Binding Resources.Quests_Daily, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
 									   Style="{DynamicResource HeaderTextStyleKey}"
-									   Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabItem}}, Path=Foreground}"
+									   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}"
 									   Margin="10,0,10,10" />
 						</TabItem.Header>
-						<ItemsControl ItemsSource="{Binding Source={StaticResource DailyQuestSourceKey}}" />
+                        <ItemsControl ItemsSource="{Binding Source={StaticResource DailyQuestSourceKey}}" />
 					</TabItem>
 
 					<TabItem>
 						<TabItem.Header>
 							<TextBlock Text="{Binding Resources.Quests_Weekly, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
 									   Style="{DynamicResource HeaderTextStyleKey}"
-									   Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabItem}}, Path=Foreground}"
+									   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}"
 									   Margin="10,0,10,10" />
 						</TabItem.Header>
-						<ItemsControl ItemsSource="{Binding Source={StaticResource WeeklyQuestSourceKey}}" />
+                        <ItemsControl ItemsSource="{Binding Source={StaticResource WeeklyQuestSourceKey}}" />
 					</TabItem>
 				</TabControl>
 

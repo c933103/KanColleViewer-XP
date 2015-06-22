@@ -26,7 +26,7 @@
 												  SharedSizeGroup="RemainingTime" />
 							</Grid.ColumnDefinitions>
 
-							<TextBlock Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:BuildingDock}}, Path=Number, Mode=OneWay}"
+                            <TextBlock Text="{Binding Number, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:BuildingDock}}, Mode=OneWay}"
 									   FontFamily="Segoe UI"
 									   FontSize="28"
 									   Foreground="{DynamicResource ActiveForegroundBrushKey}"
