@@ -40,27 +40,21 @@
 							Padding="10,0,20,14">
                 <StackPanel Margin="0,-9,0,0">
                     <TextBlock>
-						<Run Text="{Binding Product, Source={x:Static root:App.ProductInfo}, Mode=OneWay}"
+						<Run Text="{x:Static models:AppProductInfo.Product}"
 								FontFamily="Segoe UI Light"
 								FontSize="30"
 								Foreground="{DynamicResource ActiveForegroundBrushKey}" />
 						<LineBreak />
-						<Run Text="{Binding Title, Source={x:Static root:App.ProductInfo}, Mode=OneWay}"
+						<Run Text="{x:Static models:AppProductInfo.Title}"
 								FontSize="16" />
                     </TextBlock>
 
-                    <TextBlock Margin="0,8,0,0">
-						<Run Text="{Binding VersionString, Source={x:Static root:App.ProductInfo}, StringFormat=Version {0}, Mode=OneWay}"
-								FontFamily="Segoe UI Light"
-								FontSize="20"
-								Foreground="{DynamicResource ActiveForegroundBrushKey}" />
+                    <TextBlock Margin="0,8,0,0" FontFamily="Segoe UI Light" FontSize="20" Foreground="{DynamicResource ActiveForegroundBrushKey}">
+                        <Run Text="Version " /><Run Text="{x:Static models:AppProductInfo.VersionString}" />
                     </TextBlock>
 
-                    <TextBlock Margin="0,8,0,0">
-						<Run Text="{Binding ReleaseTrain, Source={x:Static root:App.ProductInfo}, StringFormat=Rel. {0}, Mode=OneWay}"
-								FontFamily="Consolas"
-								FontSize="12"
-								Foreground="{DynamicResource ActiveForegroundBrushKey}" />
+                    <TextBlock Margin="0,8,0,0" FontFamily="Consolas" FontSize="12" Foreground="{DynamicResource ActiveForegroundBrushKey}">
+						<Run Text="Rel. " /><Run Text="{x:Static models:AppProductInfo.ModRelease}" />
                     </TextBlock>
 
                     <Rectangle Height="1"
@@ -98,13 +92,13 @@
 
                     <TextBlock FontFamily="Segoe UI"
 								TextWrapping="Wrap">
-						<Run Text="{Binding Copyright, Source={x:Static root:App.ProductInfo}, Mode=OneWay}" />
+						<Run Text="{x:Static models:AppProductInfo.Copyright}" />
                     </TextBlock>
 
                     <TextBlock FontFamily="Segoe UI"
 								Margin="0,10,0,0"
 								TextWrapping="Wrap">
-						<Run Text="{Binding Product, Source={x:Static root:App.ProductInfo}, Mode=OneWay}" />
+						<Run Text="{x:Static models:AppProductInfo.Product}" />
 						<Run Text="is" />
 						<Run Text="OSS"
 								ToolTip="Open Source Software" />

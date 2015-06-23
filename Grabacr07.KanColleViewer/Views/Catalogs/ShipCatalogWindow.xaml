@@ -380,28 +380,6 @@
 							</StackPanel>
 						</WrapPanel>
 					</Border>
-
-					<!--<Border BorderThickness="1"
-							BorderBrush="{DynamicResource BorderBrushKey}"
-							Margin="0,8,0,0"
-							Padding="5">
-						<WrapPanel DataContext="{Binding ShipSallyAreaFilter}">
-							<TextBlock Margin="0,2">
-								<Run Text="出撃海域" />
-								<Run Text=":" />
-							</TextBlock>
-
-							<CheckBox Content="作戦出撃なし"
-									  IsChecked="{Binding None}"
-									  Margin="10,0" />
-							<CheckBox Content="AL 作戦参加済み"
-									  IsChecked="{Binding Aleutian}"
-									  Margin="10,0" />
-							<CheckBox Content="MI 作戦参加済み"
-									  IsChecked="{Binding Midway}"
-									  Margin="10,0" />
-						</WrapPanel>
-					</Border>-->
 				</StackPanel>
 			</Expander>
 

@@ -72,85 +72,10 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			}
 		}
 
-		#endregion
+        #endregion
 
-		#region Libraries 変更通知プロパティ
-
-		private IEnumerable<BindableTextViewModel> _Libraries;
-
-		public IEnumerable<BindableTextViewModel> Libraries
-		{
-			get { return this._Libraries; }
-			set
-			{
-				if (!Equals(this._Libraries, value))
-				{
-					this._Libraries = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		#endregion
-
-		#region IsDarkTheme 変更通知プロパティ
-
-		private bool _IsDarkTheme;
-
-		public bool IsDarkTheme
-		{
-			get { return this._IsDarkTheme; }
-			set
-			{
-				if (this._IsDarkTheme != value)
-				{
-					this._IsDarkTheme = value;
-					this.RaisePropertyChanged();
-					if (value) ThemeService.Current.ChangeTheme(Theme.Dark);
-				}
-			}
-		}
-
-		#endregion
-
-		#region IsLightTheme 変更通知プロパティ
-
-		private bool _IsLightTheme;
-
-		public bool IsLightTheme
-		{
-			get { return this._IsLightTheme; }
-			set
-			{
-				if (this._IsLightTheme != value)
-				{
-					this._IsLightTheme = value;
-					this.RaisePropertyChanged();
-					if (value) ThemeService.Current.ChangeTheme(Theme.Light);
-				}
-			}
-		}
-
-		#endregion
-
-		#region Cultures 変更通知プロパティ
-
-		private IReadOnlyCollection<CultureViewModel> _Cultures;
-
-		public IReadOnlyCollection<CultureViewModel> Cultures
-		{
-			get { return this._Cultures; }
-			set
-			{
-				if (!Equals(this._Cultures, value))
-				{
-					this._Cultures = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		#endregion
+        public IEnumerable<BindableTextViewModel> Libraries { get; }
+        public IEnumerable<CultureViewModel> Cultures { get; }
 
 		#region Culture 変更通知プロパティ
 
@@ -293,7 +218,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 		{
 			if (Helper.IsInDesignMode) return;
 
-			this.Libraries = App.ProductInfo.Libraries.Aggregate(
+			this.Libraries = AppProductInfo.Libraries.Aggregate(
 				new List<BindableTextViewModel>(),
 				(list, lib) =>
 				{
@@ -313,9 +238,6 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			{
 				(sender, args) => this.RaisePropertyChanged(args.PropertyName),
 			});
-
-			this._IsDarkTheme = ThemeService.Current.Theme == Theme.Dark;
-			this._IsLightTheme = ThemeService.Current.Theme == Theme.Light;
 
 			var zoomFactor = new BrowserZoomFactor { Current = Settings.Current.BrowserZoomFactor };
 			this.CompositeDisposable.Add(new PropertyChangedEventListener(zoomFactor)

@@ -142,7 +142,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
         public MainWindowViewModel()
 		{
-			this.Title = App.ProductInfo.Title;
+			this.Title = AppProductInfo.Title;
 			this.Settings = new SettingsViewModel();
 
 			this.CompositeDisposable.Add(new PropertyChangedEventListener(StatusService.Current)

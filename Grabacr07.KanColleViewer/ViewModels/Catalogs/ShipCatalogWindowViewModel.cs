@@ -26,7 +26,6 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 		public ShipModernizeFilter ShipModernizeFilter { get; private set; }
 		public ShipRemodelingFilter ShipRemodelingFilter { get; private set; }
 		public ShipExpeditionFilter ShipExpeditionFilter { get; private set; }
-		public ShipSallyAreaFilter ShipSallyAreaFilter { get; private set; }
 
 		public bool CheckAllShipTypes
 		{
@@ -136,7 +135,6 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 			this.ShipModernizeFilter = new ShipModernizeFilter(this.Update);
 			this.ShipRemodelingFilter = new ShipRemodelingFilter(this.Update);
 			this.ShipExpeditionFilter = new ShipExpeditionFilter(this.Update);
-			this.ShipSallyAreaFilter = new ShipSallyAreaFilter(this.Update);
 
 			this.updateSource
 				.Do(_ => this.IsReloading = true)
@@ -174,8 +172,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 				.Where(this.ShipSpeedFilter.Predicate)
 				.Where(this.ShipModernizeFilter.Predicate)
 				.Where(this.ShipRemodelingFilter.Predicate)
-				.Where(this.ShipExpeditionFilter.Predicate)
-				.Where(this.ShipSallyAreaFilter.Predicate);
+				.Where(this.ShipExpeditionFilter.Predicate);
 
 			this.Ships = this.SortWorker.Sort(list)
 				.Select((x, i) => new ShipViewModel(i + 1, x))
