@@ -27,11 +27,9 @@
                     <behaviors:ZoomAction />
                 </livet:InteractionMessageTrigger>
             </i:Interaction.Triggers>
-            <WebBrowser VerticalAlignment="Center" Grid.Row="0" Grid.Column="0">
+            <WebBrowser VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Source="{x:Static models:AppSettingProxy.KanColleUrl}">
                 <i:Interaction.Behaviors>
                     <behaviors:NavigatorBehavior Navigator="{Binding Navigator}" />
-                    <livet:WebBrowserSetStateToControlBehavior Source="{Binding KanColleUrl, Source={x:Static properties:Settings.Default}, Mode=OneTime}"
-																   Property="Source" />
                 </i:Interaction.Behaviors>
                 <i:Interaction.Triggers>
                     <livet:InteractionMessageTrigger Messenger="{Binding Messenger}"

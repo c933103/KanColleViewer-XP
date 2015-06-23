@@ -31,7 +31,7 @@
 
 		<StackPanel Grid.ColumnSpan="2"
 					TextOptions.TextFormattingMode="Ideal">
-            <TextBlock Text="{Binding Product, Source={x:Static root:App.ProductInfo}, Mode=OneWay}"
+            <TextBlock Text="{x:Static models:AppProductInfo.Product}"
 					   FontFamily="Segoe UI Light"
 					   FontSize="44"
 					   Foreground="{DynamicResource ActiveForegroundBrushKey}"
@@ -40,21 +40,14 @@
 					   FontFamily="Segoe UI Light"
 					   FontSize="16"
 					   Margin="0,-9,0,0" />
-			<TextBlock Margin="-1,0,0,-4">
-				<Run Text="{Binding Title, Source={x:Static root:App.ProductInfo}, Mode=OneWay}"
-					 FontFamily="Yu Gothic Light"
-					 FontSize="20"
-					 Foreground="{DynamicResource ActiveForegroundBrushKey}" />
-				<Run Text="  " />
-				<Run Text="{Binding VersionString, Source={x:Static root:App.ProductInfo}, StringFormat=Version {0}, Mode=OneWay}"
-					 FontFamily="Segoe UI Light"
-					 FontSize="20"
-					 Foreground="{DynamicResource ActiveForegroundBrushKey}" />
-				<Run Text="  " />
-				<Run Text="{Binding ReleaseTrain, Source={x:Static root:App.ProductInfo}, StringFormat=rel. {0}, Mode=OneWay}"
-						FontFamily="Lucida Console"
-						FontSize="12"
-						Foreground="{DynamicResource ActiveForegroundBrushKey}" />
+            <TextBlock Margin="-1,0,0,-4" Foreground="{DynamicResource ActiveForegroundBrushKey}" FontSize="20" FontFamily="Segoe UI Light">
+				<Run Text="{x:Static models:AppProductInfo.Title}" FontFamily="Yu Gothic Light" />
+				<Run Text=" Version " />
+				<Run Text="{x:Static models:AppProductInfo.VersionString}" />
+            </TextBlock>
+
+            <TextBlock Margin="0,8,0,0" FontFamily="Lucida Console" FontSize="12" Foreground="{DynamicResource ActiveForegroundBrushKey}">
+						<Run Text="Rel. " /><Run Text="{x:Static models:AppProductInfo.ModRelease}" />
             </TextBlock>
 
             <Rectangle Height="1"
@@ -104,7 +97,7 @@
 					   Margin="0,10"
 					   Style="{DynamicResource SeparatorRectangleStyleKey}" />
 
-			<metro:BindableTextBlock TextSource="{Binding Libraries}"
+			<metro:BindableTextBlock TextSource="{Binding Libraries, Mode=OneTime}"
 									 TextWrapping="Wrap"
 									 FontFamily="Segoe UI"
 									 FontSize="11">
@@ -132,9 +125,9 @@
 				   VerticalAlignment="Bottom"
 				   Margin="0,0,0,16"
 				   TextWrapping="Wrap">
-			<Run Text="{Binding Copyright, Source={x:Static root:App.ProductInfo}, Mode=OneWay}" />
+			<Run Text="{x:Static models:AppProductInfo.Copyright}" />
 			<LineBreak />
-			<Run Text="{Binding Product, Source={x:Static root:App.ProductInfo}, Mode=OneWay}" />
+			<Run Text="{x:Static models:AppProductInfo.Product}" />
 			<Run Text="is" />
 			<Run Text="OSS"
 				 ToolTip="Open Source Software" />

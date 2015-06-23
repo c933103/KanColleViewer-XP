@@ -1,125 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Grabacr07.KanColleViewer.Models
 {
-	public class ProductInfo
+    public class ProductInfo
     {
-        private const string Major = "3.8.2";
-        private const string Mod = "1.1";
-        private const string Revision = "13";
-        private const string Train = "XT";
-
-        private readonly Assembly assembly = Assembly.GetExecutingAssembly();
-		private string _Title;
-		private string _Description;
-		private string _Company;
-		private string _Product;
-		private string _Copyright;
-		private string _Trademark;
-		private Version _Version;
-		private string _VersionString;
-		private ICollection<Library> _Libraries;
-
-		public string Title
-		{
-			get { return this._Title ?? (this._Title = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(this.assembly, typeof(AssemblyTitleAttribute))).Title); }
-		}
-
-		public string Description
-		{
-			get { return this._Description ?? (this._Description = ((AssemblyDescriptionAttribute)Attribute.GetCustomAttribute(this.assembly, typeof(AssemblyDescriptionAttribute))).Description); }
-		}
-
-		public string Company
-		{
-			get { return this._Company ?? (this._Company = ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(this.assembly, typeof(AssemblyCompanyAttribute))).Company); }
-		}
-
-		public string Product
-		{
-			get { return this._Product ?? (this._Product = ((AssemblyProductAttribute)Attribute.GetCustomAttribute(this.assembly, typeof(AssemblyProductAttribute))).Product); }
-		}
-
-		public string Copyright
-		{
-			get { return this._Copyright ?? (this._Copyright = ((AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(this.assembly, typeof(AssemblyCopyrightAttribute))).Copyright); }
-		}
-
-		public string Trademark
-		{
-			get { return this._Trademark ?? (this._Trademark = ((AssemblyTrademarkAttribute)Attribute.GetCustomAttribute(this.assembly, typeof(AssemblyTrademarkAttribute))).Trademark); }
-		}
-
-		public Version Version
-		{
-			get { return this._Version ?? (this._Version = this.assembly.GetName().Version); }
-		}
-
-		public string VersionString
-		{
-			get { return this._VersionString ?? (this._VersionString = string.Format("{0}{1}{2}", this.Version.ToString(3), this.IsBetaRelease ? " β" : "", this.Version.Revision == 0 ? "" : " rev." + this.Version.Revision)); }
-		}
-
-        public string ReleaseTrain
-        {
-            get
-            {
-                return Major + "-" + Mod + "(" + Train + Revision + ")"
-#if DEBUG
-                     + "d"
-#endif
-                     ;
-            }
-        }
-
-		public bool IsBetaRelease
-		{
-#if BETA
-			get { return true; }
-#else
-			get { return false; }
-#endif
-		}
-
-		public bool IsDebug
-		{
-#if DEBUG
-			get { return true; }
-#else
-			get { return false; }
-#endif
-		}
-
-		public ICollection<Library> Libraries
-		{
-			get
-			{
-				return this._Libraries ?? (this._Libraries = new List<Library>
-				{
-					new Library("Reactive Extensions", new Uri("http://rx.codeplex.com/")),
-					new Library("Interactive Extensions", new Uri("http://rx.codeplex.com/")),
-					new Library("Windows API Code Pack", new Uri("http://archive.msdn.microsoft.com/WindowsAPICodePack")),
-					new Library("Livet", new Uri("http://ugaya40.net/livet")),
-					new Library("DynamicJson", new Uri("http://dynamicjson.codeplex.com/")),
-					new Library("FiddlerCore", new Uri("http://fiddler2.com/fiddlercore")),
-				});
-			}
-		}
-	}
-
-	public class Library
-	{
-		public string Name { get; private set; }
-		public Uri Url { get; private set; }
-
-		public Library(string name, Uri url)
-		{
-			this.Name = name;
-			this.Url = url;
-		}
-	}
+        public string Title => AppProductInfo.Title;
+        public string Description => AppProductInfo.Description;
+        public string Company => AppProductInfo.Company;
+        public string Product => AppProductInfo.Product;
+        public string Copyright => AppProductInfo.Copyright;
+        public string Trademark => AppProductInfo.Trademark;
+        public Version Version => AppProductInfo.Version;
+        public string VersionString => AppProductInfo.VersionString;
+        public string ModRelease => AppProductInfo.ModRelease;
+        public bool IsBetaRelease => AppProductInfo.IsBetaRelease;
+        public bool IsDebug => AppProductInfo.IsDebug;
+        public ICollection<Library> Libraries => AppProductInfo.Libraries;
+    }
 }

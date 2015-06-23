@@ -92,7 +92,7 @@
 		<metro:PromptComboBox Margin="20,0,0,10"
 							  HorizontalAlignment="Left"
 							  Prompt=""
-							  ItemsSource="{Binding Cultures}"
+							  ItemsSource="{Binding Cultures, Mode=OneTime}"
 							  DisplayMemberPath="DisplayName"
 							  SelectedValuePath="Name"
 							  SelectedValue="{Binding Culture, Mode=TwoWay}"
