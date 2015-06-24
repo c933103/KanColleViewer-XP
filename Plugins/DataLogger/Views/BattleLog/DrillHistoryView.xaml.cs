@@ -39,19 +39,25 @@ namespace LynLogger.Views.BattleLog
             set { SetValue(dpDrillLog, value); }
         }
 
-        public IEnumerable<KeyValuePair<long, DrillInfo>> DrillLog2 => DrillLog?.Select(x => x);
-
         public BindingBase DrillLogBinding
         {
             set { SetBinding(dpDrillLog, value); }
         }
+
+        private DrillInfo _drill;
+        public DrillInfo Drill
+        {
+            get { return _drill; }
+            set { _drill = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Drill))); }
+        }
+
+        public KeyValuePair<long, DrillInfo> KvDrill { set { Drill = value.Value; } }
 
         private void RaisePropertyChanged()
         {
             var handler = PropertyChanged;
             if (handler != null) {
                 handler(this, new PropertyChangedEventArgs(nameof(DrillLog)));
-                handler(this, new PropertyChangedEventArgs(nameof(DrillLog2)));
             }
         }
     }

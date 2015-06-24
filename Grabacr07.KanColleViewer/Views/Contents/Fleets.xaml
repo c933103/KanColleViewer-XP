@@ -58,7 +58,7 @@
 									Margin="0,2,4,0" />
                                 <TextBlock Text="{Binding Name}"
 									Style="{DynamicResource HeaderTextStyleKey}"
-									Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}" />
+									Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" />
                             </StackPanel>
                         </Border>
                     </DataTemplate>

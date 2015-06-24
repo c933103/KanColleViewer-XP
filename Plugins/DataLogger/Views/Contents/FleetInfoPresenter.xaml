@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LynLogger.Views.Contents"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" x:Name="control"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Border DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FleetInfoPresenter}}, Mode=OneTime}">
+    <Border DataContext="{Binding ElementName=control, Mode=OneTime}">
         <ItemsControl ItemsSource="{Binding Ships}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -30,7 +30,7 @@
                                                     </Setter.Value>
                                                 </Setter>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding DisplayEquiptDetail, RelativeSource={RelativeSource AncestorType={x:Type local:FleetInfoPresenter}}}" Value="True">
+                                                    <DataTrigger Binding="{Binding DisplayEquiptDetail, ElementName=control}" Value="True">
                                                         <Setter Property="ItemTemplate">
                                                             <Setter.Value>
                                                                 <DataTemplate>
@@ -45,7 +45,8 @@
                                     </ItemsControl>
                                 </StackPanel>
                             </ToolTip>
-                        </TextBlock.ToolTip><Run Text="["/><Run Text=" "/><Run Text="{Binding Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding ShipTypeName, Mode=OneTime}"/><Run Text=" "/><Run Text="{Binding ShipName, Mode=OneTime}"/><LineBreak /><Run Text="Lv."/><Run Text=" "/><Run Text="{Binding Lv, Mode=OneTime}" /><Run Text=" "/><Run Text=" HP:"/><Run Text=" "/><Run Text="{Binding CurrentHp, Mode=OneTime}" /><Run Text=" "/><Run Text="/"/><Run Text=" "/><Run Text="{Binding MaxHp, Mode=OneTime}" /></TextBlock>
+                        </TextBlock.ToolTip><Run Text="["/><Run Text=" "/><Run Text="{Binding Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding ShipTypeName, Mode=OneTime}"/><Run Text=" "/><Run Text="{Binding ShipName, Mode=OneTime}"/>
+                        <LineBreak /><Run Text="Lv."/><Run Text=" "/><Run Text="{Binding Lv, Mode=OneTime}" /><Run Text=" "/><Run Text=" HP:"/><Run Text=" "/><Run Text="{Binding CurrentHp, Mode=OneTime}" /><Run Text=" "/><Run Text="/"/><Run Text=" "/><Run Text="{Binding MaxHp, Mode=OneTime}" /></TextBlock>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

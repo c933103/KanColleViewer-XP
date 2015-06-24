@@ -6,13 +6,13 @@
              xmlns:local="clr-namespace:LynLogger.Views.Contents"
              xmlns:converters="clr-namespace:LynLogger.Views.Converters"
              xmlns:kcvControls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls;assembly=KanColleViewer"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" x:Name="control"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
     </UserControl.Resources>
     
-    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:BattleCalcResultPresenter}}}">
+    <Grid DataContext="{Binding ElementName=control, Mode=OneTime}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
