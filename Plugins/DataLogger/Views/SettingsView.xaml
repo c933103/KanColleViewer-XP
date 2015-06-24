@@ -36,6 +36,13 @@
             <Button Margin="0,3" Content="立即保存数据" Padding="10,2" Command="{Binding SaveData, Mode=OneTime}" HorizontalAlignment="Left"/>
             <Button Margin="0,3" Content="导出敌舰配置信息" Padding="10,2" Command="{Binding ExportEnemyInfo, Mode=OneTime}" HorizontalAlignment="Left"/>
             <Button Margin="0,3" Content="导入（合并）敌舰配置" Padding="10,2" Command="{Binding ImportEnemyInfo, Mode=OneTime}" HorizontalAlignment="Left"/>
+
+            <Rectangle Margin="0,10" Stroke="#FF3C3C41" />
+            <TextBlock Text="注意：以下操作使用不当会导致记录数据的丢失和损坏" Foreground="White" Background="DarkRed" Padding="4" />
+            <TextBlock>
+                <InlineUIContainer BaselineAlignment="Center"><Button Margin="0,3" Content="切换记录文件编号" Padding="10,2" Command="{Binding SwitchMember, Mode=OneTime}" HorizontalAlignment="Left"/></InlineUIContainer>
+                <InlineUIContainer BaselineAlignment="Center"><TextBox Text="{Binding SwitchMemberId}" MinWidth="100"/></InlineUIContainer>
+            </TextBlock>
         </StackPanel>
     </Grid>
 </UserControl>

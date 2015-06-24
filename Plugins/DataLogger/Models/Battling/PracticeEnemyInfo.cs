@@ -14,7 +14,7 @@ namespace LynLogger.Models.Battling
         [Serialize(0)] internal int ZwEnemyLevel;
         [Serialize(1)] internal string ZwEnemyName;
         [Serialize(2)] internal string ZwEnemyFleetName;
-        /*[Serialize(3)]*/ internal EnemyShipInfo[] ZwEnemyShips;
+                       internal EnemyShipInfo[] ZwEnemyShips;
         [Serialize(4, DepthLimit = 2)] internal string ZwRawData;
 
         public int EnemyLevel => ZwEnemyLevel;
@@ -45,9 +45,7 @@ namespace LynLogger.Models.Battling
             get
             {
                 return new Dictionary<ulong, HandlerInfo>() {
-                    [3] = new HandlerInfo(
-                        (x, p) => x.ZwEnemyShips.GetSerializationInfo(p),
-                        (o, i, p) => o.ZwEnemyShips = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i).Convert(x => new EnemyShipInfo(x, p)).ToArray()),
+                    [3] = HandlerInfo.NoOp,
                 };
             }
         }

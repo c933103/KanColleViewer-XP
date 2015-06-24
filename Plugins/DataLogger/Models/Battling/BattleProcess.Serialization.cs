@@ -56,6 +56,7 @@ namespace LynLogger.Models.Battling
             clone.ZwEnemyShips = ZwEnemyShips.DeepCloneArray();
             clone.ZwOurShips = ZwOurShips.DeepCloneArray();
             clone.ZwAirWarfare = ZwAirWarfare.Clone();
+            clone.ZwAirWarfare2 = ZwAirWarfare2.Clone();
             clone.ZwNightWar = ZwNightWar.Clone();
             clone.ZwOpeningTorpedoAttack = ZwOpeningTorpedoAttack.DeepCloneArray().ForEach(x => x._parent = clone);
             clone.ZwBombardRound1 = ZwBombardRound1.DeepCloneArray().ForEach(xx => xx._parent = clone);
@@ -69,6 +70,8 @@ namespace LynLogger.Models.Battling
 
             clone.ZwAirWarfare.ZwOurStage3Report.ForEach(x => x._parent = clone);
             clone.ZwAirWarfare.ZwEnemyStage3Report.ForEach(x => x._parent = clone);
+            clone.ZwAirWarfare2.ZwOurStage3Report.ForEach(x => x._parent = clone);
+            clone.ZwAirWarfare2.ZwEnemyStage3Report.ForEach(x => x._parent = clone);
             return clone;
         }
 

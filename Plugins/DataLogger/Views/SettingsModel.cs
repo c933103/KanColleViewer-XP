@@ -19,6 +19,9 @@ namespace LynLogger.Views
         private ImportEnemyInfoCommand impEnemyInfoCmd;
         public ICommand ImportEnemyInfo => impEnemyInfoCmd ?? (impEnemyInfoCmd = new ImportEnemyInfoCommand());
 
+        private SwitchMemberCommand switchMemberCmd;
+        public ICommand SwitchMember => switchMemberCmd ?? (switchMemberCmd = new SwitchMemberCommand(this));
+
         public int BasicInfoLoggingInterval
         {
             get { return CurrentActiveDs?.Settings.BasicInfoLoggingInterval ?? 0; }
@@ -43,9 +46,24 @@ namespace LynLogger.Views
             }
         }
 
+        private string _switchMemberId;
+        public string SwitchMemberId
+        {
+            get { return _switchMemberId; }
+            set
+            {
+                if (value == _switchMemberId) return;
+                _switchMemberId = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public SettingsModel()
         {
-            DataStore.Store.OnDataStoreSwitch += (_, ds) => RaiseMultiPropertyChanged();
+            DataStore.Store.OnDataStoreSwitch += (_, ds) => {
+                _switchMemberId = _;
+                RaiseMultiPropertyChanged();
+            };
         }
 
         public DataStore.Store CurrentActiveDs
@@ -107,13 +125,27 @@ namespace LynLogger.Views
 
                 var dummy = new LinkedList<object>();
                 using (System.IO.Stream s = ofd.OpenFile()) {
-                    using(DataStore.IO.DSReader r = new DataStore.IO.DSReader(s)) {
+                    using (DataStore.IO.DSReader r = new DataStore.IO.DSReader(s)) {
                         var dict = (DataStore.Premitives.Dictionary<DataStore.Premitives.StoragePremitive, DataStore.Premitives.StoragePremitive>)DataStore.Premitives.StoragePremitive.Parse(r);
                         foreach (var kv in dict.Convert((k, v) => new { Key = new MapLocInfo(k, dummy), Value = new BattleInfo(v, dummy) })) {
                             info[kv.Key] = kv.Value;
                         }
                     }
                 }
+            }
+        }
+
+        private class SwitchMemberCommand : ICommand
+        {
+            public bool CanExecute(object parameter) { return true; }
+            public event EventHandler CanExecuteChanged;
+
+            private readonly SettingsModel vm;
+            public SwitchMemberCommand(SettingsModel vm) { this.vm = vm; }
+
+            public void Execute(object parameter)
+            {
+                DataStore.Store.SwitchMember(vm.SwitchMemberId);
             }
         }
     }

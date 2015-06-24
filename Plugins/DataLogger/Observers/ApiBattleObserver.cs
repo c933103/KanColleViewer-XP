@@ -48,59 +48,7 @@ namespace LynLogger.Observers
                     result.ZwEnemyFormation = (BattleProcess.Formation)(int)data.api_formation[1];
                     result.ZwEncounter = (BattleProcess.EncounterForm)(int)data.api_formation[2];
                 }
-                if(data.api_hourai_flag()) { //昼战
-                    result.ZwAirWarfare = ConvertAirWarfare(result, data.api_kouku);
-                    result.ZwOurReconn = (BattleProcess.ReconnResult)(int)data.api_search[0];
-                    result.ZwEnemyReconn = (BattleProcess.ReconnResult)(int)data.api_search[1];
-                    result.ZwHasNightWar = data.api_midnight_flag > 0;
-
-                    if(data.api_opening_flag == 1) {
-                        result.ZwOpeningTorpedoAttack = ConvertTorpedoInfo(result, data.api_opening_atack);
-                    }
-                    if(data.api_hourai_flag[3] == 1) {
-                        result.ZwClosingTorpedoAttack = ConvertTorpedoInfo(result, data.api_raigeki);
-                    }
-                    if(data.api_hourai_flag[1] == 1) {
-                        result.ZwBombardRound2 = ConvertBombards(result, data.api_hougeki2);
-                    }
-                    if(data.api_hourai_flag[0] == 1) {
-                        result.ZwBombardRound1 = ConvertBombards(result, data.api_hougeki1);
-                    }
-                    result.ZwSupportType = (BattleProcess.SupportInfo.Type)(int)(data.api_support_flag() ? data.api_support_flag : 0);
-                    if(data.api_support_info() && (data.api_support_info != null)) {
-                        int supportDeckId = (int)(data.api_support_info.api_support_airatack?.api_deck_id ?? data.api_support_info.api_support_hourai.api_deck_id);
-                        result.ZwSupport = new BattleProcess.SupportInfo() {
-                            ZwSupportShips = KanColleClient.Current.Homeport.Organization.Fleets[supportDeckId].Ships.Select((x, i) => {
-                                var localShip = DataStore.Store.Current.Ships[x.Id];
-                                return new BattleProcess.ShipInfo() {
-                                    ZwShipNameType = new ShipNameType(x.Info, i),
-                                    ZwId = x.Id,
-                                    ZwLv = x.Level,
-                                    ZwCurrentHp = x.HP.Current,
-                                    ZwMaxHp = x.HP.Maximum,
-                                    ZwParameter = new BattleProcess.ShipInfo.ParameterInfo() {
-                                        ZwPower = x.Firepower.Current,
-                                        ZwTorpedo = x.Torpedo.Current,
-                                        ZwAntiAir = x.AA.Current,
-                                        ZwDefense = x.Armer.Current
-                                    },
-                                    ZwEnhancement = new BattleProcess.ShipInfo.ParameterInfo() {
-                                        ZwAntiAir = localShip.EnhancedAntiAir,
-                                        ZwDefense = localShip.EnhancedDefense,
-                                        ZwPower = localShip.EnhancedPower,
-                                        ZwTorpedo = localShip.EnhancedTorpedo
-                                    },
-                                    ZwEquipts = x.EquippedSlots.Select(si => new EquiptInfo(si)).ToArray()
-                                };
-                            }).ToArray()
-                        };
-                        if(data.api_support_info.api_support_airatack != null) {
-                            result.ZwSupport.ZwAttackInfo = ConvertAirWarfare(result, data.api_support_info.api_support_airatack);
-                        } else if(data.api_support_info.api_support_hourai != null) {
-                            result.ZwSupport.ZwAttackInfo = CreateSupportAttackInfo(result, data.api_support_info.api_support_hourai);
-                        }
-                    }
-                } else if(data.api_flare_pos()) { //夜战
+                if (data.api_flare_pos()) { //夜战
                     var r = new BattleProcess.NightWarInfo(result) {
                         ZwOurShips = result.ZwOurShips,
                         ZwEnemyShips = result.ZwEnemyShips,
@@ -109,12 +57,12 @@ namespace LynLogger.Observers
                         ZwOurReconnInTouch = (int)data.api_touch_plane[0],
                         ZwEnemyReconnInTouch = (int)data.api_touch_plane[1]
                     };
-                    if(r.ZwOurReconnInTouch < 0) {
+                    if (r.ZwOurReconnInTouch < 0) {
                         r.ZwOurReconnInTouchName = "没有舰载机";
                     } else {
                         r.ZwOurReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwOurReconnInTouch, "{0} 号侦察机");
                     }
-                    if(r.ZwEnemyReconnInTouch < 0) {
+                    if (r.ZwEnemyReconnInTouch < 0) {
                         r.ZwEnemyReconnInTouchName = "没有舰载机";
                     } else {
                         r.ZwEnemyReconnInTouchName = Helpers.GetEquiptNameWithFallback(r.ZwEnemyReconnInTouch, "{0} 号侦察机");
@@ -123,6 +71,63 @@ namespace LynLogger.Observers
                     result.ZwNightWar = r;
                     result.ZwAirWarfare = _dummyAirwarfare.Clone();
                     result.ZwAirWarfare._parent = result;
+                }
+                if (data.api_stage_flag()) { //昼战 航空战/炮击战 共有部分
+                    result.ZwAirWarfare = ConvertAirWarfare(result, data.api_kouku);
+                    result.ZwOurReconn = (BattleProcess.ReconnResult)(int)data.api_search[0];
+                    result.ZwEnemyReconn = (BattleProcess.ReconnResult)(int)data.api_search[1];
+                    result.ZwHasNightWar = data.api_midnight_flag > 0;
+
+                    if (data.api_stage_flag2()) { //昼战 航空战
+                        result.ZwAirWarfare2 = ConvertAirWarfare(result, data.api_kouku2);
+                    } else if (data.api_hourai_flag()) { //昼战 炮击战
+                        if (data.api_opening_flag == 1) {
+                            result.ZwOpeningTorpedoAttack = ConvertTorpedoInfo(result, data.api_opening_atack);
+                        }
+                        if (data.api_hourai_flag[3] == 1) {
+                            result.ZwClosingTorpedoAttack = ConvertTorpedoInfo(result, data.api_raigeki);
+                        }
+                        if (data.api_hourai_flag[1] == 1) {
+                            result.ZwBombardRound2 = ConvertBombards(result, data.api_hougeki2);
+                        }
+                        if (data.api_hourai_flag[0] == 1) {
+                            result.ZwBombardRound1 = ConvertBombards(result, data.api_hougeki1);
+                        }
+                        result.ZwSupportType = (BattleProcess.SupportInfo.Type)(int)(data.api_support_flag() ? data.api_support_flag : 0);
+                        if (data.api_support_info() && (data.api_support_info != null)) {
+                            int supportDeckId = (int)(data.api_support_info.api_support_airatack?.api_deck_id ?? data.api_support_info.api_support_hourai.api_deck_id);
+                            result.ZwSupport = new BattleProcess.SupportInfo() {
+                                ZwSupportShips = KanColleClient.Current.Homeport.Organization.Fleets[supportDeckId].Ships.Select((x, i) => {
+                                    var localShip = DataStore.Store.Current.Ships[x.Id];
+                                    return new BattleProcess.ShipInfo() {
+                                        ZwShipNameType = new ShipNameType(x.Info, i),
+                                        ZwId = x.Id,
+                                        ZwLv = x.Level,
+                                        ZwCurrentHp = x.HP.Current,
+                                        ZwMaxHp = x.HP.Maximum,
+                                        ZwParameter = new BattleProcess.ShipInfo.ParameterInfo() {
+                                            ZwPower = x.Firepower.Current,
+                                            ZwTorpedo = x.Torpedo.Current,
+                                            ZwAntiAir = x.AA.Current,
+                                            ZwDefense = x.Armer.Current
+                                        },
+                                        ZwEnhancement = new BattleProcess.ShipInfo.ParameterInfo() {
+                                            ZwAntiAir = localShip.EnhancedAntiAir,
+                                            ZwDefense = localShip.EnhancedDefense,
+                                            ZwPower = localShip.EnhancedPower,
+                                            ZwTorpedo = localShip.EnhancedTorpedo
+                                        },
+                                        ZwEquipts = x.EquippedSlots.Select(si => new EquiptInfo(si)).ToArray()
+                                    };
+                                }).ToArray()
+                            };
+                            if (data.api_support_info.api_support_airatack != null) {
+                                result.ZwSupport.ZwAttackInfo = ConvertAirWarfare(result, data.api_support_info.api_support_airatack);
+                            } else if (data.api_support_info.api_support_hourai != null) {
+                                result.ZwSupport.ZwAttackInfo = CreateSupportAttackInfo(result, data.api_support_info.api_support_hourai);
+                            }
+                        }
+                    }
                 }
 
                 _onBattle(result);

@@ -37,8 +37,7 @@ namespace LynLogger.Observers
                         MapLocId = (int)data.api_no,
                     },
                     ZwNextNodeCount = (int)data.api_next,
-                    //ZwMapBossLocId = (int)data.api_bosscell_no,
-                    ZwEvent = (MapNext.EventType)((int)data.api_event_id * ((int)data.api_event_kind == 2 ? -1 : 1)),
+                    ZwEvent = (MapNext.EventType)((int)data.api_event_id << 16 | (int)data.api_event_kind),
                     ZwRawData = json
                 };
                 if(data.api_enemy() && data.api_enemy != null) {
@@ -53,6 +52,11 @@ namespace LynLogger.Observers
                     mapNext.ZwItemGetLost = new MapNext.ItemGetLostInfo() {
                         ZwAmount = (int)data.api_happening.api_count,
                         ZwItemId = (int)data.api_happening.api_mst_id
+                    };
+                } else if(mapNext.ZwEvent == MapNext.EventType.ResourceGet) {
+                    mapNext.ZwItemGetLost = new MapNext.ItemGetLostInfo() {
+                        ZwAmount = (int)data.api_itemget_eo_comment.api_getcount,
+                        ZwItemId = (int)data.api_itemget_eo_comment.api_id
                     };
                 }
                 if(mapNext.ZwItemGetLost != null) {

@@ -7,17 +7,14 @@
              xmlns:views="clr-namespace:LynLogger.Views"
              xmlns:contents="clr-namespace:LynLogger.Views.Contents"
              xmlns:converters="clr-namespace:LynLogger.Views.Converters"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" x:Name="control"
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.DataContext>
-        <local:DrillHistoryModel />
-    </UserControl.DataContext>
     <UserControl.Resources>
         <converters:UnixTimestampToStringConverter x:Key="UnixTimestampToStringConverter" />
         <converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
     </UserControl.Resources>
-    <StackPanel>
-        <ComboBox ItemsSource="{Binding DrillLog2, RelativeSource={RelativeSource AncestorType={x:Type local:DrillHistoryView}}, Mode=OneWay}" SelectedItem="{Binding KvDrill, Mode=OneWayToSource}" Margin="0,0,0,10">
+    <StackPanel DataContext="{Binding ElementName=control, Mode=OneTime}">
+        <ComboBox ItemsSource="{Binding DrillLog, Mode=OneWay}" SelectedItem="{Binding KvDrill, Mode=OneWayToSource}" Margin="0,0,0,10">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock>
@@ -33,7 +30,7 @@
             <StackPanel Margin="20,0,0,0">
                 <TextBlock FontSize="15">
                     <Run Text="基本经验: 约" />
-                    <Run Text="{Binding Drill.Briefing.DrillBasicExp, Mode=OneWay}" />
+                    <Run Text="{Binding Drill.Battle.DrillBasicExp, Mode=OneWay}" />
                 </TextBlock>
                 <Rectangle Height="9" />
                 <Grid DataContext="{Binding Drill.Battle, Mode=OneWay}">
@@ -106,7 +103,7 @@
         <Expander Header="战斗结算" IsExpanded="True" Margin="0,3">
             <StackPanel Margin="20,0,0,0" DataContext="{Binding Drill.Result}">
                 <TextBlock>
-                    <Run Text="{Binding DataContext.Drill.Briefing.EnemyName, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type local:DrillHistoryView}}}"/>
+                    <Run Text="{Binding Drill.Briefing.EnemyName, Mode=OneWay, ElementName=control}"/>
                     <Run Text="/"/>
                     <Run Text="{Binding FleetName, Mode=OneTime}"/>
                 </TextBlock>

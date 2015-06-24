@@ -160,11 +160,9 @@
     <Compile Include="Views\BattleLogView.xaml.cs">
       <DependentUpon>BattleLogView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\BattleLog\DrillHistoryModel.cs" />
     <Compile Include="Views\BattleLog\DrillHistoryView.xaml.cs">
       <DependentUpon>DrillHistoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\BattleLog\SortieHistoryModel.cs" />
     <Compile Include="Views\BattleLog\SortieHistoryView.xaml.cs">
       <DependentUpon>SortieHistoryView.xaml</DependentUpon>
     </Compile>

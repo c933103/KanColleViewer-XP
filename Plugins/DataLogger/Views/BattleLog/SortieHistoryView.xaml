@@ -6,22 +6,19 @@
              xmlns:local="clr-namespace:LynLogger.Views.BattleLog"
              xmlns:contents="clr-namespace:LynLogger.Views.Contents"
              xmlns:converters="clr-namespace:LynLogger.Views.Converters"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" x:Name="control"
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.DataContext>
-        <local:SortieHistoryModel />
-    </UserControl.DataContext>
     <UserControl.Resources>
         <converters:UnixTimestampToStringConverter x:Key="UnixTimestampToStringConverter" />
         <converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
     </UserControl.Resources>
-    <StackPanel>
+    <StackPanel DataContext="{Binding ElementName=control, Mode=OneTime}">
         <Grid Margin="0,0,0,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ComboBox ItemsSource="{Binding SortieLog2, RelativeSource={RelativeSource AncestorType={x:Type local:SortieHistoryView}}, Mode=OneWay}" SelectedItem="{Binding KvSortie, Mode=OneWayToSource}" Grid.Column="0" Margin="5,0">
+            <ComboBox ItemsSource="{Binding SortieLog, Mode=OneWay}" SelectedItem="{Binding KvSortie, Mode=OneWayToSource}" Grid.Column="0" Margin="5,0">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <TextBlock>

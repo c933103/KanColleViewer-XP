@@ -26,7 +26,7 @@
 		<Setter Property="TextOptions.TextFormattingMode"
 				Value="Display" />
 		<Setter Property="shell:WindowChrome.WindowChrome"
-				Value="{Binding WindowChrome, RelativeSource={RelativeSource Self}}" />
+				Value="{Binding WindowChrome, RelativeSource={x:Static RelativeSource.Self}}" />
         <Setter Property="shell:WindowChrome"
 				Value="{StaticResource DefaultChrome}" />
 		<Setter Property="MetroChromeBehavior">

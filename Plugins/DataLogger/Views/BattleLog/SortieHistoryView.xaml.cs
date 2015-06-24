@@ -39,19 +39,43 @@ namespace LynLogger.Views.BattleLog
             set { SetValue(dpSortieLog, value); }
         }
 
-        public IEnumerable<KeyValuePair<long, SortieInfo>> SortieLog2 => SortieLog?.Select(x => x);
-
         public BindingBase SortieLogBinding
         {
             set { SetBinding(dpSortieLog, value); }
         }
+
+        private SortieInfo _sortie;
+        public SortieInfo Sortie
+        {
+            get { return _sortie; }
+            set
+            {
+                _sortie = value; Node = value?.Nodes.First();
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sortie)));
+            }
+        }
+
+        public KeyValuePair<long, SortieInfo> KvSortie { set { Sortie = value.Value; } }
+
+        private SortieInfo.Node _node;
+        public SortieInfo.Node Node
+        {
+            get { return _node; }
+            set
+            {
+                _node = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Node)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasBattle)));
+            }
+        }
+
+        public bool HasBattle => _node?.Battle != null;
 
         private void RaisePropertyChanged()
         {
             var handler = PropertyChanged;
             if (handler != null) {
                 handler(this, new PropertyChangedEventArgs(nameof(SortieLog)));
-                handler(this, new PropertyChangedEventArgs(nameof(SortieLog2)));
             }
         }
     }

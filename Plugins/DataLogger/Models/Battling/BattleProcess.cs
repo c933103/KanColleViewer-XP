@@ -36,6 +36,7 @@ namespace LynLogger.Models.Battling
         [Serialize(17, DepthLimit = 3)] internal bool ZwHasNightWar;
         [Serialize(18, DepthLimit = 3)] internal NightWarInfo ZwNightWar;
         [Serialize(19, DepthLimit = 3)] internal string ZwRawData;
+        [Serialize(20, DepthLimit = 3)] internal AirWarfareInfo ZwAirWarfare2;
 
         public IList<ShipInfo> EnemyShips => ZwEnemyShips;
         public IList<ShipInfo> OurShips => ZwOurShips;
@@ -43,6 +44,7 @@ namespace LynLogger.Models.Battling
         public Formation EnemyFormation => ZwEnemyFormation;
         public EncounterForm Encounter => ZwEncounter;
         public AirWarfareInfo AirWarfare => ZwAirWarfare;
+        public AirWarfareInfo AirWarfare2 => ZwAirWarfare2;
         public SupportInfo.Type SupportType => ZwSupportType;
         public SupportInfo Support => ZwSupport;
         public ReconnResult OurReconn => ZwOurReconn;
@@ -482,21 +484,28 @@ namespace LynLogger.Models.Battling
             {
                 ShipInfo a = OrigInfo;
 
-                if (report.AirWarfare.EnemyCarrierShip.Any(x => x == a)) {
-                    if (report.AirWarfare.ZwEnemyCarrierShip.Length == 1) {
-                        ZwDeliveredDamage += report.AirWarfare.ZwOurShipDamages.Sum();
-                    } else {
-                        ZwDeliveredDamage.UpperBound += report.AirWarfare.ZwOurShipDamages.Sum();
-                    }
-                } else if (report.AirWarfare.OurCarrierShip.Any(x => x == a)) {
-                    if (report.AirWarfare.ZwOurCarrierShip.Length == 1) {
-                        ZwDeliveredDamage += report.AirWarfare.ZwEnemyShipDamages.Sum();
-                    } else {
-                        ZwDeliveredDamage.UpperBound += report.AirWarfare.ZwEnemyShipDamages.Sum();
+                foreach (var aw in DataStore.Extensions.Collections.AsEnumerable(report.AirWarfare, report.AirWarfare2)) {
+                    if (aw == null) continue;
+                    if (aw.EnemyCarrierShip.Any(x => x == a)) {
+                        if (aw.ZwEnemyCarrierShip.Length == 1) {
+                            ZwDeliveredDamage += aw.ZwOurShipDamages.Sum();
+                        } else {
+                            ZwDeliveredDamage.UpperBound += aw.ZwOurShipDamages.Sum();
+                        }
+                    } else if (aw.OurCarrierShip.Any(x => x == a)) {
+                        if (aw.ZwOurCarrierShip.Length == 1) {
+                            ZwDeliveredDamage += aw.ZwEnemyShipDamages.Sum();
+                        } else {
+                            ZwDeliveredDamage.UpperBound += aw.ZwEnemyShipDamages.Sum();
+                        }
                     }
                 }
 
-                foreach(var aws3report in report.AirWarfare.EnemyStage3Report.SafeConcat(report.AirWarfare.OurStage3Report, report.Support?.AttackInfo.EnemyStage3Report)) {
+                foreach(var aws3report in report.AirWarfare.EnemyStage3Report.SafeConcat(
+                                          report.AirWarfare.OurStage3Report,
+                                          report.Support?.AttackInfo.EnemyStage3Report,
+                                          report.AirWarfare2?.EnemyStage3Report,
+                                          report.AirWarfare2?.OurStage3Report)) {
                     if(aws3report.Ship != a) continue;
                     HpCurrent -= (int)aws3report.Damage;
                 }

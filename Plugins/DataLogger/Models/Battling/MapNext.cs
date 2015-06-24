@@ -53,27 +53,36 @@ namespace LynLogger.Models.Battling
             sb.AppendLine(NodeId);
             switch(Event) {
                 case EventType.Battle:
+                case EventType._Battle:
                     sb.Append("来！战个痛！快！");
                     break;
                 case EventType.BossBattle:
+                case EventType._BossBattle:
                     sb.Append("BOSS战突入！");
                     break;
                 case EventType.NightBattle:
+                case EventType._NightBattle:
                     sb.Append("夜战突入！");
                     break;
-                /*case EventType.NightBossBattle:
-                    sb.Append("夜战 BOSS！");
-                    break;*/
+                case EventType.AirBattle:
+                    sb.Append("航空战准备！");
+                    break;
                 case EventType.ItemGet:
+                case EventType._ItemGet:
+                case EventType.ResourceGet:
                     sb.AppendFormat("获得 {0} x{1}", ItemGetLost.ItemName, ItemGetLost.Amount);
                     break;
                 case EventType.ItemLost:
+                case EventType._ItemLost:
                     sb.AppendFormat("损失 {0} x{1}", ItemGetLost.ItemName, ItemGetLost.Amount);
                     break;
                 case EventType.Nothing:
+                case EventType._Nothing:
                     sb.Append("来！战个……没事");
                     break;
                 default:
+                    sb.Append("Ev: 0x");
+                    sb.AppendLine(((int)Event).ToString("X8"));
                     sb.Append(RawData);
                     break;
             }
@@ -95,6 +104,19 @@ namespace LynLogger.Models.Battling
             internal ItemGetLostInfo(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { }
         }
 
-        public enum EventType { ItemGet = 2, ItemLost = 3, Battle = 4, BossBattle = 5, NightBattle = -4, NightBossBattle = -5, Nothing = 6 }
+        public enum EventType
+        {
+            _ItemGet = 2, _ItemLost = 3, _Battle = 4, _BossBattle = 5, _NightBattle = -4, _Nothing = 6,
+
+            ItemGet = 0x00020000,
+            ItemLost = 0x00030000,
+            Nothing = 0x00060000,
+            ResourceGet = 0x00080000,
+
+            Battle = 0x00040001,
+            NightBattle = 0x00040002,
+            AirBattle = 0x00040004,
+            BossBattle = 0x00050000,
+        }
     }
 }
