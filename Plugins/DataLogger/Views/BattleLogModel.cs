@@ -67,9 +67,8 @@ namespace LynLogger.Views
         public BattleLogModel()
         {
             var listPages = new List<TabViewItem>() {
-                new TabViewItem("出击记录", () => new BattleLog.SortieHistoryView() { SortieLogBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.SortieLog)) {Source = this } }),
-                new TabViewItem("演习记录", () => new BattleLog.DrillHistoryView() { DrillLogBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.DrillLog)) {Source = this } }),
-                //new TabViewItem("统计数据", new ShipHistoryView()),
+                new TabViewItem("出击记录", () => new Contents.SortieHistoryView() { SortieLogBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.SortieLog)) {Source = this } }),
+                new TabViewItem("演习记录", () => new Contents.DrillHistoryView() { DrillLogBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.DrillLog)) {Source = this } }),
             };
             
             listPages.ForEach(x => x.IsSelected = false);

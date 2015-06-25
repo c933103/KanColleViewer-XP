@@ -122,32 +122,15 @@ namespace Grabacr07.KanColleWrapper
 		public void Initialieze()
 		{
 			var proxy = this.Proxy ?? (this.Proxy = new KanColleProxy());
-            this.Homeport = new Homeport(proxy);
-            var basic = proxy.api_get_member_basic.TryParse<kcsapi_basic>().FirstAsync().ToTask();
-			var kdock = proxy.api_get_member_kdock.TryParse<kcsapi_kdock[]>().FirstAsync().ToTask();
-			var sitem = proxy.api_get_member_slot_item.TryParse<kcsapi_slotitem[]>().FirstAsync().ToTask();
+
+            proxy.Synchronize = true;
+            Homeport = new Homeport(proxy);
 
             IDisposable disposable = null;
-            disposable = proxy.api_start2.Subscribe(async session => {
-                // タイムアウト仕掛けてるのは、今後のアップデートで basic, kdock, slot_item のいずれかが来なくなったときに
-                // 起動できなくなる (IsStarted を true にできなくなる) のを防ぐため
-                // -----
-                // ま、そんな規模の変更があったらそもそもまともに動作せんだろうがな ☝(◞‸◟)☝ 野良ツールはつらいよ
-
-                SvData<kcsapi_start2> svd;
-                if (!SvData.TryParse(session, out svd)) return;
-
+            disposable = proxy.api_start2.TryParse<kcsapi_start2>().Subscribe(svd => {
                 this.Master = new Master(svd.Data);
-                //if (this.Homeport == null) this.Homeport = new Homeport(proxy);
-
-                var timeout = TaskEx.Delay(TimeSpan.FromSeconds(30));
-                await TaskEx.WhenAny(new Task[] { basic, kdock, sitem }.WhenAll(), timeout);
-
-                if (basic.Status == TaskStatus.RanToCompletion) this.Homeport.UpdateAdmiral(basic.Result.Data);
-                if (sitem.Status == TaskStatus.RanToCompletion) this.Homeport.Itemyard.Update(sitem.Result.Data);
-                if (kdock.Status == TaskStatus.RanToCompletion) this.Homeport.Dockyard.Update(kdock.Result.Data);
-
                 this.IsStarted = true;
+                proxy.Synchronize = false;
                 disposable.Dispose();
             });
 		}

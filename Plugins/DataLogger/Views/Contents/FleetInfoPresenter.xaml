@@ -4,8 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LynLogger.Views.Contents"
+             xmlns:converters="clr-namespace:LynLogger.Views.Converters"
              mc:Ignorable="d" x:Name="control"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:BindingProxy Data="{Binding ElementName=control, Mode=OneTime}" x:Key="control" />
+    </UserControl.Resources>
     <Border DataContext="{Binding ElementName=control, Mode=OneTime}">
         <ItemsControl ItemsSource="{Binding Ships}">
             <ItemsControl.ItemTemplate>
@@ -30,7 +34,7 @@
                                                     </Setter.Value>
                                                 </Setter>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding DisplayEquiptDetail, ElementName=control}" Value="True">
+                                                    <DataTrigger Binding="{Binding Data.DisplayEquiptDetail, Source={StaticResource control}}" Value="True">
                                                         <Setter Property="ItemTemplate">
                                                             <Setter.Value>
                                                                 <DataTemplate>

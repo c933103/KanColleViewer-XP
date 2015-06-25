@@ -70,8 +70,8 @@ namespace LynLogger.Models.Battling
 
             clone.ZwAirWarfare.ZwOurStage3Report.ForEach(x => x._parent = clone);
             clone.ZwAirWarfare.ZwEnemyStage3Report.ForEach(x => x._parent = clone);
-            clone.ZwAirWarfare2.ZwOurStage3Report.ForEach(x => x._parent = clone);
-            clone.ZwAirWarfare2.ZwEnemyStage3Report.ForEach(x => x._parent = clone);
+            clone.ZwAirWarfare2?.ZwOurStage3Report.ForEach(x => x._parent = clone);
+            clone.ZwAirWarfare2?.ZwEnemyStage3Report.ForEach(x => x._parent = clone);
             return clone;
         }
 
