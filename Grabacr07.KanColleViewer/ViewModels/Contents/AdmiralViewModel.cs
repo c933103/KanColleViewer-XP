@@ -30,7 +30,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents
 
 		private void Update()
 		{
-			this.RaisePropertyChanged("Model");
+			this.RaisePropertyChanged(nameof(Model));
 		}
 	}
 }

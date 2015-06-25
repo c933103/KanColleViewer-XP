@@ -1,10 +1,9 @@
-﻿<UserControl x:Class="LynLogger.Views.BattleLog.SortieHistoryView"
+﻿<UserControl x:Class="LynLogger.Views.Contents.SortieHistoryView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:LynLogger.Views.BattleLog"
-             xmlns:contents="clr-namespace:LynLogger.Views.Contents"
+             xmlns:local="clr-namespace:LynLogger.Views.Contents"
              xmlns:converters="clr-namespace:LynLogger.Views.Converters"
              mc:Ignorable="d" x:Name="control"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -58,7 +57,7 @@
             </StackPanel>
         </Expander>
         <Expander Header="战果速报 ( 计算值 )" Margin="0,3" IsExpanded="{Binding HasBattle, Mode=OneWay}">
-            <contents:BattleCalcResultPresenter Margin="20,0,0,0" Battle="{Binding Node.Battle}" BasicExp="{Binding Node.Result.BaseExp}" IsDrill="False" />
+            <local:BattleCalcResultPresenter Margin="20,0,0,0" Battle="{Binding Node.Battle}" BasicExp="{Binding Node.Result.BaseExp}" IsDrill="False" />
         </Expander>
         <Expander Header="战前简报" Margin="0,3" IsExpanded="{Binding HasBattle, Mode=OneWay}">
             <Grid Margin="20,0,0,15" DataContext="{Binding Node.Battle, Mode=OneWay}">

@@ -138,10 +138,10 @@
     <Compile Include="Views\BattleLogView.xaml.cs">
       <DependentUpon>BattleLogView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\BattleLog\DrillHistoryView.xaml.cs">
+    <Compile Include="Views\Contents\DrillHistoryView.xaml.cs">
       <DependentUpon>DrillHistoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\BattleLog\SortieHistoryView.xaml.cs">
+    <Compile Include="Views\Contents\SortieHistoryView.xaml.cs">
       <DependentUpon>SortieHistoryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\BattleCalcResultPresenter.xaml.cs">
@@ -153,6 +153,7 @@
     <Compile Include="Views\Contents\FleetInfoPresenter.xaml.cs">
       <DependentUpon>FleetInfoPresenter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Converters\BindingProxy.cs" />
     <Compile Include="Views\Converters\LogbookSequenceToDescriptionConverter.cs" />
     <Compile Include="Views\Converters\UnixTimestampToStringConverter.cs" />
     <Compile Include="Views\SettingsModel.cs" />
@@ -217,11 +218,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\BattleLog\DrillHistoryView.xaml">
+    <Page Include="Views\Contents\DrillHistoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\BattleLog\SortieHistoryView.xaml">
+    <Page Include="Views\Contents\SortieHistoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

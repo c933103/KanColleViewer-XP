@@ -131,6 +131,7 @@
     <Compile Include="Models\ShipSlot.cs" />
     <Compile Include="Models\SlotItemType.cs" />
     <Compile Include="Models\ViewRange.cs" />
+    <Compile Include="MutexFIFO.cs" />
     <Compile Include="Organization.cs" />
     <Compile Include="KanColleProxy.Endpoints.cs">
       <AutoGen>True</AutoGen>
