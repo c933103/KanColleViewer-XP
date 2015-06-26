@@ -116,7 +116,7 @@ namespace LynLogger.Models.Battling
             Battle = 0x00040001,
             NightBattle = 0x00040002,
             AirBattle = 0x00040004,
-            BossBattle = 0x00050000,
+            BossBattle = 0x00050001,
         }
     }
 }

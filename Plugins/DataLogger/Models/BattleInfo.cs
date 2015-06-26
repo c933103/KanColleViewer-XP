@@ -19,6 +19,7 @@ namespace LynLogger.Models
         public int BaseExp { get; set; }
 
         public IReadOnlyList<ShipInfo> EnemyShips => _enemyShips;
+        public int EnemyAsControlValue => EnemyShips.Sum(x => x.ShipAsControl);
 
         public StoragePremitive GetSerializationInfo(LinkedList<object> _path)
         {

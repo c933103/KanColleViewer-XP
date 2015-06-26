@@ -61,6 +61,9 @@ namespace LynLogger.Models.Battling
         public IReadOnlyList<BombardInfo> BombardRound2 => ZwBombardRound2;
         public string RawData => ZwRawData;
 
+        public int OurAsControlValue => OurShips.Sum(x => x.ShipAsControl);
+        public int EnemyAsControlValue => EnemyShips.Sum(x => x.ShipAsControl);
+
         public bool HasNightWar => ZwHasNightWar;
         public NightWarInfo NightWar
         {

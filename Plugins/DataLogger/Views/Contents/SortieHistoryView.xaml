@@ -12,12 +12,8 @@
         <converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
     </UserControl.Resources>
     <StackPanel DataContext="{Binding ElementName=control, Mode=OneTime}">
-        <Grid Margin="0,0,0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <ComboBox ItemsSource="{Binding SortieLog, Mode=OneWay}" SelectedItem="{Binding KvSortie, Mode=OneWayToSource}" Grid.Column="0" Margin="5,0">
+        <UniformGrid Columns="2" Margin="0,0,0,10">
+            <ComboBox ItemsSource="{Binding SortieLog2, Mode=OneWay}" SelectedItem="{Binding KvSortie, Mode=OneWayToSource}" Margin="5,0">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <TextBlock>
@@ -27,8 +23,8 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ComboBox>
-            <ComboBox ItemsSource="{Binding Sortie.Nodes, Mode=OneWay}" SelectedItem="{Binding Node, Mode=TwoWay}" DisplayMemberPath="Route.NodeId" Grid.Column="1" Margin="5,0"/>
-        </Grid>
+            <ComboBox ItemsSource="{Binding Sortie.Nodes, Mode=OneWay}" SelectedItem="{Binding Node, Mode=TwoWay}" DisplayMemberPath="Route.NodeId" Margin="5,0"/>
+        </UniformGrid>
 
         <Expander Header="地图点信息" Margin="0,3" IsExpanded="True">
             <StackPanel Margin="20,0,0,0" DataContext="{Binding Node.Route}">
@@ -60,16 +56,10 @@
             <local:BattleCalcResultPresenter Margin="20,0,0,0" Battle="{Binding Node.Battle}" BasicExp="{Binding Node.Result.BaseExp}" IsDrill="False" />
         </Expander>
         <Expander Header="战前简报" Margin="0,3" IsExpanded="{Binding HasBattle, Mode=OneWay}">
-            <Grid Margin="20,0,0,15" DataContext="{Binding Node.Battle, Mode=OneWay}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0">
+            <UniformGrid Columns="2" Margin="20,0,0,15" DataContext="{Binding Node.Battle, Mode=OneWay}">
+                <StackPanel>
                     <TextBlock FontSize="16"><Run Text="我方舰队 (" /><Run Text=" "/><Run Text="{Binding OurFormation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" "/><Run Text=")" /></TextBlock>
+                    <TextBlock Text="{Binding OurAsControlValue, Mode=OneTime, StringFormat=制空合计{0}}" />
                     <ItemsControl ItemsSource="{Binding OurShips, Mode=OneTime}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
@@ -96,8 +86,9 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
-                <StackPanel Grid.Column="1">
+                <StackPanel>
                     <TextBlock FontSize="16"><Run Text="敌方舰队 (" /><Run Text=" "/><Run Text="{Binding EnemyFormation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" "/><Run Text=")" /></TextBlock>
+                    <TextBlock Text="{Binding EnemyAsControlValue, Mode=OneTime, StringFormat=制空合计{0}}" />
                     <ItemsControl ItemsSource="{Binding EnemyShips, Mode=OneTime}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
@@ -124,7 +115,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
-            </Grid>
+            </UniformGrid>
         </Expander>
     </StackPanel>
 </UserControl>

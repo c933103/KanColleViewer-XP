@@ -13,7 +13,7 @@
         <converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
     </UserControl.Resources>
     <StackPanel DataContext="{Binding ElementName=control, Mode=OneTime}">
-        <ComboBox ItemsSource="{Binding DrillLog, Mode=OneWay}" SelectedItem="{Binding KvDrill, Mode=OneWayToSource}" Margin="0,0,0,10">
+        <ComboBox ItemsSource="{Binding DrillLog2, Mode=OneWay}" SelectedItem="{Binding KvDrill, Mode=OneWayToSource}" Margin="0,0,0,10">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock>
@@ -32,15 +32,8 @@
                     <Run Text="{Binding Drill.Battle.DrillBasicExp, Mode=OneWay}" />
                 </TextBlock>
                 <Rectangle Height="9" />
-                <Grid DataContext="{Binding Drill.Battle, Mode=OneWay}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
+                <UniformGrid Columns="2" DataContext="{Binding Drill.Battle, Mode=OneWay}">
+                    <StackPanel>
                         <TextBlock FontSize="16"><Run Text="我方舰队 (" /><Run Text=" "/><Run Text="{Binding OurFormation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" "/><Run Text=")" /></TextBlock>
                         <ItemsControl ItemsSource="{Binding OurShips, Mode=OneTime}">
                             <ItemsControl.ItemTemplate>
@@ -68,7 +61,7 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
-                    <StackPanel Grid.Column="1">
+                    <StackPanel>
                         <TextBlock FontSize="16"><Run Text="敌方舰队 (" /><Run Text=" "/><Run Text="{Binding EnemyFormation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" "/><Run Text=")" /></TextBlock>
                         <ItemsControl ItemsSource="{Binding EnemyShips, Mode=OneTime}">
                             <ItemsControl.ItemTemplate>
@@ -96,7 +89,7 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
-                </Grid>
+                </UniformGrid>
             </StackPanel>
         </Expander>
         <Expander Header="战斗结算" IsExpanded="True" Margin="0,3">

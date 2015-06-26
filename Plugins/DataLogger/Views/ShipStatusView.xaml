@@ -40,19 +40,14 @@
         </ItemsControl>
         <ComboBox ItemsSource="{Binding Ships, Mode=OneWay}" SelectedItem="{Binding SelectedShip}" DisplayMemberPath="DisplayName"/>
         <Expander Header="经验计算" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,5" IsExpanded="True">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Margin="3">
+            <StackPanel>
+                <TextBlock Margin="3">
                     <Run Text="当前等级" />
                     <Run Text="{Binding SelectedShip.Level, Mode=OneWay}" />
                     <Run Text="距下一级" />
                     <Run Text="{Binding SelectedShip.ExpNext, Mode=OneWay}" />
                 </TextBlock>
-                <WrapPanel Orientation="Horizontal" Grid.Row="1">
+                <WrapPanel Orientation="Horizontal">
                     <TextBlock Margin="3" Text="目标等级" />
                     <TextBox Margin="3" Text="{Binding TargetLevel, Delay=500, UpdateSourceTrigger=PropertyChanged}" MinWidth="40"/>
                     <TextBlock Margin="3">
@@ -60,7 +55,7 @@
                         <Run Text="{Binding RemainingExp, Mode=OneWay}" />
                     </TextBlock>
                 </WrapPanel>
-                <WrapPanel Orientation="Horizontal" Grid.Row="2">
+                <WrapPanel Orientation="Horizontal">
                     <CheckBox Margin="3" IsChecked="{Binding IsFlagship}">作为旗舰</CheckBox>
                     <TextBlock Margin="3" Text="出击海域" />
                     <ComboBox ItemsSource="{Binding MapAreas, Mode=OneTime}" SelectedItem="{Binding SelectedMapArea}" MinWidth="50" />
@@ -73,7 +68,7 @@
                         <Run Text="次" />
                     </TextBlock>
                 </WrapPanel>
-            </Grid>
+            </StackPanel>
         </Expander>
         <Expander Header="状态与参数" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,5" IsExpanded="True">
             <StackPanel>

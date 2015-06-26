@@ -12,15 +12,8 @@
         <converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
     </UserControl.Resources>
     
-    <Grid DataContext="{Binding ElementName=control, Mode=OneTime}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0">
+    <UniformGrid Columns="2" DataContext="{Binding ElementName=control, Mode=OneTime}">
+        <StackPanel>
             <TextBlock FontSize="16" Text="我方舰队" Margin="0,0,0,4"/>
             <TextBlock Margin="0,0,0,2">
                 <Run Text="{Binding Battle.OurGuage.Current, Mode=OneWay}" />
@@ -69,7 +62,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </StackPanel>
-        <StackPanel Grid.Column="1" DataContext="{Binding Battle, Mode=OneWay}">
+        <StackPanel DataContext="{Binding Battle, Mode=OneWay}">
             <TextBlock FontSize="16" Text="敌方舰队" Margin="0,0,0,4"/>
             <TextBlock Margin="0,0,0,2">
                 <Run Text="{Binding EnemyGuage.Current, Mode=OneTime}" />
@@ -113,5 +106,5 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </StackPanel>
-    </Grid>
+    </UniformGrid>
 </UserControl>
