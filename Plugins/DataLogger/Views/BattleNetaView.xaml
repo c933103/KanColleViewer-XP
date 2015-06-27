@@ -26,10 +26,9 @@
                 <ContentControl Content="{Binding MapNext, Mode=OneWay}" Margin="0,3" />
                 <StackPanel DataContext="{Binding SupplementMapNextInfo, Mode=OneWay}">
                     <TextBlock>
-                        <Run Text="扩展信息:  提督经验"/>
-                        <Run Text="{Binding AdmiralExp, Mode=OneTime}" />
-                        <Run Text=" 基本经验"/>
-                        <Run Text="{Binding BaseExp, Mode=OneTime}" />
+                        <Run Text="{Binding AdmiralExp, Mode=OneTime, StringFormat=提督经验{0}}" />
+                        <Run Text="{Binding BaseExp, Mode=OneTime, StringFormat= 舰娘基本经验{0}}" />
+                        <Run Text="{Binding EnemyAsControlValue, Mode=OneTime, StringFormat= 敌制空{0}}" />
                         <Run Text=" 阵型"/>
                         <Run Text="{Binding Formation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" />
                     </TextBlock>

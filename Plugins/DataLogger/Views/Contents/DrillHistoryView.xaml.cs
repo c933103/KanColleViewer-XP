@@ -39,6 +39,9 @@ namespace LynLogger.Views.Contents
             set { SetValue(dpDrillLog, value); }
         }
 
+        //Turns out we have to do this, as the collection doesn't implement INotifyCollectionChange
+        public IEnumerable<KeyValuePair<long, DrillInfo>> DrillLog2 => DrillLog.Select(x => x);
+
         public BindingBase DrillLogBinding
         {
             set { SetBinding(dpDrillLog, value); }
@@ -58,6 +61,7 @@ namespace LynLogger.Views.Contents
             var handler = PropertyChanged;
             if (handler != null) {
                 handler(this, new PropertyChangedEventArgs(nameof(DrillLog)));
+                handler(this, new PropertyChangedEventArgs(nameof(DrillLog2)));
             }
         }
     }

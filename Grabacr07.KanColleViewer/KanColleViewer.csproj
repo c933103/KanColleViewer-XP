@@ -217,7 +217,6 @@
     <Compile Include="ViewModels\Catalogs\ShipTypeViewModel.cs" />
     <Compile Include="ViewModels\Catalogs\ShipCatalogWindowViewModel.cs" />
     <Compile Include="ViewModels\Contents\ShipyardViewModel.cs" />
-    <Compile Include="ViewModels\Dev\DebugTabViewModel.cs" />
     <Compile Include="ViewModels\CultureViewModel.cs" />
     <Compile Include="ViewModels\FleetWindowViewModel.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
@@ -301,9 +300,6 @@
     <Compile Include="Views\Converters\HasFlagConverter.cs" />
     <Compile Include="Views\Converters\MultiBindingEqualityConverter.cs" />
     <Compile Include="Views\Converters\QuestCategoryToColorConverter.cs" />
-    <Compile Include="Views\Dev\DebugTab.xaml.cs">
-      <DependentUpon>DebugTab.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ExitDialog.xaml.cs">
       <DependentUpon>ExitDialog.xaml</DependentUpon>
     </Compile>
@@ -478,10 +474,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\ZoomFactorSelector.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dev\DebugTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

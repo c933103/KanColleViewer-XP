@@ -91,7 +91,7 @@
                     <TextBlock><Run Text="["/><Run Text=" "/><Run Text="{Binding From.Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding From.ShipName, Mode=OneTime}"/></TextBlock>
                     <ItemsControl ItemsSource="{Binding Equipts, Mode=OneTime}" DisplayMemberPath="EquiptName" />
                 </StackPanel>
-                <StackPanel Grid.Column="1" Grid.IsSharedSizeScope="True">
+                <StackPanel Margin="5,0,0,0" Grid.Column="1" Grid.IsSharedSizeScope="True">
                     <TextBlock><Run Text="攻击类型: " /><Run Text=" "/><Run Text="{Binding Type, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /></TextBlock>
                     <ItemsControl ItemsSource="{Binding AttackInfos, Mode=OneTime}">
                         <ItemsControl.ItemTemplate>
@@ -161,31 +161,24 @@
 
     <StackPanel DataContext="{Binding Battle, ElementName=control, Mode=OneWay}">
         <Expander Header="战前简报" IsExpanded="True">
-            <Grid Margin="20,0,0,15">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0">
+            <UniformGrid Columns="2" Margin="20,0,0,15">
+                <StackPanel>
                     <TextBlock FontSize="16"><Run Text="我方舰队 (" /><Run Text=" "/><Run Text="{Binding OurFormation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" "/><Run Text=")" /></TextBlock>
                     <local:FleetInfoPresenter Ships="{Binding OurShips, Mode=OneTime}" DisplayEquiptDetail="True" />
                 </StackPanel>
-                <StackPanel Grid.Column="1">
+                <StackPanel>
                     <TextBlock FontSize="16"><Run Text="敌方舰队 (" /><Run Text=" "/><Run Text="{Binding EnemyFormation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" "/><Run Text=")" /></TextBlock>
                     <local:FleetInfoPresenter Ships="{Binding EnemyShips, Mode=OneTime}" DisplayEquiptDetail="False" />
                 </StackPanel>
-            </Grid>
+            </UniformGrid>
         </Expander>
         <Expander Header="索敌" IsExpanded="True">
             <UniformGrid Margin="20,0,0,15" Columns="2">
-                <StackPanel Grid.Column="0">
+                <StackPanel>
                     <TextBlock FontSize="16" Text="我方舰队" />
                     <TextBlock Text="{Binding OurReconn, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" />
                 </StackPanel>
-                <StackPanel Grid.Column="1">
+                <StackPanel>
                     <TextBlock FontSize="16" Text="敌方舰队" />
                     <TextBlock Text="{Binding EnemyReconn, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" />
                 </StackPanel>
@@ -205,17 +198,8 @@
                     </Style.Triggers>
                 </Style>
             </Expander.Style>
-            <Grid Margin="20,0,0,15">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Row="0" Grid.Column="0">
+            <UniformGrid Columns="2" Margin="20,0,0,15">
+                <StackPanel>
                     <TextBlock FontSize="16"><Run Text="支援舰队 (" /><Run Text=" "/><Run Text="{Binding SupportType, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" "/><Run Text=")" /></TextBlock>
                     <ItemsControl ItemsSource="{Binding Support.SupportShips, Mode=OneTime}">
                         <ItemsControl.ItemTemplate>
@@ -225,7 +209,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
-                <StackPanel Grid.Row="0" Grid.Column="1">
+                <StackPanel>
                     <StackPanel.Style>
                         <Style TargetType="{x:Type StackPanel}">
                             <Setter Property="Visibility" Value="Collapsed" />
@@ -245,7 +229,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
-                <StackPanel Grid.Row="1" Grid.Column="0">
+                <StackPanel>
                     <StackPanel.Style>
                         <Style TargetType="{x:Type StackPanel}">
                             <Setter Property="Visibility" Value="Collapsed" />
@@ -259,7 +243,7 @@
                     <TextBlock><Run Text="共起飞" /><Run Text=" "/><Run Text="{Binding Support.AttackInfo.OurStage1Engaged, Mode=OneTime}" /><Run Text=" "/><Run Text="架舰载机" /></TextBlock>
                     <TextBlock><Run Text="{Binding Support.AttackInfo.OurStage1Lost, Mode=OneTime}" /><Run Text=" "/><Run Text="+" /><Run Text=" "/><Run Text="{Binding Support.AttackInfo.OurStage2Lost, Mode=OneTime}" /><Run Text=" "/><Run Text="架被击落" /></TextBlock>
                 </StackPanel>
-                <StackPanel Grid.Row="1" Grid.Column="1">
+                <StackPanel>
                     <StackPanel.Style>
                         <Style TargetType="{x:Type StackPanel}">
                             <Setter Property="Visibility" Value="Collapsed" />
@@ -273,8 +257,8 @@
                     <TextBlock><Run Text="共起飞" /><Run Text=" "/><Run Text="{Binding Support.AttackInfo.EnemyStage1Engaged, Mode=OneTime}" /><Run Text=" "/><Run Text="架舰载机" /></TextBlock>
                     <TextBlock><Run Text="{Binding Support.AttackInfo.EnemyStage1Lost, Mode=OneTime}" /><Run Text=" "/><Run Text="+" /><Run Text=" "/><Run Text="{Binding Support.AttackInfo.EnemyStage2Lost, Mode=OneTime}" /><Run Text=" "/><Run Text="架被击落" /></TextBlock>
                 </StackPanel>
-                <ItemsControl Grid.Row="2" Grid.Column="0" ItemsSource="{Binding Support.AttackInfo.EnemyStage3Report, Mode=OneTime}" Grid.IsSharedSizeScope="True"/>
-            </Grid>
+                <ItemsControl ItemsSource="{Binding Support.AttackInfo.EnemyStage3Report, Mode=OneTime}" Grid.IsSharedSizeScope="True"/>
+            </UniformGrid>
         </Expander>
         <Expander Header="开幕雷击">
             <ItemsControl Margin="20,0,0,15" Grid.IsSharedSizeScope="True" ItemsSource="{Binding OpeningTorpedoAttack, Mode=OneTime}"/>

@@ -39,6 +39,9 @@ namespace LynLogger.Views.Contents
             set { SetValue(dpSortieLog, value); }
         }
 
+        //Turns out we have to do this, as the collection doesn't implement INotifyCollectionChange
+        public IEnumerable<KeyValuePair<long, SortieInfo>> SortieLog2 => SortieLog.Select(x => x);
+
         public BindingBase SortieLogBinding
         {
             set { SetBinding(dpSortieLog, value); }
@@ -76,6 +79,7 @@ namespace LynLogger.Views.Contents
             var handler = PropertyChanged;
             if (handler != null) {
                 handler(this, new PropertyChangedEventArgs(nameof(SortieLog)));
+                handler(this, new PropertyChangedEventArgs(nameof(SortieLog2)));
             }
         }
     }
