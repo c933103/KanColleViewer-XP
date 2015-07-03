@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LynLogger.Views.Contents
+namespace LynLogger.Views.History
 {
     /// <summary>
     /// SortieHistoryView.xaml 的交互逻辑

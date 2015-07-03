@@ -14,7 +14,7 @@ namespace LynLogger.Views.Converters
             if (value is long) {
                 return Helpers.FromUnixTimestamp((long)value).ToLocalTime().ToString();
             }
-            return value.ToString();
+            return value?.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

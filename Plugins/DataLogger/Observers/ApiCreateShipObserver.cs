@@ -12,14 +12,14 @@ namespace LynLogger.Observers
 {
     class ApiCreateShipObserver : IObserver<SvData<kcsapi_kdock[]>>, IObserver<SvData<kcsapi_createship>>
     {
-        private Action<CreateShipLog> _onShipCreate;
-        public event Action<CreateShipLog> OnShipCreate
+        private Action<ShipCreate> _onShipCreate;
+        public event Action<ShipCreate> OnShipCreate
         {
             add { _onShipCreate += value.MakeWeak(x => _onShipCreate -= x); }
             remove { }
         }
 
-        private int waitDockId = -1;
+        private int _waitDockId = -1;
         private int fuel;
         private int ammo;
         private int steel;
@@ -29,7 +29,7 @@ namespace LynLogger.Observers
         public void OnNext(SvData<kcsapi_createship> value)
         {
             var data = value.Request;
-            waitDockId = int.Parse(data["api_kdock_id"]);
+            _waitDockId = int.Parse(data["api_kdock_id"]);
             fuel = int.Parse(data["api_item1"]);
             ammo = int.Parse(data["api_item2"]);
             steel = int.Parse(data["api_item3"]);
@@ -39,11 +39,14 @@ namespace LynLogger.Observers
 
         public void OnNext(SvData<kcsapi_kdock[]> value)
         {
+            var waitDockId = _waitDockId;
+
             if(waitDockId < 0) return;
+            _waitDockId = -1;
+
             if (_onShipCreate != null) {
-                _onShipCreate(new CreateShipLog(fuel, ammo, steel, bauxite, mat, waitDockId, value.Data[waitDockId].api_created_ship_id));
+                _onShipCreate(new ShipCreate(fuel, ammo, steel, bauxite, mat, waitDockId, value.Data[waitDockId-1].api_created_ship_id));
             }
-            waitDockId = -1;
         }
 
         public void OnCompleted() { return; }

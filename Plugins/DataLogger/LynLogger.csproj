@@ -68,8 +68,8 @@
   <ItemGroup>
     <Compile Include="DataStore\Extensions\PremitiveExtensions.cs" />
     <Compile Include="DataStore\LogBook\BasicInfo.cs" />
-    <Compile Include="DataStore\LogBook\CreateItemLog.cs" />
-    <Compile Include="DataStore\LogBook\CreateShipLog.cs" />
+    <Compile Include="DataStore\LogBook\ItemCreate.cs" />
+    <Compile Include="DataStore\LogBook\ShipCreate.cs" />
     <Compile Include="DataStore\LogBook\DrillInfo.cs" />
     <Compile Include="DataStore\LogBook\Histogram.cs" />
     <Compile Include="DataStore\LogBook\Ship.cs" />
@@ -103,6 +103,7 @@
     <Compile Include="Data\LevelExperienceTable.cs" />
     <Compile Include="Data\MapExperienceTable.cs" />
     <Compile Include="Logger\DrillLogger.cs" />
+    <Compile Include="Logger\ShipItemCreateLogger.cs" />
     <Compile Include="Logger\SortieLogger.cs" />
     <Compile Include="Models\BattleInfo.cs" />
     <Compile Include="Models\Battling\BattleProcess.Serialization.cs" />
@@ -134,14 +135,23 @@
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\BattleLogModel.cs" />
-    <Compile Include="Views\BattleLogView.xaml.cs">
-      <DependentUpon>BattleLogView.xaml</DependentUpon>
+    <Compile Include="Views\HistoryModel.cs" />
+    <Compile Include="Views\HistoryView.xaml.cs">
+      <DependentUpon>HistoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Contents\DrillHistoryView.xaml.cs">
+    <Compile Include="Views\History\DrillHistoryView.xaml.cs">
       <DependentUpon>DrillHistoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Contents\SortieHistoryView.xaml.cs">
+    <Compile Include="Views\History\ItemCreateHistoryView.xaml.cs">
+      <DependentUpon>ItemCreateHistoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\History\ResourceHistoryView.xaml.cs">
+      <DependentUpon>ResourceHistoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\History\ShipCreateHistoryView.xaml.cs">
+      <DependentUpon>ShipCreateHistoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\History\SortieHistoryView.xaml.cs">
       <DependentUpon>SortieHistoryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\BattleCalcResultPresenter.xaml.cs">
@@ -178,10 +188,6 @@
     <Compile Include="Views\Controls\HorizontalTabViewControl.xaml.cs">
       <DependentUpon>HorizontalTabViewControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ResourceHistoryModel.cs" />
-    <Compile Include="Views\ResourceHistoryView.xaml.cs">
-      <DependentUpon>ResourceHistoryView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ShipHistoryModel.cs" />
     <Compile Include="Views\ShipHistoryView.xaml.cs">
       <DependentUpon>ShipHistoryView.xaml</DependentUpon>
@@ -214,15 +220,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\BattleLogView.xaml">
+    <Page Include="Views\HistoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Contents\DrillHistoryView.xaml">
+    <Page Include="Views\History\DrillHistoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Contents\SortieHistoryView.xaml">
+    <Page Include="Views\History\ItemCreateHistoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\History\ResourceHistoryView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\History\ShipCreateHistoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\History\SortieHistoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -255,10 +273,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\HorizontalTabViewControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ResourceHistoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

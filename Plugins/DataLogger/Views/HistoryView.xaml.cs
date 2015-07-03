@@ -18,9 +18,9 @@ namespace LynLogger.Views
     /// <summary>
     /// BattleLogView.xaml 的交互逻辑
     /// </summary>
-    public partial class BattleLogView : UserControl
+    public partial class HistoryView : UserControl
     {
-        public BattleLogView()
+        public HistoryView()
         {
             InitializeComponent();
         }

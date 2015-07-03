@@ -9,7 +9,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" MinWidth="80" />
+            <ColumnDefinition Width="Auto" MinWidth="70" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -21,10 +21,10 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <Border Name="Tab" MouseLeftButtonUp="Grid_MouseLeftButtonUp" Grid.Row="0" Grid.Column="0">
+                        <Border Name="Tab" MouseLeftButtonUp="Grid_MouseLeftButtonUp">
                             <TextBlock Name="TabText" Text="{Binding TabName, Mode=OneWay}" FontSize="16" Margin="10,10,10,10" />
                         </Border>
-                        <Border Name="TabMask" MouseLeftButtonUp="Grid_MouseLeftButtonUp" Grid.Row="0" Grid.Column="0" Background="{x:Null}" />
+                        <Border Name="TabMask" MouseLeftButtonUp="Grid_MouseLeftButtonUp" Background="{x:Null}" />
                     </Grid>
                     <DataTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsSelected}" Value="True">

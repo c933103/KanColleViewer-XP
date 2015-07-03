@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 
 namespace LynLogger.Views
 {
-    class BattleLogModel : NotificationSourceObject
+    class HistoryModel : NotificationSourceObject
     {
         protected override IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency
         {
             get
             {
                 return new Dictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> {
-                    [o => ((BattleLogModel)o).SelectedBook] = new List<Expression<Func<object, object>>> {
-                        o => ((BattleLogModel)o).Books,
-                        o => ((BattleLogModel)o).SelectedBookId }
+                    [o => ((HistoryModel)o).SelectedBook] = new List<Expression<Func<object, object>>> {
+                        o => ((HistoryModel)o).Books,
+                        o => ((HistoryModel)o).SelectedBookId }
                 };
             }
         }
@@ -64,11 +64,14 @@ namespace LynLogger.Views
             }
         }
 
-        public BattleLogModel()
+        public HistoryModel()
         {
             var listPages = new List<TabViewItem>() {
-                new TabViewItem("出击记录", () => new Contents.SortieHistoryView() { SortieLogBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.SortieLog)) {Source = this } }),
-                new TabViewItem("演习记录", () => new Contents.DrillHistoryView() { DrillLogBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.DrillLog)) {Source = this } }),
+                new TabViewItem("建造", () => new History.ShipCreateHistoryView() { ShipCreateLogBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.ShipCreateLog)) {Source = this } }),
+                new TabViewItem("开发", () => new History.ItemCreateHistoryView() { ItemCreateLogBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.ItemCreateLog)) {Source = this } }),
+                new TabViewItem("资源", () => new History.ResourceHistoryView() { BasicInfoLogBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.BasicInfo)) {Source = this } }),
+                new TabViewItem("出击", () => new History.SortieHistoryView() { SortieLogBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.SortieLog)) {Source = this } }),
+                new TabViewItem("演习", () => new History.DrillHistoryView() { DrillLogBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.DrillLog)) {Source = this } }),
             };
             
             listPages.ForEach(x => x.IsSelected = false);
