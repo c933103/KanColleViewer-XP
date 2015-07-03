@@ -61,7 +61,7 @@
             </metro:TabView>
 		</ScrollViewer>
 
-        <ItemsControl ItemsSource="{Binding TabItems}" Padding="0,3,0,0"
+        <ItemsControl ItemsSource="{Binding TabItems}"
                       Grid.Row="{Binding HorizontalTab, FallbackValue=0, ConverterParameter=1:0, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static models:Settings.Current}}"
                       Grid.Column="{Binding HorizontalTab, FallbackValue=1, ConverterParameter=0:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static models:Settings.Current}}"
                       Grid.RowSpan="{Binding HorizontalTab, FallbackValue=2, ConverterParameter=1:2, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static models:Settings.Current}}"
@@ -105,6 +105,15 @@
                     <settings:Settings />
                 </DataTemplate>
             </ItemsControl.Resources>
+            <ItemsControl.Style>
+                <Style TargetType="{x:Type ItemsControl}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HorizontalTab, Mode=OneWay, Source={x:Static models:Settings.Current}}" Value="True">
+                            <Setter Property="Padding" Value="0,3,0,0" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ItemsControl.Style>
         </ItemsControl>
     </Grid>
 </UserControl>

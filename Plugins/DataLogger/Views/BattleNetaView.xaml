@@ -12,7 +12,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="1200" d:DesignWidth="400">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
     </UserControl.Resources>
 
@@ -28,8 +27,7 @@
                     <TextBlock>
                         <Run Text="{Binding AdmiralExp, Mode=OneTime, StringFormat=提督经验{0}}" />
                         <Run Text="{Binding BaseExp, Mode=OneTime, StringFormat= 舰娘基本经验{0}}" />
-                        <Run Text="{Binding EnemyAsControlValue, Mode=OneTime, StringFormat= 敌制空{0}}" />
-                        <Run Text=" 阵型"/>
+                        <Run Text="{Binding EnemyAsControlValue, Mode=OneTime, StringFormat= 制空{0} }" />
                         <Run Text="{Binding Formation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" />
                     </TextBlock>
                     <contents:FleetInfoPresenter Ships="{Binding EnemyShips, Mode=OneTime}" />

@@ -21,7 +21,11 @@ namespace LynLogger.DataStore
         public IShipsLogAccessor Ships { get; }
         [Serialize(2)] private Histogram<SortieInfo> _sortieLog;
         [Serialize(3)] private Histogram<DrillInfo> _drillLog;
+        [Serialize(6)] private Histogram<ShipCreate> _shipCreateLog;
+        [Serialize(7)] private Histogram<ItemCreate> _itemCreateLog;
 
+        public Histogram<ShipCreate> ShipCreateLog => _shipCreateLog ?? (_shipCreateLog = new Histogram<ShipCreate>(this));
+        public Histogram<ItemCreate> ItemCreateLog => _itemCreateLog ?? (_itemCreateLog = new Histogram<ItemCreate>(this));
         public Histogram<SortieInfo> SortieLog => _sortieLog ?? (_sortieLog = new Histogram<SortieInfo>(this));
         public Histogram<DrillInfo> DrillLog => _drillLog ?? (_drillLog = new Histogram<DrillInfo>(this));
 

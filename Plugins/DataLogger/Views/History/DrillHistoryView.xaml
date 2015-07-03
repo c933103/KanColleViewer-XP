@@ -1,9 +1,10 @@
-﻿<UserControl x:Class="LynLogger.Views.Contents.DrillHistoryView"
+﻿<UserControl x:Class="LynLogger.Views.History.DrillHistoryView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:LynLogger.Views.Contents"
+             xmlns:local="clr-namespace:LynLogger.Views.History"
+             xmlns:contents="clr-namespace:LynLogger.Views.Contents"
              xmlns:views="clr-namespace:LynLogger.Views"
              xmlns:converters="clr-namespace:LynLogger.Views.Converters"
              mc:Ignorable="d" x:Name="control"
@@ -112,7 +113,7 @@
             </StackPanel>
         </Expander>
         <Expander Header="战果速报 ( 计算值 )" Margin="0,3" IsExpanded="True">
-            <local:BattleCalcResultPresenter Margin="20,0,0,0" Battle="{Binding Drill.Battle}" IsDrill="True" />
+            <contents:BattleCalcResultPresenter Margin="20,0,0,0" Battle="{Binding Drill.Battle}" IsDrill="True" />
         </Expander>
     </StackPanel>
 </UserControl>

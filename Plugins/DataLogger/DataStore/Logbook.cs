@@ -18,7 +18,11 @@ namespace LynLogger.DataStore
         /*Serialize3*/ private SortedDictionary<int, Ship> _ships;
         [Serialize(4)] private Histogram<SortieInfo> _sortieLog;
         [Serialize(5)] private Histogram<DrillInfo> _drillLog;
+        [Serialize(6)] private Histogram<ShipCreate> _shipCreateLog;
+        [Serialize(7)] private Histogram<ItemCreate> _itemCreateLog;
 
+        public Histogram<ShipCreate> ShipCreateLog => _shipCreateLog ?? (_shipCreateLog = new Histogram<ShipCreate>(this));
+        public Histogram<ItemCreate> ItemCreateLog => _itemCreateLog ?? (_itemCreateLog = new Histogram<ItemCreate>(this));
         public Histogram<SortieInfo> SortieLog => _sortieLog ?? (_sortieLog = new Histogram<SortieInfo>(this));
         public Histogram<DrillInfo> DrillLog => _drillLog ?? (_drillLog = new Histogram<DrillInfo>(this));
         public long StartTimestamp { get; }
@@ -96,6 +100,8 @@ namespace LynLogger.DataStore
         long EndTimestamp { get; }
         Histogram<SortieInfo> SortieLog { get; }
         Histogram<DrillInfo> DrillLog { get; }
+        Histogram<ShipCreate> ShipCreateLog { get; }
+        Histogram<ItemCreate> ItemCreateLog { get; }
     }
 
     public interface IShipsLogAccessor : IEnumerable<Ship>

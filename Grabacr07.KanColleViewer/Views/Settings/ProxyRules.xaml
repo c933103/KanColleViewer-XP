@@ -8,9 +8,7 @@
              mc:Ignorable="d" 
 			 d:DesignWidth="550">
     <UserControl.Resources>
-
         <Converters:EnumToResourceStringConverter x:Key="EnumToResourceStringConverter"/>
-
     </UserControl.Resources>
     <UserControl.DataContext>
         <ViewModels:ProxyRulesViewModel/>

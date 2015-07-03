@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LynLogger.DataStore.LogBook
 {
-    public class CreateItemLog : AbstractDSSerializable<CreateItemLog>
+    public class ItemCreate : AbstractDSSerializable<ItemCreate>
     {
         [Serialize(0)] public int AdmiralLv { get; private set; }
         [Serialize(1)] public ShipNameType SecretaryShip { get; private set; }
@@ -20,7 +20,7 @@ namespace LynLogger.DataStore.LogBook
         [Serialize(7)] public int Bauxite { get; private set; }
         [Serialize(8)] public EquiptInfo ResultItem { get; private set; }
 
-        public CreateItemLog(int f, int a, int s, int b, int r, int c)
+        public ItemCreate(int f, int a, int s, int b, int r, int c)
         {
             Fuel = f; Ammo = a; Steel = s; Bauxite = b; ResultItem = new EquiptInfo(r, c);
             AdmiralLv = Grabacr07.KanColleWrapper.KanColleClient.Current.Homeport.Admiral.Level;
@@ -31,6 +31,6 @@ namespace LynLogger.DataStore.LogBook
             SecretaryShip = new ShipNameType(secShip.Info.Id);
         }
 
-        public CreateItemLog(Premitives.StoragePremitive info, LinkedList<object> serializationPath) : base(info, serializationPath) { }
+        public ItemCreate(Premitives.StoragePremitive info, LinkedList<object> serializationPath) : base(info, serializationPath) { }
     }
 }

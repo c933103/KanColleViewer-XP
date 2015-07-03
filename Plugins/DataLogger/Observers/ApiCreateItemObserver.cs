@@ -12,8 +12,8 @@ namespace LynLogger.Observers
 {
     class ApiCreateItemObserver : IObserver<SvData<kcsapi_createitem>>
     {
-        private Action<CreateItemLog> _onItemCreate;
-        public event Action<CreateItemLog> OnItemCreate
+        private Action<ItemCreate> _onItemCreate;
+        public event Action<ItemCreate> OnItemCreate
         {
             add { _onItemCreate += value.MakeWeak(x => _onItemCreate -= x); }
             remove { }
@@ -26,7 +26,9 @@ namespace LynLogger.Observers
             var req = value.Request;
             var res = value.Data;
 
-            _onItemCreate(new CreateItemLog(int.Parse(req["api_item1"]), int.Parse(req["api_item2"]), int.Parse(req["api_item3"]), int.Parse(req["api_item4"]), res.api_slotitem_id, res.api_create_flag == 1 ? 1 : 0));
+            _onItemCreate(new ItemCreate(int.Parse(req["api_item1"]), int.Parse(req["api_item2"]), int.Parse(req["api_item3"]), int.Parse(req["api_item4"]),
+                res.api_create_flag == 1 ? res.api_slotitem_id : int.Parse(res.api_fdata.Substring(res.api_fdata.IndexOf(',')+1)),
+                res.api_create_flag == 1 ? 1 : 0));
         }
 
         public void OnCompleted() { return; }

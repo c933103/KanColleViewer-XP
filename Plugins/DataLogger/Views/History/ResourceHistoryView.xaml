@@ -1,0 +1,22 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LynLogger.Views.History"
+             xmlns:contents="clr-namespace:LynLogger.Views.Contents"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:converters="clr-namespace:LynLogger.Views.Converters"
+             xmlns:controls="clr-namespace:LynLogger.Views.Controls"
+             x:Class="LynLogger.Views.History.ResourceHistoryView" 
+             mc:Ignorable="d" x:Name="control"
+             d:DesignHeight="400" d:DesignWidth="600">
+    <Grid DataContext="{Binding ElementName=control, Mode=OneTime}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <controls:HorizontalTabViewControl TabViewItems="{Binding Pages, Mode=OneWay}" TabViewSelected="{Binding SelectedPage, Mode=TwoWay}" Grid.Column="0" Grid.Row="0" />
+        <contents:HistogramPlotter PlotData="{Binding ActiveHistogram, Mode=OneWay}" AverageDelta="True" Grid.Column="0" Grid.Row="1"/>
+    </Grid>
+</UserControl>
