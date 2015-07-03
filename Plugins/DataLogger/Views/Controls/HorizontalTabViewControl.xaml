@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="LynLogger.Views.Controls.HorizontalTabViewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LynLogger.Views.Controls"
+             mc:Ignorable="d" x:Name="tabView"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ItemsControl ItemsSource="{Binding TabViewItems, Mode=OneWay, ElementName=tabView}"
+                      BorderBrush="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" BorderThickness="0,0,0,2" Margin="0,0,0,5">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid MinWidth="60">
+                        <Border Name="Tab" MouseLeftButtonUp="Grid_MouseLeftButtonUp">
+                            <TextBlock Name="TabText" Text="{Binding TabName, Mode=OneWay}" FontSize="16" Margin="10,10,10,10" TextAlignment="Center" />
+                        </Border>
+                        <Border Name="TabMask" MouseLeftButtonUp="Grid_MouseLeftButtonUp" Background="{x:Null}" />
+                    </Grid>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                            <Setter TargetName="Tab" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                        </DataTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="TabMask" Property="Background" Value="#3FFFFFFF" />
+                        </Trigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+            <ContentControl Content="{Binding TabViewSelected.TabView, ElementName=tabView, Mode=OneWay}"/>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

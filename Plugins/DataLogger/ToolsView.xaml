@@ -1,0 +1,19 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:vm="clr-namespace:Grabacr07.KanColleViewer.ViewModels;assembly=KanColleViewer"
+			 xmlns:local="clr-namespace:LynLogger"
+			 xmlns:controls="clr-namespace:LynLogger.Views.Controls"
+             xmlns:Custom="http://schemes.grabacr.net/winfx/2014/controls"
+             x:Class="LynLogger.ToolsView" 
+             mc:Ignorable="d" 
+             d:DesignHeight="480" d:DesignWidth="640"
+             ScrollViewer.VerticalScrollBarVisibility="Hidden"
+             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+             Height="{Binding ViewportHeight, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type ScrollViewer}}}">
+    <UserControl.DataContext>
+        <local:ToolsModel/>
+    </UserControl.DataContext>
+    <controls:HorizontalTabViewControl TabViewItems="{Binding Pages, Mode=OneWay}" TabViewSelected="{Binding SelectedPage, Mode=TwoWay}"/>
+</UserControl>

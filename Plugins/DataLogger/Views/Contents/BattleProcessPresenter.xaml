@@ -1,0 +1,319 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:LynLogger.Views.Converters"
+             xmlns:battleData="clr-namespace:LynLogger.Models.Battling"
+             xmlns:local="clr-namespace:LynLogger.Views.Contents"
+             x:Class="LynLogger.Views.Contents.BattleProcessPresenter"
+             mc:Ignorable="d" x:Name="control"
+             d:DesignHeight="600" d:DesignWidth="450">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
+
+        <DataTemplate DataType="{x:Type battleData:BattleProcess+AirWarfareInfo}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0">
+                    <TextBlock FontSize="16"><Run Text="我方舰队 (" /><Run Text=" "/><Run Text="{Binding OurAirspaceControl, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" "/><Run Text=")" /></TextBlock>
+                    <ItemsControl ItemsSource="{Binding OurCarrierShip, Mode=OneTime}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock><Run Text="["/><Run Text=" "/><Run Text="{Binding Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding ShipName, Mode=OneTime}" /><Run Text=" "/><Run Text="制空" /><Run Text=" "/><Run Text="{Binding ShipAsControl, Mode=OneTime}" /></TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1">
+                    <TextBlock FontSize="16"><Run Text="敌方舰队 (" /><Run Text=" "/><Run Text="{Binding EnemyAirspaceControl, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" "/><Run Text=")" /></TextBlock>
+                    <ItemsControl ItemsSource="{Binding EnemyCarrierShip, Mode=OneTime}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock><Run Text="["/><Run Text=" "/><Run Text="{Binding Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding ShipName, Mode=OneTime}" /><Run Text=" "/><Run Text="制空" /><Run Text=" "/><Run Text="{Binding ShipAsControl, Mode=OneTime}" /></TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="0">
+                    <TextBlock><Run Text="共起飞" /><Run Text=" "/><Run Text="{Binding OurStage1Engaged, Mode=OneTime}" /><Run Text=" "/><Run Text="架舰载机" /></TextBlock>
+                    <TextBlock><Run Text="合计制空" /><Run Text=" "/><Run Text="{Binding OurAsControlValue, Mode=OneTime}" /></TextBlock>
+                    <TextBlock><Run Text="{Binding OurStage1Lost, Mode=OneTime}" /><Run Text=" "/><Run Text="+" /><Run Text=" "/><Run Text="{Binding OurStage2Lost, Mode=OneTime}" /><Run Text=" "/><Run Text="架被击落" /></TextBlock>
+                    <TextBlock><Run Text="{Binding OurReconnInTouchName, Mode=OneTime}" /><Run Text=" "/><Run Text="触接对方" /></TextBlock>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="1">
+                    <TextBlock><Run Text="共起飞" /><Run Text=" "/><Run Text="{Binding EnemyStage1Engaged, Mode=OneTime}" /><Run Text=" "/><Run Text="架舰载机" /></TextBlock>
+                    <TextBlock><Run Text="合计制空" /><Run Text=" "/><Run Text="{Binding EnemyAsControlValue, Mode=OneTime}" /></TextBlock>
+                    <TextBlock><Run Text="{Binding EnemyStage1Lost, Mode=OneTime}" /><Run Text=" "/><Run Text="+" /><Run Text=" "/><Run Text="{Binding EnemyStage2Lost, Mode=OneTime}" /><Run Text=" "/><Run Text="架被击落" /></TextBlock>
+                    <TextBlock><Run Text="{Binding EnemyReconnInTouchName, Mode=OneTime}" /><Run Text=" "/><Run Text="触接对方" /></TextBlock>
+                </StackPanel>
+                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" Padding="2" BorderThickness="1" BorderBrush="DeepSkyBlue">
+                    <Border.Style>
+                        <Style TargetType="{x:Type Border}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CutInType, Mode=OneTime}" Value="None">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <StackPanel>
+                        <TextBlock><Run Text="["/><Run Text=" "/><Run Text="{Binding CutInShip.Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding CutInShip.ShipName, Mode=OneTime}" /><Run Text=" "/><Run Text="对空CI发动"/></TextBlock>
+                        <TextBlock Text="{Binding CutInType, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" />
+                        <ItemsControl ItemsSource="{Binding CutInEquipts, Mode=OneTime}" DisplayMemberPath="EquiptName" />
+                    </StackPanel>
+                </Border>
+                <ItemsControl Grid.Row="3" Grid.Column="0" ItemsSource="{Binding EnemyStage3Report, Mode=OneTime}" Grid.IsSharedSizeScope="True"/>
+                <ItemsControl Grid.Row="3" Grid.Column="1" ItemsSource="{Binding OurStage3Report, Mode=OneTime}" Grid.IsSharedSizeScope="True"/>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type battleData:BattleProcess+BombardInfo}">
+            <Grid Margin="0,8,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="BombardAttacker"/>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="BombardAttackee"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel>
+                    <TextBlock><Run Text="["/><Run Text=" "/><Run Text="{Binding From.Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding From.ShipName, Mode=OneTime}"/></TextBlock>
+                    <ItemsControl ItemsSource="{Binding Equipts, Mode=OneTime}" DisplayMemberPath="EquiptName" />
+                </StackPanel>
+                <StackPanel Margin="5,0,0,0" Grid.Column="1" Grid.IsSharedSizeScope="True">
+                    <TextBlock><Run Text="攻击类型: " /><Run Text=" "/><Run Text="{Binding Type, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /></TextBlock>
+                    <ItemsControl ItemsSource="{Binding AttackInfos, Mode=OneTime}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="AttackeeName"/>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="AttackeeDamage" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text=" --&gt; "/>
+                                    <TextBlock Grid.Column="1"><Run Text="["/><Run Text=" "/><Run Text="{Binding Key.Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding Key.ShipName, Mode=OneTime}"/></TextBlock>
+                                    <TextBlock Text=" 伤害 " Grid.Column="2"/>
+                                    <TextBlock Text="{Binding Value, Mode=OneTime}" Grid.Column="3"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type battleData:BattleProcess+TorpedoInfo}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="TorpAttackerName"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="TorpAttackeeName"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="TorpDamage" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0"><Run Text="["/><Run Text=" "/><Run Text="{Binding From.Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding From.ShipName, Mode=OneTime}"/></TextBlock>
+                <TextBlock Text=" --&gt; " Grid.Column="1"/>
+                <TextBlock Grid.Column="2"><Run Text="["/><Run Text=" "/><Run Text="{Binding To.Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding To.ShipName, Mode=OneTime}"/></TextBlock>
+                <TextBlock Text=" 伤害 " Grid.Column="3"/>
+                <TextBlock Text="{Binding Damage, Mode=OneTime}" Grid.Column="4"/>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type battleData:BattleProcess+AirWarfareInfo+Stage3Report}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="AWBombard"/>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="AWTorp"/>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="AWAttackeeName"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="AWDamage" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0" Text="雷击 " Visibility="{Binding Torpedoed, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneTime}"/>
+                <TextBlock Grid.Column="1" Text="轰炸 " Visibility="{Binding Bombed, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneTime}"/>
+                <TextBlock Grid.Column="2"><Run Text="["/><Run Text=" "/><Run Text="{Binding Ship.Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding Ship.ShipName, Mode=OneTime}"/></TextBlock>
+                <TextBlock Grid.Column="3" Text=" 伤害 " />
+                <TextBlock Grid.Column="4" Text="{Binding Damage, Mode=OneTime}" />
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <StackPanel DataContext="{Binding Battle, ElementName=control, Mode=OneWay}">
+        <Expander Header="战前简报" IsExpanded="True">
+            <UniformGrid Columns="2" Margin="20,0,0,15">
+                <StackPanel>
+                    <TextBlock FontSize="16"><Run Text="我方舰队 (" /><Run Text=" "/><Run Text="{Binding OurFormation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" "/><Run Text=")" /></TextBlock>
+                    <local:FleetInfoPresenter Ships="{Binding OurShips, Mode=OneTime}" DisplayEquiptDetail="True" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock FontSize="16"><Run Text="敌方舰队 (" /><Run Text=" "/><Run Text="{Binding EnemyFormation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" "/><Run Text=")" /></TextBlock>
+                    <local:FleetInfoPresenter Ships="{Binding EnemyShips, Mode=OneTime}" DisplayEquiptDetail="False" />
+                </StackPanel>
+            </UniformGrid>
+        </Expander>
+        <Expander Header="索敌" IsExpanded="True">
+            <UniformGrid Margin="20,0,0,15" Columns="2">
+                <StackPanel>
+                    <TextBlock FontSize="16" Text="我方舰队" />
+                    <TextBlock Text="{Binding OurReconn, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock FontSize="16" Text="敌方舰队" />
+                    <TextBlock Text="{Binding EnemyReconn, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" />
+                </StackPanel>
+            </UniformGrid>
+        </Expander>
+        <Expander Header="开幕航空战" IsExpanded="True">
+            <ContentControl Margin="20,0,0,15" Content="{Binding AirWarfare, Mode=OneTime}" />
+        </Expander>
+        <Expander Header="支援舰队">
+            <Expander.Style>
+                <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
+                    <Setter Property="IsExpanded" Value="True" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SupportType, FallbackValue=None, Mode=OneTime}" Value="None">
+                            <Setter Property="IsExpanded" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Expander.Style>
+            <UniformGrid Columns="2" Margin="20,0,0,15">
+                <StackPanel>
+                    <TextBlock FontSize="16"><Run Text="支援舰队 (" /><Run Text=" "/><Run Text="{Binding SupportType, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" "/><Run Text=")" /></TextBlock>
+                    <ItemsControl ItemsSource="{Binding Support.SupportShips, Mode=OneTime}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock><Run Text="["/><Run Text=" "/><Run Text="{Binding Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding ShipName, Mode=OneTime}" /></TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                <StackPanel>
+                    <StackPanel.Style>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SupportType, FallbackValue=AirSupport, Mode=OneTime}" Value="AirSupport">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <TextBlock FontSize="16" Text="敌方舰队" />
+                    <ItemsControl ItemsSource="{Binding Support.AttackInfo.EnemyCarrierShip, Mode=OneTime}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock><Run Text="["/><Run Text=" "/><Run Text="{Binding Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding ShipName, Mode=OneTime}" /></TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                <StackPanel>
+                    <StackPanel.Style>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SupportType, FallbackValue=AirSupport, Mode=OneTime}" Value="AirSupport">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <TextBlock><Run Text="共起飞" /><Run Text=" "/><Run Text="{Binding Support.AttackInfo.OurStage1Engaged, Mode=OneTime}" /><Run Text=" "/><Run Text="架舰载机" /></TextBlock>
+                    <TextBlock><Run Text="{Binding Support.AttackInfo.OurStage1Lost, Mode=OneTime}" /><Run Text=" "/><Run Text="+" /><Run Text=" "/><Run Text="{Binding Support.AttackInfo.OurStage2Lost, Mode=OneTime}" /><Run Text=" "/><Run Text="架被击落" /></TextBlock>
+                </StackPanel>
+                <StackPanel>
+                    <StackPanel.Style>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SupportType, FallbackValue=AirSupport, Mode=OneTime}" Value="AirSupport">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <TextBlock><Run Text="共起飞" /><Run Text=" "/><Run Text="{Binding Support.AttackInfo.EnemyStage1Engaged, Mode=OneTime}" /><Run Text=" "/><Run Text="架舰载机" /></TextBlock>
+                    <TextBlock><Run Text="{Binding Support.AttackInfo.EnemyStage1Lost, Mode=OneTime}" /><Run Text=" "/><Run Text="+" /><Run Text=" "/><Run Text="{Binding Support.AttackInfo.EnemyStage2Lost, Mode=OneTime}" /><Run Text=" "/><Run Text="架被击落" /></TextBlock>
+                </StackPanel>
+                <ItemsControl ItemsSource="{Binding Support.AttackInfo.EnemyStage3Report, Mode=OneTime}" Grid.IsSharedSizeScope="True"/>
+            </UniformGrid>
+        </Expander>
+        <Expander Header="开幕雷击">
+            <ItemsControl Margin="20,0,0,15" Grid.IsSharedSizeScope="True" ItemsSource="{Binding OpeningTorpedoAttack, Mode=OneTime}"/>
+        </Expander>
+        <Expander Header="昼间航空战">
+            <ContentControl Margin="20,0,0,15" Content="{Binding AirWarfare2, Mode=OneTime}" />
+            <Expander.Style>
+                <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource {x:Type Expander}}">
+                    <Setter Property="IsExpanded" Value="True" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AirWarfare2, Mode=OneTime}" Value="{x:Null}">
+                            <Setter Property="IsExpanded" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Expander.Style>
+        </Expander>
+        <Expander Header="炮击战">
+            <StackPanel Margin="20,0,0,15" Grid.IsSharedSizeScope="True">
+                <TextBlock FontSize="16" Margin="0,3"><Run Text="交战形态: " /><Run Text=" "/><Run Text="{Binding Encounter, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /></TextBlock>
+                <Expander Header="第一轮炮击" IsExpanded="True">
+                    <ItemsControl Margin="20,0,0,15" ItemsSource="{Binding BombardRound1, Mode=OneTime}"/>
+                </Expander>
+                <Expander Header="第二轮炮击" IsExpanded="True">
+                    <ItemsControl Margin="20,0,0,15" ItemsSource="{Binding BombardRound2, Mode=OneTime}"/>
+                </Expander>
+            </StackPanel>
+        </Expander>
+        <Expander Header="雷击战">
+            <ItemsControl Margin="20,0,0,15" Grid.IsSharedSizeScope="True" ItemsSource="{Binding ClosingTorpedoAttack, Mode=OneTime}"/>
+        </Expander>
+        <Expander Header="夜战" IsExpanded="{Binding HasNightWar, Mode=OneTime}">
+            <StackPanel Margin="20,0,0,15" DataContext="{Binding NightWar, Mode=OneTime}">
+                <Expander Header="夜侦触接判定" IsExpanded="True">
+                    <UniformGrid Margin="20,0,0,15" Columns="2">
+                        <StackPanel>
+                            <TextBlock FontSize="16" Text="我方舰队"/>
+                            <TextBlock><Run Text="{Binding OurReconnInTouchName, Mode=OneTime}" /><Run Text=" "/><Run Text="触接对方" /></TextBlock>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock FontSize="16" Text="敌方舰队"/>
+                            <TextBlock><Run Text="{Binding EnemyReconnInTouchName, Mode=OneTime}" /><Run Text=" "/><Run Text="触接对方" /></TextBlock>
+                        </StackPanel>
+                    </UniformGrid>
+                </Expander>
+                <Expander Header="炮击战">
+                    <ItemsControl Margin="20,0,0,15" ItemsSource="{Binding Bombard, Mode=OneTime}" Grid.IsSharedSizeScope="True"/>
+                </Expander>
+                <Expander Header="原始数据">
+                    <TextBox Text="{Binding RawData, Mode=OneTime}" TextWrapping="Wrap" IsReadOnly="True" Margin="20,0,0,15"/>
+                </Expander>
+            </StackPanel>
+        </Expander>
+        <Expander Header="原始数据">
+            <TextBox Text="{Binding RawData, Mode=OneTime}" TextWrapping="Wrap" IsReadOnly="True" Margin="20,0,0,15"/>
+        </Expander>
+    </StackPanel>
+</UserControl>
