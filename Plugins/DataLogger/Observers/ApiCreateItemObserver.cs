@@ -27,7 +27,7 @@ namespace LynLogger.Observers
             var res = value.Data;
 
             _onItemCreate(new ItemCreate(int.Parse(req["api_item1"]), int.Parse(req["api_item2"]), int.Parse(req["api_item3"]), int.Parse(req["api_item4"]),
-                res.api_create_flag == 1 ? res.api_slotitem_id : int.Parse(res.api_fdata.Substring(res.api_fdata.IndexOf(',')+1)),
+                res.api_slot_item?.api_slotitem_id ?? int.Parse(res.api_fdata.Substring(res.api_fdata.IndexOf(',')+1)),
                 res.api_create_flag == 1 ? 1 : 0));
         }
 
