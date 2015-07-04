@@ -103,6 +103,7 @@
     <Compile Include="DataStore\WeekBook.cs" />
     <Compile Include="Data\LevelExperienceTable.cs" />
     <Compile Include="Data\MapExperienceTable.cs" />
+    <Compile Include="Extensions\RawDataWrapperExtension.cs" />
     <Compile Include="Logger\DrillLogger.cs" />
     <Compile Include="Logger\ShipItemCreateLogger.cs" />
     <Compile Include="Logger\SortieLogger.cs" />

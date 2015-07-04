@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LynLogger.DataStore.Serialization;
 using Grabacr07.KanColleWrapper.Models;
+using LynLogger.Extensions.RawDataWrapper;
 
 namespace LynLogger.DataStore.MasterInfo
 {
@@ -28,6 +29,11 @@ namespace LynLogger.DataStore.MasterInfo
             if (ship != null) {
                 ShipName = ship.Name;
                 TypeName = ship.ShipType.Name;
+
+                var yomi = ship.GetRawData()?.api_yomi;
+                if(yomi == "flagship" || yomi == "elite") {
+                    ShipName += yomi;
+                }
             } else {
                 ShipName = "Ship" + id;
                 TypeName = "Type" + id;

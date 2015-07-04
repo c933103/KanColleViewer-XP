@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LynLogger.DataStore.Serialization;
 using LynLogger.DataStore.Extensions;
+using LynLogger.Extensions.RawDataWrapper;
 
 namespace LynLogger.DataStore.MasterInfo
 {
@@ -134,8 +135,8 @@ namespace LynLogger.DataStore.MasterInfo
             Locked = data.api_locked != 0;
 
             var shipInfo = KanColleClient.Current.Master.Ships[ShipInfo.ShipId];
-            MaxAmmo = Ammo;
-            MaxFuel = Fuel;
+            MaxAmmo = shipInfo?.GetRawData().api_bull_max ?? Ammo;
+            MaxFuel = shipInfo?.GetRawData().api_fuel_max ?? Fuel;
 
             if(noUpdateEvent) return;
 
