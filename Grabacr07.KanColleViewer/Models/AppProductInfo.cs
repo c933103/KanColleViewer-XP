@@ -10,7 +10,7 @@ namespace Grabacr07.KanColleViewer.Models
     {
         private const string Major = "3.8.2.1";
         private const string Mod = "2.2";
-        private const string Revision = "";
+        private const string Revision = "1";
         private const string Train = "XT";
 
         private static readonly Assembly assembly = Assembly.GetExecutingAssembly();
