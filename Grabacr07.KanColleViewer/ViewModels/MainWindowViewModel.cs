@@ -170,10 +170,10 @@ namespace Grabacr07.KanColleViewer.ViewModels
             Fiddler.FiddlerApplication.BeforeResponse += _ => { System.Threading.Interlocked.Decrement(ref _outstandingRequests); RaisePropertyChanged(nameof(OutstandingRequests)); };
             Fiddler.FiddlerApplication.BeforeReturningError += _ => { if (_.responseCode == 408) return; System.Threading.Interlocked.Decrement(ref _outstandingRequests); RaisePropertyChanged(nameof(OutstandingRequests)); };
 
-            this.Admiral = new AdmiralViewModel();
-            this.Materials = new MaterialsViewModel();
             this.Ships = new ShipsViewModel();
             this.SlotItems = new SlotItemsViewModel();
+            this.Admiral = new AdmiralViewModel(this);
+            this.Materials = new MaterialsViewModel();
 
             this.Fleets = new FleetsViewModel();
             this.Shipyard = new ShipyardViewModel();

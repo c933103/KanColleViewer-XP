@@ -9,28 +9,76 @@ using Livet.EventListeners;
 
 namespace Grabacr07.KanColleViewer.ViewModels.Contents
 {
-	public class AdmiralViewModel : ViewModel
-	{
-		#region Model 変更通知プロパティ
+    public class AdmiralViewModel : ViewModel
+    {
+        #region Model 変更通知プロパティ
 
-		public Admiral Model
-		{
-			get { return KanColleClient.Current.Homeport.Admiral; }
-		}
+        public Admiral Model
+        {
+            get { return KanColleClient.Current.Homeport.Admiral; }
+        }
 
-		#endregion
+        #endregion
 
-		public AdmiralViewModel()
-		{
-			this.CompositeDisposable.Add(new PropertyChangedEventListener(KanColleClient.Current.Homeport)
-			{
-				{ "Admiral", (sender, args) => this.Update() },
-			});
-		}
+        public bool IsShipCountAboveWarningLine
+        {
+            get
+            {
+                if (Model == null) return false;
+                return App.ViewModelRoot.Ships.Count >= Model.MaxShipCount - 10;
+            }
+        }
 
-		private void Update()
-		{
-			this.RaisePropertyChanged(nameof(Model));
-		}
-	}
+        public bool IsShipCountAboveHighWaterLine
+        {
+            get
+            {
+                if (Model == null) return false;
+                return App.ViewModelRoot.Ships.Count >= Model.MaxShipCount - 5;
+            }
+        }
+
+        public bool IsItemCountAboveWarningLine
+        {
+            get
+            {
+                if (Model == null) return false;
+                return App.ViewModelRoot.SlotItems.Count >= Model.MaxSlotItemCount - 40;
+            }
+        }
+
+        public bool IsItemCountAboveHighWaterLine
+        {
+            get
+            {
+                if (Model == null) return false;
+                return App.ViewModelRoot.SlotItems.Count >= Model.MaxSlotItemCount - 20;
+            }
+        }
+
+        public AdmiralViewModel(MainWindowViewModel vmRoot)
+        {
+            this.CompositeDisposable.Add(new PropertyChangedEventListener(KanColleClient.Current.Homeport)
+            {
+                { "Admiral", (sender, args) => this.Update() },
+            });
+            this.CompositeDisposable.Add(new PropertyChangedEventListener(vmRoot.SlotItems)
+            {
+                { "Count", (sender, args) => this.Update() },
+            });
+            this.CompositeDisposable.Add(new PropertyChangedEventListener(vmRoot.Ships)
+            {
+                { "Count", (sender, args) => this.Update() },
+            });
+        }
+
+        private void Update()
+        {
+            this.RaisePropertyChanged(nameof(Model));
+            this.RaisePropertyChanged(nameof(IsShipCountAboveWarningLine));
+            this.RaisePropertyChanged(nameof(IsShipCountAboveHighWaterLine));
+            this.RaisePropertyChanged(nameof(IsItemCountAboveWarningLine));
+            this.RaisePropertyChanged(nameof(IsItemCountAboveHighWaterLine));
+        }
+    }
 }
