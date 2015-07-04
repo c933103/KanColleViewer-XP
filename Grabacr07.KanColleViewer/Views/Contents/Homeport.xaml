@@ -94,14 +94,52 @@
 				<TextBlock Grid.Row="0"
 						   Grid.Column="1">
 					<Run Text="{Binding Resources.Homeport_NoOfShips, Source={x:Static models:ResourceService.Current}, Mode=OneWay}" />
-					<Run Text="{Binding Ships.Count, Mode=OneWay}"
-						 Style="{DynamicResource EmphaticTextElementStyleKey}" />
+					<Run Text="{Binding Ships.Count, Mode=OneWay}">
+                        <Run.Style><Style BasedOn="{StaticResource EmphaticTextElementStyleKey}" TargetType="{x:Type Run}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Admiral.IsShipCountAboveWarningLine, Mode=OneWay}" Value="True">
+                                    <Setter Property="Foreground" Value="Yellow" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Admiral.IsShipCountAboveHighWaterLine, Mode=OneWay}" Value="True">
+                                    <Setter Property="Foreground" Value="Orange" />
+                                </DataTrigger>
+                                <DataTrigger Value="True">
+                                    <DataTrigger.Binding>
+                                        <MultiBinding Converter="{StaticResource MultiBindingEqualityConverter}">
+                                            <Binding Path="Admiral.Model.MaxShipCount" Mode="OneWay" />
+                                            <Binding Path="Ships.Count" Mode="OneWay" />
+                                        </MultiBinding>
+                                    </DataTrigger.Binding>
+                                    <Setter Property="Foreground" Value="Red" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style></Run.Style>
+                    </Run>
 					<Run Text="/" />
 					<Run Text="{Binding Admiral.Model.MaxShipCount, Mode=OneWay}" />
 					<LineBreak />
 					<Run Text="{Binding Resources.Homeport_NoOfEquipment, Source={x:Static models:ResourceService.Current}, Mode=OneWay}" />
-					<Run Text="{Binding SlotItems.Count, Mode=OneWay}"
-						 Style="{DynamicResource EmphaticTextElementStyleKey}" />
+					<Run Text="{Binding SlotItems.Count, Mode=OneWay}">
+                        <Run.Style><Style BasedOn="{StaticResource EmphaticTextElementStyleKey}" TargetType="{x:Type Run}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Admiral.IsItemCountAboveWarningLine, Mode=OneWay}" Value="True">
+                                    <Setter Property="Foreground" Value="Yellow" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Admiral.IsItemCountAboveHighWaterLine, Mode=OneWay}" Value="True">
+                                    <Setter Property="Foreground" Value="Orange" />
+                                </DataTrigger>
+                                <DataTrigger Value="True">
+                                    <DataTrigger.Binding>
+                                        <MultiBinding Converter="{StaticResource MultiBindingEqualityConverter}">
+                                            <Binding Path="Admiral.Model.MaxSlotItemCount" Mode="OneWay" />
+                                            <Binding Path="SlotItems.Count" Mode="OneWay" />
+                                        </MultiBinding>
+                                    </DataTrigger.Binding>
+                                    <Setter Property="Foreground" Value="Red" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style></Run.Style>
+                    </Run>
 					<Run Text="/" />
 					<Run Text="{Binding Admiral.Model.MaxSlotItemCount, Mode=OneWay}" />
 				</TextBlock>
