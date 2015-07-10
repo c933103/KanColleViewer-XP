@@ -21,7 +21,7 @@ namespace LynLogger
     public class LynLoggerMain : IToolPlugin, IDisposable
     {
         private const string Major = "3.8.2.1";
-        private const string Mod = "2.2";
+        private const string Mod = "2.3";
         private const string Revision = "1";
         private const string Train = "PT";
 
@@ -63,6 +63,30 @@ namespace LynLogger
             Logger.ShipDataLogger.Init();
             Logger.SortieLogger.Init();
             Logger.DrillLogger.Init();
+
+#if DEBUG
+            AppDomain.CurrentDomain.FirstChanceException += (s, e) => {
+                var stack = new System.Diagnostics.StackTrace(e.Exception);
+                if (stack.GetFrames().Any(x => x.GetMethod().DeclaringType.Assembly.GetName().Name == typeof(LynLoggerMain).Assembly.GetName().Name)) {
+                    System.IO.File.AppendAllText("lynlogger.log", string.Format(@"
+================================================================================
+First chance, Time={0}, Sender={1}
+{2}
+", DateTime.UtcNow, s, e.Exception));
+                }
+            };
+#endif
+
+            AppDomain.CurrentDomain.UnhandledException += (s, e) => {
+                var stack = new System.Diagnostics.StackTrace((Exception)e.ExceptionObject);
+                if (stack.GetFrames().Any(x => x.GetMethod().DeclaringType.Assembly.GetName().Name == typeof(LynLoggerMain).Assembly.GetName().Name)) {
+                    System.IO.File.AppendAllText("lynlogger.log", string.Format(@"
+================================================================================
+Second chance {2}, Time={0}, Sender={1}
+{3}
+", DateTime.UtcNow, s, e.IsTerminating ? "Terminating" : "Continuing", e.ExceptionObject));
+                }
+            };
         }
 
         public LynLoggerMain()
