@@ -130,8 +130,8 @@ namespace Grabacr07.KanColleWrapper
             disposable = proxy.api_start2.TryParse<kcsapi_start2>().Subscribe(svd => {
                 this.Master = new Master(svd.Data);
                 this.IsStarted = true;
-                proxy.Synchronize = false;
                 disposable.Dispose();
+                proxy.Synchronize = false;
             });
 		}
 	}

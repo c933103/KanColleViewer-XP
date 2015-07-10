@@ -10,34 +10,53 @@ namespace Grabacr07.KanColleWrapper
     public class MutexFIFO
     {
         private readonly object _syncRoot = new object();
-        private readonly int _spinIteration = 1000;
+        private readonly int _spinIteration;
+        private readonly int _maxWaitTime = 15000;
 
         private volatile int _grantedTicket = 1;
-        private volatile int _acquireTicket = 0;
+        private volatile int _currentTicket = 0;
+
         private volatile int _acquiredThreadId = 0;
+        private int _reentrance = 0;
+
         private ThreadLocal<int> _ourTicket = new ThreadLocal<int>(() => 0);
 
-        public MutexFIFO() : this(1000) { }
+        public MutexFIFO() : this(10000) { }
         public MutexFIFO(int spinIter) { _spinIteration = spinIter; }
 
         public void Enter()
         {
-            if (_ourTicket.Value == _grantedTicket) goto _acquired;
+            if(_ourTicket.Value == _grantedTicket) {
+                _reentrance++;
+                System.Diagnostics.Debug.WriteLine(string.Format("[{0:X16}] [MutexFIFO {1:X8}] [Thread {2}] Ticket {3}: {4} reentrance",
+                                                                DateTime.UtcNow.ToFileTime(), GetHashCode(), Thread.CurrentThread.ManagedThreadId, _grantedTicket, _reentrance));
+                return;
+            }
 
-            var ticket = _ourTicket.Value = Interlocked.Increment(ref _acquireTicket);
-            for (int iter = 0; iter < _spinIteration; iter++) {
+            var iter = 0;
+            var ticket = _ourTicket.Value = Interlocked.Increment(ref _currentTicket);
+            for (iter = 0; iter < _spinIteration; iter++) {
                 if (_grantedTicket == ticket) goto _acquired;
             }
 
             lock (_syncRoot) {
-                System.Diagnostics.Debug.WriteLine("[" + Thread.CurrentThread.ManagedThreadId + "] Unable to acquire mutex after " + _spinIteration + " spins, mutex currently held by thread " + _acquiredThreadId + ", current ticket is " + _grantedTicket + ", waiting for ticket " + ticket);
+                System.Diagnostics.Debug.WriteLine(string.Format("[{0:X16}] [MutexFIFO {1:X8}] [Thread {2}] Unable to acquire mutex after {3} spins, currently held by thread {4}, current ticket is {5}, waiting for ticket {6}",
+                                                                DateTime.UtcNow.ToFileTime(), GetHashCode(), Thread.CurrentThread.ManagedThreadId, iter, _acquiredThreadId, _grantedTicket, ticket));
                 while (true) {
+                    int waitTime = 100;
                     if (_grantedTicket == ticket) goto _acquired;
-                    Monitor.Wait(_syncRoot);
+                    if(!Monitor.Wait(_syncRoot, waitTime)) {
+                        System.Diagnostics.Debug.WriteLine(string.Format("[{0:X16}] [MutexFIFO {1:X8}] [Thread {2}] Unable to acquire mutex after {3} ms, currently held by thread {4}, current ticket is {5}, waiting for ticket {6}",
+                                                                        DateTime.UtcNow.ToFileTime(), GetHashCode(), Thread.CurrentThread.ManagedThreadId, waitTime, _acquiredThreadId, _grantedTicket, ticket));
+                        waitTime *= 2;
+                        if (waitTime > _maxWaitTime) waitTime = _maxWaitTime;
+                    }
                 }
             }
 
             _acquired:
+            System.Diagnostics.Debug.WriteLine(string.Format("[{0:X16}] [MutexFIFO {1:X8}] [Thread {2}] Acquired ticket {3} after {4} spins",
+                                                            DateTime.UtcNow.ToFileTime(), GetHashCode(), Thread.CurrentThread.ManagedThreadId, ticket, iter));
             _acquiredThreadId = Thread.CurrentThread.ManagedThreadId;
         }
 
@@ -46,9 +65,19 @@ namespace Grabacr07.KanColleWrapper
             if (_ourTicket.Value != _grantedTicket)
                 throw new SynchronizationLockException();
 
+            if (_reentrance > 0) {
+                _reentrance--;
+                System.Diagnostics.Debug.WriteLine(string.Format("[{0:X16}] [MutexFIFO {1:X8}] [Thread {2}] Ticket {3}: {4} reentrance",
+                                                                DateTime.UtcNow.ToFileTime(), GetHashCode(), Thread.CurrentThread.ManagedThreadId, _grantedTicket, _reentrance));
+                return;
+            }
+
             _acquiredThreadId = 0;
-            Interlocked.Increment(ref _grantedTicket);
             _ourTicket.Value = 0;
+
+            System.Diagnostics.Debug.WriteLine(string.Format("[{0:X16}] [MutexFIFO {1:X8}] [Thread {2}] Releasing ticket {3}",
+                                                            DateTime.UtcNow.ToFileTime(), GetHashCode(), Thread.CurrentThread.ManagedThreadId, _grantedTicket));
+            Interlocked.Increment(ref _grantedTicket);
 
             lock (_syncRoot) {
                 Monitor.PulseAll(_syncRoot);

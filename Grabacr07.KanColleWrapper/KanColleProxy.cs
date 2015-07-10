@@ -19,7 +19,6 @@ namespace Grabacr07.KanColleWrapper
 		private readonly LivetCompositeDisposable compositeDisposable;
         private readonly Dictionary<string, Action<Session>> localRequestHandlers = new Dictionary<string, Action<Session>>();
 
-        private readonly MutexFIFO _syncLock = new MutexFIFO();
         public bool Synchronize { get; set; }
 
 		public IObservable<Session> SessionSource
@@ -37,8 +36,6 @@ namespace Grabacr07.KanColleWrapper
 
 		public KanColleProxy()
 		{
-            var syncLock = new MutexFIFO();
-
 			this.compositeDisposable = new LivetCompositeDisposable();
 
 			this.connectableSessionSource = Observable
@@ -49,11 +46,11 @@ namespace Grabacr07.KanColleWrapper
 				.Publish();
 
 			this.apiSource = this.connectableSessionSource
-				.Where(s => s.PathAndQuery.StartsWith("/kcsapi"))
-				.Where(s => s.oResponse.MIMEType.Equals("text/plain"))
-				#region .Do(debug)
+                .Where(s => s.PathAndQuery.StartsWith("/kcsapi") && s.oResponse.MIMEType.Equals("text/plain"))
+                .SynchronizeFIFO((a, b, c) => Synchronize)
+            #region .Do(debug)
 #if DEBUG
-.Do(session =>
+                .Do(session =>
 				{
 					Debug.WriteLine("==================================================");
 					Debug.WriteLine("Fiddler session: ");
@@ -62,7 +59,6 @@ namespace Grabacr07.KanColleWrapper
 				})
 #endif
 			#endregion
-                .SynchronizeFIFO((a, b, c) => Synchronize)
 				.Publish();
 		}
 
