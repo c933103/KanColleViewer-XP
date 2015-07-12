@@ -5,12 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LynLogger.Views.History"
              xmlns:converters="clr-namespace:LynLogger.Views.Converters"
-             mc:Ignorable="d" x:Name="control"
+             mc:Ignorable="d" x:Name="controlIcv"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <converters:UnixTimestampToStringConverter x:Key="UnixTimestampToStringConverter" />
     </UserControl.Resources>
-    <DataGrid DataContext="{Binding ElementName=control, Mode=OneTime}" ItemsSource="{Binding ItemCreateLog2, Mode=OneWay}" IsReadOnly="True" AutoGenerateColumns="False">
+    <DataGrid DataContext="{Binding ElementName=controlIcv, Mode=OneTime}" ItemsSource="{Binding ItemCreateLog2, Mode=OneWay}" IsReadOnly="True" AutoGenerateColumns="False">
         <DataGrid.Columns>
             <DataGridTextColumn Header="时间" Binding="{Binding Key, Converter={StaticResource UnixTimestampToStringConverter}}"/>
             <DataGridTextColumn Header="提督等级" Binding="{Binding Value.AdmiralLv}" />

@@ -60,8 +60,8 @@ namespace LynLogger.Views
 
         public SettingsModel()
         {
-            DataStore.Store.OnDataStoreSwitch += (_, ds) => {
-                _switchMemberId = _;
+            DataStore.Store.OnDataStoreSwitch += ds => {
+                _switchMemberId = ds.MemberId;
                 RaiseMultiPropertyChanged();
             };
         }

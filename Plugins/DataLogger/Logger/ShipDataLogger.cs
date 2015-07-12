@@ -11,7 +11,7 @@ namespace LynLogger.Logger
         {
             if (_initialized) return;
             _initialized = true;
-            Store.OnDataStoreCreate += (sid, store) => store.OnShipDataChange += (sender, x) => ProcShipDataChanged(sender, x);
+            Store.OnDataStoreCreate += store => store.OnShipDataChange += (sender, x) => ProcShipDataChanged(sender, x);
         }
 
         static void ProcShipDataChanged(Store ds, int shipId)

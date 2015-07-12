@@ -9,9 +9,9 @@
              xmlns:converters="clr-namespace:LynLogger.Views.Converters"
              xmlns:controls="clr-namespace:LynLogger.Views.Controls"
              x:Class="LynLogger.Views.History.ResourceHistoryView" 
-             mc:Ignorable="d" x:Name="control"
+             mc:Ignorable="d" x:Name="controlRhv"
              d:DesignHeight="400" d:DesignWidth="600">
-    <Grid DataContext="{Binding ElementName=control, Mode=OneTime}">
+    <Grid DataContext="{Binding ElementName=controlRhv, Mode=OneTime}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />

@@ -22,7 +22,7 @@ namespace LynLogger
     {
         private const string Major = "3.8.2.1";
         private const string Mod = "2.3";
-        private const string Revision = "1";
+        private const string Revision = "2";
         private const string Train = "PT";
 
         public static LynLoggerMain Instance { get; private set; }
@@ -159,7 +159,6 @@ Second chance {2}, Time={0}, Sender={1}
 
         private void Dispose(bool disposing)
         {
-            DataStore.Store.Current?.SaveData();
             if(!disposing) return;
             foreach(var d in _disposables) {
                 d.Dispose();

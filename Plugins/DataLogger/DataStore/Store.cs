@@ -14,23 +14,30 @@ namespace LynLogger.DataStore
 {
     public class Store : AbstractDSSerializable<Store>
     {
-        private static Action<string, Store> _onDataStoreCreate;
-        private static Action<string, Store> _onDataStoreSwitch;
+        private static Action<Store> _onDataStoreCreate;
+        private static Action<Store> _onDataStoreSwitch;
 
-        public static event Action<string, Store> OnDataStoreCreate {
+        public static event Action<Store> OnDataStoreCreate {
             add
             {
                 var dss = _ds.ToList();
-                foreach (var ds in dss) if(ds.Value != null) value(ds.Key, ds.Value);
+                foreach (var ds in dss) {
+                    Store s;
+                    if (ds.Value.TryGetTarget(out s)) {
+                        value(s);
+                    } else {
+                        _ds.Remove(ds.Key);
+                    }
+                }
                 _onDataStoreCreate += value.MakeWeak(x => _onDataStoreCreate -= x);
             }
             remove { }
         }
 
-        public static event Action<string, Store> OnDataStoreSwitch {
+        public static event Action<Store> OnDataStoreSwitch {
             add
             {
-                if (Current != null) value(_memberId, Current);
+                if (Current != null) value(Current);
                 _onDataStoreSwitch += value.MakeWeak(x => _onDataStoreSwitch -= x);
             }
             remove { }
@@ -41,27 +48,33 @@ namespace LynLogger.DataStore
         public event Action<Store> OnBasicInfoChange { add { _onBasicInfoChange += value.MakeWeak(x => _onBasicInfoChange -= x); } remove { } }
         public event Action<Store, int> OnShipDataChange { add { _onShipDataChange += value.MakeWeak(x => _onShipDataChange -= x); } remove { } }
 
-        public static Store Current { get { Store s; if(_ds.TryGetValue(_memberId, out s)) return s; return null; } }
+        public static Store Current { get; private set; }
 
-        private static readonly Dictionary<string, Store> _ds = new Dictionary<string, Store>() { { "", null } };
-        private static string _memberId = "";
+        private static readonly Dictionary<string, WeakReference<Store>> _ds = new Dictionary<string, WeakReference<Store>>();
         private static readonly string _dataDir = Path.Combine(Environment.CurrentDirectory, "LynLogger");
         private static byte[] _logHeader = new byte[] { 0x48, 0x41, 0x49, 0x49, 0x4C, 0x4F, 0x47, 0x00 };
         private static byte[] _masterHeader = new byte[] { 0x48, 0x41, 0x49, 0x49, 0x4D, 0x53, 0x54, 0x00 };
 
+        private static bool _evRegistered = false;
+
         internal static void Refresh()
         {
-            if(_onDataStoreSwitch != null) _onDataStoreSwitch(_memberId, _ds[_memberId]);
+            if(_onDataStoreSwitch != null) _onDataStoreSwitch(Current);
         }
 
         internal static void SwitchMember(string memberId)
         {
-            if(_memberId == memberId) return;
+            if(Current?.MemberId == memberId) return;
             Current?.SaveData();
 
-            if(!_ds.ContainsKey(memberId)) {
+            if(!_evRegistered) {
+                _evRegistered = true;
+                System.Windows.Application.Current.Exit += (s, e) => Current?.SaveData();
+            }
+
+            Store store;
+            if (!_ds.ContainsKey(memberId) || !_ds[memberId].TryGetTarget(out store)) {
                 var masterTable = Path.Combine(_dataDir, MasterTableFilename(memberId));
-                Store store;
                 if(File.Exists(masterTable)) {
                     try {
                         using (Stream input = File.OpenRead(masterTable)) {
@@ -80,12 +93,12 @@ namespace LynLogger.DataStore
                 store = new Store(memberId);
 
                 register:
-                if(_onDataStoreCreate != null) _onDataStoreCreate(memberId, store);
-                _ds.Add(memberId, store);
+                if (_onDataStoreCreate != null) _onDataStoreCreate(store);
+                _ds.Add(memberId, new WeakReference<Store>(store));
             }
 
-            _memberId = memberId;
-            if (_onDataStoreSwitch != null) _onDataStoreSwitch(memberId, Current);
+            Current = store;
+            if (_onDataStoreSwitch != null) _onDataStoreSwitch(Current);
         }
 
         private static Logbook LoadLogbook(Store s, ulong seq)

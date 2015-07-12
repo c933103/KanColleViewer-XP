@@ -60,7 +60,7 @@ namespace LynLogger.Views.History
             });
             Pages = listPages;
             SelectedPage = Pages.First();
-            DataStore.Store.OnDataStoreCreate += (_, ds) => ds.OnBasicInfoChange += x => {
+            DataStore.Store.OnDataStoreCreate += ds => ds.OnBasicInfoChange += x => {
                 RaisePropertyChanged();
             };
 

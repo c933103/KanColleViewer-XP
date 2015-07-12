@@ -78,7 +78,7 @@ namespace LynLogger.Views
             Pages = listPages;
             SelectedPage = Pages.First();
 
-            Store.OnDataStoreSwitch += (_, ds) => {
+            Store.OnDataStoreSwitch += _ => {
                 RaiseMultiPropertyChanged(() => Books);
                 SelectedBookId = 0;
             };

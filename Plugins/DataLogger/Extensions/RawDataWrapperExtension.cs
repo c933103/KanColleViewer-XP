@@ -13,23 +13,13 @@ namespace LynLogger.Extensions.RawDataWrapper
 
         public static T GetRawData<T>(this RawDataWrapper<T> rdw)
         {
-            try {
-                Delegate compiledFunc;
-                if (accessor.TryGetValue(typeof(T), out compiledFunc)) {
-                    return (T)compiledFunc.DynamicInvoke(rdw);
-                }
-
-                var paramRdw = Expression.Parameter(typeof(RawDataWrapper<T>));
-                var func = Expression.Lambda<Func<RawDataWrapper<T>, T>>(
-                                Expression.Property(paramRdw, typeof(RawDataWrapper<T>).GetProperty("RawData", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)), 
-                            paramRdw).Compile();
-
-                accessor[typeof(T)] = func;
-                return func(rdw);
-            } catch(Exception e) {
-                File.AppendAllText("lynlogger-error.log", e.ToString());
-                throw;
+            Delegate compiledFunc;
+            if (!accessor.TryGetValue(typeof(T), out compiledFunc) || !(compiledFunc is Func<RawDataWrapper<T>, T>)) {
+                compiledFunc = Delegate.CreateDelegate(typeof(Func<RawDataWrapper<T>, T>), null, typeof(RawDataWrapper<T>).GetProperty("RawData", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).GetMethod);
+                accessor.TryAdd(typeof(T), compiledFunc);
             }
+
+            return ((Func<RawDataWrapper<T>, T>)compiledFunc)(rdw);
         }
     }
 }

@@ -7,13 +7,13 @@
              xmlns:contents="clr-namespace:LynLogger.Views.Contents"
              xmlns:views="clr-namespace:LynLogger.Views"
              xmlns:converters="clr-namespace:LynLogger.Views.Converters"
-             mc:Ignorable="d" x:Name="control"
+             mc:Ignorable="d" x:Name="controlDhv"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <converters:UnixTimestampToStringConverter x:Key="UnixTimestampToStringConverter" />
         <converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
     </UserControl.Resources>
-    <StackPanel DataContext="{Binding ElementName=control, Mode=OneTime}">
+    <StackPanel DataContext="{Binding ElementName=controlDhv, Mode=OneTime}">
         <ComboBox ItemsSource="{Binding DrillLog2, Mode=OneWay}" SelectedItem="{Binding KvDrill, Mode=OneWayToSource}" Margin="0,0,0,10">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -96,7 +96,7 @@
         <Expander Header="战斗结算" IsExpanded="True" Margin="0,3">
             <StackPanel Margin="20,0,0,0" DataContext="{Binding Drill.Result}">
                 <TextBlock>
-                    <Run Text="{Binding Drill.Briefing.EnemyName, Mode=OneWay, ElementName=control}"/>
+                    <Run Text="{Binding Drill.Briefing.EnemyName, Mode=OneWay, ElementName=controlDhv}"/>
                     <Run Text="/"/>
                     <Run Text="{Binding FleetName, Mode=OneTime}"/>
                 </TextBlock>

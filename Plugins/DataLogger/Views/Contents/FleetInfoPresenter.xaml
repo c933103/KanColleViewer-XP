@@ -5,12 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LynLogger.Views.Contents"
              xmlns:converters="clr-namespace:LynLogger.Views.Converters"
-             mc:Ignorable="d" x:Name="control"
+             mc:Ignorable="d" x:Name="controlFip"
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.Resources>
-        <converters:BindingProxy Data="{Binding ElementName=control, Mode=OneTime}" x:Key="control" />
-    </UserControl.Resources>
-    <Border DataContext="{Binding ElementName=control, Mode=OneTime}">
+    <Border DataContext="{Binding ElementName=controlFip, Mode=OneTime}">
         <ItemsControl ItemsSource="{Binding Ships}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -34,7 +31,7 @@
                                                     </Setter.Value>
                                                 </Setter>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Data.DisplayEquiptDetail, Source={StaticResource control}}" Value="True">
+                                                    <DataTrigger Binding="{Binding DisplayEquiptDetail, Source={x:Reference controlFip}}" Value="True">
                                                         <Setter Property="ItemTemplate">
                                                             <Setter.Value>
                                                                 <DataTemplate>
