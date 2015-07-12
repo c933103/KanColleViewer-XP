@@ -6,13 +6,13 @@
              xmlns:local="clr-namespace:LynLogger.Views.Contents"
              xmlns:converters="clr-namespace:LynLogger.Views.Converters"
              xmlns:kcvControls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls;assembly=KanColleViewer"
-             mc:Ignorable="d" x:Name="control"
+             mc:Ignorable="d" x:Name="controlCrp"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
     </UserControl.Resources>
-    
-    <UniformGrid Columns="2" DataContext="{Binding ElementName=control, Mode=OneTime}">
+
+    <UniformGrid Columns="2" DataContext="{Binding ElementName=controlCrp, Mode=OneTime}">
         <StackPanel>
             <TextBlock FontSize="16" Text="我方舰队" Margin="0,0,0,4"/>
             <TextBlock Margin="0,0,0,2">

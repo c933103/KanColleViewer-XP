@@ -6,13 +6,13 @@
              xmlns:local="clr-namespace:LynLogger.Views.History"
              xmlns:contents="clr-namespace:LynLogger.Views.Contents"
              xmlns:converters="clr-namespace:LynLogger.Views.Converters"
-             mc:Ignorable="d" x:Name="control"
+             mc:Ignorable="d" x:Name="controlShv"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <converters:UnixTimestampToStringConverter x:Key="UnixTimestampToStringConverter" />
         <converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
     </UserControl.Resources>
-    <StackPanel DataContext="{Binding ElementName=control, Mode=OneTime}">
+    <StackPanel DataContext="{Binding ElementName=controlShv, Mode=OneTime}">
         <UniformGrid Columns="2" Margin="0,0,0,10">
             <ComboBox ItemsSource="{Binding SortieLog2, Mode=OneWay}" SelectedItem="{Binding KvSortie, Mode=OneWayToSource}" Margin="5,0">
                 <ItemsControl.ItemTemplate>

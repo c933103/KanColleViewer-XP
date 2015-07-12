@@ -22,7 +22,6 @@ namespace Grabacr07.KanColleViewer
 	{
 		public static ProductInfo ProductInfo { get; private set; }
 		public static MainWindowViewModel ViewModelRoot { get; private set; }
-        public static App Instance { get; private set; }
 
 		static App()
 		{
@@ -60,21 +59,18 @@ namespace Grabacr07.KanColleViewer
 
             ViewModelRoot = new MainWindowViewModel();
             this.MainWindow = new MainWindow { DataContext = ViewModelRoot };
-            Instance = this;
             ViewModelRoot.UpdateLayout(Settings.Current.LRSplit);
 			this.MainWindow.Show();
 		}
 
         protected override void OnExit(ExitEventArgs e)
 		{
-			base.OnExit(e);
+            Settings.Current.Save();
+            base.OnExit(e);
 
-			KanColleClient.Current.Proxy.Shutdown();
-
-			PluginHost.Instance.Dispose();
-			Settings.Current.Save();
-		}
-
+            KanColleClient.Current.Proxy.Shutdown();
+            PluginHost.Instance.Dispose();
+        }
 
 		private static void ReportException(object sender, Exception exception, bool fatal)
 		{

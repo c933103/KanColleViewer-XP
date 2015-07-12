@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Threading.Tasks;
 using Grabacr07.KanColleViewer.Models;
 using Grabacr07.KanColleViewer.ViewModels.Messages;
@@ -223,15 +224,15 @@ namespace Grabacr07.KanColleViewer.ViewModels
         internal void UpdateLayout(bool LR)
         {
             if(LR) {
-                ((Views.MainWindow)App.Instance.MainWindow).Row0Height.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
-                ((Views.MainWindow)App.Instance.MainWindow).Row1Height.Height = System.Windows.GridLength.Auto;
-                ((Views.MainWindow)App.Instance.MainWindow).Col0Width.Width = System.Windows.GridLength.Auto;
-                ((Views.MainWindow)App.Instance.MainWindow).Col1Width.Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
+                ((Views.MainWindow)Application.Current.MainWindow).Row0Height.Height = new GridLength(1, GridUnitType.Star);
+                ((Views.MainWindow)Application.Current.MainWindow).Row1Height.Height = GridLength.Auto;
+                ((Views.MainWindow)Application.Current.MainWindow).Col0Width.Width = GridLength.Auto;
+                ((Views.MainWindow)Application.Current.MainWindow).Col1Width.Width = new GridLength(1, GridUnitType.Star);
             } else {
-                ((Views.MainWindow)App.Instance.MainWindow).Row0Height.Height = System.Windows.GridLength.Auto;
-                ((Views.MainWindow)App.Instance.MainWindow).Row1Height.Height = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
-                ((Views.MainWindow)App.Instance.MainWindow).Col0Width.Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
-                ((Views.MainWindow)App.Instance.MainWindow).Col1Width.Width = System.Windows.GridLength.Auto;
+                ((Views.MainWindow)Application.Current.MainWindow).Row0Height.Height = GridLength.Auto;
+                ((Views.MainWindow)Application.Current.MainWindow).Row1Height.Height = new GridLength(1, GridUnitType.Star);
+                ((Views.MainWindow)Application.Current.MainWindow).Col0Width.Width = new GridLength(1, GridUnitType.Star);
+                ((Views.MainWindow)Application.Current.MainWindow).Col1Width.Width = GridLength.Auto;
             }
         }
 	}

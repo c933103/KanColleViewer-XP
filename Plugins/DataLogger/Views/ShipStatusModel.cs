@@ -195,8 +195,8 @@ namespace LynLogger.Views
 
         public ShipStatusModel()
         {
-            Store.OnDataStoreSwitch += (_, __) => RaiseMultiPropertyChanged(() => Ships);
-            Store.OnDataStoreCreate += (_, store) => store.OnShipDataChange += (ds, x) => {
+            Store.OnDataStoreSwitch += _ => RaiseMultiPropertyChanged(() => Ships);
+            Store.OnDataStoreCreate += store => store.OnShipDataChange += (ds, x) => {
                 if(x == SelectedShip?.Id) {
                     RaiseMultiPropertyChanged(() => SelectedShip);
                 }

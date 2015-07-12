@@ -58,20 +58,29 @@ namespace LynLogger.Models.Battling
             clone.ZwAirWarfare = ZwAirWarfare.Clone();
             clone.ZwAirWarfare2 = ZwAirWarfare2.Clone();
             clone.ZwNightWar = ZwNightWar.Clone();
+            clone.ZwSupport = ZwSupport.Clone();
+
             clone.ZwOpeningTorpedoAttack = ZwOpeningTorpedoAttack.DeepCloneArray().ForEach(x => x._parent = clone);
             clone.ZwBombardRound1 = ZwBombardRound1.DeepCloneArray().ForEach(xx => xx._parent = clone);
             clone.ZwBombardRound2 = ZwBombardRound2.DeepCloneArray().ForEach(xx => xx._parent = clone);
             clone.ZwBombardRound3 = ZwBombardRound3.DeepCloneArray().ForEach(xx => xx._parent = clone);
             clone.ZwClosingTorpedoAttack = ZwClosingTorpedoAttack.DeepCloneArray().ForEach(x => x._parent = clone);
-            clone.ZwSupport = ZwSupport.Clone();
 
             if(clone.ZwSupport != null)
                 clone.ZwSupport.ZwAttackInfo._parent = clone;
 
-            clone.ZwAirWarfare.ZwOurStage3Report.ForEach(x => x._parent = clone);
-            clone.ZwAirWarfare.ZwEnemyStage3Report.ForEach(x => x._parent = clone);
-            clone.ZwAirWarfare2?.ZwOurStage3Report.ForEach(x => x._parent = clone);
-            clone.ZwAirWarfare2?.ZwEnemyStage3Report.ForEach(x => x._parent = clone);
+            if(clone.NightWar != null)
+                clone.NightWar._parent = clone;
+
+            if (clone.ZwAirWarfare != null)
+                clone.ZwAirWarfare._parent = clone;
+
+            if (clone.ZwAirWarfare2 != null)
+                clone.ZwAirWarfare2._parent = clone;
+            
+            clone.ZwOurShipBattleEndHp = null;
+            clone.ZwEnemyShipBattleEndHp = null;
+
             return clone;
         }
 
@@ -209,8 +218,8 @@ namespace LynLogger.Models.Battling
                 clone.ZwEnemyShipTorpedoed = (bool[])ZwEnemyShipTorpedoed.Clone();
                 clone.ZwEnemyShipDamages = (double[])ZwEnemyShipDamages.Clone();
                 clone.ZwCutInEquipts = ZwCutInEquipts.DeepCloneArray();
-                clone.ZwEnemyStage3Report = ZwEnemyStage3Report.DeepCloneArray();
-                clone.ZwOurStage3Report = ZwOurStage3Report.DeepCloneArray();
+                clone.ZwEnemyStage3Report = null;
+                clone.ZwOurStage3Report = null;
                 return clone;
             }
 
