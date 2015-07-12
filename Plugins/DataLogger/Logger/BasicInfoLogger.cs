@@ -9,7 +9,7 @@ namespace LynLogger.Logger
         {
             if (_initialized) return;
             _initialized = true;
-            Store.OnDataStoreCreate += (sid, store) => store.OnBasicInfoChange += sender => ProcBasicInfoChanged(sender);
+            Store.OnDataStoreCreate += store => store.OnBasicInfoChange += sender => ProcBasicInfoChanged(sender);
         }
 
         static void ProcBasicInfoChanged(Store ds)

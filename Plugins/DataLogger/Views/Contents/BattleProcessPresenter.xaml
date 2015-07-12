@@ -7,7 +7,7 @@
              xmlns:battleData="clr-namespace:LynLogger.Models.Battling"
              xmlns:local="clr-namespace:LynLogger.Views.Contents"
              x:Class="LynLogger.Views.Contents.BattleProcessPresenter"
-             mc:Ignorable="d" x:Name="control"
+             mc:Ignorable="d" x:Name="controlBpp"
              d:DesignHeight="600" d:DesignWidth="450">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -159,7 +159,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <StackPanel DataContext="{Binding Battle, ElementName=control, Mode=OneWay}">
+    <StackPanel DataContext="{Binding Battle, ElementName=controlBpp, Mode=OneWay}">
         <Expander Header="战前简报" IsExpanded="True">
             <UniformGrid Columns="2" Margin="20,0,0,15">
                 <StackPanel>
