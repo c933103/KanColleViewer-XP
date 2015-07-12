@@ -30,7 +30,9 @@ namespace LynLogger.DataStore.Premitives
                 case TypeIdentifier.Decimal:
                     return typeof(Decimal);
                 case TypeIdentifier.Dictionary:
-                    return typeof(Dictionary<,>).MakeGenericType(MapIdentifierToType(reader), MapIdentifierToType(reader));
+                    var kt = MapIdentifierToType(reader);
+                    var vt = MapIdentifierToType(reader);
+                    return typeof(Dictionary<,>).MakeGenericType(kt, vt);
                 case TypeIdentifier.Double:
                     return typeof(Double);
                 case TypeIdentifier.Int:
@@ -63,7 +65,15 @@ namespace LynLogger.DataStore.Premitives
                 case TypeIdentifier.Int:
                     return x => new SignedInteger(x);
                 case TypeIdentifier.List:
-                    return x => (StoragePremitive)typeof(List<>).MakeGenericType(MapIdentifierToType(x)).GetConstructor(new Type[] { typeof(DSReader) }).Invoke(new object[] { x });
+                    return x => {
+                        try {
+                            return (StoragePremitive)typeof(List<>).MakeGenericType(MapIdentifierToType(x)).GetConstructor(new Type[] { typeof(DSReader) }).Invoke(new object[] { x });
+                        } catch (System.Reflection.TargetInvocationException e) {
+                            if (e.GetBaseException() is System.IO.IOException) {
+                                throw new System.IO.IOException("IO Error", e.GetBaseException());
+                            } else throw;
+                        }
+                    };
                 case TypeIdentifier.String:
                     return x => new String(x);
                 case TypeIdentifier.UInt:
@@ -72,9 +82,15 @@ namespace LynLogger.DataStore.Premitives
                     return x => null;
                 case TypeIdentifier.Dictionary:
                     return x => {
-                        var kt = MapIdentifierToType(reader);
-                        var vt = MapIdentifierToType(reader);
-                        return (StoragePremitive)typeof(Dictionary<,>).MakeGenericType(kt, vt).GetConstructor(new Type[] { typeof(DSReader) }).Invoke(new object[] { x });
+                        try {
+                            var kt = MapIdentifierToType(reader);
+                            var vt = MapIdentifierToType(reader);
+                            return (StoragePremitive)typeof(Dictionary<,>).MakeGenericType(kt, vt).GetConstructor(new Type[] { typeof(DSReader) }).Invoke(new object[] { x });
+                        } catch(System.Reflection.TargetInvocationException e) {
+                            if (e.GetBaseException() is System.IO.IOException) {
+                                throw new System.IO.IOException("IO Error", e.GetBaseException());
+                            } else throw;
+                        }
                     };
                 default:
                     throw new ArgumentException();
