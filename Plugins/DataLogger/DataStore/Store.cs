@@ -69,7 +69,7 @@ namespace LynLogger.DataStore
 
             if(!_evRegistered) {
                 _evRegistered = true;
-                System.Windows.Application.Current.Exit += (s, e) => Current?.SaveData();
+                System.Windows.Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, new Action(() => System.Windows.Application.Current.Exit += (s, e) => Current?.SaveData()));
             }
 
             Store store;

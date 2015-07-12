@@ -40,7 +40,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
                         _browser.ShowNavigator = true;
                         break;
 					case Mode.Started:
-                        DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => {
+                        Application.Current.Dispatcher.BeginInvoke(new Action(() => {
                             if (SelectedItem == StartContentViewModel.Instance)
                                 SelectedItem = TabItems.FirstOrDefault(x => x != StartContentViewModel.Instance);
                             TabItems.Remove(StartContentViewModel.Instance);

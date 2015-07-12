@@ -46,7 +46,7 @@ namespace LynLogger.Utilities
         {
             this.backend = backend;
             subscriptionSource.CollectionChanged += (o, e) => {
-                Livet.DispatcherHelper.UIDispatcher.Invoke(new Action(() => {
+                System.Windows.Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.DataBind, new Action(() => {
                     var h = CollectionChanged;
                     if (h != null)
                         h(this, e);
@@ -132,7 +132,7 @@ namespace LynLogger.Utilities
 
         private void RaiseCollectionChanged(NotifyCollectionChangedAction action)
         {
-            Livet.DispatcherHelper.UIDispatcher.Invoke(new Action(() => {
+            System.Windows.Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.DataBind, new Action(() => {
                 var h = CollectionChanged;
                 if (h != null)
                     h(this, new NotifyCollectionChangedEventArgs(action));
@@ -141,7 +141,7 @@ namespace LynLogger.Utilities
 
         private void RaiseCollectionChanged(NotifyCollectionChangedAction action, T item, int index)
         {
-            Livet.DispatcherHelper.UIDispatcher.Invoke(new Action(() => {
+            System.Windows.Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.DataBind, new Action(() => {
                 var h = CollectionChanged;
                 if (h != null)
                     h(this, new NotifyCollectionChangedEventArgs(action, item, index));
