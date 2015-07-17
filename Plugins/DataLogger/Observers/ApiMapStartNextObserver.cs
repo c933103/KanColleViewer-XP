@@ -40,9 +40,6 @@ namespace LynLogger.Observers
                     ZwEvent = (MapNext.EventType)((int)data.api_event_id << 16 | (int)data.api_event_kind),
                     ZwRawData = json
                 };
-                if(data.api_enemy() && data.api_enemy != null) {
-                    mapNext.ZwMapLocation.EnemyId = (int)data.api_enemy.api_enemy_id;
-                }
                 if(mapNext.ZwEvent == MapNext.EventType.ItemGet) {
                     mapNext.ZwItemGetLost = new MapNext.ItemGetLostInfo() {
                         ZwAmount = (int)data.api_itemget.api_getcount,
@@ -73,10 +70,7 @@ namespace LynLogger.Observers
                 }
 
                 _onMapNext(mapNext);
-            } catch(Exception e) {
-                System.Diagnostics.Debugger.Break();
-                System.Diagnostics.Trace.TraceError(e.ToString());
-            }
+            } catch(Exception) { }
         }
 
         public void OnCompleted() { return; }

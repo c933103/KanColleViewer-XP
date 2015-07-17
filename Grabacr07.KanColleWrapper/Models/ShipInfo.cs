@@ -104,30 +104,6 @@ namespace Grabacr07.KanColleWrapper.Models
 			get { return this.RawData.api_taik.Get(0) ?? 0; }
 		}
 
-		/// <summary>
-		/// 回避の最大値を取得します。
-		/// </summary>
-		public int MaxEvasion
-		{
-			get { return this.RawData.api_kaih.Get(1) ?? 0; }
-		}
-
-		/// <summary>
-		/// 対潜の最大値を取得します (ASW: Anti-submarine warfare)。
-		/// </summary>
-		public int MaxASW
-		{
-			get { return this.RawData.api_tais.Get(1) ?? 0; }
-		}
-
-		/// <summary>
-		/// 索敵の最大値を取得します。
-		/// </summary>
-		public int MaxLOS
-		{
-			get { return this.RawData.api_saku.Get(1) ?? 0; }
-		}
-
 		#endregion
 
 		/// <summary>

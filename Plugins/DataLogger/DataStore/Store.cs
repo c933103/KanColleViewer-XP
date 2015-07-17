@@ -150,9 +150,6 @@ namespace LynLogger.DataStore
         [Serialize(5, ConstructionType = typeof(Weekbook))]
         public ILogbook Weekbook { get; private set; }
 
-        /*Serialize6*/ private Dictionary<Models.MapLocInfo, Models.BattleInfo> _enemyInfo;
-        public Dictionary<Models.MapLocInfo, Models.BattleInfo> EnemyInfo => _enemyInfo ?? (_enemyInfo = new Dictionary<Models.MapLocInfo, Models.BattleInfo>());
-
         public ILogbook CurrentLogbook => Logbooks[DateTimeOffset.UtcNow.ToLogbookSequence()];
         public LogbookAccessor Logbooks { get; }
 
@@ -239,10 +236,7 @@ namespace LynLogger.DataStore
                         (o, i, p) => o._ships = (i as Premitives.Dictionary<Premitives.SignedInteger, Premitives.StoragePremitive>)?.Convert(x => (int)x.Value, x => new Ship(x, p))
                                              ?? (i as Premitives.Dictionary<Premitives.SignedInteger, Premitives.Compound>)?.Convert(x => (int)x.Value, x => new Ship(x, p))
                     ),
-                    [6] = new HandlerInfo(
-                        (x, p) => x._enemyInfo.GetSerializationInfo(p),
-                        (o, i, p) => o._enemyInfo = ((Premitives.Dictionary<Premitives.StoragePremitive, Premitives.StoragePremitive>)i)?.Convert(x => new Models.MapLocInfo(x, p), x => new Models.BattleInfo(x, p))
-                    ),
+                    [6] = HandlerInfo.NoOp,
                 };
             }
         }

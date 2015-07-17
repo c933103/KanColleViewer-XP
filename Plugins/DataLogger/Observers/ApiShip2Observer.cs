@@ -11,10 +11,7 @@ namespace LynLogger.Observers
             try {
                 if(!value.IsSuccess) return;
                 DataStore.Store.Current.UpdateShips(value.Data);
-            } catch(Exception e) {
-                System.Diagnostics.Debugger.Break();
-                System.Diagnostics.Trace.TraceError(e.ToString());
-            }
+            } catch (Exception) { }
         }
 
         public void OnCompleted() { return; }

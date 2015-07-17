@@ -64,14 +64,6 @@ namespace LynLogger.Logger
                     if (_state == State.NightBattle || _state == State.BattleResult) {
                         var lastNode = _info.Nodes.Last();
                         lastNode.Result = battleResult;
-                        if(lastNode.Route != null && lastNode.Battle != null && lastNode.Result != null) {
-                            DataStore.Store.Current.EnemyInfo[lastNode.Route.MapLocation] = new Models.BattleInfo() {
-                                AdmiralExp = battleResult.AdmiralExp,
-                                BaseExp = battleResult.BaseExp,
-                                Formation = lastNode.Battle.EnemyFormation,
-                                _enemyShips = lastNode.Battle.EnemyShips.Select(x => x.Clone()).ToArray()
-                            };
-                        }
                     }
                     _state = State.MapNext;
                 };

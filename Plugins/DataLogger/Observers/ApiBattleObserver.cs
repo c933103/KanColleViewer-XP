@@ -131,10 +131,7 @@ namespace LynLogger.Observers
                 }
 
                 _onBattle(result);
-            } catch (Exception e) {
-                System.Diagnostics.Debugger.Break();
-                System.Diagnostics.Trace.TraceError(e.ToString());
-            }
+            } catch (Exception) { }
         }
 
         private BattleProcess.ShipInfo[] ConvertOurFleet(int fleetId, dynamic nowHps, dynamic maxHps, dynamic param)
@@ -175,7 +172,7 @@ namespace LynLogger.Observers
                 for(int j = 0; j < 5; j++) {
                     if(slots[i][j] <= 0) break;
                     int equiptId = (int)slots[i][j];
-                    equipts.Add(new EquiptInfo(KanColleClient.Current.Master.SlotItems[equiptId], ship.Slots[j]));
+                    equipts.Add(new EquiptInfo(KanColleClient.Current.Master.SlotItems[equiptId], ship.Slots?.Get(j) ?? 1));
                 }
 
                 r.Add(new BattleProcess.ShipInfo() {

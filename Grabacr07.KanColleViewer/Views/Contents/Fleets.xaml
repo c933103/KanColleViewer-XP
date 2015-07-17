@@ -185,7 +185,7 @@
 														LimitedValue="{Binding HP, Mode=OneWay}" />
                                                 </StackPanel>
 
-                                                <TextBlock Grid.Column="1" Grid.Row="0" Margin="8,0,0,0" HorizontalAlignment="Left">
+                                                <TextBlock Grid.Column="1" Grid.Row="0" Margin="8,0,0,0" HorizontalAlignment="Left" MinWidth="45">
                                                     <InlineUIContainer>
 														<controls:ConditionIcon ConditionType="{Binding ConditionType, Mode=OneWay}" />
 													</InlineUIContainer>
