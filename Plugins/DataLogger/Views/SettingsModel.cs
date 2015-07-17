@@ -13,12 +13,6 @@ namespace LynLogger.Views
         private SaveDataCommand saveDataCmd;
         public ICommand SaveData => saveDataCmd ?? (saveDataCmd = new SaveDataCommand());
 
-        private ExportEnemyInfoCommand expEnemyInfoCmd;
-        public ICommand ExportEnemyInfo => expEnemyInfoCmd ?? (expEnemyInfoCmd = new ExportEnemyInfoCommand());
-
-        private ImportEnemyInfoCommand impEnemyInfoCmd;
-        public ICommand ImportEnemyInfo => impEnemyInfoCmd ?? (impEnemyInfoCmd = new ImportEnemyInfoCommand());
-
         private SwitchMemberCommand switchMemberCmd;
         public ICommand SwitchMember => switchMemberCmd ?? (switchMemberCmd = new SwitchMemberCommand(this));
 
@@ -80,58 +74,6 @@ namespace LynLogger.Views
             public void Execute(object parameter)
             {
                 DataStore.Store.Current?.SaveData();
-            }
-        }
-
-        private class ExportEnemyInfoCommand : ICommand
-        {
-            public bool CanExecute(object parameter) { return true; }
-            public event EventHandler CanExecuteChanged;
-
-            public void Execute(object parameter)
-            {
-                var info = DataStore.Store.Current?.EnemyInfo;
-                if (info == null) return;
-
-                Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
-                sfd.OverwritePrompt = true;
-                sfd.CheckPathExists = true;
-                sfd.ValidateNames = true;
-                if (sfd.ShowDialog() != true) return;
-
-                var dummy = new LinkedList<object>();
-                using (System.IO.Stream s = sfd.OpenFile())
-                using (DataStore.IO.DSWriter w = new DataStore.IO.DSWriter(s))
-                    info.GetSerializationInfo(dummy).Serialize(w);
-            }
-        }
-
-        private class ImportEnemyInfoCommand : ICommand
-        {
-            public bool CanExecute(object parameter) { return true; }
-            public event EventHandler CanExecuteChanged;
-
-            public void Execute(object parameter)
-            {
-                var info = DataStore.Store.Current?.EnemyInfo;
-                if (info == null) return;
-
-                Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
-                ofd.CheckFileExists = true;
-                ofd.CheckPathExists = true;
-                ofd.Multiselect = false;
-                ofd.ValidateNames = true;
-                if (ofd.ShowDialog() != true) return;
-
-                var dummy = new LinkedList<object>();
-                using (System.IO.Stream s = ofd.OpenFile()) {
-                    using (DataStore.IO.DSReader r = new DataStore.IO.DSReader(s)) {
-                        var dict = (DataStore.Premitives.Dictionary<DataStore.Premitives.StoragePremitive, DataStore.Premitives.StoragePremitive>)DataStore.Premitives.StoragePremitive.Parse(r);
-                        foreach (var kv in dict.Convert((k, v) => new { Key = new MapLocInfo(k, dummy), Value = new BattleInfo(v, dummy) })) {
-                            info[kv.Key] = kv.Value;
-                        }
-                    }
-                }
             }
         }
 

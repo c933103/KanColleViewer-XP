@@ -51,10 +51,7 @@ namespace LynLogger.Observers
                     ZwRawData = json
                 };
                 _onPracticeEnemyInfo(result);
-            } catch (Exception e) {
-                System.Diagnostics.Debugger.Break();
-                System.Diagnostics.Trace.TraceError(e.ToString());
-            }
+            } catch (Exception) { }
         }
 
         public void OnCompleted() { return; }

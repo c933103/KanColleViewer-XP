@@ -27,10 +27,7 @@ namespace LynLogger.Observers
                 ds.BasicInfo.Update(value.Data.api_basic);
 
                 if (_onPortAccess != null) _onPortAccess();
-            } catch(Exception e) {
-                System.Diagnostics.Debugger.Break();
-                System.Diagnostics.Trace.TraceError(e.ToString());
-            }
+            } catch (Exception) { }
         }
 
         public void OnCompleted() { return; }
