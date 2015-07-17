@@ -186,7 +186,8 @@ namespace Grabacr07.KanColleWrapper
 
 		private void RaiseShipsChanged()
 		{
-			this.RaisePropertyChanged("Ships");
+            DroppedShips = 0;
+            this.RaisePropertyChanged(nameof(Ships));
 		}
 
 
@@ -196,30 +197,9 @@ namespace Grabacr07.KanColleWrapper
 		/// 指定した <see cref="kcsapi_ship2"/> 型の配列を使用して、<see cref="Ships"/> プロパティ値を更新します。
 		/// </summary>
 		internal void Update(kcsapi_ship2[] source)
-		{
-			if (source.Length <= 1)
-			{
-				foreach (var ship in source)
-				{
-					var target = this.Ships[ship.api_id];
-					if (target == null) continue;
-
-					target.Update(ship);
-
-					var fleet = this.GetFleet(target.Id);
-					if (fleet != null) fleet.State.Calculate();
-				}
-			}
-			else
-			{
-				this.Ships = new MemberTable<Ship>(source.Select(x => new Ship(this.homeport, x)));
-
-				if (KanColleClient.Current.IsInSortie)
-				{
-					foreach (var id in this.evacuatedShipsIds) this.Ships[id].Situation |= ShipSituation.Evacuation;
-					foreach (var id in this.towShipIds) this.Ships[id].Situation |= ShipSituation.Tow;
-				}
-			}
+        {
+            if(this.Ships.UpdateValueRange(source, x => x.api_id, x => new Ship(this.homeport, x), (obj, dat) => obj.Update(dat), source.Length > 1))
+                RaiseShipsChanged();
 		}
 
 
@@ -228,20 +208,9 @@ namespace Grabacr07.KanColleWrapper
 		/// </summary>
 		internal void Update(kcsapi_deck[] source)
 		{
-			if (this.Fleets.Count == source.Length)
-			{
-				foreach (var raw in source)
-				{
-					var target = this.Fleets[raw.api_id];
-					if (target != null) target.Update(raw);
-				}
-			}
-			else
-			{
-				this.Fleets.ForEach(x => x.Value.SafeDispose());
-				this.Fleets = new MemberTable<Fleet>(source.Select(x => new Fleet(this.homeport, x)));
-			}
-		}
+            if(this.Fleets.UpdateValueRange(source, x => x.api_id, x => new Fleet(this.homeport, x), (obj, dat) => obj.Update(dat), true, x => x.Dispose()))
+                RaisePropertyChanged(nameof(Fleets));
+        }
 
 
 		private void Change(SvData data)
@@ -292,7 +261,7 @@ namespace Grabacr07.KanColleWrapper
 
 		private void Combine(bool combine)
 		{
-			this.CombinedFleet.SafeDispose();
+			this.CombinedFleet?.Dispose();
 			this.CombinedFleet = combine
 				? new CombinedFleet(this.homeport, this.Fleets.OrderBy(x => x.Key).Select(x => x.Value).Take(2).ToArray())
 				: null;
@@ -340,8 +309,7 @@ namespace Grabacr07.KanColleWrapper
 					.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
 					.Select(int.Parse)
 					.Where(x => this.Ships.ContainsKey(x))
-					.Select(x => this.Ships[x])
-					.ToArray();
+					.Select(x => this.Ships[x]);
 
 				// (改修に使った艦娘のこと item って呼ぶのどうなの…)
 
@@ -404,8 +372,8 @@ namespace Grabacr07.KanColleWrapper
 				.Repeat()
 				.Subscribe();
 
-			int[] evacuationOfferedShipIds = null;
-			int[] towOfferedShipIds = null;
+			int? evacuationOfferedShipIds = null;
+			int? towOfferedShipIds = null;
 
 			proxy.api_req_combined_battle_battleresult
 				.TryParse<kcsapi_combined_battle_battleresult>()
@@ -415,20 +383,18 @@ namespace Grabacr07.KanColleWrapper
 				{
 					if (this.CombinedFleet == null) return;
 					var ships = this.CombinedFleet.Fleets.SelectMany(f => f.Ships).ToArray();
-					evacuationOfferedShipIds = x.api_escape.api_escape_idx.Select(idx => ships[idx - 1].Id).ToArray();
-					towOfferedShipIds = x.api_escape.api_tow_idx.Select(idx => ships[idx - 1].Id).ToArray();
-				});
+                    evacuationOfferedShipIds = x.api_escape.api_escape_idx.Select(idx => ships[idx - 1]).FirstOrDefault()?.Id;
+                    towOfferedShipIds = x.api_escape.api_tow_idx.Select(idx => ships[idx - 1]).FirstOrDefault()?.Id;
+                });
 			proxy.api_req_combined_battle_goback_port
 				.Subscribe(_ =>
 				{
 					if (KanColleClient.Current.IsInSortie
 						&& evacuationOfferedShipIds != null
-						&& evacuationOfferedShipIds.Length >= 1
-						&& towOfferedShipIds != null
-						&& towOfferedShipIds.Length >= 1)
+						&& towOfferedShipIds != null)
 					{
-						this.evacuatedShipsIds.Add(evacuationOfferedShipIds[0]);
-						this.towShipIds.Add(towOfferedShipIds[0]);
+						this.evacuatedShipsIds.Add(evacuationOfferedShipIds.Value);
+						this.towShipIds.Add(towOfferedShipIds.Value);
 					}
 				});
 			proxy.api_get_member_ship_deck

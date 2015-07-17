@@ -63,26 +63,15 @@ namespace Grabacr07.KanColleWrapper
 		public bool CheckRepairing(Fleet fleet)
 		{
 			var repairingShipIds = this.Docks.Values.Where(x => x.Ship != null).Select(x => x.Ship.Id).ToArray();
-			return fleet.Ships.Any(x => repairingShipIds.Any(id => id == x.Id));
+			return fleet.Ships.Any(x => repairingShipIds.Contains(x.Id));
 		}
 
 
 		internal void Update(kcsapi_ndock[] source)
-		{
-			if (this.Docks.Count == source.Length)
-			{
-				foreach (var raw in source)
-				{
-					var target = this.Docks[raw.api_id];
-					if (target != null) target.Update(raw);
-				}
-			}
-			else
-			{
-				this.Docks.ForEach(x => x.Value.Dispose());
-				this.Docks = new MemberTable<RepairingDock>(source.Select(x => new RepairingDock(homeport, x)));
-			}
-		}
+        {
+            if(this.Docks.UpdateValueRange(source, x => x.api_id, x => new RepairingDock(homeport, x), (obj, dat) => obj.Update(dat), true, x => x.Dispose()))
+                RaisePropertyChanged(nameof(Docks));
+        }
 
 		private void Start(SvData data)
 		{

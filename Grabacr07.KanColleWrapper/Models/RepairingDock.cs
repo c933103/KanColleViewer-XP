@@ -119,6 +119,12 @@ namespace Grabacr07.KanColleWrapper.Models
 					this._CompleteTime = value;
 					this.notificated = false;
 					this.RaisePropertyChanged();
+
+                    if (value.HasValue) {
+                        Connect();
+                    } else {
+                        Disconnect();
+                    }
 				}
 			}
 		}
@@ -153,7 +159,7 @@ namespace Grabacr07.KanColleWrapper.Models
 		public event EventHandler<RepairingCompletedEventArgs> Completed;
 
 
-		internal RepairingDock(Homeport parent, kcsapi_ndock rawData)
+		internal RepairingDock(Homeport parent, kcsapi_ndock rawData) : base(false)
 		{
 			this.homeport = parent;
 			this.Update(rawData);

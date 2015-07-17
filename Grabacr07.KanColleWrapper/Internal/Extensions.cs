@@ -14,12 +14,6 @@ namespace Grabacr07.KanColleWrapper.Internal
 			return session.GetResponseBodyAsString().Replace("svdata=", "");
 		}
 
-		public static void SafeDispose(this IDisposable resource)
-		{
-			if (resource != null) resource.Dispose();
-		}
-
-
 		/// <summary>
 		/// <see cref="Int32" /> 型の配列に安全にアクセスします。
 		/// </summary>
@@ -28,7 +22,28 @@ namespace Grabacr07.KanColleWrapper.Internal
 			return array.Length > index ? (int?)array[index] : null;
 		}
 
-		public static string Join(this IEnumerable<string> values, string separator)
+        public static T Get<T>(this T[] array, int index) where T : class
+        {
+            return array.Length > index ? array[index] : null;
+        }
+
+        public static T[] ConsolidateNonNull<T>(this T[] array) where T:class
+        {
+            for (int i = 0; i < array.Length; i++) {
+                if (array[i] != null) continue;
+                for (int j = i + 1; j < array.Length; j++) {
+                    if (array[j] == null) continue;
+                    array[i] = array[j];
+                    array[j] = null;
+                    goto NextLoop;
+                }
+                return array;
+                NextLoop:;
+            }
+            return array;
+        }
+
+        public static string Join(this IEnumerable<string> values, string separator)
 		{
 			return string.Join(separator, values);
 		}

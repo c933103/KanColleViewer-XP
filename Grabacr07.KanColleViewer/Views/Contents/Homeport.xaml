@@ -16,15 +16,21 @@
 			 mc:Ignorable="d"
 			 d:DesignWidth="600"
              d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}">
-    <StackPanel Orientation="Horizontal">
-        <StackPanel.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
             <Style TargetType="{x:Type TextBlock}"
 				BasedOn="{StaticResource DefaultTextStyleKey}">
                 <Setter Property="Margin"
 					Value="12,0" />
             </Style>
-        </StackPanel.Resources>
-        <TextBlock DataContext="{Binding Admiral}">
+        </Grid.Resources>
+        <TextBlock DataContext="{Binding Admiral}" Grid.Column="0" TextWrapping="NoWrap">
 			<Run Text="{Binding Model.Nickname, Mode=OneWay}"
 					Style="{DynamicResource EmphaticTextElementStyleKey}"
 					FontSize="18" />
@@ -35,7 +41,7 @@
 			<Run Text="{Binding Model.Comment, Mode=OneWay}" />
 		</TextBlock>
 
-        <TextBlock DataContext="{Binding Admiral}">
+        <TextBlock DataContext="{Binding Admiral}" Grid.Column="1">
 			<Run Text="{Binding Resources.Homeport_FleetHQ, Source={x:Static models:ResourceService.Current}, Mode=OneWay}" />
 			<Run Text="Lv."
 					Style="{DynamicResource EmphaticTextElementStyleKey}"
@@ -48,7 +54,7 @@
 			<Run Text="{Binding Model.ExperienceForNexeLevel, Mode=OneWay}" />
 			<Run Text="exp." />
 		</TextBlock>
-		<TextBlock>
+        <TextBlock Grid.Column="2">
 			<Run Text="{Binding Resources.Homeport_InstantRepair, Source={x:Static models:ResourceService.Current}, Mode=OneWay}" />
 			<Run Text="{Binding Materials.Model.InstantRepairMaterials, Mode=OneWay}"
 					Style="{DynamicResource EmphaticTextElementStyleKey}" />
@@ -58,7 +64,7 @@
 					Style="{DynamicResource EmphaticTextElementStyleKey}" />
 		</TextBlock>
 
-        <TextBlock>
+        <TextBlock Grid.Column="3">
 			<Run Text="{Binding Resources.Homeport_NoOfShips, Source={x:Static models:ResourceService.Current}, Mode=OneWay}" />
 			<Run Text="{Binding Ships.Count, Mode=OneWay}">
                 <Run.Style><Style BasedOn="{StaticResource EmphaticTextElementStyleKey}" TargetType="{x:Type Run}">
@@ -109,5 +115,5 @@
 			<Run Text="/" />
 			<Run Text="{Binding Admiral.Model.MaxSlotItemCount, Mode=OneWay}" />
         </TextBlock>
-    </StackPanel>
+    </Grid>
 </UserControl>

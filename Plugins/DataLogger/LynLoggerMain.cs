@@ -21,8 +21,8 @@ namespace LynLogger
     public class LynLoggerMain : IToolPlugin, IDisposable
     {
         private const string Major = "3.8.2.1";
-        private const string Mod = "2.3";
-        private const string Revision = "3";
+        private const string Mod = "2.4";
+        private const string Revision = "";
         private const string Train = "T";
 
         public static LynLoggerMain Instance { get; private set; }

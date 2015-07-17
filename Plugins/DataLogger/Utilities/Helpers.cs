@@ -108,11 +108,6 @@ namespace LynLogger
             return text;
         }
 
-        public static int LookupTypeId(int shipId)
-        {
-            return Grabacr07.KanColleWrapper.KanColleClient.Current.Master.Ships[shipId]?.ShipType.Id ?? shipId;
-        }
-
         public static IEnumerable<Tout> Zip<T1, T2, T3, T4, Tout>(IEnumerable<T1> i1, IEnumerable<T2> i2, IEnumerable<T3> i3, IEnumerable<T4> i4, Func<T1, T2, T3, T4, Tout> project)
         {
             using (var e1 = i1.GetEnumerator())
