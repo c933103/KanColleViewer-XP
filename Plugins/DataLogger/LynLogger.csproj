@@ -88,6 +88,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayExtensions.cs" />
     <Compile Include="DataStore\Extensions\PremitiveExtensions.cs" />
     <Compile Include="DataStore\LogBook\BasicInfo.cs" />
     <Compile Include="DataStore\LogBook\ItemCreate.cs" />
@@ -127,7 +128,6 @@
     <Compile Include="Logger\DrillLogger.cs" />
     <Compile Include="Logger\ShipItemCreateLogger.cs" />
     <Compile Include="Logger\SortieLogger.cs" />
-    <Compile Include="Models\BattleInfo.cs" />
     <Compile Include="Models\Battling\BattleProcess.Serialization.cs" />
     <Compile Include="Models\Battling\PracticeEnemyInfo.cs" />
     <Compile Include="Models\MapLocInfo.cs" />

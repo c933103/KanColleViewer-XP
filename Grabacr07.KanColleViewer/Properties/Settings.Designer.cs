@@ -25,7 +25,7 @@ namespace Grabacr07.KanColleViewer.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://www.dmm.com/netgame_s/kancolle/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://www.dmm.com/my/-/login/=/path=Sg9VTQFXDFdnFh5TUlgFWA0JUxk_")]
         public global::System.Uri KanColleUrl {
             get {
                 return ((global::System.Uri)(this["KanColleUrl"]));

@@ -82,7 +82,7 @@ namespace Grabacr07.KanColleWrapper
 			proxy.api_get_member_slot_item.TryParse<kcsapi_slotitem[]>().Subscribe(x => this.Update(x.Data));
 			proxy.api_req_kousyou_createitem.TryParse<kcsapi_createitem>().Subscribe(x => this.CreateItem(x.Data));
 			proxy.api_req_kousyou_destroyitem2.TryParse<kcsapi_destroyitem2>().Subscribe(this.DestroyItem);
-			proxy.api_req_sortie_battleresult.TryParse<kcsapi_battleresult>().Subscribe(x => this.DropShip(x.Data));
+			//proxy.api_req_sortie_battleresult.TryParse<kcsapi_battleresult>().Subscribe(x => this.DropShip(x.Data));
 
 			proxy.api_get_member_useitem.TryParse<kcsapi_useitem[]>().Subscribe(x => this.Update(x.Data));
 
@@ -162,7 +162,7 @@ namespace Grabacr07.KanColleWrapper
 			}
 		}
 
-		private void DropShip(kcsapi_battleresult source)
+		/*private void DropShip(kcsapi_battleresult source)
 		{
 		    if (source.api_get_ship == null) return;
 
@@ -171,7 +171,7 @@ namespace Grabacr07.KanColleWrapper
 
 		    this.droppedItemsCount += target.RawData.api_defeq?.Count(x => x != -1) ?? 0;
 		    this.RaisePropertyChanged(nameof(SlotItemsCount));
-		}
+		}*/
 
 		private void RemodelSlotItem(kcsapi_remodel_slot source)
 		{

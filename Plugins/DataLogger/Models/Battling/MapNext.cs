@@ -40,9 +40,7 @@ namespace LynLogger.Models.Battling
                     [3] = new HandlerInfo(
                         (x, p) => null,
                         (o, i, p) => o.ZwMapLocation.MapLocId = (int)(DataStore.Premitives.SignedInteger)i, true),
-                    [4] = new HandlerInfo(
-                        (x, p) => null,
-                        (o, i, p) => o.ZwMapLocation.EnemyId = (int)(DataStore.Premitives.SignedInteger)i, true),
+                    [4] = HandlerInfo.NoOp,
                 };
             }
         }
