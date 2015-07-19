@@ -225,13 +225,13 @@ namespace LynLogger.Views
             RaiseMultiPropertyChanged(() => ShipSortMode);
         }
 
-        private static readonly Ranking[] _ranks = Enum.GetValues(typeof(Ranking)).Cast<Ranking>().ToArray();
+        private static readonly Ranking[] _ranks = (Ranking[])Enum.GetValues(typeof(Ranking));
         private static readonly ComparerBase<Ship>[] _builtinSorts = new ComparerBase<Ship>[] {
             new WeightComparerBase<Ship>("(默认)", x => x.Id, true),
             new WeightComparerBase<Ship>("等级", x => x.Level),
             new WeightComparerBase<Ship>("下一级经验", x => x.ExpNext, true),
             new WeightComparerBase<Ship>("总经验", x => x.Exp),
-            new WeightComparerBase<Ship>("舰种", x => Helpers.LookupTypeId(x.ShipInfo.ShipId), true),
+            new ComparerBase<Ship>("舰种", (a, b) => a.ShipInfo.TypeName.CompareTo(b.ShipInfo.TypeName), true),
             new WeightComparerBase<Ship>("舰名", x => x.ShipInfo.ShipId, true),
             new WeightComparerBase<Ship>("当前HP", x => x.Hp),
             new WeightComparerBase<Ship>("最大HP", x => x.HpMax),

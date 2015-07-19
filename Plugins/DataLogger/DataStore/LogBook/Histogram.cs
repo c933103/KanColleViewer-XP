@@ -38,8 +38,14 @@ namespace LynLogger.DataStore.LogBook
         public Histogram(StoragePremitive p, LinkedList<object> path)
         {
             path.AddFirst(this);
-            foreach(var kv in ((Premitives.Dictionary<SignedInteger, StoragePremitive>)p).Convert((k, v) => new KeyValuePair<long, T>(k.Value, revConverter(v, path)))) {
-                backend.Add(kv.Key, kv.Value);
+            if (p is Premitives.Dictionary<SignedInteger, StoragePremitive>) {
+                foreach (var kv in ((Premitives.Dictionary<SignedInteger, StoragePremitive>)p).Convert((k, v) => new KeyValuePair<long, T>(k.Value, revConverter(v, path)))) {
+                    backend.Add(kv.Key, kv.Value);
+                }
+            } else if(p is Compound) {
+                foreach(var kv in (Compound)p) {
+                    backend.Add((long)kv.Key, revConverter(kv.Value, path));
+                }
             }
             path.RemoveFirst();
             _holder = (ILogbook)path.First(x => x is ILogbook);
@@ -84,11 +90,14 @@ namespace LynLogger.DataStore.LogBook
 
             if (_path == null) _path = new LinkedList<object>();
             _path.AddFirst(this);
-            var r = backend.SkipWhile(x => x.Key < _holder.StartTimestamp && x.Key != lastKey)
-                           .TakeWhile(x => x.Key < _holder.EndTimestamp || x.Key == lastKey)
-                           .GetSerializationInfo(_path, (x, p) => new SignedInteger(x), converter);
-            _path.RemoveFirst();
 
+            var r = new Compound();
+            foreach(var record in backend.SkipWhile(x => x.Key < _holder.StartTimestamp && x.Key != lastKey)
+                                         .TakeWhile(x => x.Key < _holder.EndTimestamp || x.Key == lastKey)) {
+                r[(ulong)record.Key] = converter(record.Value, _path);
+            }
+
+            _path.RemoveFirst();
             return r;
         }
     }
