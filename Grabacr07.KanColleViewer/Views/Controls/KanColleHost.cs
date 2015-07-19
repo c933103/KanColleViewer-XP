@@ -102,11 +102,9 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 
             Fiddler.FiddlerApplication.BeforeRequest += QualityScript_BeforeRequest;
             Fiddler.FiddlerApplication.BeforeRequest += OverrideStylesheet_BeforeRequest;
-            Fiddler.FiddlerApplication.BeforeRequest += NoTouchActionStylesheet_BeforeRequest;
 
             Fiddler.FiddlerApplication.BeforeResponse += QualityScript_BeforeResponse;
             Fiddler.FiddlerApplication.BeforeResponse += OverrideStylesheet_BeforeResponse;
-            Fiddler.FiddlerApplication.BeforeResponse += NoTouchActionStylesheet_BeforeResponse;
         }
 
 		public override void OnApplyTemplate()
@@ -226,21 +224,6 @@ namespace Grabacr07.KanColleViewer.Views.Controls
         private static void NoTouchActionStylesheet_BrowserNavigating(object s, NavigatingCancelEventArgs e)
         {
             uri = e.Uri.AbsoluteUri;
-        }
-
-        private static void NoTouchActionStylesheet_BeforeRequest(Fiddler.Session oSession)
-        {
-            if (!Models.Settings.Current.DisableBrowserTouchAction) return;
-            if (oSession.fullUrl != uri) return;
-            oSession.bBufferResponse = true;
-        }
-
-        private static void NoTouchActionStylesheet_BeforeResponse(Fiddler.Session oSession)
-        {
-            if (!Models.Settings.Current.DisableBrowserTouchAction) return;
-            if (oSession.fullUrl != uri) return;
-            oSession.utilDecodeResponse();
-            oSession.utilReplaceInResponse("</head>", Properties.Settings.Default.TagNoTouchAction + "</head>");
         }
         #endregion
     }

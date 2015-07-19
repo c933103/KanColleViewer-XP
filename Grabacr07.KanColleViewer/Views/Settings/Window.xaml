@@ -37,8 +37,8 @@
         <CheckBox Content="主标签横向排列"
 			IsChecked="{Binding HorizontalTab, Mode=TwoWay, Source={x:Static models:Settings.Current}}"
 			Margin="20,0,0,10" />
-        <CheckBox Content="浏览器内禁用触摸手势（刷新页面生效）"
-			IsChecked="{Binding DisableBrowserTouchAction, Mode=TwoWay, Source={x:Static models:Settings.Current}}"
+        <CheckBox IsEnabled="False" IsChecked="False"
+            Content="浏览器内禁用触摸手势（无效，相关功能已在编译配置中禁用）"
 			Margin="20,0,0,10" />
 
         <Rectangle Height="1"

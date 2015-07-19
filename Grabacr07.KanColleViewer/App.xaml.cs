@@ -48,7 +48,6 @@ namespace Grabacr07.KanColleViewer
 			PluginHost.Instance.Initialize();
 			NotifierHost.Instance.Initialize(KanColleClient.Current);
             Helper.SetRegistryFeatureBrowserEmulation();
-            Helper.SetRegistryFeatureLegacyInputModel();
             Helper.SetMMCSSTask();
 
 			KanColleClient.Current.Proxy.Startup();
