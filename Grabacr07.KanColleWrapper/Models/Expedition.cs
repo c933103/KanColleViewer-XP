@@ -70,8 +70,14 @@ namespace Grabacr07.KanColleWrapper.Models
 					this._ReturnTime = value;
 					this.notificated = false;
 					this.RaisePropertyChanged();
-					this.RaisePropertyChanged("IsInExecution");
-				}
+					this.RaisePropertyChanged(nameof(IsInExecution));
+
+                    if (value.HasValue) {
+                        Connect();
+                    } else {
+                        Disconnect();
+                    }
+                }
 			}
 		}
 
@@ -112,8 +118,8 @@ namespace Grabacr07.KanColleWrapper.Models
 		public event EventHandler<ExpeditionReturnedEventArgs> Returned;
 
 
-		public Expedition(Fleet fleet)
-		{
+		public Expedition(Fleet fleet) : base(false)
+        {
 			this.fleet = fleet;
 		}
 

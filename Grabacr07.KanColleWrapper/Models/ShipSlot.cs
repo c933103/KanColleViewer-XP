@@ -8,9 +8,30 @@ namespace Grabacr07.KanColleWrapper.Models
 {
 	public class ShipSlot : NotificationObjectEx
 	{
-		public SlotItem Item { get; private set; }
+        private SlotItem _item;
+		public SlotItem Item
+        {
+            get { return _item; }
+            private set
+            {
+                if (_item == value) return;
+                _item = value;
+                RaisePropertyChanged(nameof(Item));
+                RaisePropertyChanged(nameof(Equipped));
+            }
+        }
 
-		public int Maximum { get; private set; }
+        private int _max;
+		public int Maximum
+        {
+            get { return _max; }
+            private set
+            {
+                if (_max == value) return;
+                _max = value;
+                RaisePropertyChanged();
+            }
+        }
 
 		public bool Equipped
 		{
@@ -38,9 +59,14 @@ namespace Grabacr07.KanColleWrapper.Models
 
 		public ShipSlot(SlotItem item, int maximum, int current)
 		{
-			this.Item = item;
-			this.Maximum = maximum;
-			this.Current = current;
+            Update(item, maximum, current);
 		}
-	}
+
+        internal void Update(SlotItem item, int maximum, int current)
+        {
+            this.Item = item;
+            this.Maximum = maximum;
+            this.Current = current;
+        }
+    }
 }

@@ -36,8 +36,14 @@ namespace Grabacr07.KanColleWrapper.Models
 					this._RejuvenateTime = value;
 					this.notificated = false;
 					this.RaisePropertyChanged();
-					this.RaisePropertyChanged("IsRejuvenating");
-				}
+					this.RaisePropertyChanged(nameof(IsRejuvenating));
+                    
+                    if (value.HasValue) {
+                        Connect();
+                    } else {
+                        Disconnect();
+                    }
+                }
 			}
 		}
 
@@ -74,6 +80,8 @@ namespace Grabacr07.KanColleWrapper.Models
 		#endregion
 
 		public event EventHandler<ConditionRejuvenatedEventArgs> Rejuvenated;
+
+        public FleetCondition() : base(false) { }
 
 		internal void Update(Ship[] s)
 		{

@@ -105,10 +105,10 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents
 
 			this.CompositeDisposable.Add(new PropertyChangedEventListener(quests)
 			{
-				{ () => quests.IsUntaken, (sender, args) => this.IsUntaken = quests.IsUntaken },
-				{ () => quests.All, (sender, args) => this.Quests = quests.All.Select(x => new QuestViewModel(x)).ToArray() },
-				{ () => quests.Current, (sender, args) => this.Current = quests.Current.Select(x => new QuestViewModel(x)).ToArray() },
-				{ () => quests.IsEmpty, (sender, args) => this.IsEmpty = quests.IsEmpty }
+				{ nameof(quests.IsUntaken), (sender, args) => this.IsUntaken = quests.IsUntaken },
+				{ nameof(quests.All)      , (sender, args) => this.Quests = quests.All.Select(x => new QuestViewModel(x)).ToArray() },
+				{ nameof(quests.Current)  , (sender, args) => this.Current = quests.Current.Select(x => new QuestViewModel(x)).ToArray() },
+				{ nameof(quests.IsEmpty)  , (sender, args) => this.IsEmpty = quests.IsEmpty }
 			});
 		}
 	}

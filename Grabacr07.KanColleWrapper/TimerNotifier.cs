@@ -22,23 +22,33 @@ namespace Grabacr07.KanColleWrapper
 		static TimerNotifier()
 		{
 			timer = Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(1)).Publish();
-			timer.Connect();
+            timer.Connect();
 		}
 
 		#endregion
 
-		private readonly IDisposable subscriber;
+		private IDisposable subscriber;
 
-		public TimerNotifier()
-		{
-			this.subscriber = timer.Subscribe(_ => this.Tick());
-		}
+        public TimerNotifier() : this(true) { }
+        public TimerNotifier(bool connect) { if(connect) Connect(); }
 
-		protected virtual void Tick() { }
+        protected virtual void Tick() { }
+        protected void Connect()
+        {
+            var subscription = timer.Subscribe(_ => Tick());
+            if(System.Threading.Interlocked.CompareExchange(ref subscriber, null, subscription) != null) {
+                subscription.Dispose();
+            }
+        }
+
+        protected void Disconnect()
+        {
+            System.Threading.Interlocked.Exchange(ref subscriber, null)?.Dispose();
+        }
 		
 		public virtual void Dispose()
 		{
-			this.subscriber.SafeDispose();
-		}
+            Disconnect();
+        }
 	}
 }

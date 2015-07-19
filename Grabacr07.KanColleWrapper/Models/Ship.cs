@@ -391,10 +391,15 @@ namespace Grabacr07.KanColleWrapper.Models
 				this.Luck = new ModernizableStatus(this.Info.RawData.api_luck, this.RawData.api_kyouka[4]);
 			}
 
-            this.Slots = this.RawData.api_slot
-                .Take(rawData.api_slotnum)
-                .Select(id => this.homeport.Itemyard.SlotItems[id])
-                .Select((t, i) => new ShipSlot(t, this.Info.RawData.api_maxeq.Get(i) ?? 0, this.RawData.api_onslot.Get(i) ?? 0)).ToArray();
+            if (this.Slots?.Length == rawData.api_slotnum) {
+                this.Slots.ForEach((obj, idx) => obj.Update(homeport.Itemyard.SlotItems[rawData.api_slot[idx]], this.Info.RawData.api_maxeq.Get(idx) ?? 0, this.RawData.api_onslot.Get(idx) ?? 0));
+                RaisePropertyChanged(nameof(Slots));
+            } else {
+                this.Slots = this.RawData.api_slot
+                    .Take(rawData.api_slotnum)
+                    .Select(id => this.homeport.Itemyard.SlotItems[id])
+                    .Select((t, i) => new ShipSlot(t, this.Info.RawData.api_maxeq.Get(i) ?? 0, this.RawData.api_onslot.Get(i) ?? 0)).ToArray();
+            }
 			this.EquippedSlots = this.Slots.Where(x => x.Equipped).ToArray();
 
 			if (this.EquippedSlots.Any(x => x.Item.Info.Type == SlotItemType.応急修理要員))
@@ -407,9 +412,9 @@ namespace Grabacr07.KanColleWrapper.Models
 			}
 
             // Count different types of equipments
-            var primaryCannons = 0;
-            var heavyPrimaryCannons = 0;
-            var secondaryCannons = 0;
+            var primaryGuns = 0;
+            var heavyPrimaryGuns = 0;
+            var secondaryGuns = 0;
             var torpedoes = 0;
             var observationPlanes = 0;
             var radars = 0;
@@ -427,15 +432,15 @@ namespace Grabacr07.KanColleWrapper.Models
                     default:
                         switch(itemInfo.IconType) {
                             case SlotItemIconType.MainCanonHeavy:
-                                heavyPrimaryCannons++;
-                                primaryCannons++;
+                                heavyPrimaryGuns++;
+                                primaryGuns++;
                                 break;
                             case SlotItemIconType.MainCanonLight:
                             case SlotItemIconType.MainCanonMedium:
-                                primaryCannons++;
+                                primaryGuns++;
                                 break;
                             case SlotItemIconType.SecondaryCanon:
-                                secondaryCannons++;
+                                secondaryGuns++;
                                 break;
                             case SlotItemIconType.Rader:
                                 radars++;
@@ -459,19 +464,19 @@ namespace Grabacr07.KanColleWrapper.Models
                                     case 10: //12.7cm連装高角砲
                                     case 66: //8cm高角砲
                                     case 71: //10cm連装高角砲(砲架)
-                                        secondaryCannons++;
+                                        secondaryGuns++;
                                         break;
                                     case 130: //12.7cm高角砲＋高射装置
-                                        secondaryCannons++;
+                                        secondaryGuns++;
                                         comboGunAndDirector++;
                                         break;
                                     case 3: //10cm連装高角砲
                                     case 48: //12.7cm単装高角砲
                                     case 91: //12.7cm連装高角砲(後期型)
-                                        primaryCannons++;
+                                        primaryGuns++;
                                         break;
                                     case 122: //10cm高角砲＋高射装置
-                                        primaryCannons++;
+                                        primaryGuns++;
                                         comboGunAndDirector++;
                                         break;
                                 }
@@ -484,17 +489,17 @@ namespace Grabacr07.KanColleWrapper.Models
 
             SpecialAttackType sat = SpecialAttackType.None;
             if(observationPlanes > 0) {
-                if(primaryCannons == 2 && secondaryCannons == 0 && apShells == 1 && radars == 0) sat |= SpecialAttackType.DualArtilleryWithCorrection;
-                if(primaryCannons == 1 && secondaryCannons == 1 && apShells == 1 && radars == 0) sat |= SpecialAttackType.ArtilleryWithApShellWithCorrection;
-                if(primaryCannons == 1 && secondaryCannons == 1 && apShells == 0 && radars == 1) sat |= SpecialAttackType.ArtilleryWithRadarCorrection;
-                if(primaryCannons >= 1 && secondaryCannons >= 1) sat |= SpecialAttackType.ArtilleryWithCanonWithCorrection;
-                if(primaryCannons >= 2) sat |= SpecialAttackType.DualArtillery;
+                if(primaryGuns == 2 && secondaryGuns == 0 && apShells == 1 && radars == 0) sat |= SpecialAttackType.DualArtilleryWithCorrection;
+                if(primaryGuns == 1 && secondaryGuns == 1 && apShells == 1 && radars == 0) sat |= SpecialAttackType.ArtilleryWithApShellWithCorrection;
+                if(primaryGuns == 1 && secondaryGuns == 1 && apShells == 0 && radars == 1) sat |= SpecialAttackType.ArtilleryWithRadarCorrection;
+                if(primaryGuns >= 1 && secondaryGuns >= 1) sat |= SpecialAttackType.ArtilleryWithCanonWithCorrection;
+                if(primaryGuns >= 2) sat |= SpecialAttackType.DualArtillery;
             }
             BattleSpecialAttack = sat;
 
-            if(heavyPrimaryCannons == 1 && aaShells == 1 && aaFireDirector == 1 && radars == 1) AntiAirCutIn = AaCutInType.ArtilleryAaT3ShellWithRadar;
+            if(heavyPrimaryGuns == 1 && aaShells == 1 && aaFireDirector == 1 && radars == 1) AntiAirCutIn = AaCutInType.ArtilleryAaT3ShellWithRadar;
             else if(comboGunAndDirector >= 2 && radars >= 1) AntiAirCutIn = AaCutInType.DualNavalAndAaGunWithRadar;
-            else if(heavyPrimaryCannons >= 1 && aaShells >= 1 && aaFireDirector >= 1) AntiAirCutIn = AaCutInType.ArtilleryAaT3ShellNoRadar;
+            else if(heavyPrimaryGuns >= 1 && aaShells >= 1 && aaFireDirector >= 1) AntiAirCutIn = AaCutInType.ArtilleryAaT3ShellNoRadar;
             else if(highAngleGun >= 1 && aaFireDirector >= 1 && radars >= 1) AntiAirCutIn = AaCutInType.NavalGunWithAaGunWithRadar;
             else if(comboGunAndDirector >= 1 && radars >= 1) AntiAirCutIn = AaCutInType.NavalAndAaGunWithRadar;
             else if(highAngleGun >= 1 && aaFireDirector >= 1) AntiAirCutIn = AaCutInType.NavalGunWithAaGunNoRadar;
@@ -509,13 +514,13 @@ namespace Grabacr07.KanColleWrapper.Models
             } else AntiAirCutIn = AaCutInType.None;
 
                  if(                                                torpedoes >= 2) NightSpecialAttack = NightBattleAttackType.TorpedoCutIn;
-            else if(primaryCannons >= 3                                           ) NightSpecialAttack = NightBattleAttackType.TriArtilleryCutIn;
-            else if(primaryCannons == 2 && secondaryCannons >= 1                  ) NightSpecialAttack = NightBattleAttackType.DualArtilleryWithCannonCutIn;
-            else if(primaryCannons == 2 && secondaryCannons == 0 && torpedoes == 1) NightSpecialAttack = NightBattleAttackType.DualArtilleryWithTorpedoCutIn;
-            else if(primaryCannons == 1 &&                          torpedoes == 1) NightSpecialAttack = NightBattleAttackType.ArtilleryWithTorpedoCutIn;
-            else if(primaryCannons == 2 && secondaryCannons == 0 && torpedoes == 0) NightSpecialAttack = NightBattleAttackType.DualArtillery;
-            else if(primaryCannons == 1 && secondaryCannons >= 1 && torpedoes == 0) NightSpecialAttack = NightBattleAttackType.ArtilleryWithCannon;
-            else if(secondaryCannons >= 2 && (torpedoes == 0 || torpedoes == 1)) NightSpecialAttack = NightBattleAttackType.DualCannon;
+            else if(primaryGuns >= 3                                           ) NightSpecialAttack = NightBattleAttackType.TriArtilleryCutIn;
+            else if(primaryGuns == 2 && secondaryGuns >= 1                  ) NightSpecialAttack = NightBattleAttackType.DualArtilleryWithCannonCutIn;
+            else if(primaryGuns == 2 && secondaryGuns == 0 && torpedoes == 1) NightSpecialAttack = NightBattleAttackType.DualArtilleryWithTorpedoCutIn;
+            else if(primaryGuns == 1 &&                          torpedoes == 1) NightSpecialAttack = NightBattleAttackType.ArtilleryWithTorpedoCutIn;
+            else if(primaryGuns == 2 && secondaryGuns == 0 && torpedoes == 0) NightSpecialAttack = NightBattleAttackType.DualArtillery;
+            else if(primaryGuns == 1 && secondaryGuns >= 1 && torpedoes == 0) NightSpecialAttack = NightBattleAttackType.ArtilleryWithCannon;
+            else if(secondaryGuns >= 2 && (torpedoes == 0 || torpedoes == 1)) NightSpecialAttack = NightBattleAttackType.DualCannon;
             else NightSpecialAttack = NightBattleAttackType.None;
         }
 

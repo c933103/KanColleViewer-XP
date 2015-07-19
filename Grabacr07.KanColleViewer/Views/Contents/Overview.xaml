@@ -32,45 +32,22 @@
 						Value="5,0,5,10" />
 			</Style>
 
-			<Style x:Key="JumbButtonStyleKey"
+            <Style x:Key="JumbButtonStyleKey"
 				   TargetType="{x:Type metro2:CallMethodButton}"
 				   BasedOn="{StaticResource {x:Type metro2:CallMethodButton}}">
-				<Setter Property="Background"
+                <Setter Property="Background"
 						Value="Transparent" />
-				<Setter Property="Padding"
+                <Setter Property="Padding"
 						Value="8" />
-				<Setter Property="HorizontalContentAlignment"
+                <Setter Property="HorizontalContentAlignment"
 						Value="Stretch" />
-				<Setter Property="VerticalContentAlignment"
+                <Setter Property="VerticalContentAlignment"
 						Value="Stretch" />
-				<Setter Property="Margin"
+                <Setter Property="Margin"
 						Value="5,0,5,10" />
-			</Style>
+            </Style>
 
-			<Style TargetType="{x:Type ToolTip}">
-				<Setter Property="OverridesDefaultStyle"
-						Value="True" />
-				<Setter Property="HasDropShadow"
-						Value="True" />
-				<Setter Property="Foreground"
-						Value="{DynamicResource AccentForegroundBrushKey}" />
-				<Setter Property="Template">
-					<Setter.Value>
-						<ControlTemplate TargetType="ToolTip">
-							<Border Name="Border"
-									BorderThickness="1"
-									BorderBrush="{DynamicResource BorderBrushKey}"
-									Background="{DynamicResource BackgroundBrushKey}"
-									Padding="8,4"
-									SnapsToDevicePixels="True">
-								<ContentPresenter />
-							</Border>
-						</ControlTemplate>
-					</Setter.Value>
-				</Setter>
-			</Style>
-
-			<Style TargetType="{x:Type TextBlock}"
+            <Style TargetType="{x:Type TextBlock}"
 				   BasedOn="{StaticResource DefaultTextStyleKey}" />
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -190,23 +167,12 @@
 																  SharedSizeGroup="Condition" />
 											</Grid.ColumnDefinitions>
 
-                                            <TextBlock ToolTipService.Placement="Relative"
-													   ToolTipService.HorizontalOffset="-9"
-													   ToolTipService.VerticalOffset="-3">
+                                            <TextBlock>
 											    <Run Text="{Binding Ship.Info.Name, Mode=OneWay}"
 												     Style="{DynamicResource EmphaticTextElementStyleKey}" />
 											    <LineBreak />
 											    <Run Text="{Binding Ship.Info.ShipType.Name, Mode=OneWay}"
 												     FontSize="11" />
-                                                <TextBlock.ToolTip>
-                                                    <TextBlock Margin="0,-2,0,0">
-													    <Run Text="{Binding Ship.Info.Name, Mode=OneWay}"
-														     Style="{DynamicResource EmphaticTextElementStyleKey}" />
-													    <LineBreak />
-													    <Run Text="{Binding Ship.Info.ShipType.Name, Mode=OneWay}"
-														     FontSize="11" />
-                                                    </TextBlock>
-                                                </TextBlock.ToolTip>
 										    </TextBlock>
 
                                             <TextBlock Grid.Column="1"

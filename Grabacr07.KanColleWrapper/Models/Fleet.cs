@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Grabacr07.KanColleWrapper.Models.Raw;
+using Grabacr07.KanColleWrapper.Internal;
 
 namespace Grabacr07.KanColleWrapper.Models
 {
@@ -111,37 +112,27 @@ namespace Grabacr07.KanColleWrapper.Models
 			this.UpdateShips(rawData.api_ship.Select(id => this.homeport.Organization.Ships[id]).ToArray());
 		}
 
-		#region 艦の編成 (Change, Unset)
+        #region 艦の編成 (Change, Unset)
 
-		/// <summary>
-		/// 艦隊の編成を変更します。
-		/// </summary>
-		/// <param name="index">編成を変更する艦のインデックス。通常は 0 ～ 5、旗艦以外をすべて外す場合は -1。</param>
-		/// <param name="ship">艦隊の <paramref name="index"/> 番目に新たに編成する艦。<paramref name="index"/> 番目から艦を外す場合は null。</param>
-		/// <returns>このメソッドを呼び出した時点で <paramref name="index"/> に配置されていた艦。</returns>
-		internal Ship Change(int index, Ship ship)
-		{
-			var current = this.originalShips[index];
+        /// <summary>
+        /// 艦隊の編成を変更します。
+        /// </summary>
+        /// <param name="index">編成を変更する艦のインデックス。通常は 0 ～ 5、旗艦以外をすべて外す場合は -1。</param>
+        /// <param name="ship">艦隊の <paramref name="index"/> 番目に新たに編成する艦。<paramref name="index"/> 番目から艦を外す場合は null。</param>
+        /// <returns>このメソッドを呼び出した時点で <paramref name="index"/> に配置されていた艦。</returns>
+        internal Ship Change(int index, Ship ship)
+        {
+            if (index == -1) {
+                UnsetAll(); return null;
+            }
 
-			List<Ship> list;
-			if (index == -1)
-			{
-				list = this.originalShips.Take(1).ToList();
-			}
-			else
-			{
-				list = this.originalShips.ToList();
-				list[index] = ship;
-				list.RemoveAll(x => x == null);
-			}
+            var current = this.originalShips[index];
 
-			var ships = new Ship[this.originalShips.Length];
-			Array.Copy(list.ToArray(), ships, list.Count);
+            this.originalShips[index] = ship;
+            this.UpdateShips(originalShips.ConsolidateNonNull());
 
-			this.UpdateShips(ships);
-
-			return current;
-		}
+            return current;
+        }
 
 		/// <summary>
 		/// 指定したインデックスの艦を艦隊から外します。
@@ -149,14 +140,8 @@ namespace Grabacr07.KanColleWrapper.Models
 		/// <param name="index">艦隊から外す艦のインデックス。</param>
 		internal void Unset(int index)
 		{
-			var list = this.originalShips.ToList();
-			list[index] = null;
-			list.RemoveAll(x => x == null);
-
-			var ships = new Ship[this.originalShips.Length];
-			Array.Copy(list.ToArray(), ships, list.Count);
-
-			this.UpdateShips(ships);
+            this.originalShips[index] = null;
+            this.UpdateShips(originalShips.ConsolidateNonNull());
 		}
 
 		/// <summary>
@@ -164,11 +149,11 @@ namespace Grabacr07.KanColleWrapper.Models
 		/// </summary>
 		internal void UnsetAll()
 		{
-			var list = this.originalShips.Take(1).ToList();
-			var ships = new Ship[this.originalShips.Length];
-			Array.Copy(list.ToArray(), ships, list.Count);
+            var flagship = originalShips.Get(0);
+            Array.Clear(this.originalShips, 0, originalShips.Length);
+            this.originalShips[0] = flagship;
 
-			this.UpdateShips(ships);
+			this.UpdateShips(originalShips);
 		}
 
 		#endregion
