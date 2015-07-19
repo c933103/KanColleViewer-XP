@@ -169,6 +169,7 @@ namespace Grabacr07.KanColleWrapper.Models
 				{
 					this.Completed(this, new BuildingCompletedEventArgs(this.Id, this.Ship));
 					this.notificated = true;
+                    Disconnect();
 				}
 			}
 			else

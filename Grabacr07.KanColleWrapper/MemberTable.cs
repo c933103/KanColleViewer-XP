@@ -127,7 +127,7 @@ namespace Grabacr07.KanColleWrapper
         private static NotifyCollectionChangedEventArgs _resetEvent = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
         private void RaiseCollectionReset()
         {
-            System.Windows.Application.Current.Dispatcher.BeginInvoke(new Action(() => CollectionChanged?.Invoke(this, _resetEvent)));
+            System.Windows.Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.DataBind, new Action(() => CollectionChanged?.Invoke(this, _resetEvent)));
         }
 	}
 }

@@ -41,6 +41,11 @@ namespace Grabacr07.KanColleViewer
 
 			this.DispatcherUnhandledException += (sender, args) => ReportException(sender, args.Exception, false);
 
+            System.Windows.Media.Animation.Timeline.DesiredFrameRateProperty.OverrideMetadata(
+                typeof(System.Windows.Media.Animation.Timeline),
+                new FrameworkPropertyMetadata { DefaultValue = 20 }
+            );
+
             DispatcherHelper.UIDispatcher = this.Dispatcher;
 			ProductInfo = new ProductInfo();
 
