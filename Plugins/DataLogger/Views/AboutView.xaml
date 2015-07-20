@@ -64,12 +64,6 @@
         <LineBreak />
         <LineBreak />
         <LineBreak />
-        <Run Text="祥  舰" Foreground="#10FFFFFF" />
-        <LineBreak />
-        <Run Text="瑞  队" Foreground="#10FFFFFF" />
-        <LineBreak />
-        <Run Text="雪  平" Foreground="#10FFFFFF" />
-        <LineBreak />
-        <Run Text="风  安" Foreground="#10FFFFFF" />
+        <Run Text="船是用来舔的！不想舔的船为什么要练！" Foreground="#20FFFFFF" />
     </TextBlock>
 </UserControl>
