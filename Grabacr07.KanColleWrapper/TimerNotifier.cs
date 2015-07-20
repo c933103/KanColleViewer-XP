@@ -35,6 +35,8 @@ namespace Grabacr07.KanColleWrapper
         protected virtual void Tick() { }
         protected void Connect()
         {
+            if (subscriber != null) return;
+
             var subscription = timer.Subscribe(_ => Tick());
             if(System.Threading.Interlocked.CompareExchange(ref subscriber, null, subscription) != null) {
                 subscription.Dispose();

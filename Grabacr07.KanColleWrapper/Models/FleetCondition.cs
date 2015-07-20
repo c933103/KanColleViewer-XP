@@ -129,7 +129,8 @@ namespace Grabacr07.KanColleWrapper.Models
 				{
 					this.Rejuvenated(this, new ConditionRejuvenatedEventArgs(this.Name, 0));
 					this.notificated = true;
-				}
+                    Disconnect();
+                }
 			}
 			else
 			{

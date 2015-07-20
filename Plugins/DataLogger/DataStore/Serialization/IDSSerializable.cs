@@ -21,7 +21,8 @@ namespace LynLogger.DataStore.Serialization
 
         protected virtual IDictionary<ulong, HandlerInfo> CustomFieldHandlers => null;
 
-        protected IDictionary<ulong, Premitives.StoragePremitive> blackBox = new Dictionary<ulong, Premitives.StoragePremitive>();
+        private IDictionary<ulong, Premitives.StoragePremitive> _blackBox;
+        protected IDictionary<ulong, Premitives.StoragePremitive> BlackBox => _blackBox ?? (_blackBox = new Dictionary<ulong, Premitives.StoragePremitive>());
 
         protected AbstractDSSerializable() { DeserializedStructureVersion = StructureVersion; }
 
@@ -35,7 +36,7 @@ namespace LynLogger.DataStore.Serialization
             foreach (var kv in info) {
                 HandlerInfo handler;
                 if(!_serializationHandlers.TryGetValue(kv.Key, out handler)) {
-                    blackBox.Add(kv.Key, kv.Value);
+                    BlackBox.Add(kv.Key, kv.Value);
                 } else {
                     if (depth > handler.DepthLimit) continue;
                     if (handler.IgnoreIfNull && kv.Value == null) continue;
@@ -50,7 +51,7 @@ namespace LynLogger.DataStore.Serialization
             InitHandlers();
 
             var r = new Premitives.Compound();
-            foreach(var kv in blackBox) {
+            foreach(var kv in BlackBox) {
                 r[kv.Key] = kv.Value;
             }
 

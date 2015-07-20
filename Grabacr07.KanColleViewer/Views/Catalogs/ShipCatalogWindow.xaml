@@ -481,7 +481,9 @@
 
 				<ListView ItemsSource="{Binding Ships}"
 						  ItemContainerStyle="{DynamicResource GridViewItemContainerStyleKey}"
-						  ScrollViewer.PanningMode="Both">
+						  ScrollViewer.PanningMode="Both"
+                          ScrollViewer.CanContentScroll="True"
+                          VirtualizingStackPanel.VirtualizationMode="Recycling">
 					<ListView.Resources>
 						<Style TargetType="{x:Type TextBlock}">
 							<Setter Property="Margin"

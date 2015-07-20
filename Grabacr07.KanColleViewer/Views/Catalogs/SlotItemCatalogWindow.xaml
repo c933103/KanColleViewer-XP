@@ -78,7 +78,9 @@
 					Margin="8">
 				<ListView ItemsSource="{Binding SlotItems}"
 						  ItemContainerStyle="{DynamicResource GridViewItemContainerStyleKey}"
-						  ScrollViewer.PanningMode="Both">
+						  ScrollViewer.PanningMode="Both"
+                          ScrollViewer.CanContentScroll="True"
+                          VirtualizingStackPanel.VirtualizationMode="Recycling">
 					<ListView.Resources>
 						<Style TargetType="{x:Type TextBlock}"
 							   BasedOn="{StaticResource DefaultTextStyleKey}">

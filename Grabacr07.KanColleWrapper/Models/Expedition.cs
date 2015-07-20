@@ -156,7 +156,8 @@ namespace Grabacr07.KanColleWrapper.Models
 				{
 					this.Returned(this, new ExpeditionReturnedEventArgs(this.fleet.Name));
 					this.notificated = true;
-				}
+                    Disconnect();
+                }
 			}
 			else
 			{
