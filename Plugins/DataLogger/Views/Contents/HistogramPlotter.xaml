@@ -47,8 +47,8 @@
                 <Path x:Name="PlotDataIncrement" Panel.ZIndex="100" Fill="#7FFF0000"/>
                 <Path x:Name="PlotDataDecrement" Panel.ZIndex="100" Fill="#7F00FF00"/>
                 <Path x:Name="PlotGrid" Stroke="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
-                <Rectangle x:Name="Cursor" Panel.ZIndex="300" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Width="2" Height="250" Visibility="Collapsed" />
-                <TextBlock x:Name="CursorValue" Panel.ZIndex="400" Visibility="Collapsed" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" Padding="5"/>
+                <Rectangle x:Name="DataCursor" Panel.ZIndex="300" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Width="2" Height="250" Visibility="Collapsed" />
+                <TextBlock x:Name="DataCursorValue" Panel.ZIndex="400" Visibility="Collapsed" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" Padding="5"/>
             </Canvas>
         </Border>
     </Grid>

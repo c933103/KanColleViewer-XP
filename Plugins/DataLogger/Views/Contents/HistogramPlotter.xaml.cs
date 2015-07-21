@@ -62,7 +62,7 @@ namespace LynLogger.Views.Contents
 
             PlotDataHistory.Width = PlotDataIncrement.Width = PlotDataDecrement.Width = plotArea.Width;
             PlotDataHistory.Height = PlotDataIncrement.Height = PlotDataDecrement.Height = plotArea.Height;
-            Cursor.Height = plotArea.Height;
+            DataCursor.Height = plotArea.Height;
 
             ReplotGrid();
             ReplotData();
@@ -284,31 +284,31 @@ namespace LynLogger.Views.Contents
                 if (node.Next == null) break;
                 node = node.Next;
             }
-            Canvas.SetLeft(Cursor, (node.Value.Key - minTs) * plotArea.Width / (maxTs - minTs)-1);
-            Cursor.Visibility = Visibility.Visible;
+            Canvas.SetLeft(DataCursor, (node.Value.Key - minTs) * plotArea.Width / (maxTs - minTs)-1);
+            DataCursor.Visibility = Visibility.Visible;
 
-            CursorValue.Text = string.Format("{0}\n{1} ({2:+#;-#;0})", Helpers.FromUnixTimestamp(node.Value.Key).LocalDateTime, node.Value.Value, (node.Value.Value - node.Previous?.Value.Value) ?? 0);
+            DataCursorValue.Text = string.Format("{0}\n{1} ({2:+#;-#;0})", Helpers.FromUnixTimestamp(node.Value.Key).LocalDateTime, node.Value.Value, (node.Value.Value - node.Previous?.Value.Value) ?? 0);
             if (node.Value.Key > (minTs / 2 + maxTs / 2)) {
-                Canvas.SetLeft(CursorValue, double.NaN);
-                Canvas.SetRight(CursorValue, (maxTs - node.Value.Key) * plotArea.Width / (maxTs - minTs));
+                Canvas.SetLeft(DataCursorValue, double.NaN);
+                Canvas.SetRight(DataCursorValue, (maxTs - node.Value.Key) * plotArea.Width / (maxTs - minTs));
             } else {
-                Canvas.SetLeft(CursorValue, (node.Value.Key - minTs) * plotArea.Width / (maxTs - minTs));
-                Canvas.SetRight(CursorValue, double.NaN);
+                Canvas.SetLeft(DataCursorValue, (node.Value.Key - minTs) * plotArea.Width / (maxTs - minTs));
+                Canvas.SetRight(DataCursorValue, double.NaN);
             }
             if (node.Value.Value > (minVal / 2 + maxVal / 2)) {
-                Canvas.SetBottom(CursorValue, double.NaN);
-                Canvas.SetTop(CursorValue, (maxVal - node.Value.Value) * plotArea.Height / (maxVal - minVal));
+                Canvas.SetBottom(DataCursorValue, double.NaN);
+                Canvas.SetTop(DataCursorValue, (maxVal - node.Value.Value) * plotArea.Height / (maxVal - minVal));
             } else {
-                Canvas.SetBottom(CursorValue, (node.Value.Value - minVal) * plotArea.Height / (maxVal - minVal));
-                Canvas.SetTop(CursorValue, double.NaN);
+                Canvas.SetBottom(DataCursorValue, (node.Value.Value - minVal) * plotArea.Height / (maxVal - minVal));
+                Canvas.SetTop(DataCursorValue, double.NaN);
             }
-            CursorValue.Visibility = Visibility.Visible;
+            DataCursorValue.Visibility = Visibility.Visible;
         }
 
         private void Border_MouseLeave(object sender, MouseEventArgs e)
         {
-            Cursor.Visibility = Visibility.Collapsed;
-            CursorValue.Visibility = Visibility.Collapsed;
+            DataCursor.Visibility = Visibility.Collapsed;
+            DataCursorValue.Visibility = Visibility.Collapsed;
         }
     }
 }
