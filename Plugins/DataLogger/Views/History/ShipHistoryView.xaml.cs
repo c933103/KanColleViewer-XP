@@ -134,7 +134,7 @@ namespace LynLogger.Views.History
         {
             public static ICommand Instance = new CommandDeleteSelected();
 
-            public event EventHandler CanExecuteChanged;
+            public event EventHandler CanExecuteChanged { add { } remove { } }
 
             public bool CanExecute(object parameter) => true;
 
@@ -154,7 +154,7 @@ namespace LynLogger.Views.History
         {
             public static ICommand Instance = new CommandCleanNonExsistent();
 
-            public event EventHandler CanExecuteChanged;
+            public event EventHandler CanExecuteChanged { add { } remove { } }
 
             public bool CanExecute(object parameter) => true;
 

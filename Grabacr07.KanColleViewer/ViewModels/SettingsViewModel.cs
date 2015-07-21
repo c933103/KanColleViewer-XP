@@ -339,11 +339,10 @@ namespace Grabacr07.KanColleViewer.ViewModels
 				this.selected = Settings.Current.KanColleClientSettings.ViewRangeCalcType == logic.Id;
 			}
         }
-
-#pragma warning disable 0067
+        
         private class SetFlashQualityCommand : ICommand
         {
-            public event EventHandler CanExecuteChanged;
+            public event EventHandler CanExecuteChanged { add { } remove { } }
             public bool CanExecute(object parameter) { return true; }
 
             public void Execute(object parameter)
@@ -356,7 +355,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
         private class SetFlashRenderModeCommand : ICommand
         {
-            public event EventHandler CanExecuteChanged;
+            public event EventHandler CanExecuteChanged { add { } remove { } }
             public bool CanExecute(object parameter) { return true; }
 
             public void Execute(object parameter)
