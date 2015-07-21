@@ -41,8 +41,8 @@
         <TextBlock Grid.Column="4" Grid.Row="5" Text="0" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap" x:Name="Time3" Margin="5" TextAlignment="Center"/>
         <TextBlock Grid.Column="5" Grid.Row="5" Text="0" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap" x:Name="Time4" Margin="5" TextAlignment="Center"/>
 
-        <Border Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="5" Grid.RowSpan="5" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" SizeChanged="Plot_SizeChanged">
-            <Canvas MouseMove="Canvas_MouseMove" MouseLeave="Border_MouseLeave" IsHitTestVisible="True" Background="Transparent">
+        <Border Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="5" Grid.RowSpan="5" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
+            <Canvas MouseMove="Canvas_MouseMove" MouseLeave="Border_MouseLeave" SizeChanged="Plot_SizeChanged" IsHitTestVisible="True" Background="Transparent">
                 <Path x:Name="PlotDataHistory" Panel.ZIndex="200" Stroke="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Fill="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" StrokeThickness="3"/>
                 <Path x:Name="PlotDataIncrement" Panel.ZIndex="100" Fill="#7FFF0000"/>
                 <Path x:Name="PlotDataDecrement" Panel.ZIndex="100" Fill="#7F00FF00"/>

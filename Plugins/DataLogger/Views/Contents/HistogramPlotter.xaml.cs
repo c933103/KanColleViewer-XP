@@ -59,9 +59,10 @@ namespace LynLogger.Views.Contents
         private void Plot_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             plotArea = e.NewSize;
-            PlotDataHistory.Width = PlotDataIncrement.Width = PlotDataDecrement.Width = e.NewSize.Width;
-            PlotDataHistory.Height = PlotDataIncrement.Height = PlotDataDecrement.Height = e.NewSize.Height;
-            Cursor.Height = e.NewSize.Height;
+
+            PlotDataHistory.Width = PlotDataIncrement.Width = PlotDataDecrement.Width = plotArea.Width;
+            PlotDataHistory.Height = PlotDataIncrement.Height = PlotDataDecrement.Height = plotArea.Height;
+            Cursor.Height = plotArea.Height;
 
             ReplotGrid();
             ReplotData();
@@ -91,6 +92,8 @@ namespace LynLogger.Views.Contents
                 double minDelta = 0;
                 double maxDelta = 0;
                 double lastDelta = 0;
+                double width = plotArea.Width;
+                double height = plotArea.Height;
                 bool avgDelta = AverageDelta ?? false;
                 LinkedListNode<KeyValuePair<long, double>> node = dat.First;
 
@@ -149,23 +152,23 @@ namespace LynLogger.Views.Contents
                     lnPrev = (lastDelta < 0) ? lnDecr : lnIncr;
                     lnThis = (delta < 0) ? lnDecr : lnIncr;
 
-                    lnHist.Points.Add(new Point((ts - minTs) / tsDiff * plotArea.Width, (maxVal - val) / valDiff * plotArea.Height));
+                    lnHist.Points.Add(new Point((ts - minTs) / tsDiff * width, (maxVal - val) / valDiff * height));
                     if(avgDelta) {
                         //double intermidiateTs = ((double)ts + node.Previous.Value.Key) / 2;
-                        lnPrev.Points.Add(new Point((node.Previous.Value.Key - minTs) / tsDiff * plotArea.Width, (maxDelta - lastDelta) / deltaDiff * plotArea.Height));
+                        lnPrev.Points.Add(new Point((node.Previous.Value.Key - minTs) / tsDiff * width, (maxDelta - lastDelta) / deltaDiff * height));
                         if(lnPrev != lnThis) {
-                            lnPrev.Points.Add(new Point((node.Previous.Value.Key - minTs) / tsDiff * plotArea.Width, (maxDelta) / deltaDiff * plotArea.Height));
-                            lnThis.Points.Add(new Point((node.Previous.Value.Key - minTs) / tsDiff * plotArea.Width, (maxDelta) / deltaDiff * plotArea.Height));
+                            lnPrev.Points.Add(new Point((node.Previous.Value.Key - minTs) / tsDiff * width, (maxDelta) / deltaDiff * height));
+                            lnThis.Points.Add(new Point((node.Previous.Value.Key - minTs) / tsDiff * width, (maxDelta) / deltaDiff * height));
                         }
-                        lnThis.Points.Add(new Point((node.Previous.Value.Key - minTs) / tsDiff * plotArea.Width, (maxDelta - delta) / deltaDiff * plotArea.Height));
+                        lnThis.Points.Add(new Point((node.Previous.Value.Key - minTs) / tsDiff * width, (maxDelta - delta) / deltaDiff * height));
                     } else {
                         if(lnPrev != lnThis) {
                             long tsDelta = ts - node.Previous.Value.Key;
                             double intermidiateTs = ts - (val / delta * tsDelta);
-                            lnPrev.Points.Add(new Point((intermidiateTs - minTs) / tsDiff * plotArea.Width, (maxDelta) / deltaDiff * plotArea.Height));
-                            lnThis.Points.Add(new Point((intermidiateTs - minTs) / tsDiff * plotArea.Width, (maxDelta) / deltaDiff * plotArea.Height));
+                            lnPrev.Points.Add(new Point((intermidiateTs - minTs) / tsDiff * width, (maxDelta) / deltaDiff * height));
+                            lnThis.Points.Add(new Point((intermidiateTs - minTs) / tsDiff * width, (maxDelta) / deltaDiff * height));
                         }
-                        lnThis.Points.Add(new Point((ts - minTs) / tsDiff * plotArea.Width, (maxDelta - delta) / deltaDiff * plotArea.Height));
+                        lnThis.Points.Add(new Point((ts - minTs) / tsDiff * width, (maxDelta - delta) / deltaDiff * height));
                     }
 
                     node = node.Next;
@@ -173,18 +176,18 @@ namespace LynLogger.Views.Contents
                 }
                 if(avgDelta) {
                     PolyLineSegment lnPrev = (lastDelta < 0) ? lnDecr : lnIncr;
-                    lnPrev.Points.Add(new Point((dat.Last.Value.Key - minTs) / tsDiff * plotArea.Width, (maxDelta - lastDelta) / deltaDiff * plotArea.Height));
+                    lnPrev.Points.Add(new Point((dat.Last.Value.Key - minTs) / tsDiff * width, (maxDelta - lastDelta) / deltaDiff * height));
                 } else {
 
                 }
-                lnIncr.Points.Add(new Point((dat.Last.Value.Key - minTs) / tsDiff * plotArea.Width, (maxDelta) / deltaDiff * plotArea.Height));
-                lnDecr.Points.Add(new Point((dat.Last.Value.Key - minTs) / tsDiff * plotArea.Width, (maxDelta) / deltaDiff * plotArea.Height));
+                lnIncr.Points.Add(new Point((dat.Last.Value.Key - minTs) / tsDiff * width, (maxDelta) / deltaDiff * height));
+                lnDecr.Points.Add(new Point((dat.Last.Value.Key - minTs) / tsDiff * width, (maxDelta) / deltaDiff * height));
 
                 PathFigure figHist = new PathFigure() { IsClosed = false, IsFilled = false };
                 PathFigure figIncr = new PathFigure() { IsClosed = true, IsFilled = true };
                 PathFigure figDecr = new PathFigure() { IsClosed = true, IsFilled = true };
-                figHist.StartPoint = new Point((dat.First.Value.Key - minTs) / tsDiff * plotArea.Width, (maxVal - dat.First.Value.Value) / valDiff * plotArea.Height);
-                figDecr.StartPoint = figIncr.StartPoint = new Point((dat.First.Value.Key - minTs) / tsDiff * plotArea.Width, maxDelta / deltaDiff * plotArea.Height);
+                figHist.StartPoint = new Point((dat.First.Value.Key - minTs) / tsDiff * width, (maxVal - dat.First.Value.Value) / valDiff * height);
+                figDecr.StartPoint = figIncr.StartPoint = new Point((dat.First.Value.Key - minTs) / tsDiff * width, maxDelta / deltaDiff * height);
 
                 figHist.Segments.Add(lnHist);
                 figDecr.Segments.Add(lnDecr);
@@ -281,22 +284,22 @@ namespace LynLogger.Views.Contents
                 if (node.Next == null) break;
                 node = node.Next;
             }
-            Canvas.SetLeft(Cursor, (node.Value.Key - minTs) * plotArea.Width / (maxTs - minTs));
+            Canvas.SetLeft(Cursor, (node.Value.Key - minTs) * plotArea.Width / (maxTs - minTs)-1);
             Cursor.Visibility = Visibility.Visible;
 
             CursorValue.Text = string.Format("{0}\n{1} ({2:+#;-#;0})", Helpers.FromUnixTimestamp(node.Value.Key).LocalDateTime, node.Value.Value, (node.Value.Value - node.Previous?.Value.Value) ?? 0);
             if (node.Value.Key > (minTs / 2 + maxTs / 2)) {
                 Canvas.SetLeft(CursorValue, double.NaN);
-                Canvas.SetRight(CursorValue, (maxTs - node.Value.Key) * plotArea.Width / (maxTs - minTs)-2);
+                Canvas.SetRight(CursorValue, (maxTs - node.Value.Key) * plotArea.Width / (maxTs - minTs));
             } else {
-                Canvas.SetLeft(CursorValue, (node.Value.Key - minTs) * plotArea.Width / (maxTs - minTs)+2);
+                Canvas.SetLeft(CursorValue, (node.Value.Key - minTs) * plotArea.Width / (maxTs - minTs));
                 Canvas.SetRight(CursorValue, double.NaN);
             }
             if (node.Value.Value > (minVal / 2 + maxVal / 2)) {
                 Canvas.SetBottom(CursorValue, double.NaN);
-                Canvas.SetTop(CursorValue, (maxVal - node.Value.Value) * plotArea.Height / (maxVal - minVal)+1);
+                Canvas.SetTop(CursorValue, (maxVal - node.Value.Value) * plotArea.Height / (maxVal - minVal));
             } else {
-                Canvas.SetBottom(CursorValue, (node.Value.Value - minVal) * plotArea.Height / (maxVal - minVal)-1);
+                Canvas.SetBottom(CursorValue, (node.Value.Value - minVal) * plotArea.Height / (maxVal - minVal));
                 Canvas.SetTop(CursorValue, double.NaN);
             }
             CursorValue.Visibility = Visibility.Visible;
