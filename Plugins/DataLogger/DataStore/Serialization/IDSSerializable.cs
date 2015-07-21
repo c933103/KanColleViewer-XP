@@ -74,7 +74,7 @@ namespace LynLogger.DataStore.Serialization
             if(_serializationHandlers != null) return;
 
             var localHandlers = new ConcurrentDictionary<ulong, HandlerInfo> {
-                [0] = new HandlerInfo((x, p) => new Premitives.UnsignedInteger(x.StructureVersion), (o, i, p) => o.DeserializedStructureVersion = ((Premitives.UnsignedInteger)i).Value)
+                [0] = new HandlerInfo((x, p) => x.StructureVersion != 0 ? new Premitives.UnsignedInteger(x.StructureVersion) : null, (o, i, p) => o.DeserializedStructureVersion = ((Premitives.UnsignedInteger)i)?.Value ?? 0)
             };
             foreach(var kv in DiscoverFields()) {
                 localHandlers[kv.Key+16] = kv.Value;

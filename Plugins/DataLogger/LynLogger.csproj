@@ -190,8 +190,7 @@
     <Compile Include="Views\Controls\HorizontalTabViewControl.xaml.cs">
       <DependentUpon>HorizontalTabViewControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ShipHistoryModel.cs" />
-    <Compile Include="Views\ShipHistoryView.xaml.cs">
+    <Compile Include="Views\History\ShipHistoryView.xaml.cs">
       <DependentUpon>ShipHistoryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShipStatusCustomSorting.cs" />
@@ -218,9 +217,7 @@
       <Name>MetroRadiance</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Networking\Packets\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Views\AboutView.xaml">
       <SubType>Designer</SubType>
@@ -282,7 +279,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ShipHistoryView.xaml">
+    <Page Include="Views\History\ShipHistoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

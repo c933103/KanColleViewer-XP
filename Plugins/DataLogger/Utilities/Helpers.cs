@@ -49,41 +49,6 @@ namespace LynLogger
             return s.ToString();
         }
 
-        public static void WriteVLCI(this Stream output, ulong val)
-        {
-            for(int i = 0; i < 9; i++) {
-                byte thisByte = (byte)(val & 0x7F);
-                val >>= 7;
-                if(val != 0) {
-                    thisByte |= 0x80;
-                    output.WriteByte(thisByte);
-                } else {
-                    output.WriteByte(thisByte);
-                    break;
-                }
-            }
-        }
-
-        public static ulong ReadVLCI(this Stream input)
-        {
-            ulong val = 0;
-            for(int i = 0; i < 9; i++) {
-                int b = input.ReadByte();
-                if(b < 0)
-                    throw new EndOfStreamException();
-
-                ulong l = (ulong)(b & 0x7F);
-                val |= l << (7*i);
-
-                if((b & 0x80) == 0) break;
-                if(i == 8) {
-                    if((b & 0x80) != 0) val |= 1UL << 63;
-                }
-            }
-
-            return val;
-        }
-
         public static IEnumerable<TResult> SelectWithPrevious<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TSource, TResult> projection)
         {
             using(var enumerator = source.GetEnumerator()) {
