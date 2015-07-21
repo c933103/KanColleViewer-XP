@@ -109,8 +109,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
         public ICommand DeleteRuleCommand => new CmdDeleteRule(this);
         public ICommand ExportRuleCommand => new CmdExportRule(this);
         public ICommand ImportRuleCommand => new CmdImportRule(this);
-
-#pragma warning disable 0067
+        
         private class CmdInsertRule : ICommand
         {
             private readonly ProxyRulesViewModel vm;
@@ -120,7 +119,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
                 this.vm = vm;
             }
 
-            public event EventHandler CanExecuteChanged;
+            public event EventHandler CanExecuteChanged { add { } remove { } }
 
             public bool CanExecute(object parameter)
             {
@@ -153,7 +152,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
                 this.vm = vm;
             }
 
-            public event EventHandler CanExecuteChanged;
+            public event EventHandler CanExecuteChanged { add { } remove { } }
 
             public bool CanExecute(object parameter)
             {
@@ -177,7 +176,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
                 this.vm = vm;
             }
 
-            public event EventHandler CanExecuteChanged;
+            public event EventHandler CanExecuteChanged { add { } remove { } }
 
             public bool CanExecute(object parameter)
             {
@@ -209,7 +208,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
                 this.vm = vm;
             }
 
-            public event EventHandler CanExecuteChanged;
+            public event EventHandler CanExecuteChanged { add { } remove { } }
 
             public bool CanExecute(object parameter)
             {

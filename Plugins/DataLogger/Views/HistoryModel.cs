@@ -72,6 +72,7 @@ namespace LynLogger.Views
                 new TabViewItem("资源", () => new History.ResourceHistoryView() { BasicInfoLogBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.BasicInfo)) {Source = this } }),
                 new TabViewItem("出击", () => new History.SortieHistoryView() { SortieLogBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.SortieLog)) {Source = this } }),
                 new TabViewItem("演习", () => new History.DrillHistoryView() { DrillLogBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.DrillLog)) {Source = this } }),
+                new TabViewItem("舰娘", () => new History.ShipHistoryView() { ShipHistoryBinding = new System.Windows.Data.Binding(nameof(SelectedBook)+"."+nameof(SelectedBook.Ships)) {Source = this } }),
             };
             
             listPages.ForEach(x => x.IsSelected = false);

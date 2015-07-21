@@ -84,7 +84,9 @@ namespace LynLogger.DataStore
             }
 
             public ShipsAccessor(Logbook lbk) { this.lbk = lbk; }
-            public bool Contains(int id) { return lbk._ships.ContainsKey(id); }
+            public bool Contains(int id) => lbk._ships.ContainsKey(id);
+            public bool Remove(int id) => lbk._ships.Remove(id);
+
             public IEnumerator<Ship> GetEnumerator() { return lbk._ships.Values.GetEnumerator(); }
             IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
         }
@@ -108,5 +110,6 @@ namespace LynLogger.DataStore
     {
         Ship this[int id] { get; }
         bool Contains(int id);
+        bool Remove(int id);
     }
 }

@@ -64,12 +64,11 @@ namespace LynLogger.Views
         {
             get { return DataStore.Store.Current; }
         }
-
-#pragma warning disable 0067
+        
         private class SaveDataCommand : ICommand
         {
             public bool CanExecute(object parameter) { return true; }
-            public event EventHandler CanExecuteChanged;
+            public event EventHandler CanExecuteChanged { add { } remove { } }
 
             public void Execute(object parameter)
             {
@@ -80,7 +79,7 @@ namespace LynLogger.Views
         private class SwitchMemberCommand : ICommand
         {
             public bool CanExecute(object parameter) { return true; }
-            public event EventHandler CanExecuteChanged;
+            public event EventHandler CanExecuteChanged { add { } remove { } }
 
             private readonly SettingsModel vm;
             public SwitchMemberCommand(SettingsModel vm) { this.vm = vm; }
