@@ -42,11 +42,13 @@
         <TextBlock Grid.Column="5" Grid.Row="5" Text="0" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap" x:Name="Time4" Margin="5" TextAlignment="Center"/>
 
         <Border Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="5" Grid.RowSpan="5" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" SizeChanged="Plot_SizeChanged">
-            <Canvas>
+            <Canvas MouseMove="Canvas_MouseMove" MouseLeave="Border_MouseLeave" IsHitTestVisible="True" Background="Transparent">
                 <Path x:Name="PlotDataHistory" Panel.ZIndex="200" Stroke="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Fill="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" StrokeThickness="3"/>
                 <Path x:Name="PlotDataIncrement" Panel.ZIndex="100" Fill="#7FFF0000"/>
                 <Path x:Name="PlotDataDecrement" Panel.ZIndex="100" Fill="#7F00FF00"/>
                 <Path x:Name="PlotGrid" Stroke="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+                <Rectangle x:Name="Cursor" Panel.ZIndex="300" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Width="2" Height="250" Visibility="Collapsed" />
+                <TextBlock x:Name="CursorValue" Panel.ZIndex="400" Visibility="Collapsed" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" Padding="5"/>
             </Canvas>
         </Border>
     </Grid>

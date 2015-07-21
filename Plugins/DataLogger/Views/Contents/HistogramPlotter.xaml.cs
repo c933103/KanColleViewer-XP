@@ -24,6 +24,11 @@ namespace LynLogger.Views.Contents
         public static readonly DependencyProperty dpAverageDelta = DependencyProperty.Register(nameof(AverageDelta), typeof(bool?), typeof(HistogramPlotter), new PropertyMetadata(new PropertyChangedCallback(PlotChanged)));
 
         private Size plotArea;
+        private long minTs = long.MaxValue;
+        private long maxTs = long.MinValue;
+        private double minVal = double.MaxValue;
+        private double maxVal = double.MinValue;
+        private LinkedList<KeyValuePair<long, double>> dat;
 
         public IEnumerable<KeyValuePair<long, double>> PlotData
         {
@@ -56,6 +61,7 @@ namespace LynLogger.Views.Contents
             plotArea = e.NewSize;
             PlotDataHistory.Width = PlotDataIncrement.Width = PlotDataDecrement.Width = e.NewSize.Width;
             PlotDataHistory.Height = PlotDataIncrement.Height = PlotDataDecrement.Height = e.NewSize.Height;
+            Cursor.Height = e.NewSize.Height;
 
             ReplotGrid();
             ReplotData();
@@ -66,7 +72,7 @@ namespace LynLogger.Views.Contents
             try {
                 if(PlotData == null) return;
 
-                var dat = new LinkedList<KeyValuePair<long, double>>(PlotData);
+                dat = new LinkedList<KeyValuePair<long, double>>(PlotData);
                 if(dat.First == null) return;
                 if(dat.First.Next == null) {
                     PlotDataHistory.Data = new EllipseGeometry(new Point(plotArea.Width/2, plotArea.Height/2), 5, 5);
@@ -78,10 +84,10 @@ namespace LynLogger.Views.Contents
                     return;
                 }
 
-                long minTs = long.MaxValue;
-                long maxTs = long.MinValue;
-                double minVal = double.MaxValue;
-                double maxVal = double.MinValue;
+                minTs = long.MaxValue;
+                maxTs = long.MinValue;
+                minVal = double.MaxValue;
+                maxVal = double.MinValue;
                 double minDelta = 0;
                 double maxDelta = 0;
                 double lastDelta = 0;
@@ -145,13 +151,13 @@ namespace LynLogger.Views.Contents
 
                     lnHist.Points.Add(new Point((ts - minTs) / tsDiff * plotArea.Width, (maxVal - val) / valDiff * plotArea.Height));
                     if(avgDelta) {
-                        double intermidiateTs = ((double)ts + node.Previous.Value.Key) / 2;
-                        lnPrev.Points.Add(new Point((intermidiateTs - minTs) / tsDiff * plotArea.Width, (maxDelta - lastDelta) / deltaDiff * plotArea.Height));
+                        //double intermidiateTs = ((double)ts + node.Previous.Value.Key) / 2;
+                        lnPrev.Points.Add(new Point((node.Previous.Value.Key - minTs) / tsDiff * plotArea.Width, (maxDelta - lastDelta) / deltaDiff * plotArea.Height));
                         if(lnPrev != lnThis) {
-                            lnPrev.Points.Add(new Point((intermidiateTs - minTs) / tsDiff * plotArea.Width, (maxDelta) / deltaDiff * plotArea.Height));
-                            lnThis.Points.Add(new Point((intermidiateTs - minTs) / tsDiff * plotArea.Width, (maxDelta) / deltaDiff * plotArea.Height));
+                            lnPrev.Points.Add(new Point((node.Previous.Value.Key - minTs) / tsDiff * plotArea.Width, (maxDelta) / deltaDiff * plotArea.Height));
+                            lnThis.Points.Add(new Point((node.Previous.Value.Key - minTs) / tsDiff * plotArea.Width, (maxDelta) / deltaDiff * plotArea.Height));
                         }
-                        lnThis.Points.Add(new Point((intermidiateTs - minTs) / tsDiff * plotArea.Width, (maxDelta - delta) / deltaDiff * plotArea.Height));
+                        lnThis.Points.Add(new Point((node.Previous.Value.Key - minTs) / tsDiff * plotArea.Width, (maxDelta - delta) / deltaDiff * plotArea.Height));
                     } else {
                         if(lnPrev != lnThis) {
                             long tsDelta = ts - node.Previous.Value.Key;
@@ -254,6 +260,52 @@ namespace LynLogger.Views.Contents
             d.Width = Math.Min(d.Width, constraint.Width);
 
             return base.MeasureOverride(d);
+        }
+
+        private void Canvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (dat == null) return;
+
+            var pt = e.GetPosition(PlotGrid);
+            var tsVal = pt.X / plotArea.Width * (maxTs - minTs) + minTs;
+            var minDiff = double.PositiveInfinity;
+            var node = dat.First;
+            while(node != null) {
+                var diff = node.Value.Key - tsVal;
+                if(diff >= 0) {
+                    if (diff < minDiff) break;
+                    node = node.Previous;
+                    break;
+                }
+                minDiff = Math.Min(minDiff, -diff);
+                if (node.Next == null) break;
+                node = node.Next;
+            }
+            Canvas.SetLeft(Cursor, (node.Value.Key - minTs) * plotArea.Width / (maxTs - minTs));
+            Cursor.Visibility = Visibility.Visible;
+
+            CursorValue.Text = string.Format("{0}\n{1} ({2:+#;-#;0})", Helpers.FromUnixTimestamp(node.Value.Key).LocalDateTime, node.Value.Value, (node.Value.Value - node.Previous?.Value.Value) ?? 0);
+            if (node.Value.Key > (minTs / 2 + maxTs / 2)) {
+                Canvas.SetLeft(CursorValue, double.NaN);
+                Canvas.SetRight(CursorValue, (maxTs - node.Value.Key) * plotArea.Width / (maxTs - minTs)-2);
+            } else {
+                Canvas.SetLeft(CursorValue, (node.Value.Key - minTs) * plotArea.Width / (maxTs - minTs)+2);
+                Canvas.SetRight(CursorValue, double.NaN);
+            }
+            if (node.Value.Value > (minVal / 2 + maxVal / 2)) {
+                Canvas.SetBottom(CursorValue, double.NaN);
+                Canvas.SetTop(CursorValue, (maxVal - node.Value.Value) * plotArea.Height / (maxVal - minVal)+1);
+            } else {
+                Canvas.SetBottom(CursorValue, (node.Value.Value - minVal) * plotArea.Height / (maxVal - minVal)-1);
+                Canvas.SetTop(CursorValue, double.NaN);
+            }
+            CursorValue.Visibility = Visibility.Visible;
+        }
+
+        private void Border_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Cursor.Visibility = Visibility.Collapsed;
+            CursorValue.Visibility = Visibility.Collapsed;
         }
     }
 }
