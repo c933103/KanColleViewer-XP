@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LynLogger.DataStore.IO;
 using LynLogger.DataStore.Extensions;
+using LynLogger.Utilities;
 
 namespace LynLogger.DataStore.Premitives
 {
@@ -15,7 +16,7 @@ namespace LynLogger.DataStore.Premitives
     {
         private IList<KeyValuePair<TKey, TValue>> data = new System.Collections.Generic.List<KeyValuePair<TKey, TValue>>();
 
-        public override IEnumerable<TypeIdentifier> Type => Collections.AsEnumerable(TypeIdentifier.Dictionary).Concat(new TKey().Type).Concat(new TValue().Type);
+        public override IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.Dictionary).Concat(new TKey().Type).Concat(new TValue().Type);
         public int Count => data.Count;
 
         public Dictionary() { }

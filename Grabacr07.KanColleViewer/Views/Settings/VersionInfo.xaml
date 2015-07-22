@@ -76,6 +76,7 @@
 				<metro2:HyperlinkEx Uri="https://twitter.com/Grabacr07">
 					<Run Text="@Grabacr07" />
 				</metro2:HyperlinkEx>
+				<Run Text="et al." />
 
 				<LineBreak />
 				<LineBreak />
@@ -91,9 +92,17 @@
 				<metro2:HyperlinkEx Uri="https://twitter.com/southrop113">
 					<Run Text="@southrop113" />
 				</metro2:HyperlinkEx>
-			</TextBlock>
 
-			<Rectangle Height="1"
+				<LineBreak />
+				<LineBreak />
+                
+				<Run Text="Modder:" />
+				<metro2:HyperlinkEx Uri="http://bbs.kancolle.tv/thread-4111-1-1.html">
+					<Run Text="阿武隈改二 @ KTV" />
+				</metro2:HyperlinkEx>
+            </TextBlock>
+
+            <Rectangle Height="1"
 					   Margin="0,10"
 					   Style="{DynamicResource SeparatorRectangleStyleKey}" />
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LynLogger.DataStore.IO;
 using LynLogger.DataStore.Extensions;
+using LynLogger.Utilities;
 
 namespace LynLogger.DataStore.Premitives
 {
@@ -13,7 +14,7 @@ namespace LynLogger.DataStore.Premitives
     {
         private decimal value;
 
-        public override IEnumerable<TypeIdentifier> Type => Collections.AsEnumerable(TypeIdentifier.Decimal);
+        public override IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.Decimal);
         public decimal Value => value;
 
         public Decimal() { }

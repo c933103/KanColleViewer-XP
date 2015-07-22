@@ -86,6 +86,13 @@
 						</metro2:HyperlinkEx>
                     </TextBlock>
 
+                    <TextBlock FontFamily="Segoe UI" Margin="0,8,0,0">
+						<Run Text="Modder:" />
+						<metro2:HyperlinkEx Uri="http://bbs.kancolle.tv/thread-4111-1-1.html">
+							<Run Text="阿武隈改二 @ KTV" />
+						</metro2:HyperlinkEx>
+                    </TextBlock>
+
                     <Rectangle Height="1"
 								Margin="0,12"
 								Style="{DynamicResource SeparatorRectangleStyleKey}" />

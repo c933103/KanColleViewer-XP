@@ -47,7 +47,5 @@ namespace LynLogger.DataStore.Extensions
             if (list == null) return null;
             return new Premitives.List<Premitives.StoragePremitive>(list.Select(x => x.GetSerializationInfo(_path)));
         }
-
-        public static IEnumerable<T> AsEnumerable<T>(params T[] ts) { return ts; }
     }
 }

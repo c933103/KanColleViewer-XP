@@ -150,6 +150,13 @@ namespace LynLogger.DataStore
         [Serialize(5, ConstructionType = typeof(Weekbook))]
         public ILogbook Weekbook { get; private set; }
 
+        /*Serialize7*/ //private IReadOnlyDictionary<int, int[]> _slotNums;
+        public IReadOnlyDictionary<int, int[]> SlotNums
+        {
+            get { return Data.EnemySlotNumInfo.SlotNumInfo; }
+            //set { _slotNums = value; }
+        }
+
         public ILogbook CurrentLogbook => Logbooks[DateTimeOffset.UtcNow.ToLogbookSequence()];
         public LogbookAccessor Logbooks { get; }
 
@@ -232,11 +239,15 @@ namespace LynLogger.DataStore
                         (o, i, p) => o._logbookSequence = new NotifyingSortedSet<ulong>(((Premitives.List<Premitives.UnsignedInteger>)i).Convert(x => x.Value))
                     ),
                     [2] = new HandlerInfo(
-                        (x, p) => x._ships.Where(kv => kv.Value != null).GetSerializationInfo(p, (k, p1) => (Premitives.SignedInteger)(k)),
+                        (x, p) => x._ships.Where(kv => kv.Value != null).GetSerializationInfo(p, (k, p1) => (Premitives.SignedInteger)k),
                         (o, i, p) => o._ships = (i as Premitives.Dictionary<Premitives.SignedInteger, Premitives.StoragePremitive>)?.Convert(x => (int)x.Value, x => new Ship(x, p))
                                              ?? (i as Premitives.Dictionary<Premitives.SignedInteger, Premitives.Compound>)?.Convert(x => (int)x.Value, x => new Ship(x, p))
                     ),
                     [6] = HandlerInfo.NoOp,
+                    /*[7] = new HandlerInfo(
+                        (x, p) => x._slotNums.GetSerializationInfo(p, (k, p1) => (Premitives.SignedInteger)k, (v, p1) => v.GetSerializationInfo(p1, (i, p2) => (Premitives.SignedInteger)i)),
+                        (o, i, p) => o._slotNums = (i as Premitives.Dictionary<Premitives.SignedInteger, Premitives.List<Premitives.UnsignedInteger>>).Convert(k => (int)k, v => v.Convert(i1 => (int)i1).ToArray())
+                    ),*/
                 };
             }
         }

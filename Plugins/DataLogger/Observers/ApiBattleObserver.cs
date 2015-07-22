@@ -172,7 +172,7 @@ namespace LynLogger.Observers
                 for(int j = 0; j < 5; j++) {
                     if(slots[i][j] <= 0) break;
                     int equiptId = (int)slots[i][j];
-                    equipts.Add(new EquiptInfo(KanColleClient.Current.Master.SlotItems[equiptId], ship.Slots?.Get(j) ?? 1));
+                    equipts.Add(new EquiptInfo(KanColleClient.Current.Master.SlotItems[equiptId], ship.Slots?.Get(j) ?? DataStore.Store.Current?.SlotNums.GetWithFallback(shipId, null)?.GetWithFallback(j, 0) ?? 0));
                 }
 
                 r.Add(new BattleProcess.ShipInfo() {

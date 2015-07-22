@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LynLogger.DataStore.IO;
+using LynLogger.Utilities;
 
 namespace LynLogger.DataStore.Premitives
 {
@@ -14,7 +15,11 @@ namespace LynLogger.DataStore.Premitives
     {
         private IList<T> data = new System.Collections.Generic.List<T>();
 
-        public override IEnumerable<TypeIdentifier> Type => Collections.AsEnumerable(TypeIdentifier.List).Concat(new T().Type);
+        public override IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.List).Concat(new T().Type);
+
+        public T this[int i] => data[i];
+
+        public List() { }
 
         public List(IEnumerable<T> s) { foreach(var v in s) data.Add(v); }
 

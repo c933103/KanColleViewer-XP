@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using LynLogger.Utilities;
 
 namespace LynLogger.Models.Battling
 {
@@ -51,8 +52,8 @@ namespace LynLogger.Models.Battling
         public ReconnResult EnemyReconn => ZwEnemyReconn;
         public IReadOnlyList<TorpedoInfo> OpeningTorpedoAttack => ZwOpeningTorpedoAttack ?? (ZwOpeningTorpedoAttack = new TorpedoInfo[0]);
         public IReadOnlyList<TorpedoInfo> ClosingTorpedoAttack => ZwClosingTorpedoAttack ?? (ZwClosingTorpedoAttack = new TorpedoInfo[0]);
-        public IReadOnlyList<ShipHpStatus> OurShipBattleEndHp => ZwOurShipBattleEndHp ?? (ZwOurShipBattleEndHp = Helpers.Sequence().Take(OurShips.Count).Select(x => new ShipHpStatus(x+1, this)).ToArray());
-        public IReadOnlyList<ShipHpStatus> EnemyShipBattleEndHp => ZwEnemyShipBattleEndHp ?? (ZwEnemyShipBattleEndHp = Helpers.Sequence().Take(EnemyShips.Count).Select(x => new ShipHpStatus(x+7, this)).ToArray());
+        public IReadOnlyList<ShipHpStatus> OurShipBattleEndHp => ZwOurShipBattleEndHp ?? (ZwOurShipBattleEndHp = CollectionsEx.Sequence(1, OurShips.Count).Select(x => new ShipHpStatus(x, this)).ToArray());
+        public IReadOnlyList<ShipHpStatus> EnemyShipBattleEndHp => ZwEnemyShipBattleEndHp ?? (ZwEnemyShipBattleEndHp = CollectionsEx.Sequence(7, EnemyShips.Count).Select(x => new ShipHpStatus(x, this)).ToArray());
         public LimitedValue OurGuage => new LimitedValue(EnemyShipBattleEndHp.Sum(x => x.OrigInfo.CurrentHp - x.HpCurrent), EnemyShips.Sum(x => x.CurrentHp), 0);
         public LimitedValue EnemyGuage => new LimitedValue(OurShipBattleEndHp.Sum(x => x.OrigInfo.CurrentHp - x.HpCurrent), OurShips.Sum(x => x.CurrentHp), 0);
         public int OurGuagePerMil { get { var guage = OurGuage; return guage.Current * 1000 / guage.Maximum; } }
@@ -260,10 +261,10 @@ namespace LynLogger.Models.Battling
             public int OurAsControlValue => OurCarrierShip.Sum(x => x.ShipAsControl);
             public int EnemyAsControlValue => EnemyCarrierShip.Sum(x => x.ShipAsControl);
 
-            public IReadOnlyList<Stage3Report> OurStage3Report => ZwOurStage3Report ?? (ZwOurStage3Report = Helpers.Zip(ZwOurShipDamages, ZwOurShipBombed, ZwOurShipTorpedoed, Helpers.Sequence(),
+            public IReadOnlyList<Stage3Report> OurStage3Report => ZwOurStage3Report ?? (ZwOurStage3Report = CollectionsEx.Zip(ZwOurShipDamages, ZwOurShipBombed, ZwOurShipTorpedoed, CollectionsEx.Range(1, 7),
                         (damage, bombed, torpedoed, ship) =>
                             new Stage3Report() {
-                                ZwShip = ship+1,
+                                ZwShip = ship,
                                 ZwDamage = damage,
                                 ZwBombed = bombed,
                                 ZwTorpedoed = torpedoed,
@@ -271,10 +272,10 @@ namespace LynLogger.Models.Battling
                             }
                     ).Where(x => x.Bombed || x.Torpedoed).ToArray());
 
-            public IReadOnlyList<Stage3Report> EnemyStage3Report => ZwEnemyStage3Report ?? (ZwEnemyStage3Report = Helpers.Zip(ZwEnemyShipDamages, ZwEnemyShipBombed, ZwEnemyShipTorpedoed, Helpers.Sequence(),
+            public IReadOnlyList<Stage3Report> EnemyStage3Report => ZwEnemyStage3Report ?? (ZwEnemyStage3Report = CollectionsEx.Zip(ZwEnemyShipDamages, ZwEnemyShipBombed, ZwEnemyShipTorpedoed, CollectionsEx.Range(7, 13),
                         (damage, bombed, torpedoed, ship) =>
                             new Stage3Report() {
-                                ZwShip = ship+7,
+                                ZwShip = ship,
                                 ZwDamage = damage,
                                 ZwBombed = bombed,
                                 ZwTorpedoed = torpedoed,
@@ -487,7 +488,7 @@ namespace LynLogger.Models.Battling
             {
                 ShipInfo a = OrigInfo;
 
-                foreach (var aw in DataStore.Extensions.Collections.AsEnumerable(report.AirWarfare, report.AirWarfare2)) {
+                foreach (var aw in CollectionsEx.AsEnumerable(report.AirWarfare, report.AirWarfare2)) {
                     if (aw == null) continue;
                     if (aw.EnemyCarrierShip.Any(x => x == a)) {
                         if (aw.ZwEnemyCarrierShip.Length == 1) {

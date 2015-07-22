@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LynLogger.DataStore.LogBook;
 using System.Collections;
+using LynLogger.Utilities;
 
 namespace LynLogger.DataStore
 {

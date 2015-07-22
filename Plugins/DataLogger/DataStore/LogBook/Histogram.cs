@@ -6,6 +6,7 @@ using System.Linq;
 using LynLogger.DataStore.Premitives;
 using LynLogger.DataStore.Extensions;
 using System.Linq.Expressions;
+using LynLogger.Utilities;
 
 namespace LynLogger.DataStore.LogBook
 {

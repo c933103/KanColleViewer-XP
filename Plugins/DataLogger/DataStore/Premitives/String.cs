@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LynLogger.DataStore.IO;
 using LynLogger.DataStore.Extensions;
+using LynLogger.Utilities;
 
 namespace LynLogger.DataStore.Premitives
 {
@@ -13,7 +14,7 @@ namespace LynLogger.DataStore.Premitives
     {
         private string value = "";
 
-        public override IEnumerable<TypeIdentifier> Type => Collections.AsEnumerable(TypeIdentifier.String);
+        public override IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.String);
         public string Value => value;
 
         public String() { }

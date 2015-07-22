@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LynLogger.Utilities;
 
 namespace LynLogger.DataStore.Premitives
 {
     [Serializable]
     public class StoragePremitive
     {
-        public virtual IEnumerable<TypeIdentifier> Type => Collections.AsEnumerable(TypeIdentifier.Undefined);
+        public virtual IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.Undefined);
         public virtual void SerializeNonNull(DSWriter output) { throw new NotImplementedException(); }
 
         public static StoragePremitive Parse(DSReader input)

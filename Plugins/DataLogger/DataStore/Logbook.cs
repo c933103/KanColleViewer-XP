@@ -7,6 +7,7 @@ using LynLogger.DataStore.LogBook;
 using LynLogger.DataStore.Extensions;
 using LynLogger.DataStore.Serialization;
 using System.Collections;
+using LynLogger.Utilities;
 
 namespace LynLogger.DataStore
 {
