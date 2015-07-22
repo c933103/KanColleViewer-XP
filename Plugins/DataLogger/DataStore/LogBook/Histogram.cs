@@ -39,8 +39,8 @@ namespace LynLogger.DataStore.LogBook
         public Histogram(StoragePremitive p, LinkedList<object> path)
         {
             path.AddFirst(this);
-            if (p is Premitives.Dictionary<SignedInteger, StoragePremitive>) {
-                foreach (var kv in ((Premitives.Dictionary<SignedInteger, StoragePremitive>)p).Convert((k, v) => new KeyValuePair<long, T>(k.Value, revConverter(v, path)))) {
+            if (p is Premitives.DsDictionary<SignedInteger, StoragePremitive>) {
+                foreach (var kv in ((Premitives.DsDictionary<SignedInteger, StoragePremitive>)p).Convert((k, v) => new KeyValuePair<long, T>(k.Value, revConverter(v, path)))) {
                     backend.Add(kv.Key, kv.Value);
                 }
             } else if(p is Compound) {

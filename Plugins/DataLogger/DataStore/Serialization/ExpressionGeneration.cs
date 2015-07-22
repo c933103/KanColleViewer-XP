@@ -90,12 +90,12 @@ namespace LynLogger.DataStore.Serialization
                 body = Expression.New(typeof(Premitives.UnsignedInteger).GetConstructor(new Type[] { typeof(ulong) }), conversion);
             } else if(premitiveType == typeof(Premitives.SignedInteger)) {
                 body = Expression.New(typeof(Premitives.SignedInteger).GetConstructor(new Type[] { typeof(long) }), Expression.Convert(input, typeof(long)));
-            } else if(premitiveType == typeof(Premitives.Decimal)) {
-                body = Expression.New(typeof(Premitives.Decimal).GetConstructor(new Type[] { typeof(decimal) }), Expression.Convert(input, typeof(decimal)));
-            } else if(premitiveType == typeof(Premitives.Double)) {
-                body = Expression.New(typeof(Premitives.Double).GetConstructor(new Type[] { typeof(double) }), Expression.Convert(input, typeof(double)));
-            } else if(premitiveType == typeof(Premitives.String)) {
-                body = Expression.New(typeof(Premitives.String).GetConstructor(new Type[] { typeof(string) }), Expression.Convert(input, typeof(string)));
+            } else if(premitiveType == typeof(Premitives.DsDecimal)) {
+                body = Expression.New(typeof(Premitives.DsDecimal).GetConstructor(new Type[] { typeof(decimal) }), Expression.Convert(input, typeof(decimal)));
+            } else if(premitiveType == typeof(Premitives.DsDouble)) {
+                body = Expression.New(typeof(Premitives.DsDouble).GetConstructor(new Type[] { typeof(double) }), Expression.Convert(input, typeof(double)));
+            } else if(premitiveType == typeof(Premitives.DsString)) {
+                body = Expression.New(typeof(Premitives.DsString).GetConstructor(new Type[] { typeof(string) }), Expression.Convert(input, typeof(string)));
             } else if(premitiveType == typeof(Premitives.Blob)) {
                 body = Expression.New(typeof(Premitives.Blob).GetConstructor(new Type[] { typeof(byte[]) }), Expression.Convert(input, typeof(byte[])));
             } else {
@@ -119,12 +119,12 @@ namespace LynLogger.DataStore.Serialization
                 body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.UnsignedInteger)), nameof(Premitives.UnsignedInteger.Value));
             } else if(premitiveType == typeof(Premitives.SignedInteger)) {
                 body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.SignedInteger)), nameof(Premitives.SignedInteger.Value));
-            } else if(premitiveType == typeof(Premitives.Decimal)) {
-                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.Decimal)), nameof(Premitives.Decimal.Value));
-            } else if(premitiveType == typeof(Premitives.Double)) {
-                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.Double)), nameof(Premitives.Double.Value));
-            } else if(premitiveType == typeof(Premitives.String)) {
-                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.String)), nameof(Premitives.String.Value));
+            } else if(premitiveType == typeof(Premitives.DsDecimal)) {
+                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.DsDecimal)), nameof(Premitives.DsDecimal.Value));
+            } else if(premitiveType == typeof(Premitives.DsDouble)) {
+                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.DsDouble)), nameof(Premitives.DsDouble.Value));
+            } else if(premitiveType == typeof(Premitives.DsString)) {
+                body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.DsString)), nameof(Premitives.DsString.Value));
             } else if(premitiveType == typeof(Premitives.Blob)) {
                 body = Expression.PropertyOrField(Expression.Convert(paramInfo, typeof(Premitives.Blob)), nameof(Premitives.Blob.Data));
             } else {
@@ -146,11 +146,11 @@ namespace LynLogger.DataStore.Serialization
             var fieldType = typeof(T);
             if(fieldType.IsEnum) fieldType = fieldType.GetEnumUnderlyingType();
 
-            if(fieldType == typeof(string)) return typeof(Premitives.String);
+            if(fieldType == typeof(string)) return typeof(Premitives.DsString);
             if(fieldType == typeof(byte[])) return typeof(Premitives.Blob);
-            if(fieldType == typeof(decimal)) return typeof(Premitives.Decimal);
+            if(fieldType == typeof(decimal)) return typeof(Premitives.DsDecimal);
 
-            if(fieldType == typeof(double) || fieldType == typeof(float)) return typeof(Premitives.Double);
+            if(fieldType == typeof(double) || fieldType == typeof(float)) return typeof(Premitives.DsDouble);
 
             if(fieldType == typeof(sbyte) ||fieldType == typeof(short) ||fieldType == typeof(int) ||fieldType == typeof(long)) return typeof(Premitives.SignedInteger);
             if(fieldType == typeof(byte) ||fieldType == typeof(ushort) ||fieldType == typeof(uint) || fieldType == typeof(ulong) || fieldType == typeof(bool)) return typeof(Premitives.UnsignedInteger);

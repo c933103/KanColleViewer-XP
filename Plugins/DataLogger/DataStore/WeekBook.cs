@@ -57,8 +57,8 @@ namespace LynLogger.DataStore
                     [1] = new HandlerInfo(
                         (x, p) => x._ships.GetSerializationInfo(p, (k, p1) => new Premitives.SignedInteger(k)),
                         (o, i, p) => o._ships = new SortedDictionary<int, Ship>(
-                                                    (i as Premitives.Dictionary<Premitives.SignedInteger, Premitives.StoragePremitive>)?.Convert(x => (int)x.Value, x => new Ship(x, p))
-                                                 ?? (i as Premitives.Dictionary<Premitives.SignedInteger, Premitives.Compound>)?.Convert(x => (int)x.Value, x => new Ship(x, p)))
+                                                    (i as Premitives.DsDictionary<Premitives.SignedInteger, Premitives.StoragePremitive>)?.Convert(x => (int)x.Value, x => new Ship(x, p))
+                                                 ?? (i as Premitives.DsDictionary<Premitives.SignedInteger, Premitives.Compound>)?.Convert(x => (int)x.Value, x => new Ship(x, p)))
                     ),
                 };
             }

@@ -10,7 +10,7 @@ using LynLogger.Utilities;
 namespace LynLogger.DataStore.Premitives
 {
     [Serializable]
-    class Dictionary<TKey, TValue> : StoragePremitive
+    class DsDictionary<TKey, TValue> : StoragePremitive
         where TKey : StoragePremitive, new()
         where TValue : StoragePremitive, new()
     {
@@ -19,9 +19,9 @@ namespace LynLogger.DataStore.Premitives
         public override IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.Dictionary).Concat(new TKey().Type).Concat(new TValue().Type);
         public int Count => data.Count;
 
-        public Dictionary() { }
-        public Dictionary(IEnumerable<KeyValuePair<TKey, TValue>> s) { foreach(var kv in s) data.Add(kv); }
-        public Dictionary(DSReader input)
+        public DsDictionary() { }
+        public DsDictionary(IEnumerable<KeyValuePair<TKey, TValue>> s) { foreach(var kv in s) data.Add(kv); }
+        public DsDictionary(DSReader input)
         {
             var fcount = input.Read7bUInt();
             for(uint i = 0; i < fcount; i++) {

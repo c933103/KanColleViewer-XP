@@ -236,12 +236,12 @@ namespace LynLogger.DataStore
                 return new Dictionary<ulong, HandlerInfo>() {
                     [1] = new HandlerInfo(
                         (x, p) => x.LogbookSequence.GetSerializationInfo(p, (v, p1) => new Premitives.UnsignedInteger(v)),
-                        (o, i, p) => o._logbookSequence = new NotifyingSortedSet<ulong>(((Premitives.List<Premitives.UnsignedInteger>)i).Convert(x => x.Value))
+                        (o, i, p) => o._logbookSequence = new NotifyingSortedSet<ulong>(((Premitives.DsList<Premitives.UnsignedInteger>)i).Convert(x => x.Value))
                     ),
                     [2] = new HandlerInfo(
                         (x, p) => x._ships.Where(kv => kv.Value != null).GetSerializationInfo(p, (k, p1) => (Premitives.SignedInteger)k),
-                        (o, i, p) => o._ships = (i as Premitives.Dictionary<Premitives.SignedInteger, Premitives.StoragePremitive>)?.Convert(x => (int)x.Value, x => new Ship(x, p))
-                                             ?? (i as Premitives.Dictionary<Premitives.SignedInteger, Premitives.Compound>)?.Convert(x => (int)x.Value, x => new Ship(x, p))
+                        (o, i, p) => o._ships = (i as Premitives.DsDictionary<Premitives.SignedInteger, Premitives.StoragePremitive>)?.Convert(x => (int)x.Value, x => new Ship(x, p))
+                                             ?? (i as Premitives.DsDictionary<Premitives.SignedInteger, Premitives.Compound>)?.Convert(x => (int)x.Value, x => new Ship(x, p))
                     ),
                     [6] = HandlerInfo.NoOp,
                     /*[7] = new HandlerInfo(

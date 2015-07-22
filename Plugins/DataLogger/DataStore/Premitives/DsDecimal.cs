@@ -10,16 +10,16 @@ using LynLogger.Utilities;
 namespace LynLogger.DataStore.Premitives
 {
     [Serializable]
-    class Decimal : StoragePremitive
+    class DsDecimal : StoragePremitive
     {
         private decimal value;
 
         public override IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.Decimal);
         public decimal Value => value;
 
-        public Decimal() { }
-        public Decimal(decimal value) { this.value = value; }
-        public Decimal(DSReader input)
+        public DsDecimal() { }
+        public DsDecimal(decimal value) { this.value = value; }
+        public DsDecimal(DSReader input)
         {
             value = input.ReadDecimal();
         }

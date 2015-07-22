@@ -10,7 +10,7 @@ using LynLogger.Utilities;
 namespace LynLogger.DataStore.Premitives
 {
     [Serializable]
-    class List<T> : StoragePremitive
+    class DsList<T> : StoragePremitive
         where T : StoragePremitive, new()
     {
         private IList<T> data = new System.Collections.Generic.List<T>();
@@ -19,11 +19,11 @@ namespace LynLogger.DataStore.Premitives
 
         public T this[int i] => data[i];
 
-        public List() { }
+        public DsList() { }
 
-        public List(IEnumerable<T> s) { foreach(var v in s) data.Add(v); }
+        public DsList(IEnumerable<T> s) { foreach(var v in s) data.Add(v); }
 
-        public List(DSReader input)
+        public DsList(DSReader input)
         {
             var fcount = input.Read7bUInt();
             for(uint i = 0; i < fcount; i++) {

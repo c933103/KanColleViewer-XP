@@ -62,15 +62,17 @@ namespace LynLogger.Views.Contents
                 if (Battle == null) yield break;
 
                 var EndShips = Battle.OurShipBattleEndHp.ToList();
-                var mvpRange = EndShips.Aggregate(new FuzzyDouble(), (range, ship) => FuzzyDouble.UpperRange(range, ship.DeliveredDamage));
+                var mvpRange = EndShips.Aggregate(new FuzzyInt(), (range, ship) => FuzzyInt.UpperRange(range, ship.DeliveredDamage));
                 var fuzzy = EndShips.Select(x => x.DeliveredDamage).Where(x => x.LowerBound != x.UpperBound);
                 if (fuzzy.Count() != 0) {
                     mvpRange.LowerBound = Math.Max(mvpRange.LowerBound, fuzzy.Max(x => x.UpperBound) / fuzzy.Count());
                 }
 
                 var inRangeState = EndShips.Count(x => (x.DeliveredDamage >= mvpRange) != TriState.No) == 1 ? TriState.Yes : TriState.DK;
+                if (mvpRange.UpperBound == mvpRange.LowerBound) inRangeState = TriState.Yes;
                 foreach (var ship in EndShips) {
                     yield return new KeyValuePair<BattleProcess.ShipHpStatus, TriState>(ship, (ship.DeliveredDamage >= mvpRange) != TriState.No ? inRangeState : TriState.No);
+                    if (mvpRange.UpperBound == mvpRange.LowerBound && ship.DeliveredDamage.LowerBound == mvpRange.LowerBound) inRangeState = TriState.No;
                 }
             }
         }

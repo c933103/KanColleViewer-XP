@@ -29,19 +29,19 @@ namespace LynLogger.DataStore.Premitives
                 case TypeIdentifier.Compound:
                     return typeof(Compound);
                 case TypeIdentifier.Decimal:
-                    return typeof(Decimal);
+                    return typeof(DsDecimal);
                 case TypeIdentifier.Dictionary:
                     var kt = MapIdentifierToType(reader);
                     var vt = MapIdentifierToType(reader);
-                    return typeof(Dictionary<,>).MakeGenericType(kt, vt);
+                    return typeof(DsDictionary<,>).MakeGenericType(kt, vt);
                 case TypeIdentifier.Double:
-                    return typeof(Double);
+                    return typeof(DsDouble);
                 case TypeIdentifier.Int:
                     return typeof(SignedInteger);
                 case TypeIdentifier.List:
-                    return typeof(List<>).MakeGenericType(MapIdentifierToType(reader));
+                    return typeof(DsList<>).MakeGenericType(MapIdentifierToType(reader));
                 case TypeIdentifier.String:
-                    return typeof(String);
+                    return typeof(DsString);
                 case TypeIdentifier.UInt:
                     return typeof(UnsignedInteger);
                 case TypeIdentifier.Undefined:
@@ -60,15 +60,15 @@ namespace LynLogger.DataStore.Premitives
                 case TypeIdentifier.Compound:
                     return x => new Compound(x);
                 case TypeIdentifier.Decimal:
-                    return x => new Decimal(x);
+                    return x => new DsDecimal(x);
                 case TypeIdentifier.Double:
-                    return x => new Double(x);
+                    return x => new DsDouble(x);
                 case TypeIdentifier.Int:
                     return x => new SignedInteger(x);
                 case TypeIdentifier.List:
                     return x => {
                         try {
-                            return (StoragePremitive)typeof(List<>).MakeGenericType(MapIdentifierToType(x)).GetConstructor(new Type[] { typeof(DSReader) }).Invoke(new object[] { x });
+                            return (StoragePremitive)typeof(DsList<>).MakeGenericType(MapIdentifierToType(x)).GetConstructor(new Type[] { typeof(DSReader) }).Invoke(new object[] { x });
                         } catch (System.Reflection.TargetInvocationException e) {
                             if (e.GetBaseException() is System.IO.IOException) {
                                 throw new System.IO.IOException("IO Error", e.GetBaseException());
@@ -76,7 +76,7 @@ namespace LynLogger.DataStore.Premitives
                         }
                     };
                 case TypeIdentifier.String:
-                    return x => new String(x);
+                    return x => new DsString(x);
                 case TypeIdentifier.UInt:
                     return x => new UnsignedInteger(x);
                 case TypeIdentifier.Null:
@@ -86,7 +86,7 @@ namespace LynLogger.DataStore.Premitives
                         try {
                             var kt = MapIdentifierToType(reader);
                             var vt = MapIdentifierToType(reader);
-                            return (StoragePremitive)typeof(Dictionary<,>).MakeGenericType(kt, vt).GetConstructor(new Type[] { typeof(DSReader) }).Invoke(new object[] { x });
+                            return (StoragePremitive)typeof(DsDictionary<,>).MakeGenericType(kt, vt).GetConstructor(new Type[] { typeof(DSReader) }).Invoke(new object[] { x });
                         } catch(System.Reflection.TargetInvocationException e) {
                             if (e.GetBaseException() is System.IO.IOException) {
                                 throw new System.IO.IOException("IO Error", e.GetBaseException());
