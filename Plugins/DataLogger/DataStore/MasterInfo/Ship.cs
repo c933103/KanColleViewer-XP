@@ -199,7 +199,7 @@ namespace LynLogger.DataStore.MasterInfo
                 return new Dictionary<ulong, HandlerInfo>() {
                     [37] = new HandlerInfo(
                         (x, p) => x.ZwEquipts.GetSerializationInfo(p, (k, p1) => (Premitives.Compound)k.GetSerializationInfo(p1)),
-                        (o, i, p) => o.ZwEquipts = ((Premitives.List<Premitives.Compound>)i).Convert(x => new EquiptInfo(x, p)).ToArray()),
+                        (o, i, p) => o.ZwEquipts = ((Premitives.DsList<Premitives.Compound>)i).Convert(x => new EquiptInfo(x, p)).ToArray()),
                 };
             }
         }

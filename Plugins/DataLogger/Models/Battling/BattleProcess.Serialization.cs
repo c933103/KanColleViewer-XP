@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LynLogger.Utilities;
+using LynLogger.DataStore.Premitives;
 
 namespace LynLogger.Models.Battling
 {
@@ -18,37 +20,37 @@ namespace LynLogger.Models.Battling
                 return new Dictionary<ulong, HandlerInfo>() {
                     [0] = new HandlerInfo(
                         (x, p) => x.ZwEnemyShips.GetSerializationInfo(p),
-                        (o, i, p) => o.ZwEnemyShips = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i).Convert(x => new ShipInfo(x, p)).ToArray()),
+                        (o, i, p) => o.ZwEnemyShips = ((DsList<StoragePremitive>)i).Convert(x => new ShipInfo(x, p)).ToArray()),
                     [1] = new HandlerInfo(
                         (x, p) => x.ZwOurShips.GetSerializationInfo(p),
-                        (o, i, p) => o.ZwOurShips = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i).Convert(x => new ShipInfo(x, p)).ToArray()),
+                        (o, i, p) => o.ZwOurShips = ((DsList<StoragePremitive>)i).Convert(x => new ShipInfo(x, p)).ToArray()),
                     [10] = new HandlerInfo(3,
                         (x, p) => x.ZwOpeningTorpedoAttack.GetSerializationInfo(p),
-                        (o, i, p) => o.ZwOpeningTorpedoAttack = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i)?.Convert(x => new TorpedoInfo(x, p)).ToArray()),
+                        (o, i, p) => o.ZwOpeningTorpedoAttack = ((DsList<StoragePremitive>)i)?.Convert(x => new TorpedoInfo(x, p)).ToArray()),
                     [11] = new HandlerInfo(3,
                         (x, p) => x.ZwBombardRound1.GetSerializationInfo(p),
-                        (o, i, p) => o.ZwBombardRound1 = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i)?.Convert(x => new BombardInfo(x, p)).ToArray()),
+                        (o, i, p) => o.ZwBombardRound1 = ((DsList<StoragePremitive>)i)?.Convert(x => new BombardInfo(x, p)).ToArray()),
                     [12] = new HandlerInfo(3,
                         (x, p) => x.ZwBombardRound2.GetSerializationInfo(p),
-                        (o, i, p) => o.ZwBombardRound2 = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i)?.Convert(x => new BombardInfo(x, p)).ToArray()),
+                        (o, i, p) => o.ZwBombardRound2 = ((DsList<StoragePremitive>)i)?.Convert(x => new BombardInfo(x, p)).ToArray()),
                     [13] = new HandlerInfo(3,
                         (x, p) => x.ZwBombardRound3.GetSerializationInfo(p),
-                        (o, i, p) => o.ZwBombardRound3 = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i)?.Convert(x => new BombardInfo(x, p)).ToArray()),
+                        (o, i, p) => o.ZwBombardRound3 = ((DsList<StoragePremitive>)i)?.Convert(x => new BombardInfo(x, p)).ToArray()),
                     [14] = new HandlerInfo(3,
                         (x, p) => x.ZwClosingTorpedoAttack.GetSerializationInfo(p),
-                        (o, i, p) => o.ZwClosingTorpedoAttack = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i)?.Convert(x => new TorpedoInfo(x, p)).ToArray()),
+                        (o, i, p) => o.ZwClosingTorpedoAttack = ((DsList<StoragePremitive>)i)?.Convert(x => new TorpedoInfo(x, p)).ToArray()),
                     [15] = new HandlerInfo(
                         (x, p) => (p.Count > 3 ? x.OurShipBattleEndHp : x.ZwOurShipBattleEndHp).GetSerializationInfo(p),
-                        (o, i, p) => o.ZwOurShipBattleEndHp = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i)?.Convert(x => new ShipHpStatus(x, p)).ToArray()),
+                        (o, i, p) => o.ZwOurShipBattleEndHp = ((DsList<StoragePremitive>)i)?.Convert(x => new ShipHpStatus(x, p)).ToArray()),
                     [16] = new HandlerInfo(
                         (x, p) => (p.Count > 3 ? x.EnemyShipBattleEndHp : x.ZwEnemyShipBattleEndHp).GetSerializationInfo(p),
-                        (o, i, p) => o.ZwEnemyShipBattleEndHp = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i)?.Convert(x => new ShipHpStatus(x, p)).ToArray()),
+                        (o, i, p) => o.ZwEnemyShipBattleEndHp = ((DsList<StoragePremitive>)i)?.Convert(x => new ShipHpStatus(x, p)).ToArray()),
                 };
             }
         }
 
         internal BattleProcess() { }
-        internal BattleProcess(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { }
+        internal BattleProcess(StoragePremitive x, LinkedList<object> path) : base(x, path) { }
 
         object ICloneable.Clone()
         {
@@ -93,22 +95,22 @@ namespace LynLogger.Models.Battling
                     return new Dictionary<ulong, HandlerInfo>() {
                         [1] = new HandlerInfo(
                             (x, p) => null,
-                            (o, i, p) => (o.ZwShipNameType ?? (o.ZwShipNameType = new ShipNameType(0))).ShipId = (int)(DataStore.Premitives.SignedInteger)i, true),
+                            (o, i, p) => (o.ZwShipNameType ?? (o.ZwShipNameType = new ShipNameType(0))).ShipId = (int)(SignedInteger)i, true),
                         [2] = new HandlerInfo(
                             (x, p) => null,
-                            (o, i, p) => (o.ZwShipNameType ?? (o.ZwShipNameType = new ShipNameType(0))).TypeName = (DataStore.Premitives.String)i, true),
+                            (o, i, p) => (o.ZwShipNameType ?? (o.ZwShipNameType = new ShipNameType(0))).TypeName = (DataStore.Premitives.DsString)i, true),
                         [3] = new HandlerInfo(
                             (x, p) => null,
-                            (o, i, p) => (o.ZwShipNameType ?? (o.ZwShipNameType = new ShipNameType(0))).ShipName = (DataStore.Premitives.String)i, true),
+                            (o, i, p) => (o.ZwShipNameType ?? (o.ZwShipNameType = new ShipNameType(0))).ShipName = (DataStore.Premitives.DsString)i, true),
                         [9] = new HandlerInfo(
                             (x, p) => x.ZwEquipts.GetSerializationInfo(p),
-                            (o, i, p) => o.ZwEquipts = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i).Convert(x => new EquiptInfo(x, p)).ToArray()),
+                            (o, i, p) => o.ZwEquipts = ((DsList<StoragePremitive>)i).Convert(x => new EquiptInfo(x, p)).ToArray()),
                     };
                 }
             }
 
             internal ShipInfo() { }
-            internal ShipInfo(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { }
+            internal ShipInfo(StoragePremitive x, LinkedList<object> path) : base(x, path) { }
 
             object ICloneable.Clone()
             {
@@ -122,7 +124,7 @@ namespace LynLogger.Models.Battling
             public partial class ParameterInfo : AbstractDSSerializable<ParameterInfo>, ICloneable
             {
                 internal ParameterInfo() { }
-                internal ParameterInfo(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { }
+                internal ParameterInfo(StoragePremitive x, LinkedList<object> path) : base(x, path) { }
 
                 object ICloneable.Clone() { return MemberwiseClone(); }
             }
@@ -137,18 +139,18 @@ namespace LynLogger.Models.Battling
                     return new Dictionary<ulong, HandlerInfo>() {
                         [0] = new HandlerInfo(
                             (x, p) => x.ZwEnemyShips.GetSerializationInfo(p),
-                            (o, i, p) => o.ZwEnemyShips = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i)?.Convert(x => new ShipInfo(x, p)).ToArray()),
+                            (o, i, p) => o.ZwEnemyShips = ((DsList<StoragePremitive>)i)?.Convert(x => new ShipInfo(x, p)).ToArray()),
                         [1] = new HandlerInfo(
                             (x, p) => x.ZwOurShips.GetSerializationInfo(p),
-                            (o, i, p) => o.ZwOurShips = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i)?.Convert(x => new ShipInfo(x, p)).ToArray()),
+                            (o, i, p) => o.ZwOurShips = ((DsList<StoragePremitive>)i)?.Convert(x => new ShipInfo(x, p)).ToArray()),
                         [2] = new HandlerInfo(
                             (x, p) => x.ZwBombard.GetSerializationInfo(p),
-                            (o, i, p) => o.ZwBombard = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i)?.Convert(x => new BombardInfo(x, p)).ToArray()),
+                            (o, i, p) => o.ZwBombard = ((DsList<StoragePremitive>)i)?.Convert(x => new BombardInfo(x, p)).ToArray()),
                     };
                 }
             }
             
-            internal NightWarInfo(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { _parent = path.FirstOrDefault(p => p is IShipInfoHolder) as IShipInfoHolder; }
+            internal NightWarInfo(StoragePremitive x, LinkedList<object> path) : base(x, path) { _parent = path.FirstOrDefault(p => p is IShipInfoHolder) as IShipInfoHolder; }
 
             object ICloneable.Clone()
             {
@@ -168,43 +170,43 @@ namespace LynLogger.Models.Battling
                 {
                     return new Dictionary<ulong, HandlerInfo>() {
                         [1] = new HandlerInfo(
-                            (x, p) => x.ZwOurCarrierShip.GetSerializationInfo(p, (k, p1) => new DataStore.Premitives.SignedInteger(k)),
-                            (o, i, p) => o.ZwOurCarrierShip = ((DataStore.Premitives.List<DataStore.Premitives.SignedInteger>)i).Convert(x => (int)x.Value).ToArray()),
+                            (x, p) => x.ZwOurCarrierShip.GetSerializationInfo(p, (k, p1) => new SignedInteger(k)),
+                            (o, i, p) => o.ZwOurCarrierShip = ((DsList<SignedInteger>)i).Convert(x => (int)x.Value).ToArray()),
                         [8] = new HandlerInfo(
-                            (x, p) => x.ZwEnemyCarrierShip.GetSerializationInfo(p, (k, p1) => new DataStore.Premitives.SignedInteger(k)),
-                            (o, i, p) => o.ZwEnemyCarrierShip = ((DataStore.Premitives.List<DataStore.Premitives.SignedInteger>)i).Convert(x => (int)x.Value).ToArray()),
+                            (x, p) => x.ZwEnemyCarrierShip.GetSerializationInfo(p, (k, p1) => new SignedInteger(k)),
+                            (o, i, p) => o.ZwEnemyCarrierShip = ((DsList<SignedInteger>)i).Convert(x => (int)x.Value).ToArray()),
                         [15] = new HandlerInfo(
-                            (x, p) => x.ZwOurShipBombed.GetSerializationInfo(p, (k, p1) => new DataStore.Premitives.SignedInteger(k ? 1 : 0)),
-                            (o, i, p) => o.ZwOurShipBombed = ((DataStore.Premitives.List<DataStore.Premitives.SignedInteger>)i).Convert(x => x.Value != 0).ToArray()),
+                            (x, p) => x.ZwOurShipBombed.GetSerializationInfo(p, (k, p1) => new SignedInteger(k ? 1 : 0)),
+                            (o, i, p) => o.ZwOurShipBombed = ((DsList<SignedInteger>)i).Convert(x => x.Value != 0).ToArray()),
                         [16] = new HandlerInfo(
-                            (x, p) => x.ZwOurShipTorpedoed.GetSerializationInfo(p, (k, p1) => new DataStore.Premitives.SignedInteger(k ? 1 : 0)),
-                            (o, i, p) => o.ZwOurShipTorpedoed = ((DataStore.Premitives.List<DataStore.Premitives.SignedInteger>)i).Convert(x => x.Value != 0).ToArray()),
+                            (x, p) => x.ZwOurShipTorpedoed.GetSerializationInfo(p, (k, p1) => new SignedInteger(k ? 1 : 0)),
+                            (o, i, p) => o.ZwOurShipTorpedoed = ((DsList<SignedInteger>)i).Convert(x => x.Value != 0).ToArray()),
                         [17] = new HandlerInfo(
-                            (x, p) => x.ZwOurShipDamages.GetSerializationInfo(p, (k, p1) => new DataStore.Premitives.Double(k)),
-                            (o, i, p) => o.ZwOurShipDamages = ((DataStore.Premitives.List<DataStore.Premitives.Double>)i).Convert(x => x.Value).ToArray()),
+                            (x, p) => x.ZwOurShipDamages.GetSerializationInfo(p, (k, p1) => new SignedInteger(k)),
+                            (o, i, p) => o.ZwOurShipDamages = (i is DsList<DsDouble> ? ((DsList<DsDouble>)i).Convert(x => (int)x.Value) : ((DsList<SignedInteger>)i).Convert(x => (int)x.Value)).ToArray()),
                         [18] = new HandlerInfo(
-                            (x, p) => x.ZwEnemyShipBombed.GetSerializationInfo(p, (k, p1) => new DataStore.Premitives.SignedInteger(k ? 1 : 0)),
-                            (o, i, p) => o.ZwEnemyShipBombed = ((DataStore.Premitives.List<DataStore.Premitives.SignedInteger>)i).Convert(x => x.Value != 0).ToArray()),
+                            (x, p) => x.ZwEnemyShipBombed.GetSerializationInfo(p, (k, p1) => new SignedInteger(k ? 1 : 0)),
+                            (o, i, p) => o.ZwEnemyShipBombed = ((DsList<SignedInteger>)i).Convert(x => x.Value != 0).ToArray()),
                         [19] = new HandlerInfo(
-                            (x, p) => x.ZwEnemyShipTorpedoed.GetSerializationInfo(p, (k, p1) => new DataStore.Premitives.SignedInteger(k ? 1 : 0)),
-                            (o, i, p) => o.ZwEnemyShipTorpedoed = ((DataStore.Premitives.List<DataStore.Premitives.SignedInteger>)i).Convert(x => x.Value != 0).ToArray()),
+                            (x, p) => x.ZwEnemyShipTorpedoed.GetSerializationInfo(p, (k, p1) => new SignedInteger(k ? 1 : 0)),
+                            (o, i, p) => o.ZwEnemyShipTorpedoed = ((DsList<SignedInteger>)i).Convert(x => x.Value != 0).ToArray()),
                         [20] = new HandlerInfo(
-                            (x, p) => x.ZwEnemyShipDamages.GetSerializationInfo(p, (k, p1) => new DataStore.Premitives.Double(k)),
-                            (o, i, p) => o.ZwEnemyShipDamages = ((DataStore.Premitives.List<DataStore.Premitives.Double>)i).Convert(x => x.Value).ToArray()),
+                            (x, p) => x.ZwEnemyShipDamages.GetSerializationInfo(p, (k, p1) => new SignedInteger(k)),
+                            (o, i, p) => o.ZwEnemyShipDamages = (i is DsList<DsDouble> ? ((DsList<DsDouble>)i).Convert(x => (int)x.Value) : ((DsList<SignedInteger>)i).Convert(x => (int)x.Value)).ToArray()),
                         [23] = new HandlerInfo(
                             (x, p) => x.ZwCutInEquipts.GetSerializationInfo(p),
-                            (o, i, p) => o.ZwCutInEquipts = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i)?.Convert(x => new EquiptInfo(x, p)).ToArray()),
+                            (o, i, p) => o.ZwCutInEquipts = ((DsList<StoragePremitive>)i)?.Convert(x => new EquiptInfo(x, p)).ToArray()),
                         [24] = new HandlerInfo(
                             (x, p) => x.ZwOurStage3Report.GetSerializationInfo(p),
-                            (o, i, p) => o.ZwOurStage3Report = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i)?.Convert(x => new Stage3Report(x, p)).ToArray()),
+                            (o, i, p) => o.ZwOurStage3Report = ((DsList<StoragePremitive>)i)?.Convert(x => new Stage3Report(x, p)).ToArray()),
                         [25] = new HandlerInfo(
                             (x, p) => x.ZwEnemyStage3Report.GetSerializationInfo(p),
-                            (o, i, p) => o.ZwEnemyStage3Report = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i)?.Convert(x => new Stage3Report(x, p)).ToArray()),
+                            (o, i, p) => o.ZwEnemyStage3Report = ((DsList<StoragePremitive>)i)?.Convert(x => new Stage3Report(x, p)).ToArray()),
                     };
                 }
             }
             
-            internal AirWarfareInfo(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { _parent = path.FirstOrDefault(p => p is IShipInfoHolder) as IShipInfoHolder; }
+            internal AirWarfareInfo(StoragePremitive x, LinkedList<object> path) : base(x, path) { _parent = path.FirstOrDefault(p => p is IShipInfoHolder) as IShipInfoHolder; }
 
             object ICloneable.Clone()
             {
@@ -212,11 +214,11 @@ namespace LynLogger.Models.Battling
                 clone.ZwOurCarrierShip = (int[])ZwOurCarrierShip.Clone();
                 clone.ZwOurShipBombed = (bool[])ZwOurShipBombed.Clone();
                 clone.ZwOurShipTorpedoed = (bool[])ZwOurShipTorpedoed.Clone();
-                clone.ZwOurShipDamages = (double[])ZwOurShipDamages.Clone();
+                clone.ZwOurShipDamages = (int[])ZwOurShipDamages.Clone();
                 clone.ZwEnemyCarrierShip = (int[])ZwEnemyCarrierShip.Clone();
                 clone.ZwEnemyShipBombed = (bool[])ZwEnemyShipBombed.Clone();
                 clone.ZwEnemyShipTorpedoed = (bool[])ZwEnemyShipTorpedoed.Clone();
-                clone.ZwEnemyShipDamages = (double[])ZwEnemyShipDamages.Clone();
+                clone.ZwEnemyShipDamages = (int[])ZwEnemyShipDamages.Clone();
                 clone.ZwCutInEquipts = ZwCutInEquipts.DeepCloneArray();
                 clone.ZwEnemyStage3Report = null;
                 clone.ZwOurStage3Report = null;
@@ -226,7 +228,7 @@ namespace LynLogger.Models.Battling
             public partial class Stage3Report : AbstractDSSerializable<Stage3Report>, ICloneable
             {
                 internal Stage3Report() { }
-                internal Stage3Report(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { _parent = path.FirstOrDefault(p => p is IShipInfoHolder) as IShipInfoHolder; }
+                internal Stage3Report(StoragePremitive x, LinkedList<object> path) : base(x, path) { _parent = path.FirstOrDefault(p => p is IShipInfoHolder) as IShipInfoHolder; }
 
                 object ICloneable.Clone() { return MemberwiseClone(); }
             }
@@ -234,8 +236,19 @@ namespace LynLogger.Models.Battling
 
         public partial class TorpedoInfo : AbstractDSSerializable<TorpedoInfo>, ICloneable
         {
-            internal TorpedoInfo(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { _parent = path.FirstOrDefault(p => p is IShipInfoHolder) as IShipInfoHolder; }
+            protected override IReadOnlyDictionary<ulong, HandlerInfo> CustomFieldHandlers
+            {
+                get
+                {
+                    return new Dictionary<ulong, HandlerInfo>() {
+                        [2] = new HandlerInfo(
+                            (x, p) => (SignedInteger)x.ZwDamage,
+                            (o, i, p) => o.ZwDamage = (i is DsDouble ? (int)(i as DsDouble).Value : (int)(i as SignedInteger).Value)),
+                    };
+                }
+            }
 
+            internal TorpedoInfo(StoragePremitive x, LinkedList<object> path) : base(x, path) { _parent = path.FirstOrDefault(p => p is IShipInfoHolder) as IShipInfoHolder; }
             object ICloneable.Clone() { return MemberwiseClone(); }
         }
 
@@ -247,25 +260,25 @@ namespace LynLogger.Models.Battling
                 {
                     return new Dictionary<ulong, HandlerInfo>() {
                         [1] = new HandlerInfo(
-                            (x, p) => x.ZwTo.GetSerializationInfo(p, (k, p1) => new DataStore.Premitives.SignedInteger(k)),
-                            (o, i, p) => o.ZwTo = ((DataStore.Premitives.List<DataStore.Premitives.SignedInteger>)i).Convert(x => (int)x.Value).ToArray()),
+                            (x, p) => x.ZwTo.GetSerializationInfo(p, (k, p1) => new SignedInteger(k)),
+                            (o, i, p) => o.ZwTo = ((DsList<SignedInteger>)i).Convert(x => (int)x.Value).ToArray()),
                         [3] = new HandlerInfo(
-                            (x, p) => x.ZwDamage.GetSerializationInfo(p, (k, p1) => new DataStore.Premitives.Double(k)),
-                            (o, i, p) => o.ZwDamage = ((DataStore.Premitives.List<DataStore.Premitives.Double>)i).Convert(x => x.Value).ToArray()),
+                            (x, p) => x.ZwDamage.GetSerializationInfo(p, (k, p1) => new SignedInteger(k)),
+                            (o, i, p) => o.ZwDamage = (i is DsList<DsDouble> ? ((DsList<DsDouble>)i).Convert(x => (int)x.Value) : ((DsList<SignedInteger>)i).Convert(x => (int)x.Value)).ToArray()),
                         [4] = new HandlerInfo(
                             (x, p) => x.ZwEquipts.GetSerializationInfo(p),
-                            (o, i, p) => o.ZwEquipts = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i).Convert(x => new EquiptInfo(x, p)).ToArray()),
+                            (o, i, p) => o.ZwEquipts = ((DsList<StoragePremitive>)i).Convert(x => new EquiptInfo(x, p)).ToArray()),
                     };
                 }
             }
-            internal BombardInfo(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { _parent = path.FirstOrDefault(p => p is IShipInfoHolder) as IShipInfoHolder; }
+            internal BombardInfo(StoragePremitive x, LinkedList<object> path) : base(x, path) { _parent = path.FirstOrDefault(p => p is IShipInfoHolder) as IShipInfoHolder; }
 
             object ICloneable.Clone()
             {
                 var clone = (BombardInfo)MemberwiseClone();
                 clone.ZwTo = (int[])ZwTo.Clone();
                 clone.ZwEquipts = ZwEquipts.DeepCloneArray();
-                clone.ZwDamage = (double[])ZwDamage.Clone();
+                clone.ZwDamage = (int[])ZwDamage.Clone();
                 return clone;
             }
         }
@@ -279,13 +292,13 @@ namespace LynLogger.Models.Battling
                     return new Dictionary<ulong, HandlerInfo>() {
                         [0] = new HandlerInfo(
                             (x, p) => x.ZwSupportShips.GetSerializationInfo(p),
-                            (o, i, p) => o.ZwSupportShips = ((DataStore.Premitives.List<DataStore.Premitives.StoragePremitive>)i).Convert(x => new ShipInfo(x, p)).ToArray()),
+                            (o, i, p) => o.ZwSupportShips = ((DsList<StoragePremitive>)i).Convert(x => new ShipInfo(x, p)).ToArray()),
                     };
                 }
             }
 
             internal SupportInfo() { }
-            internal SupportInfo(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { }
+            internal SupportInfo(StoragePremitive x, LinkedList<object> path) : base(x, path) { }
 
             object ICloneable.Clone()
             {
@@ -298,7 +311,7 @@ namespace LynLogger.Models.Battling
 
         public partial class ShipHpStatus : AbstractDSSerializable<ShipHpStatus>, ICloneable
         {
-            internal ShipHpStatus(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { _parent = path.FirstOrDefault(p => p is BattleProcess) as BattleProcess; }
+            internal ShipHpStatus(StoragePremitive x, LinkedList<object> path) : base(x, path) { _parent = path.FirstOrDefault(p => p is BattleProcess) as BattleProcess; }
 
             object ICloneable.Clone() { return MemberwiseClone(); }
         }

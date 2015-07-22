@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LynLogger.Utilities;
 
 namespace LynLogger.DataStore.Extensions
 {
@@ -13,7 +14,7 @@ namespace LynLogger.DataStore.Extensions
         public static void Serialize(this StoragePremitive p, DSWriter w)
         {
             if(p == null) {
-                w.Write(Collections.AsEnumerable(TypeIdentifier.Null));
+                w.Write(CollectionsEx.AsEnumerable(TypeIdentifier.Null));
             } else {
                 p.SerializeNonNull(w);
             }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using LynLogger.Utilities;
 
 namespace LynLogger.Models.Battling
 {
@@ -51,8 +52,8 @@ namespace LynLogger.Models.Battling
         public ReconnResult EnemyReconn => ZwEnemyReconn;
         public IReadOnlyList<TorpedoInfo> OpeningTorpedoAttack => ZwOpeningTorpedoAttack ?? (ZwOpeningTorpedoAttack = new TorpedoInfo[0]);
         public IReadOnlyList<TorpedoInfo> ClosingTorpedoAttack => ZwClosingTorpedoAttack ?? (ZwClosingTorpedoAttack = new TorpedoInfo[0]);
-        public IReadOnlyList<ShipHpStatus> OurShipBattleEndHp => ZwOurShipBattleEndHp ?? (ZwOurShipBattleEndHp = Helpers.Sequence().Take(OurShips.Count).Select(x => new ShipHpStatus(x+1, this)).ToArray());
-        public IReadOnlyList<ShipHpStatus> EnemyShipBattleEndHp => ZwEnemyShipBattleEndHp ?? (ZwEnemyShipBattleEndHp = Helpers.Sequence().Take(EnemyShips.Count).Select(x => new ShipHpStatus(x+7, this)).ToArray());
+        public IReadOnlyList<ShipHpStatus> OurShipBattleEndHp => ZwOurShipBattleEndHp ?? (ZwOurShipBattleEndHp = CollectionsEx.Sequence(1, OurShips.Count).Select(x => new ShipHpStatus(x, this)).ToArray());
+        public IReadOnlyList<ShipHpStatus> EnemyShipBattleEndHp => ZwEnemyShipBattleEndHp ?? (ZwEnemyShipBattleEndHp = CollectionsEx.Sequence(7, EnemyShips.Count).Select(x => new ShipHpStatus(x, this)).ToArray());
         public LimitedValue OurGuage => new LimitedValue(EnemyShipBattleEndHp.Sum(x => x.OrigInfo.CurrentHp - x.HpCurrent), EnemyShips.Sum(x => x.CurrentHp), 0);
         public LimitedValue EnemyGuage => new LimitedValue(OurShipBattleEndHp.Sum(x => x.OrigInfo.CurrentHp - x.HpCurrent), OurShips.Sum(x => x.CurrentHp), 0);
         public int OurGuagePerMil { get { var guage = OurGuage; return guage.Current * 1000 / guage.Maximum; } }
@@ -222,11 +223,11 @@ namespace LynLogger.Models.Battling
 
             /*[Serialize(15)]*/ internal bool[] ZwOurShipBombed;
             /*[Serialize(16)]*/ internal bool[] ZwOurShipTorpedoed;
-            /*[Serialize(17)]*/ internal double[] ZwOurShipDamages;
+            /*[Serialize(17)]*/ internal int[] ZwOurShipDamages;
 
             /*[Serialize(18)]*/ internal bool[] ZwEnemyShipBombed;
             /*[Serialize(19)]*/ internal bool[] ZwEnemyShipTorpedoed;
-            /*[Serialize(20)]*/ internal double[] ZwEnemyShipDamages;
+            /*[Serialize(20)]*/ internal int[] ZwEnemyShipDamages;
 
             [Serialize(21)] internal int ZwCutInShipNo = -1;
             [Serialize(22)] internal AaCutInType ZwCutInType;
@@ -260,10 +261,10 @@ namespace LynLogger.Models.Battling
             public int OurAsControlValue => OurCarrierShip.Sum(x => x.ShipAsControl);
             public int EnemyAsControlValue => EnemyCarrierShip.Sum(x => x.ShipAsControl);
 
-            public IReadOnlyList<Stage3Report> OurStage3Report => ZwOurStage3Report ?? (ZwOurStage3Report = Helpers.Zip(ZwOurShipDamages, ZwOurShipBombed, ZwOurShipTorpedoed, Helpers.Sequence(),
+            public IReadOnlyList<Stage3Report> OurStage3Report => ZwOurStage3Report ?? (ZwOurStage3Report = CollectionsEx.Zip(ZwOurShipDamages, ZwOurShipBombed, ZwOurShipTorpedoed, CollectionsEx.Range(1, 7),
                         (damage, bombed, torpedoed, ship) =>
                             new Stage3Report() {
-                                ZwShip = ship+1,
+                                ZwShip = ship,
                                 ZwDamage = damage,
                                 ZwBombed = bombed,
                                 ZwTorpedoed = torpedoed,
@@ -271,10 +272,10 @@ namespace LynLogger.Models.Battling
                             }
                     ).Where(x => x.Bombed || x.Torpedoed).ToArray());
 
-            public IReadOnlyList<Stage3Report> EnemyStage3Report => ZwEnemyStage3Report ?? (ZwEnemyStage3Report = Helpers.Zip(ZwEnemyShipDamages, ZwEnemyShipBombed, ZwEnemyShipTorpedoed, Helpers.Sequence(),
+            public IReadOnlyList<Stage3Report> EnemyStage3Report => ZwEnemyStage3Report ?? (ZwEnemyStage3Report = CollectionsEx.Zip(ZwEnemyShipDamages, ZwEnemyShipBombed, ZwEnemyShipTorpedoed, CollectionsEx.Range(7, 13),
                         (damage, bombed, torpedoed, ship) =>
                             new Stage3Report() {
-                                ZwShip = ship+7,
+                                ZwShip = ship,
                                 ZwDamage = damage,
                                 ZwBombed = bombed,
                                 ZwTorpedoed = torpedoed,
@@ -368,11 +369,11 @@ namespace LynLogger.Models.Battling
         {
             [Serialize(0)] internal int ZwFrom;
             [Serialize(1)] internal int ZwTo;
-            [Serialize(2)] internal double ZwDamage;
+            /*[Serialize(2)]*/ internal int ZwDamage;
 
             public ShipInfo From => ZwFrom > 6 ? _parent.EnemyShips[ZwFrom - 7] : _parent.OurShips[ZwFrom - 1];
             public ShipInfo To => ZwTo > 6 ? _parent.EnemyShips[ZwTo - 7] : _parent.OurShips[ZwTo - 1];
-            public double Damage => ZwDamage;
+            public int Damage => ZwDamage;
 
             internal IShipInfoHolder _parent;
             public TorpedoInfo(IShipInfoHolder parent) { _parent = parent; ZwDamage = ZwFrom = ZwTo = 0; }
@@ -384,14 +385,14 @@ namespace LynLogger.Models.Battling
             /*[Serialize(1)]*/ internal int[] ZwTo;
             [Serialize(2)] internal AttackType ZwType;
             /*[Serialize(3)]*/ internal EquiptInfo[] ZwEquipts;
-            /*[Serialize(4)]*/ internal double[] ZwDamage;
+            /*[Serialize(4)]*/ internal int[] ZwDamage;
 
             public ShipInfo From => ZwFrom > 6 ? _parent.EnemyShips[ZwFrom - 7] : _parent.OurShips[ZwFrom - 1];
             public IEnumerable<ShipInfo> To => ZwTo.Select(x => x > 6 ? _parent.EnemyShips[x - 7] : _parent.OurShips[x - 1]);
             public AttackType Type => ZwType;
             public IReadOnlyList<EquiptInfo> Equipts => ZwEquipts;
-            public IReadOnlyList<double> Damage => ZwDamage;
-            public IEnumerable<KeyValuePair<ShipInfo, double>> AttackInfos => Enumerable.Zip(To, Damage, (a, b) => new KeyValuePair<ShipInfo, double>(a, b));
+            public IReadOnlyList<int> Damage => ZwDamage;
+            public IEnumerable<KeyValuePair<ShipInfo, int>> AttackInfos => Enumerable.Zip(To, Damage, (a, b) => new KeyValuePair<ShipInfo, int>(a, b));
 
             internal IShipInfoHolder _parent;
             public BombardInfo(IShipInfoHolder parent) { _parent = parent; }
@@ -462,7 +463,7 @@ namespace LynLogger.Models.Battling
 
         public partial class ShipHpStatus : AbstractDSSerializable<ShipHpStatus>, ICloneable
         {
-            [Serialize(0)] private FuzzyDouble ZwDeliveredDamage;
+            [Serialize(0)] private FuzzyInt ZwDeliveredDamage;
             [Serialize(1)] internal int ZwOrigShipId;
             [Serialize(2)] public int HpCurrent { get; private set; }
 
@@ -475,11 +476,11 @@ namespace LynLogger.Models.Battling
             public int HpMax => OrigInfo.MaxHp;
 
             public LimitedValue Hp => new LimitedValue(HpCurrent, HpMax, 0);
-            public FuzzyDouble DeliveredDamage => ZwDeliveredDamage;
+            public FuzzyInt DeliveredDamage => ZwDeliveredDamage;
 
             public ShipHpStatus(int oid, BattleProcess parent)
             {
-                _parent = parent; ZwOrigShipId = oid; HpCurrent = OrigInfo.CurrentHp; ZwDeliveredDamage = new FuzzyDouble();
+                _parent = parent; ZwOrigShipId = oid; HpCurrent = OrigInfo.CurrentHp; ZwDeliveredDamage = new FuzzyInt();
                 ProcessBattle(parent);
             }
 
@@ -487,7 +488,7 @@ namespace LynLogger.Models.Battling
             {
                 ShipInfo a = OrigInfo;
 
-                foreach (var aw in DataStore.Extensions.Collections.AsEnumerable(report.AirWarfare, report.AirWarfare2)) {
+                foreach (var aw in CollectionsEx.AsEnumerable(report.AirWarfare, report.AirWarfare2)) {
                     if (aw == null) continue;
                     if (aw.EnemyCarrierShip.Any(x => x == a)) {
                         if (aw.ZwEnemyCarrierShip.Length == 1) {

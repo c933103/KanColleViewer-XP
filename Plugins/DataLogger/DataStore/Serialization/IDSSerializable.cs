@@ -51,8 +51,10 @@ namespace LynLogger.DataStore.Serialization
             InitHandlers();
 
             var r = new Premitives.Compound();
-            foreach(var kv in BlackBox) {
-                r[kv.Key] = kv.Value;
+            if (_blackBox != null) {
+                foreach (var kv in _blackBox) {
+                    r[kv.Key] = kv.Value;
+                }
             }
 
             if (serializationPath == null) serializationPath = new LinkedList<object>();

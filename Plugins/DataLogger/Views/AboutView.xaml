@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:plugin="clr-namespace:LynLogger"
+             xmlns:data="clr-namespace:LynLogger.Data"
              x:Class="LynLogger.Views.AboutView" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -11,10 +12,13 @@
         <Run Text="这是一个闲的无聊的人做给闲的无聊的人用的插件" />
         <LineBreak />
         <LineBreak />
-        <Run Text="By 某蠢琳" />
+        <Run Text="By" />
+        <Hyperlink NavigateUri="http://bbs.kancolle.tv/thread-4111-1-1.html" Foreground="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" RequestNavigate="Hyperlink_RequestNavigate">阿武隈改二 @ KTV</Hyperlink>
         <LineBreak />
         <Run Text="{Binding Source={x:Static plugin:LynLoggerMain.Version}, Mode=OneTime, StringFormat=ver. {0}}" />
         <LineBreak />
+        <LineBreak />
+        <Run Text="{Binding Source={x:Static data:EnemySlotNumInfo.DataTime}, Mode=OneTime, StringFormat=敌舰搭载量信息版本: {0}}" />
         <LineBreak />
         <LineBreak />
         <LineBreak />

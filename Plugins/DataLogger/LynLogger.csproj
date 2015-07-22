@@ -67,7 +67,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArrayExtensions.cs" />
     <Compile Include="DataStore\Extensions\PremitiveExtensions.cs" />
     <Compile Include="DataStore\LogBook\BasicInfo.cs" />
     <Compile Include="DataStore\LogBook\ItemCreate.cs" />
@@ -92,16 +91,17 @@
     <Compile Include="DataStore\MasterInfo\Ship.cs" />
     <Compile Include="DataStore\Premitives\Blob.cs" />
     <Compile Include="DataStore\Premitives\Compound.cs" />
-    <Compile Include="DataStore\Premitives\Decimal.cs" />
-    <Compile Include="DataStore\Premitives\Dictionary.cs" />
-    <Compile Include="DataStore\Premitives\Double.cs" />
-    <Compile Include="DataStore\Premitives\List.cs" />
+    <Compile Include="DataStore\Premitives\DsDecimal.cs" />
+    <Compile Include="DataStore\Premitives\DsDictionary.cs" />
+    <Compile Include="DataStore\Premitives\DsDouble.cs" />
+    <Compile Include="DataStore\Premitives\DsList.cs" />
     <Compile Include="DataStore\Premitives\SignedInteger.cs" />
     <Compile Include="DataStore\Premitives\StoragePremitive.cs" />
-    <Compile Include="DataStore\Premitives\String.cs" />
+    <Compile Include="DataStore\Premitives\DsString.cs" />
     <Compile Include="DataStore\Premitives\UnsignedInteger.cs" />
     <Compile Include="DataStore\Store.cs" />
     <Compile Include="DataStore\WeekBook.cs" />
+    <Compile Include="Data\EnemySlotNumInfo.cs" />
     <Compile Include="Data\LevelExperienceTable.cs" />
     <Compile Include="Data\MapExperienceTable.cs" />
     <Compile Include="Extensions\RawDataWrapperExtension.cs" />
@@ -114,6 +114,7 @@
     <Compile Include="Observers\ApiCreateItemObserver.cs" />
     <Compile Include="Observers\ApiCreateShipObserver.cs" />
     <Compile Include="Observers\ApiPracticeEnemyInfoObserver.cs" />
+    <Compile Include="Utilities\CollectionsEx.cs" />
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Logger\BasicInfoLogger.cs" />
     <Compile Include="Logger\ShipDataLogger.cs" />

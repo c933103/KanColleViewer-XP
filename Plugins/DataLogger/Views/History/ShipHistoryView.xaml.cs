@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using LynLogger.DataStore.LogBook;
 using System.ComponentModel;
 using LynLogger.DataStore;
+using LynLogger.Utilities;
 
 namespace LynLogger.Views.History
 {
