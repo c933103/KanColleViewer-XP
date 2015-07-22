@@ -5,20 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LynLogger.DataStore.IO;
+using LynLogger.Utilities;
 
 namespace LynLogger.DataStore.Premitives
 {
     [Serializable]
-    class List<T> : StoragePremitive
+    class DsList<T> : StoragePremitive
         where T : StoragePremitive, new()
     {
         private IList<T> data = new System.Collections.Generic.List<T>();
 
-        public override IEnumerable<TypeIdentifier> Type => Collections.AsEnumerable(TypeIdentifier.List).Concat(new T().Type);
+        public override IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.List).Concat(new T().Type);
 
-        public List(IEnumerable<T> s) { foreach(var v in s) data.Add(v); }
+        public T this[int i] => data[i];
 
-        public List(DSReader input)
+        public DsList() { }
+
+        public DsList(IEnumerable<T> s) { foreach(var v in s) data.Add(v); }
+
+        public DsList(DSReader input)
         {
             var fcount = input.Read7bUInt();
             for(uint i = 0; i < fcount; i++) {

@@ -1,4 +1,5 @@
 ﻿using LynLogger.Models.Battling;
+using LynLogger.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

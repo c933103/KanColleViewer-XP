@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LynLogger.DataStore.Serialization;
 using LynLogger.DataStore.MasterInfo;
+using LynLogger.Utilities;
 
 namespace LynLogger.DataStore.LogBook
 {

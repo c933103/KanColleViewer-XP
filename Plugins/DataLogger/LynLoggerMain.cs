@@ -1,6 +1,7 @@
 ﻿using Grabacr07.KanColleViewer.Composition;
 using Grabacr07.KanColleWrapper;
 using Grabacr07.KanColleWrapper.Models.Raw;
+using LynLogger.DataStore.Premitives;
 using LynLogger.DataStore.Serialization;
 using LynLogger.Utilities;
 using System;
@@ -21,8 +22,8 @@ namespace LynLogger
     public class LynLoggerMain : IToolPlugin, IDisposable
     {
         private const string Major = "3.8.2.1";
-        private const string Mod = "2.6";
-        private const string Revision = "";
+        private const string Mod = "2.7";
+        private const string Revision = "1";
         private const string Train = "XT";
 
         public static LynLoggerMain Instance { get; private set; }
@@ -197,61 +198,72 @@ Second chance {2}, Time={0}, Sender={1}
         Yes,
     }
 
-    public class FuzzyDouble : AbstractDSSerializable<FuzzyDouble>
+    public struct FuzzyInt : IDSSerializable
     {
-        [Serialize(0)] public double UpperBound { get; set; }
-        [Serialize(1)] public double LowerBound { get; set; }
+        public int UpperBound { get; set; }
+        public int LowerBound { get; set; }
+        
+        internal FuzzyInt(StoragePremitive x, LinkedList<object> path) {
+            Compound comp = (Compound)x;
+            UpperBound = comp[16] is DsDouble ? (int)(comp[16] as DsDouble).Value : (int)(comp[16] as SignedInteger).Value;
+            LowerBound = comp[17] is DsDouble ? (int)(comp[17] as DsDouble).Value : (int)(comp[17] as SignedInteger).Value;
+        }
 
-        public FuzzyDouble() { }
-        internal FuzzyDouble(DataStore.Premitives.StoragePremitive x, LinkedList<object> path) : base(x, path) { }
-
-        public static FuzzyDouble operator +(FuzzyDouble a, FuzzyDouble b)
+        public StoragePremitive GetSerializationInfo(LinkedList<object> _path)
         {
-            return new FuzzyDouble() {
+            return new Compound() {
+                [16] = (SignedInteger)UpperBound,
+                [17] = (SignedInteger)LowerBound
+            };
+        }
+
+        public static FuzzyInt operator +(FuzzyInt a, FuzzyInt b)
+        {
+            return new FuzzyInt() {
                 UpperBound = a.UpperBound + b.UpperBound,
                 LowerBound = a.LowerBound + b.LowerBound
             };
         }
 
-        public static FuzzyDouble operator +(FuzzyDouble a, double b)
+        public static FuzzyInt operator +(FuzzyInt a, int b)
         {
-            return new FuzzyDouble() {
+            return new FuzzyInt() {
                 UpperBound = a.UpperBound + b,
                 LowerBound = a.LowerBound + b
             };
         }
 
-        public static TriState operator >(FuzzyDouble a, FuzzyDouble b)
+        public static TriState operator >(FuzzyInt a, FuzzyInt b)
         {
             if(a.LowerBound > b.UpperBound) return TriState.Yes;
             if(a.UpperBound <= b.LowerBound) return TriState.No;
             return TriState.DK;
         }
 
-        public static TriState operator <(FuzzyDouble a, FuzzyDouble b)
+        public static TriState operator <(FuzzyInt a, FuzzyInt b)
         {
             if(a.UpperBound < b.LowerBound) return TriState.Yes;
             if(a.LowerBound >= b.UpperBound) return TriState.No;
             return TriState.DK;
         }
 
-        public static TriState operator >=(FuzzyDouble a, FuzzyDouble b)
+        public static TriState operator >=(FuzzyInt a, FuzzyInt b)
         {
             if(a.LowerBound >= b.UpperBound) return TriState.Yes;
             if(a.UpperBound < b.LowerBound) return TriState.No;
             return TriState.DK;
         }
 
-        public static TriState operator <=(FuzzyDouble a, FuzzyDouble b)
+        public static TriState operator <=(FuzzyInt a, FuzzyInt b)
         {
             if(a.UpperBound <= b.LowerBound) return TriState.Yes;
             if(a.LowerBound > b.UpperBound) return TriState.No;
             return TriState.DK;
         }
 
-        public static FuzzyDouble UpperRange(FuzzyDouble a, FuzzyDouble b)
+        public static FuzzyInt UpperRange(FuzzyInt a, FuzzyInt b)
         {
-            return new FuzzyDouble() {
+            return new FuzzyInt() {
                 UpperBound = Math.Max(a.UpperBound, b.UpperBound),
                 LowerBound = Math.Max(a.LowerBound, b.LowerBound)
             };

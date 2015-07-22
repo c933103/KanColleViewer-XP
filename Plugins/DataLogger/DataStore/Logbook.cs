@@ -7,6 +7,7 @@ using LynLogger.DataStore.LogBook;
 using LynLogger.DataStore.Extensions;
 using LynLogger.DataStore.Serialization;
 using System.Collections;
+using LynLogger.Utilities;
 
 namespace LynLogger.DataStore
 {
@@ -60,8 +61,8 @@ namespace LynLogger.DataStore
                     [3] = new HandlerInfo(
                         (x, p) => x._ships.GetSerializationInfo(p, (k, p1) => new Premitives.SignedInteger(k)),
                         (o, i, p) => o._ships = new SortedDictionary<int, Ship>(
-                                                    (i as Premitives.Dictionary<Premitives.SignedInteger, Premitives.StoragePremitive>)?.Convert(x => (int)x.Value, x => new Ship(x, p))
-                                                 ?? (i as Premitives.Dictionary<Premitives.SignedInteger, Premitives.Compound>)?.Convert(x => (int)x.Value, x => new Ship(x, p)))
+                                                    (i as Premitives.DsDictionary<Premitives.SignedInteger, Premitives.StoragePremitive>)?.Convert(x => (int)x.Value, x => new Ship(x, p))
+                                                 ?? (i as Premitives.DsDictionary<Premitives.SignedInteger, Premitives.Compound>)?.Convert(x => (int)x.Value, x => new Ship(x, p)))
                     ),
                 };
             }

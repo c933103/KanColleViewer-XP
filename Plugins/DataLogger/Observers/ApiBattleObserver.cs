@@ -172,7 +172,7 @@ namespace LynLogger.Observers
                 for(int j = 0; j < 5; j++) {
                     if(slots[i][j] <= 0) break;
                     int equiptId = (int)slots[i][j];
-                    equipts.Add(new EquiptInfo(KanColleClient.Current.Master.SlotItems[equiptId], ship.Slots?.Get(j) ?? 1));
+                    equipts.Add(new EquiptInfo(KanColleClient.Current.Master.SlotItems[equiptId], ship.Slots?.Get(j) ?? DataStore.Store.Current?.SlotNums.GetWithFallback(shipId, null)?.GetWithFallback(j, 0) ?? 0));
                 }
 
                 r.Add(new BattleProcess.ShipInfo() {
@@ -201,14 +201,14 @@ namespace LynLogger.Observers
 
         private BattleProcess.AirWarfareInfo CreateSupportAttackInfo(BattleProcess holder, dynamic data)
         {
-            List<double> enemyDamage = new List<double>(6);
+            List<int> enemyDamage = new List<int>(6);
             List<bool> enemyBombed = new List<bool>(6);
             List<bool> enemyTorpedoed = new List<bool>(6);
             for(int i = 1; i < 7; i++) {
                 if(data.api_damage.IsDefined(i) && data.api_damage[i] >= 0) {
                     enemyBombed.Add(holder.SupportType == BattleProcess.SupportInfo.Type.GunFight);
                     enemyTorpedoed.Add(holder.SupportType == BattleProcess.SupportInfo.Type.Torpedo);
-                    enemyDamage.Add(data.api_damage[i]);
+                    enemyDamage.Add((int)data.api_damage[i]);
                 }
             }
             return new BattleProcess.AirWarfareInfo(holder) {
@@ -233,7 +233,7 @@ namespace LynLogger.Observers
                 ZwEnemyShipDamages      = enemyDamage.ToArray(),
                 ZwEnemyShipTorpedoed    = enemyTorpedoed.ToArray(),
                 ZwOurShipBombed         = new bool[0],
-                ZwOurShipDamages        = new double[0],
+                ZwOurShipDamages        = new int[0],
                 ZwOurShipTorpedoed      = new bool[0]
             };
         }
@@ -253,21 +253,21 @@ namespace LynLogger.Observers
             }
             List<bool> ourBombed = new List<bool>(6);
             List<bool> ourTorpedoed = new List<bool>(6);
-            List<double> ourDamage = new List<double>(6);
+            List<int> ourDamage = new List<int>(6);
             List<bool> enemyBombed = new List<bool>(6);
             List<bool> enemyTorpedoed = new List<bool>(6);
-            List<double> enemyDamage = new List<double>(6);
+            List<int> enemyDamage = new List<int>(6);
             if(data.api_stage3 != null) {
                 for(int i = 1; i < 7; i++) {
                     if(data.api_stage3.api_fdam() && data.api_stage3.api_fdam.IsDefined(i) && data.api_stage3.api_fdam[i] >= 0) {
                         ourBombed.Add(data.api_stage3.api_fbak_flag[i] != 0);
                         ourTorpedoed.Add(data.api_stage3.api_frai_flag[i] != 0);
-                        ourDamage.Add(data.api_stage3.api_fdam[i]);
+                        ourDamage.Add((int)data.api_stage3.api_fdam[i]);
                     }
                     if(data.api_stage3.api_edam.IsDefined(i) && data.api_stage3.api_edam[i] >= 0) {
                         enemyBombed.Add(data.api_stage3.api_ebak_flag[i] != 0);
                         enemyTorpedoed.Add(data.api_stage3.api_erai_flag[i] != 0);
-                        enemyDamage.Add(data.api_stage3.api_edam[i]);
+                        enemyDamage.Add((int)data.api_stage3.api_edam[i]);
                     }
                 }
             }
@@ -314,7 +314,7 @@ namespace LynLogger.Observers
                     ZwEnemyShipDamages      = enemyDamage.ToArray(),
                     ZwEnemyShipTorpedoed    = enemyTorpedoed.ToArray(),
                     ZwOurShipBombed         = new bool[0],
-                    ZwOurShipDamages        = new double[0],
+                    ZwOurShipDamages        = new int[0],
                     ZwOurShipTorpedoed      = new bool[0]
                 };
             } else {
@@ -374,14 +374,14 @@ namespace LynLogger.Observers
                     r.Add(new BattleProcess.TorpedoInfo(holder) {
                         ZwFrom = i,
                         ZwTo = (int)data.api_frai[i] + 6,
-                        ZwDamage = data.api_fydam[i]
+                        ZwDamage = (int)data.api_fydam[i]
                     });
                 }
                 if(data.api_erai.IsDefined(i) && (data.api_erai[i] > 0)) {
                     r.Add(new BattleProcess.TorpedoInfo(holder) {
                         ZwFrom = i+6,
                         ZwTo = (int)data.api_erai[i],
-                        ZwDamage = data.api_eydam[i]
+                        ZwDamage = (int)data.api_eydam[i]
                     });
                 }
             }
@@ -392,14 +392,14 @@ namespace LynLogger.Observers
         {
             List<BattleProcess.BombardInfo> r = new List<BattleProcess.BombardInfo>(12);
             for(int i = 1; data.api_at_list.IsDefined(i); i++) {
-                List<double> dmgs = new List<double>(2);
+                List<int> dmgs = new List<int>(2);
                 List<int> tgts = new List<int>(2);
                 List<int> sis = new List<int>(3);
                 int attackType;
 
                 for(int j = 0; data.api_damage[i].IsDefined(j); j++) {
                     if(data.api_df_list[i][j] > 0) {
-                        dmgs.Add(data.api_damage[i][j]);
+                        dmgs.Add((int)data.api_damage[i][j]);
                         tgts.Add((int)data.api_df_list[i][j]);
                     }
                 }
@@ -444,10 +444,10 @@ namespace LynLogger.Observers
             ZwOurStage2Lost = 0,
             ZwOurAirspaceControl = BattleProcess.AirWarfareInfo.AirspaceControl.None,
             ZwEnemyShipBombed = new bool[6],
-            ZwEnemyShipDamages = new double[6],
+            ZwEnemyShipDamages = new int[6],
             ZwEnemyShipTorpedoed = new bool[6],
             ZwOurShipBombed = new bool[6],
-            ZwOurShipDamages = new double[6],
+            ZwOurShipDamages = new int[6],
             ZwOurShipTorpedoed = new bool[6],
             ZwOurReconnInTouchName = "没有舰载机",
             ZwEnemyReconnInTouchName = "没有舰载机",

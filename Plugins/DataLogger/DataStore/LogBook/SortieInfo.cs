@@ -33,7 +33,7 @@ namespace LynLogger.DataStore.LogBook
                 return new Dictionary<ulong, HandlerInfo>() {
                     [1] = new HandlerInfo(
                         (x, p) => x.Nodes.GetSerializationInfo(p),
-                        (o, i, p) => o.Nodes = ((Premitives.List<Premitives.StoragePremitive>)i).Convert(x => new Node(x, p)).ToArray()),
+                        (o, i, p) => o.Nodes = ((Premitives.DsList<Premitives.StoragePremitive>)i).Convert(x => new Node(x, p)).ToArray()),
                 };
             }
         }
