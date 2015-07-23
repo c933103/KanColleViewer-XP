@@ -70,13 +70,10 @@ namespace LynLogger.Views
                     IncludeDebugInformation = true
                 };
                 foreach(Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
-                    try {
-                        string location = assembly.Location;
-                        if(!string.IsNullOrEmpty(location)) {
-                            parameters.ReferencedAssemblies.Add(location);
-                        }
-                    } catch (NotSupportedException) {
-                        // this happens for dynamic assemblies, so just ignore it. 
+                    if (assembly.IsDynamic) continue;
+                    string location = assembly.Location;
+                    if(!string.IsNullOrEmpty(location)) {
+                        parameters.ReferencedAssemblies.Add(location);
                     }
                 }
 

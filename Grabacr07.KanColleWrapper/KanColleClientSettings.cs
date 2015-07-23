@@ -91,6 +91,18 @@ namespace Grabacr07.KanColleWrapper
 			}
 		}
 
-		#endregion
-	}
+        #endregion
+
+        private bool _disallowSortieWithHeavyDamage = false;
+        public bool DisallowSortieWithHeavyDamage
+        {
+            get { return _disallowSortieWithHeavyDamage; }
+            set
+            {
+                if (value == _disallowSortieWithHeavyDamage) return;
+                _disallowSortieWithHeavyDamage = value;
+                RaisePropertyChanged();
+            }
+        }
+    }
 }

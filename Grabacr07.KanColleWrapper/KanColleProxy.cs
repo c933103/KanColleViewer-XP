@@ -21,18 +21,10 @@ namespace Grabacr07.KanColleWrapper
 
         public bool Synchronize { get; set; }
 
-		public IObservable<Session> SessionSource
-		{
-			get { return this.connectableSessionSource.AsObservable(); }
-		}
-
-		public IObservable<Session> ApiSessionSource
-		{
-			get { return this.apiSource.AsObservable(); }
-		}
+		public IObservable<Session> SessionSource => connectableSessionSource;
+		public IObservable<Session> ApiSessionSource => apiSource;
 
 		public IProxySettings UpstreamProxySettings { get; set; }
-
 
 		public KanColleProxy()
 		{
@@ -149,9 +141,25 @@ namespace Grabacr07.KanColleWrapper
 
             if(result.Action == ProxyRule.MatchAction.Block) {
                 requestingSession.utilCreateResponseAndBypassServer();
-                requestingSession.oResponse.headers.HTTPResponseCode = 403;
-                requestingSession.oResponse.headers.HTTPResponseStatus = "403 Forbidden";
+                requestingSession.oResponse.headers.HTTPResponseCode = 450;
+                requestingSession.oResponse.headers.HTTPResponseStatus = "450 Blocked As Requested";
                 return;
+            }
+
+            if(KanColleClient.Current.Settings.DisallowSortieWithHeavyDamage) {
+                if(KanColleClient.Current.Homeport.Organization.Fleets.Any(x => x.Value.IsInSortie && x.Value.State.Situation.HasFlag(Models.FleetSituation.HeavilyDamaged))) {
+                    if (    requestingSession.PathAndQuery.Length > 7
+                         && requestingSession.PathAndQuery.Substring(0, 7) == "/kcsapi"
+                         && (requestingSession.PathAndQuery.Contains("battle") || requestingSession.PathAndQuery.Contains("sortie"))
+                         && !requestingSession.PathAndQuery.Contains("practice")
+                         && !requestingSession.PathAndQuery.Contains("result")) {
+
+                        requestingSession.utilCreateResponseAndBypassServer();
+                        requestingSession.oResponse.headers.HTTPResponseCode = 450;
+                        requestingSession.oResponse.headers.HTTPResponseStatus = "450 Blocked As Requested";
+                        return;
+                    }
+                }
             }
 
             if(result.Action == ProxyRule.MatchAction.Proxy && result.Proxy != null) {
