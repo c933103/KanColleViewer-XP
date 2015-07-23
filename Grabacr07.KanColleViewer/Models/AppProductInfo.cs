@@ -9,8 +9,8 @@ namespace Grabacr07.KanColleViewer.Models
 	public static class AppProductInfo
     {
         private const string Major = "3.8.2.1";
-        private const string Mod = "2.7";
-        private const string Revision = "2";
+        private const string Mod = "2.8";
+        private const string Revision = "";
         private const string Train = "T";
 
         private static readonly Assembly assembly = Assembly.GetExecutingAssembly();

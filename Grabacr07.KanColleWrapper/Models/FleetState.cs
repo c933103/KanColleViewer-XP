@@ -299,11 +299,11 @@ namespace Grabacr07.KanColleWrapper.Models
 				}
 			}
 
-			var heavilyDamaged = ships
-				.Where(s => !this.homeport.Repairyard.CheckRepairing(s.Id))
-				.Where(s => !s.Situation.HasFlag(ShipSituation.Evacuation) && !s.Situation.HasFlag(ShipSituation.Tow))
-				.Where(s => !(state.HasFlag(FleetSituation.Sortie) && s.Situation.HasFlag(ShipSituation.DamageControlled)))
-				.Any(s => s.HP.IsHeavilyDamage());
+            var heavilyDamaged = ships
+                .Where(s => s.HP.IsHeavilyDamage())
+                .Where(s => !this.homeport.Repairyard.CheckRepairing(s.Id))
+                .Where(s => !(state.HasFlag(FleetSituation.Sortie) && s.Situation.HasFlag(ShipSituation.DamageControlled)))
+                .Any(s => !s.Situation.HasFlag(ShipSituation.Evacuation) && !s.Situation.HasFlag(ShipSituation.Tow));
 			if (heavilyDamaged)
 			{
 				state |= FleetSituation.HeavilyDamaged;
