@@ -124,7 +124,7 @@
 using System;       //标准系统命名空间
 using System.Linq;  //Linq扩展方法空间
 using LynLogger;    //插件主命名空间
-using LynLogger.DataStore.Master; //插件主数据表命名空间
+using LynLogger.DataStore.MasterInfo; //插件主数据表命名空间
 
 //标注处理排序用的类名称 CustomSorter.Sorter
 [assembly: ComparerClass("CustomSorter.Sorter")]

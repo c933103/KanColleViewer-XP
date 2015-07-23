@@ -23,7 +23,7 @@ namespace LynLogger
     {
         private const string Major = "3.8.2.1";
         private const string Mod = "2.7";
-        private const string Revision = "1";
+        private const string Revision = "2";
         private const string Train = "T";
 
         public static LynLoggerMain Instance { get; private set; }
@@ -67,6 +67,7 @@ namespace LynLogger
 
 #if DEBUG
             AppDomain.CurrentDomain.FirstChanceException += (s, e) => {
+                if (e.Exception is System.Security.SecurityException) return;
                 var stack = new System.Diagnostics.StackTrace(e.Exception);
                 if (stack.GetFrames().Any(x => x.GetMethod().DeclaringType.Assembly.GetName().Name == typeof(LynLoggerMain).Assembly.GetName().Name)) {
                     System.IO.File.AppendAllText("lynlogger.log", string.Format(@"
