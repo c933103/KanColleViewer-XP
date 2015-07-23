@@ -22,8 +22,8 @@ namespace LynLogger
     public class LynLoggerMain : IToolPlugin, IDisposable
     {
         private const string Major = "3.8.2.1";
-        private const string Mod = "2.7";
-        private const string Revision = "1";
+        private const string Mod = "2.8";
+        private const string Revision = "";
         private const string Train = "PT";
 
         public static LynLoggerMain Instance { get; private set; }
@@ -67,6 +67,7 @@ namespace LynLogger
 
 #if DEBUG
             AppDomain.CurrentDomain.FirstChanceException += (s, e) => {
+                if (e.Exception is System.Security.SecurityException) return;
                 var stack = new System.Diagnostics.StackTrace(e.Exception);
                 if (stack.GetFrames().Any(x => x.GetMethod().DeclaringType.Assembly.GetName().Name == typeof(LynLoggerMain).Assembly.GetName().Name)) {
                     System.IO.File.AppendAllText("lynlogger.log", string.Format(@"
@@ -98,7 +99,7 @@ Second chance {2}, Time={0}, Sender={1}
             _disposables.AddLast(KanColleClient.Current.Proxy.api_get_member_ship2.TryParse<kcsapi_ship2[]>().Subscribe(new Observers.ApiShip2Observer()));
 
             BattleObserver = new Observers.ApiBattleObserver();
-            _disposables.AddLast(KanColleClient.Current.Proxy.api_req_sortie_battle.Subscribe(BattleObserver)); //昼战
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_sortie/battle").Subscribe(BattleObserver)); //昼战
             _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_sortie/airbattle").Subscribe(BattleObserver)); //航空战
             _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_battle_midnight/battle").Subscribe(BattleObserver)); //普通夜战
             _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_battle_midnight/sp_midnight").Subscribe(BattleObserver)); //夜战点

@@ -67,7 +67,7 @@ namespace LynLogger.Properties {
         ///using System;       //标准系统命名空间
         ///using System.Linq;  //Linq扩展方法空间
         ///using LynLogger;    //插件主命名空间
-        ///using LynLogger.DataStore.Master; //插件主数据表命名空间
+        ///using LynLogger.DataStore.MasterInfo; //插件主数据表命名空间
         ///
         /////标注处理排序用的类名称 CustomSorter.Sorter
         ///[assembly: ComparerClass(&quot;CustomSorter.Sorter&quot;)]
@@ -79,7 +79,7 @@ namespace LynLogger.Properties {
         ///  public class Sorter : CustomComparerBase&lt;Ship&gt; {
         ///
         ///    //重写父类的比较方法
-        ///    public override int Compare [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///    public override int Com [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string TemplateCustomShipSorter {
             get {
