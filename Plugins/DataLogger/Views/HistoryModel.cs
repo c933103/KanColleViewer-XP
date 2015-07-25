@@ -10,19 +10,14 @@ using System.Threading.Tasks;
 
 namespace LynLogger.Views
 {
-    class HistoryModel : NotificationSourceObject
+    class HistoryModel : NotificationSourceObject<HistoryModel>
     {
-        protected override IDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency
-        {
-            get
-            {
-                return new Dictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> {
-                    [o => ((HistoryModel)o).SelectedBook] = new List<Expression<Func<object, object>>> {
-                        o => ((HistoryModel)o).Books,
-                        o => ((HistoryModel)o).SelectedBookId }
-                };
-            }
-        }
+        protected override IDictionary<string, ICollection<string>> PropertyDependency =>
+            new Dictionary<string, ICollection<string>> {
+                [nameof(SelectedBook)] = new string[] {
+                    nameof(Books),
+                    nameof(SelectedBookId) }
+            };
 
         public IList<TabViewItem> Pages { get; private set; }
 
@@ -80,7 +75,7 @@ namespace LynLogger.Views
             SelectedPage = Pages.First();
 
             Store.OnDataStoreSwitch += _ => {
-                RaiseMultiPropertyChanged(() => Books);
+                RaiseMultiPropertyChanged(nameof(Books));
                 SelectedBookId = 0;
             };
         }

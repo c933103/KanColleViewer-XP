@@ -17,25 +17,11 @@ namespace LynLogger.Utilities
             this.backend = backend;
         }
 
-        public int Count
-        {
-            get
-            {
-                return backend.Count;
-            }
-        }
-
-        bool ICollection<T>.IsReadOnly { get { return true; } }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return backend.GetEnumerator();
-        }
-
-        void ICollection<T>.CopyTo(T[] array, int arrayIndex)
-        {
-            backend.CopyTo(array, arrayIndex);
-        }
+        public int Count => backend.Count;
+        bool ICollection<T>.IsReadOnly => true;
+        public IEnumerator<T> GetEnumerator() => backend.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => backend.GetEnumerator();
+        void ICollection<T>.CopyTo(T[] array, int arrayIndex) => backend.CopyTo(array, arrayIndex);
 
         void ICollection<T>.Add(T item)
         {
@@ -55,11 +41,6 @@ namespace LynLogger.Utilities
         bool ICollection<T>.Remove(T item)
         {
             throw new InvalidOperationException();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return backend.GetEnumerator();
         }
     }
 
@@ -81,31 +62,12 @@ namespace LynLogger.Utilities
             };
         }
 
-        public int Count
-        {
-            get
-            {
-                return backend.Count;
-            }
-        }
-
-        public bool IsReadOnly
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return backend.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return backend.GetEnumerator();
-        }
+        public bool IsReadOnly => true;
+        public int Count => backend.Count;
+        public bool Contains(T item) => backend.Contains(item);
+        public IEnumerator<T> GetEnumerator() => backend.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => backend.GetEnumerator();
+        public void CopyTo(T[] array, int arrayIndex) => backend.CopyTo(array, arrayIndex);
 
         public void Add(T item)
         {
@@ -115,16 +77,6 @@ namespace LynLogger.Utilities
         public void Clear()
         {
             throw new InvalidOperationException();
-        }
-
-        public bool Contains(T item)
-        {
-            return backend.Contains(item);
-        }
-
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            backend.CopyTo(array, arrayIndex);
         }
 
         public bool Remove(T item)
@@ -137,11 +89,7 @@ namespace LynLogger.Utilities
     {
         private readonly SortedSet<T> _backend;
 
-        public NotifyingSortedSet()
-        {
-            _backend = new SortedSet<T>();
-        }
-
+        public NotifyingSortedSet() : this(new SortedSet<T>()) { }
         public NotifyingSortedSet(IEnumerable<T> s)
         {
             _backend = new SortedSet<T>(s);
@@ -149,21 +97,8 @@ namespace LynLogger.Utilities
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        public int Count
-        {
-            get
-            {
-                return ((ISet<T>)_backend).Count;
-            }
-        }
-
-        public bool IsReadOnly
-        {
-            get
-            {
-                return ((ISet<T>)_backend).IsReadOnly;
-            }
-        }
+        public int Count => _backend.Count;
+        public bool IsReadOnly => ((ISet<T>)_backend).IsReadOnly;
 
         public void Clear()
         {
@@ -210,83 +145,40 @@ namespace LynLogger.Utilities
 
         public void UnionWith(IEnumerable<T> other)
         {
-            ((ISet<T>)_backend).UnionWith(other);
+            _backend.UnionWith(other);
             RaiseCollectionChanged(NotifyCollectionChangedAction.Reset);
         }
 
         public void ExceptWith(IEnumerable<T> other)
         {
-            ((ISet<T>)_backend).ExceptWith(other);
+            _backend.ExceptWith(other);
             RaiseCollectionChanged(NotifyCollectionChangedAction.Reset);
         }
 
         public void SymmetricExceptWith(IEnumerable<T> other)
         {
-            ((ISet<T>)_backend).SymmetricExceptWith(other);
+            _backend.SymmetricExceptWith(other);
             RaiseCollectionChanged(NotifyCollectionChangedAction.Reset);
-        }
-
-        public bool IsSubsetOf(IEnumerable<T> other)
-        {
-            return ((ISet<T>)_backend).IsSubsetOf(other);
-        }
-
-        public bool IsSupersetOf(IEnumerable<T> other)
-        {
-            return ((ISet<T>)_backend).IsSupersetOf(other);
-        }
-
-        public bool IsProperSupersetOf(IEnumerable<T> other)
-        {
-            return ((ISet<T>)_backend).IsProperSupersetOf(other);
-        }
-
-        public bool IsProperSubsetOf(IEnumerable<T> other)
-        {
-            return ((ISet<T>)_backend).IsProperSubsetOf(other);
-        }
-
-        public bool Overlaps(IEnumerable<T> other)
-        {
-            return ((ISet<T>)_backend).Overlaps(other);
-        }
-
-        public bool SetEquals(IEnumerable<T> other)
-        {
-            return ((ISet<T>)_backend).SetEquals(other);
-        }
-
-        void ICollection<T>.Add(T item)
-        {
-            Add(item);
-        }
-
-        public bool Contains(T item)
-        {
-            return ((ISet<T>)_backend).Contains(item);
-        }
-
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            ((ISet<T>)_backend).CopyTo(array, arrayIndex);
         }
 
         public bool Remove(T item)
         {
-            var r = ((ISet<T>)_backend).Remove(item);
-            if(r)
+            var r = _backend.Remove(item);
+            if (r)
                 RaiseCollectionChanged(NotifyCollectionChangedAction.Remove, item, _backend.TakeWhile(x => _backend.Comparer.Compare(x, item) < 0).Count());
             return r;
         }
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            return ((ISet<T>)_backend).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((ISet<T>)_backend).GetEnumerator();
-        }
+        void ICollection<T>.Add(T item) => Add(item);
+        public bool Contains(T item) => _backend.Contains(item);
+        public IEnumerator<T> GetEnumerator() => _backend.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => _backend.GetEnumerator();
+        public bool Overlaps(IEnumerable<T> other) => _backend.Overlaps(other);
+        public bool SetEquals(IEnumerable<T> other) => _backend.SetEquals(other);
+        public bool IsSubsetOf(IEnumerable<T> other) => _backend.IsSubsetOf(other);
+        public bool IsSupersetOf(IEnumerable<T> other) => _backend.IsSupersetOf(other);
+        public void CopyTo(T[] array, int arrayIndex) => _backend.CopyTo(array, arrayIndex);
+        public bool IsProperSubsetOf(IEnumerable<T> other) => _backend.IsProperSubsetOf(other);
+        public bool IsProperSupersetOf(IEnumerable<T> other) => _backend.IsProperSupersetOf(other);
     }
 }

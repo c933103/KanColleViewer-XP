@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace LynLogger
 {
-    public class ToolsModel : NotificationSourceObject
+    public class ToolsModel : NotificationSourceObject<ToolsModel>
     {
         public IList<TabViewItem> Pages { get; private set; }
 
