@@ -22,7 +22,7 @@ namespace LynLogger
     public class LynLoggerMain : IToolPlugin, IDisposable
     {
         private const string Major = "3.8.2.1";
-        private const string Mod = "2.8";
+        private const string Mod = "2.9";
         private const string Revision = "";
         private const string Train = "T";
 

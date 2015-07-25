@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LynLogger.Views.Controls
 {
-    public class TabViewItem : Models.NotificationSourceObject
+    public class TabViewItem : Models.NotificationSourceObject<TabViewItem>
     {
         public virtual string TabName { get; set; }
 

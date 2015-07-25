@@ -38,7 +38,7 @@ namespace Grabacr07.KanColleWrapper
             if (subscriber != null) return;
 
             var subscription = timer.Subscribe(_ => Tick());
-            if(System.Threading.Interlocked.CompareExchange(ref subscriber, null, subscription) != null) {
+            if(System.Threading.Interlocked.CompareExchange(ref subscriber, subscription, null) != null) {
                 subscription.Dispose();
             }
         }
