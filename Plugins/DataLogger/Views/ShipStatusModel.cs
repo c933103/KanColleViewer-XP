@@ -10,36 +10,41 @@ using System.Linq.Expressions;
 
 namespace LynLogger.Views
 {
-    public partial class ShipStatusModel : NotificationSourceObject
+    public partial class ShipStatusModel : NotificationSourceObject<ShipStatusModel>
     {
-        protected override IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency
-        {
-            get
-            {
-                return new Dictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> {
-                    [o => ((ShipStatusModel)o).Ships] = new List<Expression<Func<object, object>>> {
-                        o => ((ShipStatusModel)o).ShipSortMode,
-                        o => ((ShipStatusModel)o).CustomComparerSource},
-                    [o => ((ShipStatusModel)o).RemainingExp] = new List<Expression<Func<object, object>>> {
-                        o => ((ShipStatusModel)o).SelectedShip,
-                        o => ((ShipStatusModel)o).TargetLevel },
-                    [o => ((ShipStatusModel)o).RamaingCount] = new List<Expression<Func<object, object>>> {
-                        o => ((ShipStatusModel)o).RemainingExp,
-                        o => ((ShipStatusModel)o).IsFlagship,
-                        o => ((ShipStatusModel)o).IsMvp,
-                        o => ((ShipStatusModel)o).SelectedMapArea,
-                        o => ((ShipStatusModel)o).TargetRank },
-                    [o => ((ShipStatusModel)o).FuelReq] = new List<Expression<Func<object, object>>> {
-                        o => ((ShipStatusModel)o).SelectedShip },
-                    [o => ((ShipStatusModel)o).AmmoReq] = new List<Expression<Func<object, object>>> {
-                        o => ((ShipStatusModel)o).SelectedShip }
-                };
-            }
-        }
+        protected override IReadOnlyDictionary<string, IReadOnlyCollection<string>> PropertyDependency =>
+            new Dictionary<string, IReadOnlyCollection<string>> {
+                [nameof(Ships)] = new string[] {
+                    nameof(ShipSortMode),
+                    nameof(CustomComparerSource)},
+                [nameof(RemainingExp)] = new string[] {
+                    nameof(CurrentLevel),
+                    nameof(ExpNext),
+                    nameof(TargetLevel) },
+                [nameof(RemaingCount)] = new string[] {
+                    nameof(RemainingExp),
+                    nameof(IsFlagship),
+                    nameof(IsMvp),
+                    nameof(SelectedMapArea),
+                    nameof(TargetRank) },
+                [nameof(FuelReq)] = new string[] {
+                    nameof(SelectedShip) },
+                [nameof(AmmoReq)] = new string[] {
+                    nameof(SelectedShip) },
+                [nameof(TargetLevel)] = new string[] {
+                    nameof(SelectedShip) },
+                [nameof(CurrentLevel)] = new string[] {
+                    nameof(SelectedShip) },
+                [nameof(ExpNext)] = new string[] {
+                    nameof(SelectedShip) }
+            };
 
         private Ship _selectedShip;
         private string _selectedMapArea = "1-1";
-        private int _targetLevel;
+        private int? _currentLevel;
+        private int? _expNext;
+        private int? _targetLevel;
+        private int _autoLv = 1;
         private bool _isMvp;
         private bool _isFlagship;
         private Ranking _rank;
@@ -83,6 +88,11 @@ namespace LynLogger.Views
             {
                 if(_selectedShip == value) return;
                 _selectedShip = value;
+                if (value != null) {
+                    _autoLv = Grabacr07.KanColleWrapper.KanColleClient.Current?.Homeport?.Organization?.Ships[value.Id]?.Info?.NextRemodelingLevel ?? 1;
+                    if (value.Level >= _autoLv) _autoLv = 99;
+                    if (value.Level >= _autoLv) _autoLv = 150;
+                }
                 RaisePropertyChanged();
             }
         }
@@ -98,9 +108,31 @@ namespace LynLogger.Views
             }
         }
 
-        public int TargetLevel
+        public int? CurrentLevel
         {
-            get { return _targetLevel; }
+            get { return _currentLevel ?? _selectedShip?.Level ?? 1; }
+            set
+            {
+                if (_currentLevel == value) return;
+                _currentLevel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int? ExpNext
+        {
+            get { return _expNext ?? _selectedShip?.ExpNext ?? 0; }
+            set
+            {
+                if (_expNext == value) return;
+                _expNext = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int? TargetLevel
+        {
+            get { return _targetLevel ?? _autoLv; }
             set
             {
                 if(_targetLevel == value) return;
@@ -146,18 +178,17 @@ namespace LynLogger.Views
         {
             get
             {
-                var currentLevel = SelectedShip?.Level ?? int.MaxValue;
-                if(currentLevel >= TargetLevel) return 0;
+                if(CurrentLevel >= TargetLevel) return 0;
 
-                if(currentLevel <= 99 && TargetLevel >= 100) return int.MaxValue;
-                if(currentLevel == 150) return 0;
-                if(currentLevel == 99) return 0;
-                
-                return Data.LevelExperienceTable.Instance[TargetLevel] - Data.LevelExperienceTable.Instance[currentLevel+1] + SelectedShip.ExpNext;
+                if(CurrentLevel <= 99 && TargetLevel >= 100) return int.MaxValue;
+                if(CurrentLevel == 150) return 0;
+                if(CurrentLevel == 99) return 0;
+
+                return Data.LevelExperienceTable.Instance[TargetLevel.Value] - Data.LevelExperienceTable.Instance[CurrentLevel.Value + 1] + ExpNext.Value;
             }
         }
 
-        public int RamaingCount
+        public int RemaingCount
         {
             get
             {
@@ -195,12 +226,12 @@ namespace LynLogger.Views
 
         public ShipStatusModel()
         {
-            Store.OnDataStoreSwitch += _ => RaiseMultiPropertyChanged(() => Ships);
+            Store.OnDataStoreSwitch += _ => RaiseMultiPropertyChanged(nameof(Ships));
             Store.OnDataStoreCreate += store => store.OnShipDataChange += (ds, x) => {
                 if(x == SelectedShip?.Id) {
-                    RaiseMultiPropertyChanged(() => SelectedShip);
+                    RaiseMultiPropertyChanged(nameof(SelectedShip));
                 }
-                RaiseMultiPropertyChanged(() => Ships);
+                RaiseMultiPropertyChanged(nameof(Ships));
             };
             sortMode = new List<SortRequest<Ship>>() {
                 new SortRequest<Ship>(this) { SortKey = _builtinSorts[0] }
@@ -222,7 +253,7 @@ namespace LynLogger.Views
                 defSort.PropertyChanged += HandleSortChange;
                 sortMode.Add(defSort);
             }
-            RaiseMultiPropertyChanged(() => ShipSortMode);
+            RaiseMultiPropertyChanged(nameof(ShipSortMode));
         }
 
         private static readonly Ranking[] _ranks = (Ranking[])Enum.GetValues(typeof(Ranking));
@@ -276,7 +307,7 @@ namespace LynLogger.Views
             }
         }
 
-        public class SortRequest<T> : NotificationSourceObject
+        public class SortRequest<T> : NotificationSourceObject<SortRequest<T>>
         {
             private ComparerBase<T> key;
             private bool ascending;

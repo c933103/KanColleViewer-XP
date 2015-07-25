@@ -7,27 +7,22 @@ using System.Linq.Expressions;
 
 namespace LynLogger.Views
 {
-    public class BattleNetaModel : Models.NotificationSourceObject
+    public class BattleNetaModel : Models.NotificationSourceObject<BattleNetaModel>
     {
-        protected override IReadOnlyDictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> PropertyDependency
-        {
-            get
-            {
-                return new Dictionary<Expression<Func<object, object>>, List<Expression<Func<object, object>>>> {
-                    [o => ((BattleNetaModel)o).BasicExp] = new List<Expression<Func<object, object>>> {
-                        o => ((BattleNetaModel)o).Battle },
-                    [o => ((BattleNetaModel)o).IsDrill] = new List<Expression<Func<object, object>>> {
-                        o => ((BattleNetaModel)o).Battle },
-                    [o => ((BattleNetaModel)o).ShowBattleResult] = new List<Expression<Func<object, object>>> {
-                        o => ((BattleNetaModel)o).Battle,
-                        o => ((BattleNetaModel)o).MapNext,
-                        o => ((BattleNetaModel)o).PracticeEnemy },
-                    [o => ((BattleNetaModel)o).ShowBattleProcess] = new List<Expression<Func<object, object>>> {
-                        o => ((BattleNetaModel)o).MapNext,
-                        o => ((BattleNetaModel)o).PracticeEnemy }
-                };
-            }
-        }
+        protected override IReadOnlyDictionary<string, IReadOnlyCollection<string>> PropertyDependency =>
+            new Dictionary<string, IReadOnlyCollection<string>> {
+                [nameof(BasicExp)] = new string[] {
+                    nameof(Battle) },
+                [nameof(IsDrill)] = new string[] {
+                    nameof(Battle) },
+                [nameof(ShowBattleResult)] = new string[] {
+                    nameof(Battle),
+                    nameof(MapNext),
+                    nameof(PracticeEnemy) },
+                [nameof(ShowBattleProcess)] = new string[] {
+                    nameof(MapNext),
+                    nameof(PracticeEnemy) }
+            };
 
         private ViewState _state = ViewState.AnticipateBattle;
 

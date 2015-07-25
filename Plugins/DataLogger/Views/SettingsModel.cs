@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace LynLogger.Views
 {
-    public class SettingsModel : NotificationSourceObject
+    public class SettingsModel : NotificationSourceObject<SettingsModel>
     {
         private SaveDataCommand saveDataCmd;
         public ICommand SaveData => saveDataCmd ?? (saveDataCmd = new SaveDataCommand());
