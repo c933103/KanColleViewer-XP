@@ -203,7 +203,7 @@
     <Compile Include="Homeport.cs" />
     <Compile Include="Internal\RetryObservableExtensions.cs" />
     <Compile Include="KanColleError.cs" />
-    <Compile Include="Internal\Definitions.cs" />
+    <Compile Include="Definitions.cs" />
     <Compile Include="Internal\Extensions.cs" />
     <Compile Include="KanColleClient.cs" />
     <Compile Include="KanColleProxy.cs" />
