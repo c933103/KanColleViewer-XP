@@ -92,6 +92,27 @@
 							<Run Text="阿武隈改二 @ KTV" />
 						</metro2:HyperlinkEx>
                     </TextBlock>
+                    <TextBlock FontFamily="Segoe UI" Margin="0,3,0,0">
+						<Run Text="最新版本:" />
+						<Run Text="{Binding LastUpdateVersion, Source={x:Static models:Settings.Current}, Mode=OneWay, StringFormat={} {0}}">
+                            <Run.Style>
+                                <Style TargetType="{x:Type Run}">
+                                    <Style.Triggers>
+                                        <DataTrigger Value="False">
+                                            <DataTrigger.Binding>
+                                                <MultiBinding Converter="{StaticResource MultiBindingEqualityConverter}">
+                                                    <Binding Source="{x:Static models:AppProductInfo.ModRelease}" Mode="OneTime" />
+                                                    <Binding Source="{x:Static models:Settings.Current}" Path="LastUpdateVersion" Mode="OneWay" />
+                                                </MultiBinding>
+                                            </DataTrigger.Binding>
+                                            <Setter Property="Background" Value="PaleGreen" />
+                                            <Setter Property="Foreground" Value="Black" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Run.Style>
+                        </Run>
+                    </TextBlock>
 
                     <Rectangle Height="1"
 								Margin="0,12"

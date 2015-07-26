@@ -65,6 +65,17 @@ namespace Grabacr07.KanColleViewer
             this.MainWindow = new MainWindow { DataContext = ViewModelRoot };
             ViewModelRoot.UpdateLayout(Settings.Current.LRSplit);
 			this.MainWindow.Show();
+
+            if (Definitions.UnixTimestamp - Settings.Current.LastUpdateCheck > 86400) {
+                var wc = new System.Net.WebClient();
+                wc.DownloadStringTaskAsync(AppProductInfo.UpdateCheckUri).ContinueWith(task => {
+                    wc.Dispose();
+                    if (task.Status == TaskStatus.RanToCompletion) {
+                        Settings.Current.LastUpdateVersion = task.Result.Trim();
+                        Settings.Current.LastUpdateCheck = Definitions.UnixTimestamp;
+                    }
+                });
+            }
 		}
 
         protected override void OnExit(ExitEventArgs e)

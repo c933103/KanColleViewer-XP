@@ -9,7 +9,7 @@ namespace Grabacr07.KanColleViewer.Models
 	public static class AppProductInfo
     {
         private const string Major = "3.8.2.1";
-        private const string Mod = "2.9";
+        private const string Mod = "2.10";
         private const string Revision = "";
         private const string Train = "XT";
 
@@ -75,6 +75,8 @@ namespace Grabacr07.KanColleViewer.Models
                      ;
             }
         }
+
+        public static Uri UpdateCheckUri => new Uri(string.Format("http://soft.lyn.moe/kcv/release-{0}.txt", Train));
 
 		public static bool IsBetaRelease
 		{

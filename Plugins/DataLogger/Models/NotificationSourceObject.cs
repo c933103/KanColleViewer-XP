@@ -124,11 +124,9 @@ namespace LynLogger.Models
         private void DoRaiseMultiPropertyChanged(IEnumerable<string> properties, PropertyChangedEventHandler handler)
         {
             var affected = new HashSet<string>();
-            foreach(var source in properties) {
+            foreach (var source in properties) {
                 if(_propertyChangePath?.ContainsKey(source) == true) {
-                    foreach(var dp in _propertyChangePath[source]) {
-                        affected.Add(dp);
-                    }
+                    affected.UnionWith(_propertyChangePath[source]);
                 } else {
                     affected.Add(source);
                 }

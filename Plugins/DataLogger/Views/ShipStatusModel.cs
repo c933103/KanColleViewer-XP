@@ -36,7 +36,13 @@ namespace LynLogger.Views
                 [nameof(CurrentLevel)] = new string[] {
                     nameof(SelectedShip) },
                 [nameof(ExpNext)] = new string[] {
-                    nameof(SelectedShip) }
+                    nameof(SelectedShip) },
+                [nameof(BrushCurrentLevel)] = new string[] {
+                    nameof(CurrentLevel) },
+                [nameof(BrushExpNext)] = new string[] {
+                    nameof(ExpNext) },
+                [nameof(BrushTargetLevel)] = new string[] {
+                    nameof(TargetLevel) }
             };
 
         private Ship _selectedShip;
@@ -108,6 +114,10 @@ namespace LynLogger.Views
             }
         }
 
+        public System.Windows.Media.Brush BrushExpNext => _expNext.HasValue ? System.Windows.Media.Brushes.PaleTurquoise : System.Windows.Media.Brushes.PaleGreen;
+        public System.Windows.Media.Brush BrushTargetLevel => _targetLevel.HasValue ? System.Windows.Media.Brushes.PaleTurquoise : ((_autoLv == 99 || _autoLv == 150) ? System.Windows.Media.Brushes.Pink : System.Windows.Media.Brushes.PaleGreen);
+        public System.Windows.Media.Brush BrushCurrentLevel => _currentLevel.HasValue ? System.Windows.Media.Brushes.PaleTurquoise : System.Windows.Media.Brushes.PaleGreen;
+
         public int? CurrentLevel
         {
             get { return _currentLevel ?? _selectedShip?.Level ?? 1; }
@@ -174,24 +184,26 @@ namespace LynLogger.Views
             }
         }
 
-        public int RemainingExp
+        public int? RemainingExp
         {
             get
             {
                 if(CurrentLevel >= TargetLevel) return 0;
 
-                if(CurrentLevel <= 99 && TargetLevel >= 100) return int.MaxValue;
+                if(CurrentLevel <= 99 && TargetLevel >= 100) return null;
                 if(CurrentLevel == 150) return 0;
                 if(CurrentLevel == 99) return 0;
 
-                return Data.LevelExperienceTable.Instance[TargetLevel.Value] - Data.LevelExperienceTable.Instance[CurrentLevel.Value + 1] + ExpNext.Value;
+                return Data.LevelExperienceTable.Instance[TargetLevel.Value] - Data.LevelExperienceTable.Instance[CurrentLevel.Value + (ExpNext.Value == 0 ? 0 : 1)] + ExpNext.Value;
             }
         }
 
-        public int RemaingCount
+        public int? RemaingCount
         {
             get
             {
+                if (RemainingExp == null) return null;
+
                 var mapExp = Data.MapExperienceTable.Instance[SelectedMapArea];
                 double multiplier;
                 switch(TargetRank) {
@@ -217,7 +229,7 @@ namespace LynLogger.Views
                 if((TargetRank != Ranking.E) && IsMvp) multiplier *= 2;
 
                 var expGet = (int)(mapExp * multiplier);
-                return (int)Math.Ceiling(1.0 * RemainingExp / expGet);
+                return (int?)Math.Ceiling(1.0 * RemainingExp.Value / expGet);
             }
         }
 

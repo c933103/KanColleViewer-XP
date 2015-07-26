@@ -438,6 +438,36 @@ namespace Grabacr07.KanColleViewer.Models
             }
         }
 
+        private long _lastUpdateCheck = Definitions.UnixTimestamp;
+        public long LastUpdateCheck
+        {
+            get { return _lastUpdateCheck; }
+            set
+            {
+                if (value == _lastUpdateCheck) return;
+                _lastUpdateCheck = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _lastUpdateVersion = AppProductInfo.ModRelease.TrimEnd('d');
+        public string LastUpdateVersion
+        {
+            get {
+                return _lastUpdateVersion
+#if DEBUG
+                     + "d"
+#endif
+                    ;
+            }
+            set
+            {
+                if (value == _lastUpdateVersion) return;
+                _lastUpdateVersion = value.TrimEnd('d');
+                RaisePropertyChanged();
+            }
+        }
+
         public void Save()
 		{
 			try
