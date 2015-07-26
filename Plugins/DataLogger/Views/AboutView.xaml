@@ -5,9 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:plugin="clr-namespace:LynLogger"
              xmlns:data="clr-namespace:LynLogger.Data"
+             xmlns:converters="clr-namespace:LynLogger.Views.Converters"
              x:Class="LynLogger.Views.AboutView" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:MultiBindingEqualityConverter x:Key="MultiBindingEqualityConverter" />
+    </UserControl.Resources>
     <TextBlock>
         <Run Text="这是一个闲的无聊的人做给闲的无聊的人用的插件" />
         <LineBreak />
@@ -16,6 +20,27 @@
         <Hyperlink NavigateUri="http://bbs.kancolle.tv/thread-4111-1-1.html" Foreground="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" RequestNavigate="Hyperlink_RequestNavigate">阿武隈改二 @ KTV</Hyperlink>
         <LineBreak />
         <Run Text="{Binding Source={x:Static plugin:LynLoggerMain.Version}, Mode=OneTime, StringFormat=ver. {0}}" />
+        <LineBreak />
+        <LineBreak />
+        <Run Text="最新版本:" />
+		<Run Text="{Binding UpdateVersion, Source={x:Static plugin:LynLoggerMain.Instance}, Mode=OneWay, StringFormat={} {0}}">
+            <Run.Style>
+                <Style TargetType="{x:Type Run}">
+                    <Style.Triggers>
+                        <DataTrigger Value="False">
+                            <DataTrigger.Binding>
+                                <MultiBinding Converter="{StaticResource MultiBindingEqualityConverter}">
+                                    <Binding Source="{x:Static plugin:LynLoggerMain.Version}" Mode="OneTime" />
+                                    <Binding Source="{x:Static plugin:LynLoggerMain.Instance}" Path="UpdateVersion" Mode="OneWay" />
+                                </MultiBinding>
+                            </DataTrigger.Binding>
+                            <Setter Property="Background" Value="PaleGreen" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Run.Style>
+        </Run>
         <LineBreak />
         <LineBreak />
         <Run Text="{Binding Source={x:Static data:EnemySlotNumInfo.DataTime}, Mode=OneTime, StringFormat=敌舰搭载量信息版本: {0}}" />

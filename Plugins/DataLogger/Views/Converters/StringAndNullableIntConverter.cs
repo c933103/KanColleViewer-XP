@@ -17,9 +17,8 @@ namespace LynLogger.Views.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            int val;
-            if (int.TryParse(value.ToString(), out val)) return (int?)val;
-            return null;
+            if (string.IsNullOrWhiteSpace(value.ToString())) return null;
+            return int.Parse(value.ToString());
         }
     }
 }

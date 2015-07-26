@@ -9,8 +9,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.IO;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace LynLogger
 {
@@ -19,10 +21,10 @@ namespace LynLogger
     [ExportMetadata("Description", "Test")]
     [ExportMetadata("Version", "1.0")]
     [ExportMetadata("Author", "@Linnaea")]
-    public class LynLoggerMain : IToolPlugin, IDisposable
+    public class LynLoggerMain : IToolPlugin, IDisposable, INotifyPropertyChanged
     {
         private const string Major = "3.8.2.1";
-        private const string Mod = "2.9";
+        private const string Mod = "2.10";
         private const string Revision = "";
         private const string Train = "PT";
 
@@ -38,6 +40,9 @@ namespace LynLogger
                      ;
             }
         }
+
+        public string UpdateVersion { get; private set; }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private static Action<LynLoggerMain> _onInstanceCreate;
         public static event Action<LynLoggerMain> OnInstanceCreate
@@ -70,7 +75,7 @@ namespace LynLogger
                 if (e.Exception is System.Security.SecurityException) return;
                 var stack = new System.Diagnostics.StackTrace(e.Exception);
                 if (stack.GetFrames().Any(x => x.GetMethod().DeclaringType.Assembly.GetName().Name == typeof(LynLoggerMain).Assembly.GetName().Name)) {
-                    System.IO.File.AppendAllText("lynlogger.log", string.Format(@"
+                    File.AppendAllText("lynlogger.log", string.Format(@"
 ================================================================================
 First chance, Time={0}, Sender={1}
 {2}
@@ -82,7 +87,7 @@ First chance, Time={0}, Sender={1}
             AppDomain.CurrentDomain.UnhandledException += (s, e) => {
                 var stack = new System.Diagnostics.StackTrace((Exception)e.ExceptionObject);
                 if (stack.GetFrames().Any(x => x.GetMethod().DeclaringType.Assembly.GetName().Name == typeof(LynLoggerMain).Assembly.GetName().Name)) {
-                    System.IO.File.AppendAllText("lynlogger.log", string.Format(@"
+                    File.AppendAllText("lynlogger.log", string.Format(@"
 ================================================================================
 Second chance {2}, Time={0}, Sender={1}
 {3}
@@ -127,6 +132,23 @@ Second chance {2}, Time={0}, Sender={1}
 
             Instance = this;
             if(_onInstanceCreate != null) _onInstanceCreate(this);
+
+            var vcFile = Path.Combine(Environment.CurrentDirectory, "LynLogger.ver");
+            if (!File.Exists(vcFile)) File.WriteAllText(vcFile, Version);
+
+            UpdateVersion = File.ReadAllText(vcFile).Trim();
+            if (Helpers.UnixTimestamp - new DateTimeOffset(File.GetLastWriteTimeUtc(vcFile), TimeSpan.Zero).ToUnixTimestamp() > 86400) {
+                var wc = new System.Net.WebClient();
+                wc.DownloadStringTaskAsync("http://soft.lyn.moe/kcv/release-PT.txt").ContinueWith(task => {
+                    wc.Dispose();
+                    if (task.Status == TaskStatus.RanToCompletion) {
+                        UpdateVersion = task.Result.Trim();
+                        File.WriteAllText(vcFile, UpdateVersion);
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UpdateVersion)));
+                        PropertyChanged = null;
+                    }
+                });
+            }
         }
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

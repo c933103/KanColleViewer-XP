@@ -138,6 +138,7 @@
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Converters\MultiBindingEqualityConverter.cs" />
     <Compile Include="Views\Converters\StringAndNullableIntConverter.cs" />
     <Compile Include="Views\HistoryModel.cs" />
     <Compile Include="Views\HistoryView.xaml.cs">
