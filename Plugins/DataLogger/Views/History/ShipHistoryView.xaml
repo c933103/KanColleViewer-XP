@@ -1,0 +1,40 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LynLogger.Views"
+             xmlns:contents="clr-namespace:LynLogger.Views.Contents"
+             x:Class="LynLogger.Views.History.ShipHistoryView" 
+             mc:Ignorable="d" x:Name="controlShv"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel DataContext="{Binding ElementName=controlShv, Mode=OneTime}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ComboBox ItemsSource="{Binding Ships}" SelectedItem="{Binding SelectedShip}" DisplayMemberPath="DisplayName" ScrollViewer.CanContentScroll="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ComboBox>
+            <Button Grid.Column="1" Content="删除" Command="{Binding CmdDeleteSelected}" CommandParameter="{Binding ElementName=controlShv}" />
+            <Button Grid.Column="2" Margin="5,0,0,0" Content="清理记录" Command="{Binding CmdCleanNonExsistent}" CommandParameter="{Binding ElementName=controlShv}" ToolTip="这将删除所有只有1条记录，或者已被除籍的舰娘信息" />
+        </Grid>
+        <Expander Header="经验历史" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,5" IsExpanded="True">
+            <contents:HistogramPlotter PlotData="{Binding SelectedShipExp}" AverageDelta="True" />
+        </Expander>
+        <Expander Header="事件记录" BorderBrush="White" BorderThickness="0,0,0,2" Margin="0,5" IsExpanded="True">
+            <DataGrid ItemsSource="{Binding CombinedEventLog}" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,0,10,0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="时间" Binding="{Binding Key}" />
+                    <DataGridTextColumn Header="事件" Binding="{Binding Value}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Expander>
+    </StackPanel>
+</UserControl>
