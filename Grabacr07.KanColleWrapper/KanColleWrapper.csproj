@@ -41,6 +41,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\KanColleWrapper.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release %28beta%29|AnyCPU'">
     <OutputPath>bin\Release %28beta%29\</OutputPath>
@@ -117,13 +119,13 @@
     <Compile Include="Dockyard.cs" />
     <Compile Include="DynamicJson.cs" />
     <Compile Include="Models\BattleAttackType.cs" />
+    <Compile Include="EnumerableEx.cs" />
     <Compile Include="Models\CombinedFleet.cs" />
     <Compile Include="Models\FleetSpeed.cs" />
     <Compile Include="Models\FleetState.cs" />
     <Compile Include="Models\MapArea.cs" />
     <Compile Include="Models\MapInfo.cs" />
     <Compile Include="Models\Mission.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="Itemyard.cs" />
     <Compile Include="IProxySettings.cs" />
     <Compile Include="KanColleProxyExtensions.cs" />

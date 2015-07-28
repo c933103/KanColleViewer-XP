@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Grabacr07.KanColleViewer.Views.Settings"
-             xmlns:ViewModels="clr-namespace:Grabacr07.KanColleViewer.ViewModels" xmlns:Converters="clr-namespace:Grabacr07.KanColleViewer.Views.Converters" x:Class="Grabacr07.KanColleViewer.Views.Settings.ProxyRules"
+             xmlns:ViewModels="clr-namespace:Grabacr07.KanColleViewer.ViewModels"
+             xmlns:Converters="clr-namespace:Grabacr07.KanColleViewer.Views.Converters"
+             x:Class="Grabacr07.KanColleViewer.Views.Settings.ProxyRules"
              mc:Ignorable="d" 
 			 d:DesignWidth="550">
     <UserControl.Resources>

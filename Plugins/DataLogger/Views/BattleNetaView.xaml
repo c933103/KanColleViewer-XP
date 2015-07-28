@@ -7,7 +7,6 @@
              xmlns:contents="clr-namespace:LynLogger.Views.Contents"
              xmlns:converters="clr-namespace:LynLogger.Views.Converters"
              xmlns:battleData="clr-namespace:LynLogger.Models.Battling"
-             xmlns:kcvControls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls;assembly=KanColleViewer"
              x:Class="LynLogger.Views.BattleNetaView" 
              mc:Ignorable="d" 
              d:DesignHeight="1200" d:DesignWidth="400">
