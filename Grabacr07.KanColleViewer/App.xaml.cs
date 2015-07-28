@@ -55,14 +55,14 @@ namespace Grabacr07.KanColleViewer
 			var initResult = PluginHost.Instance.Initialize();
 			if (initResult == PluginHost.InitializationResult.RequiresRestart)
 			{
-				if (ProductInfo.IsDebug) Process.Start("KanColleViewer.exe", e.Args.ToString(" "));
-				else Process.Start(Process.GetCurrentProcess().StartInfo);
+				Restart(e.Args.ToString(" "));
 
 				this.Shutdown(0);
 				return;
 			}
 			if (initResult == PluginHost.InitializationResult.Failed)
 			{
+				// メッセージはリソース化するのと、「プラグイン取り除いてみろ」的なヒントを出したい感じ
 				MessageBox.Show("プラグインが原因で、アプリケーションの起動に失敗しました。", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
 				this.Shutdown(0);
@@ -104,6 +104,25 @@ namespace Grabacr07.KanColleViewer
             KanColleClient.Current.Proxy.Shutdown();
             PluginHost.Instance.Dispose();
         }
+
+		private static void Restart(string args)
+		{
+			if (ProductInfo.IsDebug)
+			{
+				Process.Start("KanColleViewer.exe", args);
+			}
+			else
+			{
+				try
+				{
+					Process.Start(Environment.GetCommandLineArgs()[0], args);
+				}
+				catch (Exception)
+				{
+					MessageBox.Show("プラグインの読み込みに失敗しました。再度アプリケーションを起動してみてください。", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+				}
+			}
+		}
 
 		private static void ReportException(object sender, Exception exception, bool fatal)
 		{

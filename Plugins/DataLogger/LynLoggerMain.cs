@@ -21,8 +21,8 @@ namespace LynLogger
     [ExportMetadata("Author", "@Linnaea")]
     public class LynLoggerMain : IToolPlugin, IDisposable
     {
-        private const string Major = "3.8.2.1";
-        private const string Mod = "2.10";
+        private const string Major = "4.0A";
+        private const string Mod = "1.0";
         private const string Revision = "";
         private const string Train = "T";
 

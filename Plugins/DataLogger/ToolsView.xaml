@@ -7,10 +7,7 @@
              xmlns:Custom="http://schemes.grabacr.net/winfx/2014/controls"
              x:Class="LynLogger.ToolsView" 
              mc:Ignorable="d" 
-             d:DesignHeight="480" d:DesignWidth="640"
-             ScrollViewer.VerticalScrollBarVisibility="Hidden"
-             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-             Height="{Binding ViewportHeight, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type ScrollViewer}}}">
+             d:DesignHeight="480" d:DesignWidth="640">
     <UserControl.DataContext>
         <local:ToolsModel/>
     </UserControl.DataContext>
