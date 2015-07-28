@@ -37,7 +37,7 @@ namespace Grabacr07.KanColleWrapper
 		#region CreatedSlotItem 変更通知プロパティ
 
 		private CreatedSlotItem _CreatedSlotItem;
-		
+
 		/// <summary>
 		/// 最後に開発された装備アイテムの情報を取得します。
 		/// </summary>

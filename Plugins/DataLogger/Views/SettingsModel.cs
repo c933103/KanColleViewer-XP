@@ -1,5 +1,4 @@
-﻿using Grabacr07.KanColleViewer.Models.Data.Xml;
-using LynLogger.DataStore.Extensions;
+﻿using LynLogger.DataStore.Extensions;
 using LynLogger.Models;
 using System;
 using System.Collections.Generic;

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LynLogger.Views.Contents"
              xmlns:converters="clr-namespace:LynLogger.Views.Converters"
-             xmlns:kcvControls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls;assembly=KanColleViewer"
+			 xmlns:kcvc="http://schemes.grabacr.net/winfx/2015/kancolleviewer/controls"
              mc:Ignorable="d" x:Name="controlCrp"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -56,7 +56,7 @@
                                 <Run Text="/"/>
                                 <Run Text="{Binding Key.HpMax, Mode=OneTime}" />
                             </TextBlock>
-                            <kcvControls:ColorIndicator Grid.Row="1" Grid.Column="1" LimitedValue="{Binding Key.Hp, Mode=OneTime}" Height="7" Margin="7,3,20,0" />
+                            <kcvc:ColorIndicator Grid.Row="1" Grid.Column="1" LimitedValue="{Binding Key.Hp, Mode=OneTime}" Height="7" Margin="7,3,20,0" />
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -100,7 +100,7 @@
                                 <Run Text="/"/>
                                 <Run Text="{Binding HpMax, Mode=OneTime}" />
                             </TextBlock>
-                            <kcvControls:ColorIndicator Grid.Row="1" Grid.Column="1" LimitedValue="{Binding Hp, Mode=OneTime}" Height="7" Margin="7,3,20,0" />
+                            <kcvc:ColorIndicator Grid.Row="1" Grid.Column="1" LimitedValue="{Binding Hp, Mode=OneTime}" Height="7" Margin="7,3,20,0" />
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

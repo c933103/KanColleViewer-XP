@@ -6,15 +6,16 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:livet="http://schemas.livet-mvvm.net/2011/wpf"
+			 xmlns:kcvc="http://schemes.grabacr.net/winfx/2015/kancolleviewer/controls"
+			 xmlns:kcvi="http://schemes.grabacr.net/winfx/2015/kancolleviewer/interactivity"
+			 xmlns:kcvv="http://schemes.grabacr.net/winfx/2015/kancolleviewer/converters"
 			 xmlns:metro2="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"
-			 xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls"
 			 xmlns:views="clr-namespace:Grabacr07.KanColleViewer.Views"
-			 xmlns:vm="clr-namespace:Grabacr07.KanColleViewer.ViewModels"
-			 xmlns:behaviors="clr-namespace:Grabacr07.KanColleViewer.Views.Behaviors"
-			 xmlns:fleets="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents.Fleets"
+             xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls"
 			 xmlns:contents="clr-namespace:Grabacr07.KanColleViewer.Views.Contents"
+             xmlns:viewModels="clr-namespace:Grabacr07.KanColleViewer.ViewModels"
+             xmlns:fleets="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents.Fleets"
 			 xmlns:kanColleViewer="clr-namespace:Grabacr07.KanColleViewer"
-			 xmlns:Converters="clr-namespace:Grabacr07.KanColleViewer.Views.Converters"
 			 xmlns:models="clr-namespace:Grabacr07.KanColleViewer.Models"
 			 mc:Ignorable="d"
 			 d:DesignWidth="800"
@@ -178,13 +179,13 @@
                                                 <StackPanel Grid.Column="0" Grid.Row="0">
                                                     <TextBlock x:Name="HPText"><Run Text="HP:" /><Run Text=" "/><Run Text="{Binding HP.Current, Mode=OneWay}"
 															Style="{DynamicResource EmphaticTextElementStyleKey}" /><Run Text=" "/><Run Text="/" /><Run Text=" "/><Run Text="{Binding HP.Maximum, Mode=OneWay}" /></TextBlock>
-                                                    <controls:ColorIndicator x:Name="HPIndicator"
+                                                    <kcvc:ColorIndicator x:Name="HPIndicator"
 														Height="7"
 														Margin="0,3,0,0"
 														LimitedValue="{Binding HP, Mode=OneWay}" />
                                                 </StackPanel>
 
-                                                <controls:ConditionIcon Margin="8,0,3,0" Grid.Column="1" ConditionType="{Binding ConditionType, Mode=OneWay}" />
+                                                <kcvc:ConditionIcon Margin="8,0,3,0" Grid.Column="1" ConditionType="{Binding ConditionType, Mode=OneWay}" />
 
                                                 <TextBlock Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Text="{Binding Condition, Mode=OneWay}" Style="{DynamicResource EmphaticTextStyleKey}" />
                                             </Grid>
@@ -194,13 +195,13 @@
                                                     <ColumnDefinition Width="0.5*" />
                                                     <ColumnDefinition Width="0.5*" />
                                                 </Grid.ColumnDefinitions>
-                                                <controls:ColorIndicator Grid.Column="0"
+                                                <kcvc:ColorIndicator Grid.Column="0"
 													Grid.Row="0"
 													Width="Auto"
 													LimitedValue="{Binding Fuel, Mode=OneWay}"
 													Height="5"
 													Margin="0,0,5,0" />
-                                                <controls:ColorIndicator Grid.Column="1"
+                                                <kcvc:ColorIndicator Grid.Column="1"
 													Grid.Row="1"
 													Width="Auto"
 													LimitedValue="{Binding Bull, Mode=OneWay}"
@@ -379,7 +380,7 @@
                                                                 <RowDefinition Height="Auto" />
                                                             </Grid.RowDefinitions>
 
-                                                            <controls:SlotItemIcon Grid.Column="0" Grid.RowSpan="2"
+                                                            <kcvc:SlotItemIcon Grid.Column="0" Grid.RowSpan="2"
 																Type="{Binding Item.Info.IconType}"
 																Width="20" Height="20" Margin="0,0,5,0" />
                                                             <TextBlock Grid.ColumnSpan="{Binding LRSplit, FallbackValue=1, ConverterParameter=5:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static models:Settings.Current}}"

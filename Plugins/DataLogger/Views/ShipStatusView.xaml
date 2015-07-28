@@ -53,13 +53,13 @@
             <StackPanel>
                 <WrapPanel Orientation="Horizontal">
                     <TextBlock Margin="3" Text="当前等级" />
-                    <TextBox Margin="3" Text="{Binding CurrentLevel, Delay=500, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringAndNullableIntConverter}}" MinWidth="40" Background="{Binding BrushCurrentLevel}" />
+                    <TextBox Margin="3" Text="{Binding CurrentLevel, Delay=300, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringAndNullableIntConverter}}" MinWidth="40" Background="{Binding BrushCurrentLevel}" />
                     <TextBlock Margin="3" Text="距下一级" />
-                    <TextBox Margin="3" Text="{Binding ExpNext, Delay=500, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringAndNullableIntConverter}}" MinWidth="60" Background="{Binding BrushExpNext}" />
+                    <TextBox Margin="3" Text="{Binding ExpNext, Delay=300, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringAndNullableIntConverter}}" MinWidth="60" Background="{Binding BrushExpNext}" />
                 </WrapPanel>
                 <WrapPanel Orientation="Horizontal">
                     <TextBlock Margin="3" Text="目标等级" />
-                    <TextBox Margin="3" Text="{Binding TargetLevel, Delay=500, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringAndNullableIntConverter}}" MinWidth="40" Background="{Binding BrushTargetLevel}"/>
+                    <TextBox Margin="3" Text="{Binding TargetLevel, Delay=300, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringAndNullableIntConverter}}" MinWidth="40" Background="{Binding BrushTargetLevel}"/>
                     <TextBlock Margin="3" Text="{Binding RemainingExp, StringFormat=还需经验 {0}, TargetNullValue=需要戒指}" />
                 </WrapPanel>
                 <WrapPanel Orientation="Horizontal">
