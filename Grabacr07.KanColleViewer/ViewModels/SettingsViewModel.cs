@@ -340,7 +340,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			var collection = ViewModelHelper.CreateReadOnlyDispatcherCollection(
 				Settings.Current.BlacklistedPlugins,
 				x => new BlacklistedPluginViewModel(x),
-				DispatcherHelper.UIDispatcher);
+				System.Windows.Application.Current.Dispatcher);
 			this.CompositeDisposable.Add(collection);
 			this.BlacklistedPlugins = collection;
 		}

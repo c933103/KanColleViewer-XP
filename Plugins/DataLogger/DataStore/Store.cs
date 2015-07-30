@@ -298,7 +298,7 @@ namespace LynLogger.DataStore
                     }
                     Logbook newBook = LoadLogbook(_store, seq);
                     _store._logbooks[seq] = new WeakReference<Logbook>(newBook);
-                    _store._logbookSequence.Add(seq);
+                    System.Windows.Application.Current.Dispatcher.Invoke(() => _store._logbookSequence.Add(seq), System.Windows.Threading.DispatcherPriority.Send);
                     _store._dirtyLogbooks.Add(newBook); //TODO Remove this.
                     return newBook;
                 }

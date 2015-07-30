@@ -16,7 +16,7 @@ namespace Grabacr07.KanColleWrapper
 	/// <typeparam name="TValue">ユーザー データの型。</typeparam>
 	public class MemberTable<TValue> : IReadOnlyDictionary<int, TValue>, INotifyCollectionChanged where TValue : class, IIdentifiable
 	{
-		private readonly IDictionary<int, TValue> dictionary;
+		private readonly SortedList<int, TValue> dictionary;
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
         
@@ -33,37 +33,44 @@ namespace Grabacr07.KanColleWrapper
 
 		public MemberTable(IEnumerable<TValue> source)
 		{
-			this.dictionary = source?.ToDictionary(x => x.Id) ?? new Dictionary<int, TValue>();
+			this.dictionary = source?.ToSortedList(x => x.Id) ?? new SortedList<int, TValue>();
 		}
 
         internal bool UpdateValueRange<TIn>(IEnumerable<TIn> source, Func<TIn, int> idSelector, Func<TIn, TValue> valueFactory, Action<TValue, TIn> updateMethod = null, bool doDispose = false, Action<TValue> disposeMethod = null)
         {
             var collectionReset = false;
-            HashSet<int> removeIds = new HashSet<int>(dictionary.Keys);
+            HashSet<int> removeIds = null;
+            if (doDispose) removeIds = new HashSet<int>(dictionary.Keys);
+
             foreach (var value in source) {
                 var id = idSelector(value);
-                removeIds.Remove(id);
-                if (updateMethod != null && dictionary.ContainsKey(id)) {
-                    updateMethod(dictionary[id], value);
+                TValue obj;
+                bool keyExist = dictionary.TryGetValue(id, out obj);
+
+                if (doDispose) removeIds.Remove(id);
+                if (updateMethod != null && keyExist) {
+                    updateMethod(obj, value);
                 } else {
                     var val = valueFactory(value);
-                    if (val.Id != id) {
-                        throw new InvalidOperationException();
-                    }
+                    System.Diagnostics.Debug.Assert(val.Id == id);
                     dictionary[id] = val;
+                    if (keyExist) {
+                        RaiseCollectionItemReplaced(obj, val);
+                    } else {
+                        RaiseCollectionItemAdded(val);
+                    }
                     collectionReset = true;
                 }
             }
 
             if (doDispose) {
                 foreach (var id in removeIds) {
-                    disposeMethod?.Invoke(dictionary[id]);
+                    var obj = dictionary[id];
+                    disposeMethod?.Invoke(obj);
                     dictionary.Remove(id);
+                    RaiseCollectionItemRemoved(obj);
                     collectionReset = true;
                 }
-            }
-            if (collectionReset) {
-                RaiseCollectionReset();
             }
 
             return collectionReset;
@@ -72,18 +79,23 @@ namespace Grabacr07.KanColleWrapper
 		internal void Add(TValue value)
 		{
 			this.dictionary.Add(value.Id, value);
-		}
+            RaiseCollectionItemAdded(value);
+        }
 
 		internal void Remove(TValue value)
 		{
 			this.dictionary.Remove(value.Id);
-		}
+            RaiseCollectionItemRemoved(value);
+        }
 
 		internal void Remove(int id)
 		{
-			this.dictionary.Remove(id);
+            TValue obj;
+            if(dictionary.TryGetValue(id, out obj)) {
+                this.dictionary.Remove(id);
+                RaiseCollectionItemRemoved(obj);
+            }
 		}
-
 
 		#region IReadOnlyDictionary<TK, TV> members
 
@@ -124,10 +136,53 @@ namespace Grabacr07.KanColleWrapper
 
         #endregion
 
-        private static NotifyCollectionChangedEventArgs _resetEvent = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
-        private void RaiseCollectionReset()
+        private void RaiseCollectionItemRemoved(TValue obj)
         {
-            System.Windows.Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.DataBind, new Action(() => CollectionChanged?.Invoke(this, _resetEvent)));
+            var handler = CollectionChanged;
+            if (handler == null) return;
+
+            var index = dictionary.Keys.BinarySearchEqualOrHigher(obj.Id);
+            var ev = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, obj, index);
+
+            DoRaiseCollectionChanged(handler, ev);
         }
-	}
+
+        private void RaiseCollectionItemAdded(TValue obj)
+        {
+            var handler = CollectionChanged;
+            if (handler == null) return;
+
+            var index = dictionary.Keys.BinarySearchEqualOrHigher(obj.Id);
+            var ev = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, obj, index);
+
+            DoRaiseCollectionChanged(handler, ev);
+        }
+
+        private void RaiseCollectionItemReplaced(TValue objOld, TValue objNew)
+        {
+            System.Diagnostics.Debug.Assert(objOld.Id == objNew.Id);
+
+            var handler = CollectionChanged;
+            if (handler == null) return;
+
+            var index = dictionary.Keys.BinarySearchEqualOrHigher(objNew.Id);
+            var ev = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, objNew, objOld, index);
+
+            DoRaiseCollectionChanged(handler, ev);
+        }
+
+        private volatile System.Windows.Threading.DispatcherOperation _lastOp;
+        private void DoRaiseCollectionChanged(NotifyCollectionChangedEventHandler handler, NotifyCollectionChangedEventArgs ev)
+        {
+            //var lastOp = _lastOp;
+            //while (true) {
+                _lastOp?.Wait();
+                //if (object.ReferenceEquals(System.Threading.Interlocked.CompareExchange(ref _lastOp, null, lastOp), lastOp)) {
+                    _lastOp = System.Windows.Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.DataBind, handler, this, ev);
+                    return;
+                //}
+                //lastOp = _lastOp;
+            //}
+        }
+    }
 }
