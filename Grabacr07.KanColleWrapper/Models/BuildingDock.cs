@@ -161,7 +161,10 @@ namespace Grabacr07.KanColleWrapper.Models
 			if (this.CompleteTime.HasValue)
 			{
 				var remaining = this.CompleteTime.Value.Subtract(DateTimeOffset.Now);
-				if (remaining.Ticks < 0) remaining = TimeSpan.Zero;
+                if (remaining.Ticks < 0) {
+                    Disconnect();
+                    remaining = TimeSpan.Zero;
+                }
 
 				this.Remaining = remaining;
 
@@ -169,7 +172,6 @@ namespace Grabacr07.KanColleWrapper.Models
 				{
 					this.Completed(this, new BuildingCompletedEventArgs(this.Id, this.Ship));
 					this.notificated = true;
-                    Disconnect();
 				}
 			}
 			else

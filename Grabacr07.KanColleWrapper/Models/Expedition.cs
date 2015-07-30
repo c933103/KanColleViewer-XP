@@ -146,9 +146,12 @@ namespace Grabacr07.KanColleWrapper.Models
 			if (this.ReturnTime.HasValue)
 			{
 				var remaining = this.ReturnTime.Value - DateTimeOffset.Now;
-				if (remaining.Ticks < 0) remaining = TimeSpan.Zero;
+				if (remaining.Ticks < 0) {
+                    Disconnect();
+                    remaining = TimeSpan.Zero;
+                }
 
-				this.Remaining = remaining;
+                this.Remaining = remaining;
 
 				if (!this.notificated
 					&& this.Returned != null
@@ -156,7 +159,6 @@ namespace Grabacr07.KanColleWrapper.Models
 				{
 					this.Returned(this, new ExpeditionReturnedEventArgs(this.fleet.Name));
 					this.notificated = true;
-                    Disconnect();
                 }
 			}
 			else

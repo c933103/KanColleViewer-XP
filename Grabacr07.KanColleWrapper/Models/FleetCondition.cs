@@ -121,15 +121,17 @@ namespace Grabacr07.KanColleWrapper.Models
 			if (this.RejuvenateTime.HasValue && this.IsEnabled)
 			{
 				var remaining = this.RejuvenateTime.Value.Subtract(DateTimeOffset.Now);
-				if (remaining.Ticks < 0) remaining = TimeSpan.Zero;
+				if (remaining.Ticks < 0) {
+                    Disconnect();
+                    remaining = TimeSpan.Zero;
+                }
 
-				this.Remaining = remaining;
+                this.Remaining = remaining;
 
 				if (!this.notificated && this.Rejuvenated != null && remaining.Ticks <= 0)
 				{
 					this.Rejuvenated(this, new ConditionRejuvenatedEventArgs(this.Name, 0));
 					this.notificated = true;
-                    Disconnect();
                 }
 			}
 			else
