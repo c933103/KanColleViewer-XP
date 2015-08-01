@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Grabacr07.KanColleWrapper.Models;
 using Livet;
 using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace Grabacr07.KanColleWrapper
 {
@@ -14,12 +15,14 @@ namespace Grabacr07.KanColleWrapper
 	/// 整数値の ID をキーとして使用する、艦これユーザー データ用のテーブルを定義します。
 	/// </summary>
 	/// <typeparam name="TValue">ユーザー データの型。</typeparam>
-	public class MemberTable<TValue> : IReadOnlyDictionary<int, TValue>, INotifyCollectionChanged where TValue : class, IIdentifiable
+	public class MemberTable<TValue> : IReadOnlyDictionary<int, TValue>, INotifyCollectionChanged, INotifyPropertyChanged
+        where TValue : class, IIdentifiable
 	{
 		private readonly SortedList<int, TValue> dictionary;
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
-        
+        public event PropertyChangedEventHandler PropertyChanged;
+
         /// <summary>
         /// テーブルから指定した ID の要素を取得します。ID が存在しない場合は null を返します。
         /// </summary>
@@ -84,8 +87,9 @@ namespace Grabacr07.KanColleWrapper
 
 		internal void Remove(TValue value)
 		{
-			this.dictionary.Remove(value.Id);
-            RaiseCollectionItemRemoved(value);
+            if (this.dictionary.Remove(value.Id)) {
+                RaiseCollectionItemRemoved(value);
+            }
         }
 
 		internal void Remove(int id)
@@ -138,6 +142,8 @@ namespace Grabacr07.KanColleWrapper
 
         private void RaiseCollectionItemRemoved(TValue obj)
         {
+            DoRaisePropertyChanged();
+
             var handler = CollectionChanged;
             if (handler == null) return;
 
@@ -149,6 +155,8 @@ namespace Grabacr07.KanColleWrapper
 
         private void RaiseCollectionItemAdded(TValue obj)
         {
+            DoRaisePropertyChanged();
+
             var handler = CollectionChanged;
             if (handler == null) return;
 
@@ -183,6 +191,12 @@ namespace Grabacr07.KanColleWrapper
                 //}
                 //lastOp = _lastOp;
             //}
+        }
+
+        private static readonly PropertyChangedEventArgs _countPropertyChanged = new PropertyChangedEventArgs(nameof(Count));
+        private void DoRaisePropertyChanged()
+        {
+            PropertyChanged?.Invoke(this, _countPropertyChanged);
         }
     }
 }
