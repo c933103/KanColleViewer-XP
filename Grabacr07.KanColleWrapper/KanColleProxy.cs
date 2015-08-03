@@ -6,23 +6,23 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Nekoxy;
 using Fiddler;
-using Grabacr07.KanColleWrapper.Win32;
 using Livet;
 
 namespace Grabacr07.KanColleWrapper
 {
 	public partial class KanColleProxy
 	{
-		private readonly IConnectableObservable<Session> connectableSessionSource;
-		private readonly IConnectableObservable<Session> apiSource;
+		private readonly IConnectableObservable<Nekoxy.Session> connectableSessionSource;
+		private readonly IConnectableObservable<Nekoxy.Session> apiSource;
 		private readonly LivetCompositeDisposable compositeDisposable;
-        private readonly Dictionary<string, Action<Session>> localRequestHandlers = new Dictionary<string, Action<Session>>();
+        private readonly Dictionary<string, Action<Fiddler.Session>> localRequestHandlers = new Dictionary<string, Action<Fiddler.Session>>();
 
         public bool Synchronize { get; set; }
 
-		public IObservable<Session> SessionSource => connectableSessionSource;
-		public IObservable<Session> ApiSessionSource => apiSource;
+		public IObservable<Nekoxy.Session> SessionSource => connectableSessionSource;
+		public IObservable<Nekoxy.Session> ApiSessionSource => apiSource;
 
 		public IProxySettings UpstreamProxySettings { get; set; }
 
@@ -31,14 +31,14 @@ namespace Grabacr07.KanColleWrapper
 			this.compositeDisposable = new LivetCompositeDisposable();
 
 			this.connectableSessionSource = Observable
-				.FromEvent<SessionStateHandler, Session>(
-					action => new SessionStateHandler(action),
-					h => FiddlerApplication.AfterSessionComplete += h,
-					h => FiddlerApplication.AfterSessionComplete -= h)
+				.FromEvent<Action<Nekoxy.Session>, Nekoxy.Session>(
+					action => action,
+					h => HttpProxy.AfterSessionComplete += h,
+					h => HttpProxy.AfterSessionComplete -= h)
 				.Publish();
 
 			this.apiSource = this.connectableSessionSource
-                .Where(s => s.PathAndQuery.StartsWith("/kcsapi") && s.oResponse.MIMEType.Equals("text/plain"))
+                .Where(s => s.Request.PathAndQuery.StartsWith("/kcsapi") && s.Response.MimeType.Equals("text/plain"))
                 .SynchronizeFIFO((a, b, c) => Synchronize)
             #region .Do(debug)
 #if DEBUG
@@ -59,58 +59,24 @@ namespace Grabacr07.KanColleWrapper
 		{
             if(proxy < 1024) proxy = new Random().Next(1024, 65535);
 
-            var flags = FiddlerCoreStartupFlags.Default;
-            flags &= ~FiddlerCoreStartupFlags.DecryptSSL;
-            flags &= ~FiddlerCoreStartupFlags.AllowRemoteClients;
-            flags &= ~FiddlerCoreStartupFlags.RegisterAsSystemProxy;
-            flags |= FiddlerCoreStartupFlags.ChainToUpstreamGateway;
-
-            FiddlerApplication.Startup(proxy, flags);
             FiddlerApplication.BeforeRequest += this.Fiddler_BeforeRequest;
-
-            SetIESettings("localhost:" + proxy);
-
-			this.compositeDisposable.Add(this.connectableSessionSource.Connect());
+            HttpProxy.Startup(proxy);
+            this.compositeDisposable.Add(this.connectableSessionSource.Connect());
 			this.compositeDisposable.Add(this.apiSource.Connect());
 		}
 
         public void Shutdown()
 		{
 			this.compositeDisposable.Dispose();
-
-			FiddlerApplication.BeforeRequest -= this.Fiddler_BeforeRequest;
-			FiddlerApplication.Shutdown();
-		}
-
-
-		private static void SetIESettings(string proxyUri)
-		{
-			// ReSharper disable InconsistentNaming
-			const int INTERNET_OPTION_PROXY = 38;
-			const int INTERNET_OPEN_TYPE_PROXY = 3;
-			// ReSharper restore InconsistentNaming
-
-			INTERNET_PROXY_INFO proxyInfo;
-			proxyInfo.dwAccessType = INTERNET_OPEN_TYPE_PROXY;
-			proxyInfo.proxy = Marshal.StringToHGlobalAnsi(proxyUri);
-			proxyInfo.proxyBypass = Marshal.StringToHGlobalAnsi("local");
-
-			var proxyInfoSize = Marshal.SizeOf(proxyInfo);
-			var proxyInfoPtr = Marshal.AllocCoTaskMem(proxyInfoSize);
-			Marshal.StructureToPtr(proxyInfo, proxyInfoPtr, true);
-
-			NativeMethods.InternetSetOption(IntPtr.Zero, INTERNET_OPTION_PROXY, proxyInfoPtr, proxyInfoSize);
-
-            Marshal.FreeCoTaskMem(proxyInfoPtr);
-            Marshal.FreeHGlobal(proxyInfo.proxy);
-            Marshal.FreeHGlobal(proxyInfo.proxyBypass);
+            HttpProxy.Shutdown();
+            FiddlerApplication.BeforeRequest -= this.Fiddler_BeforeRequest;
         }
 
 		/// <summary>
 		/// Fiddler からのリクエスト発行時にプロキシを挟む設定を行います。
 		/// </summary>
 		/// <param name="requestingSession">通信を行おうとしているセッション。</param>
-		private void Fiddler_BeforeRequest(Session requestingSession)
+		private void Fiddler_BeforeRequest(Fiddler.Session requestingSession)
 		{
             if(requestingSession.hostname == "kancolleviewer.local") {
                 requestingSession.utilCreateResponseAndBypassServer();
@@ -120,7 +86,7 @@ namespace Grabacr07.KanColleWrapper
                     path = path.Substring(0, queryIndex);
                 }
 
-                Action<Session> handler;
+                Action<Fiddler.Session> handler;
                 if (localRequestHandlers.TryGetValue(path, out handler)) {
                     requestingSession.oResponse.headers.HTTPResponseCode = 200;
                     requestingSession.oResponse.headers.HTTPResponseStatus = "200 OK";
@@ -173,7 +139,7 @@ namespace Grabacr07.KanColleWrapper
             requestingSession.bBufferResponse = false;
         }
 
-        public void SetLocalRerquestHandler(string path, Action<Session> proc)
+        public void SetLocalRerquestHandler(string path, Action<Fiddler.Session> proc)
         {
             if (proc != null) {
                 localRequestHandlers[path] = proc;

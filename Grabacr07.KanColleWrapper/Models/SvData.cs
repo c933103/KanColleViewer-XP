@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Collections.Specialized;
-using Fiddler;
+using Nekoxy;
 using Grabacr07.KanColleWrapper.Models.Raw;
 using Grabacr07.KanColleWrapper.Internal;
 
@@ -65,7 +65,7 @@ namespace Grabacr07.KanColleWrapper.Models
 			using (var stream = new MemoryStream(bytes))
 			{
 				var rawResult = serializer.ReadObject(stream) as svdata<T>;
-				var result = new SvData<T>(rawResult, session.GetRequestBodyAsString());
+				var result = new SvData<T>(rawResult, session.Request.BodyAsString);
 				return result;
 			}
 		}
@@ -97,7 +97,7 @@ namespace Grabacr07.KanColleWrapper.Models
 			using (var stream = new MemoryStream(bytes))
 			{
 				var rawResult = serializer.ReadObject(stream) as svdata;
-				var result = new SvData(rawResult, session.GetRequestBodyAsString());
+				var result = new SvData(rawResult, session.Request.BodyAsString);
 				return result;
 			}
 		}

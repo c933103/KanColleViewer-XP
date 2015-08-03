@@ -38,10 +38,6 @@
     <AssemblyOriginatorKeyFile>signingkey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FiddlerCore4, Version=4.5.1.0, Culture=neutral, PublicKeyToken=67cb91587178ac5a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FiddlerCore.4.5.1.0\lib\net40\FiddlerCore4.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Livet">
       <HintPath>..\..\packages\LivetCask.1.1.0.0\lib\net45\Livet.dll</HintPath>
     </Reference>
@@ -218,6 +214,10 @@
     <ProjectReference Include="..\..\MetroRadiance\MetroRadiance\MetroRadiance.csproj">
       <Project>{0af0b9ff-d981-4d0f-a41f-c3ab6fe2f16d}</Project>
       <Name>MetroRadiance</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shim.Fiddler.Nekoxy\Shim.Fiddler.Nekoxy.csproj">
+      <Project>{53f0650c-bd88-4e6e-9159-019015f663c6}</Project>
+      <Name>Shim.Fiddler.Nekoxy</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

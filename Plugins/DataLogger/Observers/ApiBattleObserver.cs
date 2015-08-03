@@ -3,6 +3,7 @@ using Grabacr07.KanColleWrapper;
 using LynLogger.DataStore.MasterInfo;
 using LynLogger.Models.Battling;
 using LynLogger.Utilities;
+using Nekoxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Text;
 
 namespace LynLogger.Observers
 {
-    class ApiBattleObserver : IObserver<Fiddler.Session>
+    class ApiBattleObserver : IObserver<Session>
     {
         private Action<BattleProcess> _onBattle;
         public event Action<BattleProcess> OnBattle
@@ -19,12 +20,12 @@ namespace LynLogger.Observers
             remove { }
         }
 
-        public void OnNext(Fiddler.Session value)
+        public void OnNext(Session value)
         {
             if(_onBattle == null) return;
 
             try {
-                var response = value.ResponseBody;
+                var response = value.Response.Body;
                 string json = Encoding.ASCII.GetString(response, 7, response.Length-7);
                 dynamic res = DynamicJson.Parse(json);
                 if(!res.api_result() || res.api_result != 1) return;

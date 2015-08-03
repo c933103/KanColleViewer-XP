@@ -1,12 +1,13 @@
 ﻿using Codeplex.Data;
 using LynLogger.Models.Battling;
 using LynLogger.Utilities;
+using Nekoxy;
 using System;
 using System.Text;
 
 namespace LynLogger.Observers
 {
-    class ApiMapStartNextObserver : IObserver<Fiddler.Session>
+    class ApiMapStartNextObserver : IObserver<Session>
     {
         private static readonly string[] Names = new string[] {
             "油", "弹", "钢", "铝", "喷火器", "桶", "开发资材", "改修资财"
@@ -19,12 +20,12 @@ namespace LynLogger.Observers
             remove { }
         }
 
-        public void OnNext(Fiddler.Session value)
+        public void OnNext(Session value)
         {
             if(_onMapNext == null) return;
 
             try {
-                var response = value.ResponseBody;
+                var response = value.Response.Body;
                 string json = Encoding.ASCII.GetString(response, 7, response.Length-7);
                 dynamic res = DynamicJson.Parse(json);
                 if(!res.api_result() || res.api_result != 1) return;
