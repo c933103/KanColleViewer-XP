@@ -77,16 +77,7 @@ namespace Nekoxy
         /// <returns>編集後プロキシ設定</returns>
         private static string GetProxyConfig(int listeningPort)
         {
-            var localProxy = "http=localhost:" + listeningPort;
-            var proxyConfig = WinHttpGetIEProxyConfigForCurrentUser();
-            if (string.IsNullOrWhiteSpace(proxyConfig.Proxy)) return localProxy;
-
-            var configs = proxyConfig.Proxy.Split(';');
-            if (!proxyConfig.Proxy.Contains("=")) return localProxy + ";https=" + configs[0] + ";ftp=" + configs[0];
-
-            return configs.Any(x => x.StartsWith("http="))
-                ? string.Join(";", configs.Select(x => x.StartsWith("http=") ? localProxy : x))
-                : localProxy + ";" + string.Join(";", configs);
+            return "http=localhost:" + listeningPort + ";https=localhost:" + listeningPort;
         }
 
         /// <summary>

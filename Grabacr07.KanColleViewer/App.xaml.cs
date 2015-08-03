@@ -21,6 +21,7 @@ namespace Grabacr07.KanColleViewer
 	public partial class App
 	{
 		public static ProductInfo ProductInfo { get; private set; }
+
 		public static MainWindowViewModel ViewModelRoot { get; private set; }
 
 		static App()
@@ -35,6 +36,7 @@ namespace Grabacr07.KanColleViewer
             return AppDomain.CurrentDomain.GetAssemblies().Where(x => x.GetName().Name == resolvName.Name).FirstOrDefault();
         }
 
+
         protected override void OnStartup(StartupEventArgs e)
 		{
 			base.OnStartup(e);
@@ -47,42 +49,26 @@ namespace Grabacr07.KanColleViewer
             );
 
             DispatcherHelper.UIDispatcher = this.Dispatcher;
-			ProductInfo = new ProductInfo();
+				ProductInfo = new ProductInfo();
 
-			Settings.Load();
-			ResourceService.Current.ChangeCulture(Settings.Current.Culture);
+				Settings.Load();
+				ResourceService.Current.ChangeCulture(Settings.Current.Culture);
 
-			var initResult = PluginHost.Instance.Initialize();
-			if (initResult == PluginHost.InitializationResult.RequiresRestart)
-			{
-				Restart(e.Args.ToString(" "));
-
-				this.Shutdown(0);
-				return;
-			}
-			if (initResult == PluginHost.InitializationResult.Failed)
-			{
-				// メッセージはリソース化するのと、「プラグイン取り除いてみろ」的なヒントを出したい感じ
-				MessageBox.Show("プラグインが原因で、アプリケーションの起動に失敗しました。", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
-				this.Shutdown(0);
-				return;
-			}
-
-			NotifierHost.Instance.Initialize(KanColleClient.Current);
+				PluginHost.Instance.Initialize();
+				NotifierHost.Instance.Initialize();
             Helper.SetRegistryFeatureBrowserEmulation();
             Helper.SetRegistryFeatureLegacyInputModel();
             Helper.SetMMCSSTask();
 
 			KanColleClient.Current.Proxy.Startup();
-			KanColleClient.Current.Proxy.UpstreamProxySettings = Settings.Current.ProxySettings;
+				KanColleClient.Current.Proxy.UpstreamProxySettings = Settings.Current.ProxySettings;
 
-			ThemeService.Current.Initialize(this, Theme.Dark, Accent.Purple);
+				ThemeService.Current.Initialize(this, Theme.Dark, Accent.Purple);
 
             ViewModelRoot = new MainWindowViewModel();
             this.MainWindow = new MainWindow { DataContext = ViewModelRoot };
             ViewModelRoot.UpdateLayout(Settings.Current.LRSplit);
-			this.MainWindow.Show();
+				this.MainWindow.Show();
 
             if (Definitions.UnixTimestamp - Settings.Current.LastUpdateCheck > 86400) {
                 var wc = new System.Net.WebClient();
@@ -102,26 +88,17 @@ namespace Grabacr07.KanColleViewer
             base.OnExit(e);
 
             KanColleClient.Current.Proxy.Shutdown();
+			NotifierHost.Instance.Dispose();
             PluginHost.Instance.Dispose();
+
         }
 
-		private static void Restart(string args)
+		private void ProcessCommandLineParameter(string[] args)
 		{
-			if (ProductInfo.IsDebug)
-			{
-				Process.Start("KanColleViewer.exe", args);
-			}
-			else
-			{
-				try
-				{
-					Process.Start(Environment.GetCommandLineArgs()[0], args);
-				}
-				catch (Exception)
-				{
-					MessageBox.Show("プラグインの読み込みに失敗しました。再度アプリケーションを起動してみてください。", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-				}
-			}
+			Debug.WriteLine("多重起動検知: " + args.ToString(" "));
+
+			// コマンド ライン引数付きで多重起動されたときに何かできる
+			// けど今やることがない
 		}
 
 		private static void ReportException(object sender, Exception exception, bool fatal)

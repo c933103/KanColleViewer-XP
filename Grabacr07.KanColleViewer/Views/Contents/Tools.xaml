@@ -81,7 +81,7 @@
 							<ColumnDefinition Width="15" />
 						</Grid.ColumnDefinitions>
 						<TextBlock Grid.Column="1"
-								   Text="{Binding ToolName}"
+								   Text="{Binding Name}"
 								   Style="{DynamicResource HeaderTextStyleKey}"
 								   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
 								   TextTrimming="CharacterEllipsis" />

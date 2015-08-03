@@ -11,46 +11,52 @@ namespace TrotiNet
 {
     public class HttpHeaders
     {
-        public HttpHeaders(HTTPRequestHeaders hdr, Session sess)
+        public HttpHeaders(HTTPRequestHeaders hdrs, Session sess)
         {
-            Headers = hdr.ToDictionary(x => x.Name, x => x.Value);
+            Headers = new Dictionary<string, string>();
+            foreach (var hdr in hdrs) {
+                Headers[hdr.Name.ToLowerInvariant()] = hdr.Value;
+            }
             using (var buffer = new MemoryStream()) {
                 sess.WriteRequestToStream(true, true, buffer);
                 buffer.Flush();
                 HeadersInOrder = Encoding.ASCII.GetString(buffer.ToArray());
             }
 
-            CacheControl = hdr["Cache-Control"];
-            Connection = hdr["Connection"]?.Split(';').Select(x => x.Trim()).ToArray();
-            ContentEncoding = hdr["Content-Encoding"];
-            ContentLength = hdr["Content-Length"] == null ? (uint?)null : uint.Parse(hdr["Content-Length"]);
-            Expires = hdr["Expires"];
-            Host = hdr["Host"];
-            Pragma = hdr["Pragma"];
-            ProxyConnection = hdr["Proxy-Connection"]?.Split(';').Select(x => x.Trim()).ToArray();
-            Referer = hdr["Referer"];
-            TransferEncoding = hdr["Transfer-Encoding"]?.Split(';').Select(x => x.Trim()).ToArray();
+            CacheControl = hdrs["Cache-Control"];
+            Connection = hdrs["Connection"]?.Split(';').Select(x => x.Trim()).ToArray();
+            ContentEncoding = hdrs["Content-Encoding"];
+            ContentLength = string.IsNullOrWhiteSpace(hdrs["Content-Length"]) ? (uint?)null : uint.Parse(hdrs["Content-Length"]);
+            Expires = hdrs["Expires"];
+            Host = hdrs["Host"];
+            Pragma = hdrs["Pragma"];
+            ProxyConnection = hdrs["Proxy-Connection"]?.Split(';').Select(x => x.Trim()).ToArray();
+            Referer = hdrs["Referer"];
+            TransferEncoding = hdrs["Transfer-Encoding"]?.Split(';').Select(x => x.Trim()).ToArray();
         }
 
-        public HttpHeaders(HTTPResponseHeaders hdr, Session sess)
+        public HttpHeaders(HTTPResponseHeaders hdrs, Session sess)
         {
-            Headers = hdr.ToDictionary(x => x.Name, x => x.Value);
+            Headers = new Dictionary<string, string>();
+            foreach(var hdr in hdrs) {
+                Headers[hdr.Name.ToLowerInvariant()] = hdr.Value;
+            }
             using (var buffer = new MemoryStream()) {
                 sess.WriteRequestToStream(true, true, buffer);
                 buffer.Flush();
                 HeadersInOrder = Encoding.ASCII.GetString(buffer.ToArray());
             }
 
-            CacheControl = hdr["Cache-Control"];
-            Connection = hdr["Connection"]?.Split(';').Select(x => x.Trim()).ToArray();
-            ContentEncoding = hdr["Content-Encoding"];
-            ContentLength = hdr["Content-Length"] == null ? (uint?)null : uint.Parse(hdr["Content-Length"]);
-            Expires = hdr["Expires"];
-            Host = hdr["Host"];
-            Pragma = hdr["Pragma"];
-            ProxyConnection = hdr["Proxy-Connection"]?.Split(';').Select(x => x.Trim()).ToArray();
-            Referer = hdr["Referer"];
-            TransferEncoding = hdr["Transfer-Encoding"]?.Split(';').Select(x => x.Trim()).ToArray();
+            CacheControl = hdrs["Cache-Control"];
+            Connection = hdrs["Connection"]?.Split(';').Select(x => x.Trim()).ToArray();
+            ContentEncoding = hdrs["Content-Encoding"];
+            ContentLength = string.IsNullOrWhiteSpace(hdrs["Content-Length"]) ? (uint?)null : uint.Parse(hdrs["Content-Length"]);
+            Expires = hdrs["Expires"];
+            Host = hdrs["Host"];
+            Pragma = hdrs["Pragma"];
+            ProxyConnection = hdrs["Proxy-Connection"]?.Split(';').Select(x => x.Trim()).ToArray();
+            Referer = hdrs["Referer"];
+            TransferEncoding = hdrs["Transfer-Encoding"]?.Split(';').Select(x => x.Trim()).ToArray();
         }
         
         public string CacheControl { get; set; }

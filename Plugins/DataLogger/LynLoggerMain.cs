@@ -14,15 +14,17 @@ using System.Reflection;
 
 namespace LynLogger
 {
-    [Export(typeof(IToolPlugin))]
+    [Export(typeof(IPlugin))]
+    [Export(typeof(ITool))]
+    [ExportMetadata("Guid", "1e2fcc49-96fe-4fa4-ae70-fd8e4c13020b")] //uuidgen -r (util-linux 2.26.2)
     [ExportMetadata("Title", "LynLogger")]
-    [ExportMetadata("Description", "Test")]
+    [ExportMetadata("Description", "LynLogger")]
     [ExportMetadata("Version", "1.0")]
     [ExportMetadata("Author", "@Linnaea")]
-    public class LynLoggerMain : IToolPlugin, IDisposable
+    public class LynLoggerMain : IPlugin, ITool, IDisposable
     {
         private const string Major = "4.0A";
-        private const string Mod = "1.0";
+        private const string Mod = "1.1";
         private const string Revision = "";
         private const string Train = "T";
 
@@ -59,12 +61,6 @@ namespace LynLogger
 
         static LynLoggerMain()
         {
-            Logger.ShipItemCreateLogger.Init();
-            Logger.BasicInfoLogger.Init();
-            Logger.ShipDataLogger.Init();
-            Logger.SortieLogger.Init();
-            Logger.DrillLogger.Init();
-
 #if DEBUG
             AppDomain.CurrentDomain.FirstChanceException += (s, e) => {
                 if (e.Exception is System.Security.SecurityException) return;
@@ -91,8 +87,14 @@ Second chance {2}, Time={0}, Sender={1}
             };
         }
 
-        public LynLoggerMain()
+        public void Initialize()
         {
+            Logger.ShipItemCreateLogger.Init();
+            Logger.BasicInfoLogger.Init();
+            Logger.ShipDataLogger.Init();
+            Logger.SortieLogger.Init();
+            Logger.DrillLogger.Init();
+
             PortObserver = new Observers.ApiPortObserver();
             _disposables.AddLast(KanColleClient.Current.Proxy.api_port.TryParse<kcsapi_port>().Subscribe(PortObserver));
 
@@ -126,7 +128,7 @@ Second chance {2}, Time={0}, Sender={1}
             _disposables.AddLast(KanColleClient.Current.Proxy.api_req_kousyou_createitem.TryParse<kcsapi_createitem>().Subscribe(CreateItemObserver));
 
             Instance = this;
-            if(_onInstanceCreate != null) _onInstanceCreate(this);
+            if (_onInstanceCreate != null) _onInstanceCreate(this);
         }
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
@@ -137,12 +139,8 @@ Second chance {2}, Time={0}, Sender={1}
             return null;
         }
 
-        public string ToolName => "LynLogger";
-
-        public object GetToolView()
-        {
-            return _view ?? (_view = new ToolsView());
-        }
+        public string Name => "LynLogger";
+        public object View => _view ?? (_view = new ToolsView());
 
         public object GetSettingsView()
         {

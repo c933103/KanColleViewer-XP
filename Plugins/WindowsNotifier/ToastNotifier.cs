@@ -10,11 +10,9 @@ using MS.WindowsAPICodePack.Internal;
 
 namespace Grabacr07.KanColleViewer.Plugins
 {
-	internal class Windows8Notifier : INotifier
+	internal class ToastNotifier : NotifierBase
 	{
-		#region static members
-
-		public static bool IsSupported
+		public override bool IsSupported
 		{
 			get
 			{
@@ -22,9 +20,7 @@ namespace Grabacr07.KanColleViewer.Plugins
 			}
 		}
 
-		#endregion
-
-		public void Initialize()
+		protected override void InitializeCore()
 		{
 			try
 			{
@@ -65,23 +61,13 @@ namespace Grabacr07.KanColleViewer.Plugins
 			ErrorHelper.VerifySucceeded(newShortcutSave.Save(shortcutPath, true));
 		}
 
-		public void Show(NotifyType type, string header, string body, Action activated, Action<Exception> failed = null)
+		protected override void ShowCore(NotifyType type, string header, string body, Action activated, Action<Exception> failed)
 		{
 			var toast = new Toast(header, body);
 			toast.Activated += (sender, args) => activated();
-			if (failed != null)
-				toast.ToastFailed += (sender, args) => failed(args.ErrorCode);
+			if (failed != null) toast.ToastFailed += (sender, args) => failed(args.ErrorCode);
 
 			toast.Show();
-		}
-
-		public object GetSettingsView()
-		{
-			return null;
-		}
-
-		public void Dispose()
-		{
 		}
 	}
 }
