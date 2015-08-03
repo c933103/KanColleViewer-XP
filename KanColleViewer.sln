@@ -1,9 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanColleViewer", "Grabacr07.KanColleViewer\KanColleViewer.csproj", "{C5F0111F-3F68-4A74-BB20-BB762564D080}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -21,8 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B8B366
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanColleWrapper", "Grabacr07.KanColleWrapper\KanColleWrapper.csproj", "{0BC8CF79-76D9-46AD-867F-FEC6C6AD4594}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".resharper", ".resharper", "{4CB2D693-E4DB-447F-816E-C4F3EF36FD70}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".settings", ".settings", "{4CB2D693-E4DB-447F-816E-C4F3EF36FD70}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		KanColleViewer.sln.DotSettings = KanColleViewer.sln.DotSettings
 	EndProjectSection
 EndProject
@@ -57,6 +56,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanColleViewer.Controls", "Grabacr07.KanColleViewer.Controls\KanColleViewer.Controls.csproj", "{978239D0-3129-4C54-AAC6-493F0DE48BF5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanColleViewer.Composition", "Grabacr07.KanColleViewer.Composition\KanColleViewer.Composition.csproj", "{CC139E98-D847-41DA-B20F-8ACA4564F375}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shim.Fiddler.Nekoxy", "Shim.Fiddler.Nekoxy\Shim.Fiddler.Nekoxy.csproj", "{53F0650C-BD88-4E6E-9159-019015F663C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shim.Fiddler.TrotiNet", "Shim.Fiddler.TrotiNet\Shim.Fiddler.TrotiNet.csproj", "{E5CE93B3-7839-4061-B27A-CC0A8BF82E43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -119,34 +122,30 @@ Global
 		{83BE9A36-DAE7-4E67-A999-2732615BDAD7}.Release (beta)|Any CPU.Build.0 = Release|Any CPU
 		{83BE9A36-DAE7-4E67-A999-2732615BDAD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83BE9A36-DAE7-4E67-A999-2732615BDAD7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DE2400A1-2AAE-4AB0-BCD5-A88DC78033A7}.Release|x86.ActiveCfg = Release|Any CPU
-		{08226BB3-A7A0-49E3-84DE-ED5B7A7D293E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08226BB3-A7A0-49E3-84DE-ED5B7A7D293E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08226BB3-A7A0-49E3-84DE-ED5B7A7D293E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{08226BB3-A7A0-49E3-84DE-ED5B7A7D293E}.Release (beta)|Any CPU.ActiveCfg = Release|Any CPU
-		{08226BB3-A7A0-49E3-84DE-ED5B7A7D293E}.Release (beta)|Any CPU.Build.0 = Release|Any CPU
-		{08226BB3-A7A0-49E3-84DE-ED5B7A7D293E}.Release (beta)|x86.ActiveCfg = Release|Any CPU
-		{08226BB3-A7A0-49E3-84DE-ED5B7A7D293E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08226BB3-A7A0-49E3-84DE-ED5B7A7D293E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{08226BB3-A7A0-49E3-84DE-ED5B7A7D293E}.Release|x86.ActiveCfg = Release|Any CPU
 		{978239D0-3129-4C54-AAC6-493F0DE48BF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{978239D0-3129-4C54-AAC6-493F0DE48BF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{978239D0-3129-4C54-AAC6-493F0DE48BF5}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{978239D0-3129-4C54-AAC6-493F0DE48BF5}.Release (beta)|Any CPU.ActiveCfg = Release|Any CPU
 		{978239D0-3129-4C54-AAC6-493F0DE48BF5}.Release (beta)|Any CPU.Build.0 = Release|Any CPU
-		{978239D0-3129-4C54-AAC6-493F0DE48BF5}.Release (beta)|x86.ActiveCfg = Release|Any CPU
 		{978239D0-3129-4C54-AAC6-493F0DE48BF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{978239D0-3129-4C54-AAC6-493F0DE48BF5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{978239D0-3129-4C54-AAC6-493F0DE48BF5}.Release|x86.ActiveCfg = Release|Any CPU
 		{CC139E98-D847-41DA-B20F-8ACA4564F375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC139E98-D847-41DA-B20F-8ACA4564F375}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC139E98-D847-41DA-B20F-8ACA4564F375}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{CC139E98-D847-41DA-B20F-8ACA4564F375}.Release (beta)|Any CPU.ActiveCfg = Release|Any CPU
 		{CC139E98-D847-41DA-B20F-8ACA4564F375}.Release (beta)|Any CPU.Build.0 = Release|Any CPU
-		{CC139E98-D847-41DA-B20F-8ACA4564F375}.Release (beta)|x86.ActiveCfg = Release|Any CPU
 		{CC139E98-D847-41DA-B20F-8ACA4564F375}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC139E98-D847-41DA-B20F-8ACA4564F375}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC139E98-D847-41DA-B20F-8ACA4564F375}.Release|x86.ActiveCfg = Release|Any CPU
+		{53F0650C-BD88-4E6E-9159-019015F663C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53F0650C-BD88-4E6E-9159-019015F663C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53F0650C-BD88-4E6E-9159-019015F663C6}.Release (beta)|Any CPU.ActiveCfg = Release|Any CPU
+		{53F0650C-BD88-4E6E-9159-019015F663C6}.Release (beta)|Any CPU.Build.0 = Release|Any CPU
+		{53F0650C-BD88-4E6E-9159-019015F663C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53F0650C-BD88-4E6E-9159-019015F663C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5CE93B3-7839-4061-B27A-CC0A8BF82E43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5CE93B3-7839-4061-B27A-CC0A8BF82E43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5CE93B3-7839-4061-B27A-CC0A8BF82E43}.Release (beta)|Any CPU.ActiveCfg = Release|Any CPU
+		{E5CE93B3-7839-4061-B27A-CC0A8BF82E43}.Release (beta)|Any CPU.Build.0 = Release|Any CPU
+		{E5CE93B3-7839-4061-B27A-CC0A8BF82E43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5CE93B3-7839-4061-B27A-CC0A8BF82E43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -159,5 +158,7 @@ Global
 		{A6B0A741-5BE0-479D-B813-E65672350057} = {6FE85CE3-7479-4630-B746-EA18BCE3311D}
 		{DE2400A1-2AAE-4AB0-BCD5-A88DC78033A7} = {D844E42C-9406-43BF-9681-4F06F6CB3AD9}
 		{83BE9A36-DAE7-4E67-A999-2732615BDAD7} = {D844E42C-9406-43BF-9681-4F06F6CB3AD9}
+		{53F0650C-BD88-4E6E-9159-019015F663C6} = {7F9428F0-290D-4DBC-80ED-A704ECB12C64}
+		{E5CE93B3-7839-4061-B27A-CC0A8BF82E43} = {7F9428F0-290D-4DBC-80ED-A704ECB12C64}
 	EndGlobalSection
 EndGlobal

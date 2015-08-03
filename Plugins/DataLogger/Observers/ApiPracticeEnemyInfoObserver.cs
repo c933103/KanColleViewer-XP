@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Fiddler;
+using Nekoxy;
 using LynLogger.Models.Battling;
 using LynLogger.Utilities;
 using Codeplex.Data;
@@ -24,7 +24,7 @@ namespace LynLogger.Observers
             if(_onPracticeEnemyInfo == null) return;
 
             try {
-                var response = value.ResponseBody;
+                var response = value.Response.Body;
                 string json = Encoding.ASCII.GetString(response, 7, response.Length-7);
                 dynamic res = DynamicJson.Parse(json);
                 if(!res.api_result() || res.api_result != 1) return;

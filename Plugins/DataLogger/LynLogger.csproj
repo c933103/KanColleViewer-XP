@@ -241,6 +241,10 @@
       <Project>{0af0b9ff-d981-4d0f-a41f-c3ab6fe2f16d}</Project>
       <Name>MetroRadiance</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Shim.Fiddler.Nekoxy\Shim.Fiddler.Nekoxy.csproj">
+      <Project>{53f0650c-bd88-4e6e-9159-019015f663c6}</Project>
+      <Name>Shim.Fiddler.Nekoxy</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

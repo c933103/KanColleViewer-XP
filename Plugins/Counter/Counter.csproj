@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -37,10 +37,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FiddlerCore4, Version=4.5.1.0, Culture=neutral, PublicKeyToken=67cb91587178ac5a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FiddlerCore.4.5.1.0\lib\net40\FiddlerCore4.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Livet, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b0b1d3f711ef38cb, processorArchitecture=MSIL">
       <HintPath>..\..\packages\LivetCask.1.1.0.0\lib\net40\Livet.dll</HintPath>
       <Private>True</Private>
@@ -128,13 +124,13 @@
       <Project>{978239d0-3129-4c54-aac6-493f0de48bf5}</Project>
       <Name>KanColleViewer.Controls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Grabacr07.KanColleViewer\KanColleViewer.csproj">
-      <Project>{c5f0111f-3f68-4a74-bb20-bb762564d080}</Project>
-      <Name>KanColleViewer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Grabacr07.KanColleWrapper\KanColleWrapper.csproj">
       <Project>{0bc8cf79-76d9-46ad-867f-fec6c6ad4594}</Project>
       <Name>KanColleWrapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shim.Fiddler.Nekoxy\Shim.Fiddler.Nekoxy.csproj">
+      <Project>{53f0650c-bd88-4e6e-9159-019015f663c6}</Project>
+      <Name>Shim.Fiddler.Nekoxy</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

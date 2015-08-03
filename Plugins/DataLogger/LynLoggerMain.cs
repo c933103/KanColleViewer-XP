@@ -14,15 +14,17 @@ using System.Reflection;
 
 namespace LynLogger
 {
-    [Export(typeof(IToolPlugin))]
+    [Export(typeof(IPlugin))]
+    [Export(typeof(ITool))]
+    [ExportMetadata("Guid", "1e2fcc49-96fe-4fa4-ae70-fd8e4c13020b")] //uuidgen -r (util-linux 2.26.2)
     [ExportMetadata("Title", "LynLogger")]
-    [ExportMetadata("Description", "Test")]
+    [ExportMetadata("Description", "LynLogger")]
     [ExportMetadata("Version", "1.0")]
     [ExportMetadata("Author", "@Linnaea")]
-    public class LynLoggerMain : IToolPlugin, IDisposable
+    public class LynLoggerMain : IPlugin, ITool, IDisposable
     {
         private const string Major = "4.0A";
-        private const string Mod = "1.0";
+        private const string Mod = "1.1";
         private const string Revision = "";
         private const string Train = "XT";
 
@@ -59,12 +61,6 @@ namespace LynLogger
 
         static LynLoggerMain()
         {
-            Logger.ShipItemCreateLogger.Init();
-            Logger.BasicInfoLogger.Init();
-            Logger.ShipDataLogger.Init();
-            Logger.SortieLogger.Init();
-            Logger.DrillLogger.Init();
-
 #if DEBUG
             AppDomain.CurrentDomain.FirstChanceException += (s, e) => {
                 if (e.Exception is System.Security.SecurityException) return;
@@ -91,32 +87,38 @@ Second chance {2}, Time={0}, Sender={1}
             };
         }
 
-        public LynLoggerMain()
+        public void Initialize()
         {
+            Logger.ShipItemCreateLogger.Init();
+            Logger.BasicInfoLogger.Init();
+            Logger.ShipDataLogger.Init();
+            Logger.SortieLogger.Init();
+            Logger.DrillLogger.Init();
+
             PortObserver = new Observers.ApiPortObserver();
             _disposables.AddLast(KanColleClient.Current.Proxy.api_port.TryParse<kcsapi_port>().Subscribe(PortObserver));
 
             _disposables.AddLast(KanColleClient.Current.Proxy.api_get_member_ship2.TryParse<kcsapi_ship2[]>().Subscribe(new Observers.ApiShip2Observer()));
 
             BattleObserver = new Observers.ApiBattleObserver();
-            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_sortie/battle").Subscribe(BattleObserver)); //昼战
-            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_sortie/airbattle").Subscribe(BattleObserver)); //航空战
-            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_battle_midnight/battle").Subscribe(BattleObserver)); //普通夜战
-            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_battle_midnight/sp_midnight").Subscribe(BattleObserver)); //夜战点
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_sortie/battle").Subscribe(BattleObserver)); //昼战
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_sortie/airbattle").Subscribe(BattleObserver)); //航空战
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_battle_midnight/battle").Subscribe(BattleObserver)); //普通夜战
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_battle_midnight/sp_midnight").Subscribe(BattleObserver)); //夜战点
 
-            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_practice/battle").Subscribe(BattleObserver)); //演习
-            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_practice/midnight_battle").Subscribe(BattleObserver)); //演习夜战
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_practice/battle").Subscribe(BattleObserver)); //演习
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_practice/midnight_battle").Subscribe(BattleObserver)); //演习夜战
 
             MapStartNextObserver = new Observers.ApiMapStartNextObserver();
             _disposables.AddLast(KanColleClient.Current.Proxy.api_req_map_start.Subscribe(MapStartNextObserver));
-            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_map/next").Subscribe(MapStartNextObserver));
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_map/next").Subscribe(MapStartNextObserver));
 
             BattleResultObserver = new Observers.ApiBattleResultObserver();
             _disposables.AddLast(KanColleClient.Current.Proxy.api_req_sortie_battleresult.TryParse<kcsapi_battleresult>().Subscribe(BattleResultObserver));
-            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_practice/battle_result").TryParse<kcsapi_battleresult>().Subscribe(BattleResultObserver));
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_practice/battle_result").TryParse<kcsapi_battleresult>().Subscribe(BattleResultObserver));
 
             PracticeEnemyInfoObserver = new Observers.ApiPracticeEnemyInfoObserver();
-            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_member/get_practice_enemyinfo").Subscribe(PracticeEnemyInfoObserver));
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_member/get_practice_enemyinfo").Subscribe(PracticeEnemyInfoObserver));
 
             CreateShipObserver = new Observers.ApiCreateShipObserver();
             _disposables.AddLast(KanColleClient.Current.Proxy.api_get_member_kdock.TryParse<kcsapi_kdock[]>().Subscribe(CreateShipObserver));
@@ -126,7 +128,7 @@ Second chance {2}, Time={0}, Sender={1}
             _disposables.AddLast(KanColleClient.Current.Proxy.api_req_kousyou_createitem.TryParse<kcsapi_createitem>().Subscribe(CreateItemObserver));
 
             Instance = this;
-            if(_onInstanceCreate != null) _onInstanceCreate(this);
+            if (_onInstanceCreate != null) _onInstanceCreate(this);
         }
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
@@ -137,12 +139,8 @@ Second chance {2}, Time={0}, Sender={1}
             return null;
         }
 
-        public string ToolName => "LynLogger";
-
-        public object GetToolView()
-        {
-            return _view ?? (_view = new ToolsView());
-        }
+        public string Name => "LynLogger";
+        public object View => _view ?? (_view = new ToolsView());
 
         public object GetSettingsView()
         {

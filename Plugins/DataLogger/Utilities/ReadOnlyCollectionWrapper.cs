@@ -54,11 +54,7 @@ namespace LynLogger.Utilities
         {
             this.backend = backend;
             subscriptionSource.CollectionChanged += (o, e) => {
-                System.Windows.Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.DataBind, new Action(() => {
-                    var h = CollectionChanged;
-                    if (h != null)
-                        h(this, e);
-                }));
+                CollectionChanged?.Invoke(this, e);
             };
         }
 
@@ -121,26 +117,18 @@ namespace LynLogger.Utilities
         {
             var r = _backend.Add(item);
             if (r)
-                RaiseCollectionChanged(NotifyCollectionChangedAction.Add, item, _backend.TakeWhile(x => _backend.Comparer.Compare(x, item) < 0).Count());
+                RaiseCollectionChanged(NotifyCollectionChangedAction.Add, item, _backend.GetViewBetween(_backend.Min, item).Count - 1);
             return r;
         }
 
         private void RaiseCollectionChanged(NotifyCollectionChangedAction action)
         {
-            System.Windows.Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.DataBind, new Action(() => {
-                var h = CollectionChanged;
-                if (h != null)
-                    h(this, new NotifyCollectionChangedEventArgs(action));
-            }));
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action));
         }
 
         private void RaiseCollectionChanged(NotifyCollectionChangedAction action, T item, int index)
         {
-            System.Windows.Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.DataBind, new Action(() => {
-                var h = CollectionChanged;
-                if (h != null)
-                    h(this, new NotifyCollectionChangedEventArgs(action, item, index));
-            }));
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action));
         }
 
         public void UnionWith(IEnumerable<T> other)
@@ -165,7 +153,7 @@ namespace LynLogger.Utilities
         {
             var r = _backend.Remove(item);
             if (r)
-                RaiseCollectionChanged(NotifyCollectionChangedAction.Remove, item, _backend.TakeWhile(x => _backend.Comparer.Compare(x, item) < 0).Count());
+                RaiseCollectionChanged(NotifyCollectionChangedAction.Remove, item, _backend.GetViewBetween(_backend.Min, item).Count);
             return r;
         }
 
