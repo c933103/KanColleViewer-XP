@@ -53,6 +53,12 @@ namespace Nekoxy
             var handler = AfterSessionComplete;
             if (handler == null) return;
 
+            if (sess.RequestMethod == "CONNECT") return;
+            if (string.IsNullOrWhiteSpace(sess.RequestMethod)) return;
+
+            sess.utilDecodeRequest();
+            sess.utilDecodeResponse();
+
             handler(new Session(sess));
         }
 
