@@ -10,23 +10,8 @@ namespace Nekoxy
 {
     public class HttpResponse
     {
-        /// <summary>
-        /// HTTPステータス、ヘッダ、ボディを元に初期化。
-        /// </summary>
-        /// <param name="statusLine">HTTPステータスライン。</param>
-        /// <param name="headers">HTTPレスポンスヘッダ。</param>
-        /// <param name="body">HTTPレスポンスボディ。</param>
-        public HttpResponse(HttpStatusLine statusLine, HttpHeaders headers, byte[] body)
-        {
-            this.StatusLine = statusLine;
-            this.Headers = headers;
-            this.Body = body;
-        }
-
         public HttpResponse(Fiddler.Session sess)
         {
-            sess.utilDecodeResponse();
-
             this.StatusLine = new HttpStatusLine(sess);
             this.Body = (byte[])sess.responseBodyBytes.Clone();
             this.Headers = new HttpHeaders(sess.ResponseHeaders, sess);

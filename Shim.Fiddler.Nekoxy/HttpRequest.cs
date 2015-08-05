@@ -9,16 +9,8 @@ namespace Nekoxy
 {
     public class HttpRequest
     {
-        /// <summary>
-        /// リクエストライン、ヘッダ、ボディを元に初期化。
-        /// </summary>
-        /// <param name="requestLine">HTTPリクエストライン</param>
-        /// <param name="headers">HTTPリクエストヘッダ</param>
-        /// <param name="body">HTTPリクエストボディ</param>
         public HttpRequest(Fiddler.Session sess)
         {
-            sess.utilDecodeRequest();
-
             RequestLine = new HttpRequestLine(sess);
             Body = (byte[])sess.requestBodyBytes.Clone();
             Headers = new HttpHeaders(sess.RequestHeaders, sess);
