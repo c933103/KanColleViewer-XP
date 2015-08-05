@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using NAudioStripped.CoreAudioApi;
 using NAudioStripped.CoreAudioApi.Interfaces;
@@ -92,7 +91,7 @@ namespace Grabacr07.KanColleViewer.Models
 			this.Value = (int)(this.simpleAudioVolume.Volume * 100);
 		}
 
-		
+
 		#region IAudioSessionEvents
 
 		int IAudioSessionEvents.OnDisplayNameChanged(string newDisplayName, ref Guid eventContext)

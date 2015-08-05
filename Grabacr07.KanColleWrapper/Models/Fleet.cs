@@ -78,12 +78,12 @@ namespace Grabacr07.KanColleWrapper.Models
 
 		public bool IsInSortie { get; private set; }
 
-		public FleetState State { get; private set; }
+		public FleetState State { get; }
 
 		/// <summary>
 		/// 艦隊の遠征に関するステータスを取得します。
 		/// </summary>
-		public Expedition Expedition { get; private set; }
+		public Expedition Expedition { get; }
 
 
 		internal Fleet(Homeport parent, kcsapi_deck rawData)
@@ -191,7 +191,7 @@ namespace Grabacr07.KanColleWrapper.Models
 
 		public override string ToString()
 		{
-			return string.Format("ID = {0}, Name = \"{1}\", Ships = {2}", this.Id, this.Name, this.Ships.Select(s => "\"" + s.Info.Name + "\"").ToString(","));
+			return $"ID = {this.Id}, Name = \"{this.Name}\", Ships = {this.Ships.Select(s => "\"" + s.Info.Name + "\"").ToString(",")}";
 		}
 	}
 }

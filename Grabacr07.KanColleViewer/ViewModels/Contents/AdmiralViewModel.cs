@@ -13,10 +13,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents
     {
         #region Model 変更通知プロパティ
 
-        public Admiral Model
-        {
-            get { return KanColleClient.Current.Homeport.Admiral; }
-        }
+		public Admiral Model => KanColleClient.Current.Homeport.Admiral;
 
         #endregion
 
@@ -60,7 +57,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents
         {
             this.CompositeDisposable.Add(new PropertyChangedEventListener(KanColleClient.Current.Homeport)
             {
-                { "Admiral", (sender, args) => this.Update() },
+				{ nameof(Homeport.Admiral), (sender, args) => this.Update() },
             });
             this.CompositeDisposable.Add(new PropertyChangedEventListener(vmRoot.SlotItems)
             {

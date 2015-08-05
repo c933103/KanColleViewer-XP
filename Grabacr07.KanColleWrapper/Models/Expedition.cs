@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Grabacr07.KanColleWrapper.Internal;
 
@@ -70,7 +69,7 @@ namespace Grabacr07.KanColleWrapper.Models
 					this._ReturnTime = value;
 					this.notificated = false;
 					this.RaisePropertyChanged();
-					this.RaisePropertyChanged(nameof(IsInExecution));
+					this.RaisePropertyChanged(nameof(this.IsInExecution));
 
                     if (value.HasValue) {
                         Connect();
@@ -85,10 +84,7 @@ namespace Grabacr07.KanColleWrapper.Models
 		/// <summary>
 		/// 現在遠征を実行中かどうかを示す値を取得します。
 		/// </summary>
-		public bool IsInExecution
-		{
-			get { return this.ReturnTime.HasValue; }
-		}
+		public bool IsInExecution => this.ReturnTime.HasValue;
 
 
 		#endregion

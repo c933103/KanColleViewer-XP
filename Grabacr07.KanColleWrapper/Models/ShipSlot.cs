@@ -33,10 +33,7 @@ namespace Grabacr07.KanColleWrapper.Models
             }
         }
 
-		public bool Equipped
-		{
-			get { return this.Item != null; }
-		}
+		public bool Equipped => this.Item != null;
 
 		#region Current 変更通知プロパティ
 

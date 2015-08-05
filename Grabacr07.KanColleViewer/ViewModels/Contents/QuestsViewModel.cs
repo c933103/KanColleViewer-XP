@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Grabacr07.KanColleViewer.Properties;
 using Grabacr07.KanColleWrapper;
-using Grabacr07.KanColleWrapper.Models;
 using Livet.EventListeners;
 
 namespace Grabacr07.KanColleViewer.ViewModels.Contents
@@ -16,7 +15,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents
 			get { return Resources.Quests; }
 			protected set { throw new NotImplementedException(); }
 		}
-	
+
 		#region Current 変更通知プロパティ
 
 		private QuestViewModel[] _Current;
