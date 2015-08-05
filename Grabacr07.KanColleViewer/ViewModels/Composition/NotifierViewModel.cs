@@ -12,7 +12,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Composition
 
 		#region ErrorMessage 変更通知プロパティ
 
-		private string _ErrorMessage;
+		/*private string _ErrorMessage;
 
 		public string ErrorMessage
 		{
@@ -25,7 +25,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Composition
 					this.RaisePropertyChanged();
 				}
 			}
-		}
+		}*/
 
 		#endregion
 

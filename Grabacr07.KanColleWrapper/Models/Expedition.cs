@@ -155,7 +155,7 @@ namespace Grabacr07.KanColleWrapper.Models
 
 				if (!this.notificated
 					&& this.Returned != null
-					&& remaining <= TimeSpan.FromSeconds(KanColleClient.Current.Settings.NotificationShorteningTime))
+					&& remaining.TotalSeconds < KanColleClient.Current.Settings.NotificationShorteningTime)
 				{
 					this.Returned(this, new ExpeditionReturnedEventArgs(this.fleet.Name));
 					this.notificated = true;

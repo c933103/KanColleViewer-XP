@@ -65,7 +65,19 @@ namespace Grabacr07.KanColleViewer.Plugins
 				stringElements[1].AppendChild(toastXml.CreateTextNode(body));
 			}
 
-			this.toast = new ToastNotification(toastXml);
+            Windows.Data.Xml.Dom.XmlElement audioElement = null;
+            var audioElements = toastXml.GetElementsByTagName("audio");
+            if (audioElements.Length == 1) {
+                audioElement = audioElements[0] as Windows.Data.Xml.Dom.XmlElement;
+            }
+            if(audioElement == null) {
+                audioElement = toastXml.CreateElement("audio");
+                toastXml.DocumentElement.AppendChild(audioElement);
+            }
+            audioElement.SetAttribute("src", "ms-winsoundevent:Notification.Reminder");
+            audioElement.SetAttribute("loop", "false");
+
+            this.toast = new ToastNotification(toastXml);
 		}
 
 		public void Show()

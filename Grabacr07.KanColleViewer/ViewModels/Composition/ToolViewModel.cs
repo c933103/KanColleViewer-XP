@@ -10,7 +10,6 @@ namespace Grabacr07.KanColleViewer.ViewModels.Composition
 	public class ToolViewModel : ViewModel
     {
 		private readonly ITool tool;
-        private string _name;
         private object _view;
 
 
@@ -26,7 +25,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Composition
 
 		public object View
 		{
-				get { return _view ?? (_view = tool.View); }
+			get { return _view ?? (_view = tool.View); }
 		}
 	}
 }

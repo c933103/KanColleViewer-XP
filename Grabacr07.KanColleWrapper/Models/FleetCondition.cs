@@ -128,7 +128,7 @@ namespace Grabacr07.KanColleWrapper.Models
 
                 this.Remaining = remaining;
 
-				if (!this.notificated && this.Rejuvenated != null && remaining.Ticks <= 0)
+				if (!this.notificated && this.Rejuvenated != null && remaining.Ticks == 0)
 				{
 					this.Rejuvenated(this, new ConditionRejuvenatedEventArgs(this.Name, 0));
 					this.notificated = true;
