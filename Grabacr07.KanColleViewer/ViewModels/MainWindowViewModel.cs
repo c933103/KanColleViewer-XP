@@ -162,6 +162,10 @@ public MainWindowViewModel()
 				{ nameof(KanColleClient.IsStarted), (sender, args) => this.UpdateMode() },
 				{ nameof(KanColleClient.IsInSortie), (sender, args) => this.UpdateMode() },
 			});
+			this.CompositeDisposable.Add(new PropertyChangedEventListener(Models.Settings.Current)
+			{
+				{ nameof(Models.Settings.CanCloseWithoutConfirmation), (sender, args) => this.RaisePropertyChanged(nameof(this.CanClose)) },
+			});
 
             this._browser = new BrowserViewModel();
 
