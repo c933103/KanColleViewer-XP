@@ -24,6 +24,7 @@
 				   MinWidth="640"
 				   MinHeight="480"
 				   Topmost="{Binding TopMost, Source={x:Static models:Settings.Current}}"
+				   WindowState="{Binding WindowState, Mode=OneWayToSource}"
 				   FontSize="12"
 				   Background="{DynamicResource ThemeBrushKey}"
 				   Foreground="{DynamicResource ActiveForegroundBrushKey}"
@@ -32,14 +33,24 @@
 				   TextOptions.TextFormattingMode="Display"
 				   UseLayoutRounding="True">
 
+	<i:Interaction.Behaviors>
+		<livet:WindowCloseCancelBehavior CloseCanceledCallbackMethodTarget="{Binding}"
+										 CloseCanceledCallbackMethodName="CloseCanceledCallback"
+										 CanClose="{Binding CanClose}" />
+	</i:Interaction.Behaviors>
+
 	<i:Interaction.Triggers>
 		<livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
-										 MessageKey="Window/Location">
+										 MessageKey="Window.Location">
 			<behaviors:SetWindowLocationAction />
 		</livet:InteractionMessageTrigger>
-		<livet:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}"
-										 MessageKey="Window/Activate">
+		<livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
+										 MessageKey="Window.WindowAction">
 			<livet:WindowInteractionMessageAction />
+		</livet:InteractionMessageTrigger>
+		<livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
+										 MessageKey="Window.Transition">
+			<livet:TransitionInteractionMessageAction />
 		</livet:InteractionMessageTrigger>
     </i:Interaction.Triggers>
 

@@ -14,90 +14,89 @@ using MetroRadiance;
 using Grabacr07.KanColleViewer.ViewModels.Contents;
 using Grabacr07.KanColleViewer.ViewModels.Contents.Fleets;
 using System.Collections.ObjectModel;
+using Grabacr07.KanColleViewer.Views;
+using Livet.Messaging;
 
 namespace Grabacr07.KanColleViewer.ViewModels
 {
-	public class MainWindowViewModel : WindowViewModel
-	{
-		private Mode currentMode;
+    public class MainWindowViewModel : WindowViewModel
+    {
+        private Mode currentMode;
 
-		public SettingsViewModel Settings { get; private set; }
+        public SettingsViewModel Settings { get; private set; }
 
-		#region Mode 変更通知プロパティ
+        #region Mode 変更通知プロパティ
 
-		public Mode Mode
-		{
-			get { return this.currentMode; }
-			set
-			{
-				this.currentMode = value;
-				switch (value)
-				{
-					case Mode.NotStarted:
+        public Mode Mode
+        {
+            get { return this.currentMode; }
+            set
+            {
+                this.currentMode = value;
+                switch (value) {
+                    case Mode.NotStarted:
                         this.StatusBar = null;
-						StatusService.Current.Set(Properties.Resources.StatusBar_NotStarted);
-						ThemeService.Current.ChangeAccent(Accent.Purple);
+                        StatusService.Current.Set(Properties.Resources.StatusBar_NotStarted);
+                        ThemeService.Current.ChangeAccent(Accent.Purple);
                         _browser.ShowNavigator = true;
                         break;
-					case Mode.Started:
+                    case Mode.Started:
                         Application.Current.Dispatcher.BeginInvoke(new Action(() => {
                             if (SelectedItem == StartContentViewModel.Instance)
                                 SelectedItem = TabItems.FirstOrDefault(x => x != StartContentViewModel.Instance);
                             TabItems.Remove(StartContentViewModel.Instance);
                         }));
-						StatusService.Current.Set(Properties.Resources.StatusBar_Ready);
-						ThemeService.Current.ChangeAccent(Accent.Blue);
+                        StatusService.Current.Set(Properties.Resources.StatusBar_Ready);
+                        ThemeService.Current.ChangeAccent(Accent.Blue);
                         _browser.ShowNavigator = false;
                         break;
-					case Mode.InSortie:
-						ThemeService.Current.ChangeAccent(Accent.Orange);
+                    case Mode.InSortie:
+                        ThemeService.Current.ChangeAccent(Accent.Orange);
                         _browser.ShowNavigator = false;
                         break;
-				}
+                }
 
-				this.RaisePropertyChanged();
-			}
-		}
+                this.RaisePropertyChanged();
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region StatusMessage 変更通知プロパティ
+        #region StatusMessage 変更通知プロパティ
 
-		private string _StatusMessage;
+        private string _StatusMessage;
 
-		public string StatusMessage
-		{
-			get { return this._StatusMessage; }
-			set
-			{
-				if (this._StatusMessage != value)
-				{
-					this._StatusMessage = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
+        public string StatusMessage
+        {
+            get { return this._StatusMessage; }
+            set
+            {
+                if (this._StatusMessage != value) {
+                    this._StatusMessage = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region StatusBar 変更通知プロパティ
+        #region StatusBar 変更通知プロパティ
 
-		private ViewModel _StatusBar;
+        private ViewModel _StatusBar;
 
-		public ViewModel StatusBar
-		{
-			get { return this._StatusBar; }
-			set
-			{
-				if (this._StatusBar != value)
-				{
-					this._StatusBar = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
+        public ViewModel StatusBar
+        {
+            get { return this._StatusBar; }
+            set
+            {
+                if (this._StatusBar != value) {
+                    this._StatusBar = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
 
-		#endregion
+        #endregion
 
         private bool _downloadActivity = false;
         public bool DownloadActive { get { return _downloadActivity = !_downloadActivity; } set { RaisePropertyChanged(); } }
@@ -145,19 +144,27 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
         #endregion
 
-        public MainWindowViewModel()
+		public override sealed bool CanClose => Models.Settings.Current.CanCloseWithoutConfirmation || base.CanClose;
+
+public MainWindowViewModel()
 		{
 			this.Title = AppProductInfo.Title;
-			this.Settings = new SettingsViewModel();
+            this.CanClose = false;
+
+            this.Settings = new SettingsViewModel();
 
 			this.CompositeDisposable.Add(new PropertyChangedEventListener(StatusService.Current)
 			{
-				{ () => StatusService.Current.Message, (sender, args) => this.StatusMessage = StatusService.Current.Message },
+				{ nameof(StatusService.Message), (sender, args) => this.StatusMessage = StatusService.Current.Message },
 			});
 			this.CompositeDisposable.Add(new PropertyChangedEventListener(KanColleClient.Current)
 			{
-				{ () => KanColleClient.Current.IsStarted, (sender, args) => this.UpdateMode() },
-				{ () => KanColleClient.Current.IsInSortie, (sender, args) => this.UpdateMode() },
+				{ nameof(KanColleClient.IsStarted), (sender, args) => this.UpdateMode() },
+				{ nameof(KanColleClient.IsInSortie), (sender, args) => this.UpdateMode() },
+			});
+			this.CompositeDisposable.Add(new PropertyChangedEventListener(Models.Settings.Current)
+			{
+				{ nameof(Models.Settings.CanCloseWithoutConfirmation), (sender, args) => this.RaisePropertyChanged(nameof(this.CanClose)) },
 			});
 
             this._browser = new BrowserViewModel();
@@ -202,17 +209,20 @@ namespace Grabacr07.KanColleViewer.ViewModels
             }
             this.SelectedItem = this.TabItems.FirstOrDefault();
         }
-        
-		/// <summary>
-		/// メイン ウィンドウをアクティブ化することを試みます。
-		/// </summary>
-		public void Activate()
-		{
-			this.Messenger.Raise(new WindowActionMessage(WindowAction.Active, "Window/Activate"));
-		}
 
+        public override void CloseCanceledCallback()
+        {
+            var dialog = new DialogViewModel { Title = "終了確認", };
 
-		private void UpdateMode()
+            this.Transition(dialog, typeof(ExitDialog), TransitionMode.Modal);
+
+            if (dialog.DialogResult) {
+                this.CanClose = true;
+                this.InvokeOnUIDispatcher(this.Close);
+            }
+        }
+
+        private void UpdateMode()
 		{
 			this.Mode = KanColleClient.Current.IsStarted
 				? KanColleClient.Current.IsInSortie

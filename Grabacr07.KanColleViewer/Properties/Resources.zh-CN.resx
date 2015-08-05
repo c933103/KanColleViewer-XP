@@ -513,4 +513,16 @@
   <data name="Tab_Tool_Name" xml:space="preserve">
     <value>插件</value>
   </data>
+  <data name="DlgExit_Message" xml:space="preserve">
+    <value>确认退出？</value>
+  </data>
+  <data name="Dlg_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Dlg_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Settings_Windows_CloseNoConfirm" xml:space="preserve">
+    <value>退出时不显示确认对话框</value>
+  </data>
 </root>

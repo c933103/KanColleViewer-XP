@@ -28,6 +28,9 @@
         <CheckBox Content="{Binding Resources.Settings_Window_TopMost, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
 				  IsChecked="{Binding TopMost, Source={x:Static models:Settings.Current}, Mode=TwoWay}"
 				  Margin="20,0,0,10" />
+        <CheckBox Content="{Binding Resources.Settings_Windows_CloseNoConfirm, Source={x:Static models:ResourceService.Current}, Mode=OneWay}"
+				  IsChecked="{Binding Source={x:Static models:Settings.Current}, Path=CanCloseWithoutConfirmation, Mode=TwoWay}"
+				  Margin="20,0,0,10" />
         <CheckBox Content="迷你模式（重启生效）"
 			IsChecked="{Binding MiniLayout, Mode=TwoWay, Source={x:Static models:Settings.Current}}"
 			Margin="20,0,0,10" />

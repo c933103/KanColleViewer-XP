@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -43,7 +40,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 				{
 					Settings.Current.ScreenshotFolder = value;
 					this.RaisePropertyChanged();
-					this.RaisePropertyChanged("CanOpenScreenshotFolder");
+					this.RaisePropertyChanged(nameof(this.CanOpenScreenshotFolder));
 				}
 			}
 		}
@@ -52,10 +49,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
 		#region CanOpenScreenshotFolder 変更通知プロパティ
 
-		public bool CanOpenScreenshotFolder
-		{
-			get { return Directory.Exists(this.ScreenshotFolder); }
-		}
+		public bool CanOpenScreenshotFolder => Directory.Exists(this.ScreenshotFolder);
 
 		#endregion
 
@@ -132,25 +126,6 @@ namespace Grabacr07.KanColleViewer.ViewModels
 		}
 
 		#endregion
-
-		#region EnableLogging 変更通知プロパティ
-
-		public bool EnableLogging
-		{
-			get { return Settings.Current.KanColleClientSettings.EnableLogging; }
-			set
-			{
-				if (Settings.Current.KanColleClientSettings.EnableLogging != value)
-				{
-					Settings.Current.KanColleClientSettings.EnableLogging = value;
-					KanColleClient.Current.Homeport.Logger.EnableLogging = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		#endregion
-
 
 		#region NotifierPlugins 変更通知プロパティ
 
@@ -263,7 +238,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			var zoomFactor = new BrowserZoomFactor { Current = Settings.Current.BrowserZoomFactor };
 			this.CompositeDisposable.Add(new PropertyChangedEventListener(zoomFactor)
 			{
-				{ "Current", (sender, args) => Settings.Current.BrowserZoomFactor = zoomFactor.Current },
+				{ nameof(zoomFactor.Current), (sender, args) => Settings.Current.BrowserZoomFactor = zoomFactor.Current },
 			});
 			this.BrowserZoomFactor = zoomFactor;
 
@@ -319,12 +294,12 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
 		public void ClearZoomFactor()
 		{
-			App.ViewModelRoot.Messenger.Raise(new InteractionMessage { MessageKey = "WebBrowser/Zoom" });
+			App.ViewModelRoot.Messenger.Raise(new InteractionMessage { MessageKey = "WebBrowser.Zoom" });
 		}
 
 		public void SetLocationLeft()
 		{
-			App.ViewModelRoot.Messenger.Raise(new SetWindowLocationMessage { MessageKey = "Window/Location", Left = 0.0 });
+			App.ViewModelRoot.Messenger.Raise(new SetWindowLocationMessage { MessageKey = "Window.Location", Left = 0.0 });
 		}
 
 

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Grabacr07.Desktop.Metro.Controls;
 using Grabacr07.KanColleViewer.Composition;
+using Grabacr07.KanColleViewer.Views.Settings;
 using Livet;
 
 namespace Grabacr07.KanColleViewer.ViewModels.Composition
@@ -11,29 +13,17 @@ namespace Grabacr07.KanColleViewer.ViewModels.Composition
 	{
 		private readonly INotifier notifier;
 
-		protected Plugin Plugin { get; private set; }
+		protected Plugin Plugin { get; }
 
 		#region metadata
 
-		public string Title
-		{
-			get { return this.Plugin.Metadata.Title; }
-		}
+		public string Title => this.Plugin.Metadata.Title;
 
-		public string Description
-		{
-			get { return this.Plugin.Metadata.Description; }
-		}
+		public string Description => this.Plugin.Metadata.Description;
 
-		public string Author
-		{
-			get { return this.Plugin.Metadata.Author; }
-		}
+		public string Author => this.Plugin.Metadata.Author;
 
-		public string Version
-		{
-			get { return this.Plugin.Metadata.Version; }
-		}
+		public string Version => this.Plugin.Metadata.Version;
 
 		#endregion
 
@@ -56,22 +46,21 @@ namespace Grabacr07.KanColleViewer.ViewModels.Composition
 
 		#endregion
 
-		/// <summary>
-		/// プラグインが設定画面を持っているかどうかを示す値を取得します。
-		/// </summary>
-		public bool HasSettingsView { get; private set; }
-
-		/// <summary>
-		/// プラグイン側からの通知があるかどうかを示す値を取得します。
-		/// </summary>
-		public bool HasNotifySource { get; private set; }
-
-		/// <summary>
-		/// プラグインが通知機能を持っているかどうかを示す値を取得します。
-		/// </summary>
-		public bool HasNotifier
+		public IEnumerable<RichText> Functions
 		{
-			get { return this.notifier != null; }
+			get
+			{
+				var settings = this.Plugin.OfType<ISettings>().FirstOrDefault();
+				if (settings != null) yield return new SettingsText { Function = settings, };
+
+				if (this.notifier != null) yield return new NotifierText { Function = this.notifier, TestMethod = this.TestNotifier, };
+
+				var requestNotify = this.Plugin.OfType<IRequestNotify>().FirstOrDefault();
+				if (requestNotify != null) yield return new RequestNotifyText { Function = requestNotify, };
+
+				var tool = this.Plugin.OfType<ITool>().FirstOrDefault();
+				if (tool != null) yield return new ToolText { Function = tool, };
+			}
 		}
 
 		/// <summary>
@@ -89,9 +78,6 @@ namespace Grabacr07.KanColleViewer.ViewModels.Composition
 
 			var notifiers = plugin.OfType<INotifier>().ToArray();
 			if (notifiers.Length >= 1) this.notifier = new AggregateNotifier(notifiers);
-
-			this.HasSettingsView = plugin.OfType<ISettings>().Any();
-			this.HasNotifySource = plugin.OfType<IRequestNotify>().Any();
 		}
 
 		public void OpenSettings()
@@ -101,10 +87,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Composition
 
 		public void TestNotifier()
 		{
-			if (this.HasNotifier)
-			{
-				this.notifier.Show(NotifyType.Other, "テスト", "これはテスト通知です。", App.ViewModelRoot.Activate, ex => this.ErrorMessage = ex.Message);
-			}
+			this.notifier?.Show("テスト", "これはテスト通知です。", App.ViewModelRoot.Activate, ex => this.ErrorMessage = ex.Message);
 		}
 	}
 }

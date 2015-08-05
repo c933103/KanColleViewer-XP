@@ -43,10 +43,7 @@ namespace Grabacr07.KanColleWrapper
 			return GetEnumerator();
 		}
 
-		public int Count
-		{
-			get { return this.dictionary.Count; }
-		}
+		public int Count => this.dictionary.Count;
 
 		public bool ContainsKey(int key)
 		{
@@ -58,6 +55,7 @@ namespace Grabacr07.KanColleWrapper
 			return this.dictionary.TryGetValue(key, out value);
 		}
 
+		public ICollection<int> Keys => this.dictionary.Keys;
         bool ICollection<KeyValuePair<int, TValue>>.Contains(KeyValuePair<int, TValue> item)
         {
             return dictionary.Contains(item);
@@ -68,15 +66,8 @@ namespace Grabacr07.KanColleWrapper
             dictionary.CopyTo(array, arrayIndex);
         }
 
-        public ICollection<int> Keys
-		{
-			get { return this.dictionary.Keys; }
-		}
 
-		public ICollection<TValue> Values
-		{
-			get { return this.dictionary.Values; }
-		}
+		public ICollection<TValue> Values => this.dictionary.Values;
 
         bool ICollection<KeyValuePair<int, TValue>>.IsReadOnly { get { return true; } }
 

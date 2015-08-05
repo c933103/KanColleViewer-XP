@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Grabacr07.KanColleWrapper.Models.Raw;
 using Grabacr07.KanColleWrapper.Internal;
-using Livet;
 
 namespace Grabacr07.KanColleWrapper.Models
 {
@@ -168,7 +167,7 @@ namespace Grabacr07.KanColleWrapper.Models
 
 				this.Remaining = remaining;
 
-				if (!this.notificated && this.Completed != null && remaining.Ticks <= 0)
+				if (!this.notificated && this.Completed != null && remaining.Ticks == 0)
 				{
 					this.Completed(this, new BuildingCompletedEventArgs(this.Id, this.Ship));
 					this.notificated = true;

@@ -519,4 +519,16 @@
   <data name="Tab_Tool_Name" xml:space="preserve">
     <value>ツール</value>
   </data>
+  <data name="DlgExit_Message" xml:space="preserve">
+    <value>「提督業も忙しい！」 を終了します。よろしいですか？</value>
+  </data>
+  <data name="Dlg_Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Dlg_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Settings_Windows_CloseNoConfirm" xml:space="preserve">
+    <value>確認ダイアログを表示せずに終了する</value>
+  </data>
 </root>

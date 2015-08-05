@@ -9,26 +9,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Composition
 	public class NotifierViewModel : PluginViewModel
 	{
 		private readonly INotifier notifier;
-
-		#region ErrorMessage 変更通知プロパティ
-
-		private string _ErrorMessage;
-
-		public string ErrorMessage
-		{
-			get { return this._ErrorMessage; }
-			set
-			{
-				if (this._ErrorMessage != value)
-				{
-					this._ErrorMessage = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		#endregion
-
+		
 		public NotifierViewModel(Plugin plugin, IEnumerable<INotifier> notifiers = null)
 			: base(plugin)
 		{
@@ -37,7 +18,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Composition
 
 		public void Test()
 		{
-			this.notifier.Show(NotifyType.Other, "テスト", "これはテスト通知です。", App.ViewModelRoot.Activate, ex => this.ErrorMessage = ex.Message);
+			this.notifier.Show("テスト", "これはテスト通知です。", App.ViewModelRoot.Activate, ex => this.ErrorMessage = ex.Message);
 		}
 	}
 }

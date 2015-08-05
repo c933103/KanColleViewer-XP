@@ -15,13 +15,13 @@ using WebBrowser = System.Windows.Controls.WebBrowser;
 
 namespace Grabacr07.KanColleViewer.Views.Controls
 {
-	[ContentProperty("WebBrowser")]
+	[ContentProperty(nameof(WebBrowser))]
 	[TemplatePart(Name = PART_ContentHost, Type = typeof(ScrollViewer))]
 	public class KanColleHost : Control
 	{
 		private const string PART_ContentHost = "PART_ContentHost";
 		private static readonly Size kanColleSize = new Size(800.0, 480.0);
-		private static readonly Size browserSize = new Size(800.0, 572.0);
+		private static readonly Size browserSize = new Size(960.0, 572.0);
 
 		static KanColleHost()
 		{
@@ -41,7 +41,7 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 		}
 
 		public static readonly DependencyProperty WebBrowserProperty =
-			DependencyProperty.Register("WebBrowser", typeof(WebBrowser), typeof(KanColleHost), new UIPropertyMetadata(null, WebBrowserPropertyChangedCallback));
+			DependencyProperty.Register(nameof(WebBrowser), typeof(WebBrowser), typeof(KanColleHost), new UIPropertyMetadata(null, WebBrowserPropertyChangedCallback));
 
 		private static void WebBrowserPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
@@ -84,7 +84,7 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 		/// <see cref="ZoomFactor"/> 依存関係プロパティを識別します。
 		/// </summary>
 		public static readonly DependencyProperty ZoomFactorProperty =
-			DependencyProperty.Register("ZoomFactor", typeof(double), typeof(KanColleHost), new UIPropertyMetadata(1.0, ZoomFactorChangedCallback));
+			DependencyProperty.Register(nameof(ZoomFactor), typeof(double), typeof(KanColleHost), new UIPropertyMetadata(1.0, ZoomFactorChangedCallback));
 
 		private static void ZoomFactorChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{

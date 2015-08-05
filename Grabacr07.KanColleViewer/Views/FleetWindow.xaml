@@ -45,12 +45,8 @@
 			<livet:DataContextDisposeAction />
 		</i:EventTrigger>
 
-		<livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
-										 MessageKey="Window/Location">
-			<behaviors:SetWindowLocationAction />
-		</livet:InteractionMessageTrigger>
 		<livet:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}"
-										 MessageKey="Window/Activate">
+										 MessageKey="Window.Action">
 			<livet:WindowInteractionMessageAction />
 		</livet:InteractionMessageTrigger>
 	</i:Interaction.Triggers>
@@ -696,8 +692,7 @@
 						<StackPanel>
 							<VisualStateManager.VisualStateGroups>
 								<VisualStateGroup x:Name="VisualStateGroup">
-									<VisualState x:Name="Normal">
-									</VisualState>
+									<VisualState x:Name="Normal" />
 									<VisualState x:Name="Blinking">
 										<Storyboard AutoReverse="True"
 													RepeatBehavior="Forever">

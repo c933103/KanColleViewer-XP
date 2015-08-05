@@ -142,6 +142,33 @@ namespace Grabacr07.KanColleViewer.Properties {
         }
         
         /// <summary>
+        ///   查找类似 キャンセル 的本地化字符串。
+        /// </summary>
+        public static string Dlg_Cancel {
+            get {
+                return ResourceManager.GetString("Dlg_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 OK 的本地化字符串。
+        /// </summary>
+        public static string Dlg_OK {
+            get {
+                return ResourceManager.GetString("Dlg_OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 「提督業も忙しい！」 を終了します。よろしいですか？ 的本地化字符串。
+        /// </summary>
+        public static string DlgExit_Message {
+            get {
+                return ResourceManager.GetString("DlgExit_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 建造ドック 的本地化字符串。
         /// </summary>
         public static string Dockyard {
@@ -1164,6 +1191,15 @@ namespace Grabacr07.KanColleViewer.Properties {
         public static string Settings_WindowControl_LocationLeftButton_Sub {
             get {
                 return ResourceManager.GetString("Settings_WindowControl_LocationLeftButton_Sub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 確認ダイアログを表示せずに終了する 的本地化字符串。
+        /// </summary>
+        public static string Settings_Windows_CloseNoConfirm {
+            get {
+                return ResourceManager.GetString("Settings_Windows_CloseNoConfirm", resourceCulture);
             }
         }
         

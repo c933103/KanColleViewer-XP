@@ -2,10 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Grabacr07.KanColleWrapper.Models;
-using Livet;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
@@ -113,10 +111,7 @@ namespace Grabacr07.KanColleWrapper
 			return GetEnumerator();
 		}
 
-		public int Count
-		{
-			get { return this.dictionary.Count; }
-		}
+		public int Count => this.dictionary.Count;
 
 		public bool ContainsKey(int key)
 		{
@@ -128,15 +123,9 @@ namespace Grabacr07.KanColleWrapper
 			return this.dictionary.TryGetValue(key, out value);
 		}
 
-        public ICollection<int> Keys
-		{
-			get { return this.dictionary.Keys; }
-		}
+		public ICollection<int> Keys => this.dictionary.Keys;
 
-		public ICollection<TValue> Values
-		{
-			get { return this.dictionary.Values; }
-        }
+		public ICollection<TValue> Values => this.dictionary.Values;
 
         bool ICollection<KeyValuePair<int, TValue>>.Contains(KeyValuePair<int, TValue> item)
         {

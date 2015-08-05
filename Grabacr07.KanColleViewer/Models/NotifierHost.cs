@@ -13,12 +13,7 @@ namespace Grabacr07.KanColleViewer.Models
 	{
 		#region singleton members
 
-		private static readonly NotifierHost instance = new NotifierHost();
-
-		public static NotifierHost Instance
-		{
-			get { return instance; }
-		}
+		public static NotifierHost Instance { get; } = new NotifierHost();
 
 		#endregion
 
@@ -33,7 +28,7 @@ namespace Grabacr07.KanColleViewer.Models
 
 			KanColleClient.Current.PropertyChanged += (sender, args) =>
 			{
-				if (args.PropertyName == "IsStarted") InitializeCore();
+				if (args.PropertyName == nameof(KanColleClient.IsStarted)) InitializeCore();
 			};
 		}
 
@@ -43,19 +38,19 @@ namespace Grabacr07.KanColleViewer.Models
 
 			client.Homeport.Repairyard.PropertyChanged += (sender, args) =>
 			{
-				if (args.PropertyName == "Docks") UpdateRepairyard(client.Homeport.Repairyard);
+				if (args.PropertyName == nameof(Repairyard.Docks)) UpdateRepairyard(client.Homeport.Repairyard);
 			};
 			UpdateRepairyard(client.Homeport.Repairyard);
 
 			client.Homeport.Dockyard.PropertyChanged += (sender, args) =>
 			{
-				if (args.PropertyName == "Docks") UpdateDockyard(client.Homeport.Dockyard);
+				if (args.PropertyName == nameof(Dockyard.Docks)) UpdateDockyard(client.Homeport.Dockyard);
 			};
 			UpdateDockyard(client.Homeport.Dockyard);
 
 			client.Homeport.Organization.PropertyChanged += (sender, args) =>
 			{
-				if (args.PropertyName == "Fleets") UpdateFleets(client.Homeport.Organization);
+				if (args.PropertyName == nameof(Organization.Fleets)) UpdateFleets(client.Homeport.Organization);
 			};
 			UpdateFleets(client.Homeport.Organization);
 		}
@@ -69,7 +64,6 @@ namespace Grabacr07.KanColleViewer.Models
 					if (Settings.Current.NotifyRepairingCompleted)
 					{
 						PluginHost.Instance.GetNotifier().Show(
-							NotifyType.Repair,
 							Resources.Repairyard_NotificationMessage_Title,
 							string.Format(Resources.Repairyard_NotificationMessage, args.DockId, args.Ship.Info.Name),
 							() => App.ViewModelRoot.Activate());
@@ -91,7 +85,6 @@ namespace Grabacr07.KanColleViewer.Models
 							: Resources.Common_ShipGirl;
 
 						PluginHost.Instance.GetNotifier().Show(
-							NotifyType.Build,
 							Resources.Dockyard_NotificationMessage_Title,
 							string.Format(Resources.Dockyard_NotificationMessage, args.DockId, shipName),
 							() => App.ViewModelRoot.Activate());
@@ -109,7 +102,6 @@ namespace Grabacr07.KanColleViewer.Models
 					if (Settings.Current.NotifyExpeditionReturned)
 					{
 						PluginHost.Instance.GetNotifier().Show(
-							NotifyType.Expedition,
 							Resources.Expedition_NotificationMessage_Title,
 							string.Format(Resources.Expedition_NotificationMessage, args.FleetName),
 							() => App.ViewModelRoot.Activate());
@@ -121,9 +113,8 @@ namespace Grabacr07.KanColleViewer.Models
 					if (Settings.Current.NotifyFleetRejuvenated)
 					{
 						PluginHost.Instance.GetNotifier().Show(
-							NotifyType.Rejuvenated,
 							"疲労回復完了",
-							string.Format("「{0}」に編成されている艦娘の疲労が回復しました。", args.FleetName),
+							$"「{args.FleetName}」に編成されている艦娘の疲労が回復しました。",
 							() => App.ViewModelRoot.Activate());
 					}
 				};
@@ -132,7 +123,7 @@ namespace Grabacr07.KanColleViewer.Models
 
 		private static void HandleNotifyRequested(object sender, NotifyEventArgs e)
 		{
-			PluginHost.Instance.GetNotifier().Show(NotifyType.Other, e.Title, e.Message, e.Activated, e.Failed);
+			PluginHost.Instance.GetNotifier().Show(e.Header, e.Body, e.Activated, e.Failed);
 		}
 
 		public void Dispose()

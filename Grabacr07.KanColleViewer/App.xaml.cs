@@ -36,12 +36,13 @@ namespace Grabacr07.KanColleViewer
             return AppDomain.CurrentDomain.GetAssemblies().Where(x => x.GetName().Name == resolvName.Name).FirstOrDefault();
         }
 
+		private readonly LivetCompositeDisposable compositeDisposable = new LivetCompositeDisposable();
 
         protected override void OnStartup(StartupEventArgs e)
-		{
-			base.OnStartup(e);
+        {
+            base.OnStartup(e);
 
-			this.DispatcherUnhandledException += (sender, args) => ReportException(sender, args.Exception, false);
+            this.DispatcherUnhandledException += (sender, args) => ReportException(sender, args.Exception, false);
 
             System.Windows.Media.Animation.Timeline.DesiredFrameRateProperty.OverrideMetadata(
                 typeof(System.Windows.Media.Animation.Timeline),
@@ -49,25 +50,28 @@ namespace Grabacr07.KanColleViewer
             );
 
             DispatcherHelper.UIDispatcher = this.Dispatcher;
-				ProductInfo = new ProductInfo();
+            ProductInfo = new ProductInfo();
 
-				Settings.Load();
-				ResourceService.Current.ChangeCulture(Settings.Current.Culture);
+            Settings.Load();
+            ResourceService.Current.ChangeCulture(Settings.Current.Culture);
+            ThemeService.Current.Initialize(this, Theme.Dark, Accent.Purple);
 
-				PluginHost.Instance.Initialize();
-				NotifierHost.Instance.Initialize();
+            PluginHost.Instance.Initialize();
+            NotifierHost.Instance.Initialize();
             Helper.SetRegistryFeatureBrowserEmulation();
             Helper.SetMMCSSTask();
 
-			KanColleClient.Current.Proxy.Startup();
-				KanColleClient.Current.Proxy.UpstreamProxySettings = Settings.Current.ProxySettings;
-
-				ThemeService.Current.Initialize(this, Theme.Dark, Accent.Purple);
+            KanColleClient.Current.Proxy.Startup();
+            KanColleClient.Current.Proxy.UpstreamProxySettings = Settings.Current.ProxySettings;
+            this.compositeDisposable.Add(PluginHost.Instance);
+            this.compositeDisposable.Add(NotifierHost.Instance);
+            this.compositeDisposable.Add(Settings.Current.Save);
+            this.compositeDisposable.Add(KanColleClient.Current.Proxy.Shutdown);
 
             ViewModelRoot = new MainWindowViewModel();
             this.MainWindow = new MainWindow { DataContext = ViewModelRoot };
             ViewModelRoot.UpdateLayout(Settings.Current.LRSplit);
-				this.MainWindow.Show();
+            this.MainWindow.Show();
 
             if (Definitions.UnixTimestamp - Settings.Current.LastUpdateCheck > 86400) {
                 var wc = new System.Net.WebClient();
@@ -79,17 +83,12 @@ namespace Grabacr07.KanColleViewer
                     }
                 });
             }
-		}
+        }
 
         protected override void OnExit(ExitEventArgs e)
 		{
-            Settings.Current.Save();
-            base.OnExit(e);
-
-            KanColleClient.Current.Proxy.Shutdown();
-			NotifierHost.Instance.Dispose();
-            PluginHost.Instance.Dispose();
-
+			base.OnExit(e);
+			this.compositeDisposable.Dispose();
         }
 
 		private void ProcessCommandLineParameter(string[] args)

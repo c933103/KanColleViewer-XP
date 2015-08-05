@@ -202,7 +202,7 @@ namespace Grabacr07.KanColleWrapper.Models
 
 				if (!this.notificated
 					&& this.Completed != null
-					&& remaining <= TimeSpan.FromSeconds(KanColleClient.Current.Settings.NotificationShorteningTime))
+					&& remaining.TotalSeconds < KanColleClient.Current.Settings.NotificationShorteningTime)
 				{
 					this.Completed(this, new RepairingCompletedEventArgs(this.Id, this.Ship));
 					this.notificated = true;

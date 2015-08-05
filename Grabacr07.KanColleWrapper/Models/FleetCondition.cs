@@ -36,7 +36,7 @@ namespace Grabacr07.KanColleWrapper.Models
 					this._RejuvenateTime = value;
 					this.notificated = false;
 					this.RaisePropertyChanged();
-					this.RaisePropertyChanged(nameof(IsRejuvenating));
+					this.RaisePropertyChanged(nameof(this.IsRejuvenating));
                     
                     if (value.HasValue) {
                         Connect();
@@ -50,10 +50,7 @@ namespace Grabacr07.KanColleWrapper.Models
 		/// <summary>
 		/// 艦隊に編成されている艦娘の疲労を自然回復しているかどうかを示す値を取得します。
 		/// </summary>
-		public bool IsRejuvenating
-		{
-			get { return this.RejuvenateTime.HasValue; }
-		}
+		public bool IsRejuvenating => this.RejuvenateTime.HasValue;
 
 		#endregion
 
@@ -128,7 +125,7 @@ namespace Grabacr07.KanColleWrapper.Models
 
                 this.Remaining = remaining;
 
-				if (!this.notificated && this.Rejuvenated != null && remaining.Ticks <= 0)
+				if (!this.notificated && this.Rejuvenated != null && remaining.Ticks == 0)
 				{
 					this.Rejuvenated(this, new ConditionRejuvenatedEventArgs(this.Name, 0));
 					this.notificated = true;
