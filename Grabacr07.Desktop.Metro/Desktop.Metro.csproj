@@ -71,6 +71,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -78,6 +79,9 @@
   <ItemGroup>
     <Compile Include="Controls\CallMethodButton.cs" />
     <Compile Include="Controls\HyperlinkEx.cs" />
+    <Compile Include="Controls\RichTextInlinePresenter.cs" />
+    <Compile Include="Controls\RichTexts.cs" />
+    <Compile Include="Controls\RichTextView.cs" />
     <Compile Include="Controls\SortButton.cs" />
     <Compile Include="Controls\SortDirection.cs" />
     <Compile Include="Controls\TabHeader.cs" />
@@ -141,6 +145,11 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.RichTextView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>Generic.xaml</DependentUpon>
     </Page>
   </ItemGroup>
   <ItemGroup>

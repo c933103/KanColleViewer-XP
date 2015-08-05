@@ -465,4 +465,16 @@
   <data name="Settings_Logging_Enable" xml:space="preserve">
     <value>Log drops and crafting results to file</value>
   </data>
+  <data name="DlgExit_Message" xml:space="preserve">
+    <value>Confirm exit?</value>
+  </data>
+  <data name="Dlg_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Dlg_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Settings_Windows_CloseNoConfirm" xml:space="preserve">
+    <value>Exit without confirmation</value>
+  </data>
 </root>

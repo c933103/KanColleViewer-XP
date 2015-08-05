@@ -251,6 +251,7 @@
     <Compile Include="ViewModels\Catalogs\ShipCatalogWindowViewModel.cs" />
     <Compile Include="ViewModels\Contents\ShipyardViewModel.cs" />
     <Compile Include="ViewModels\CultureViewModel.cs" />
+    <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\FleetWindowViewModel.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="Models\INavigator.cs" />
@@ -271,6 +272,7 @@
     <Compile Include="ViewModels\VolumeViewModel.cs" />
     <Compile Include="Views\Behaviors\FlickFleetsAction.cs" />
     <Compile Include="Views\Behaviors\FlickTrigger.cs" />
+    <Compile Include="Views\Behaviors\FocusAction.cs" />
     <Compile Include="Views\Behaviors\NavigatorBehavior.cs" />
     <Compile Include="Views\Behaviors\ScreenshotAction.cs" />
     <Compile Include="Views\Behaviors\SetWindowLocationAction.cs" />
@@ -350,6 +352,7 @@
     <Compile Include="Views\Settings\Plugins.xaml.cs">
       <DependentUpon>Plugins.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Settings\RichText.cs" />
     <Compile Include="Views\Settings\VersionInfo.xaml.cs">
       <DependentUpon>VersionInfo.xaml</DependentUpon>
     </Compile>

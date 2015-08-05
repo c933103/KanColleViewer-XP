@@ -13,37 +13,65 @@
 				   xmlns:viewModels="clr-namespace:Grabacr07.KanColleViewer.ViewModels"
 				   xmlns:behaviors="clr-namespace:Grabacr07.KanColleViewer.Views.Behaviors"
 				   xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls"
+			       xmlns:models="clr-namespace:Grabacr07.KanColleViewer.Models"
 				   mc:Ignorable="d"
-				   d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
+				   d:DataContext="{d:DesignInstance viewModels:DialogViewModel}"
 				   Style="{DynamicResource MetroDialogStyleKey}"
-				   Title="EXIT KanColleViewer"
-				   WindowStartupLocation="CenterScreen"
+				   Title="{Binding Title}"
+				   WindowStartupLocation="CenterOwner"
 				   SizeToContent="Height">
+
+	<i:Interaction.Triggers>
+		<livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
+										 MessageKey="Window.WindowAction">
+			<livet:WindowInteractionMessageAction />
+		</livet:InteractionMessageTrigger>
+		<livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
+										 MessageKey="Window.Transition">
+			<livet:TransitionInteractionMessageAction />
+		</livet:InteractionMessageTrigger>
+	</i:Interaction.Triggers>
+
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<TextBlock Text="「提督業も忙しい！」 を終了します。 よろしいですか？"
-				   FontSize="13"
-				   Foreground="{DynamicResource ActiveForegroundBrushKey}"
-				   Margin="10,0"
-				   HorizontalAlignment="Left" />
+		<StackPanel Margin="12">
+			<DockPanel>
+				<controls:AppIcon Width="40"
+								  Background="Transparent" />
 
-		<StackPanel Grid.Row="1"
-					Orientation="Horizontal"
-					HorizontalAlignment="Right"
-					Margin="14,7,14,14">
-			
-			<metro2:CallMethodButton Content="OK"
-									 MinWidth="100"
-									 Padding="20,5"
-									 Margin="12,0,0,0" />
-			<metro2:CallMethodButton Content="Cancel"
-									 MinWidth="100"
-									 Padding="20,5"
-									 Margin="12,0,0,0" />
+                <TextBlock Text="{Binding Resources.DlgExit_Message, Source={x:Static models:ResourceService.Current}, Mode=OneTime}"
+						   FontSize="14"
+						   Foreground="{DynamicResource ActiveForegroundBrushKey}"
+						   Margin="12,0,0,0"
+						   HorizontalAlignment="Left"
+						   VerticalAlignment="Center" />
+			</DockPanel>
+
+			<Border Height="12" />
+
+			<Rectangle Height="1"
+					   Style="{DynamicResource SeparatorRectangleStyleKey}" />
 		</StackPanel>
+
+		<WrapPanel Grid.Row="1"
+				   HorizontalAlignment="Right"
+				   Margin="6,-6,6,6">
+            <metro2:CallMethodButton Content="{Binding Resources.Dlg_OK, Source={x:Static models:ResourceService.Current}, Mode=OneTime}"
+									 MethodName="OK"
+									 IsDefault="True"
+									 MinWidth="110"
+									 Padding="30,6"
+									 Margin="6" />
+            <metro2:CallMethodButton Content="{Binding Resources.Dlg_Cancel, Source={x:Static models:ResourceService.Current}, Mode=OneTime}"
+									 MethodName="Cancel"
+									 IsCancel="True"
+									 MinWidth="110"
+									 Padding="30,6"
+									 Margin="6" />
+		</WrapPanel>
 	</Grid>
 </metro:MetroWindow>
