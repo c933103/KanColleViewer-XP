@@ -9,7 +9,7 @@ namespace Grabacr07.KanColleViewer.Models
 	public static class ProductInfo
     {
         private const string Major = "4.0A";
-        private const string Mod = "1.2";
+        private const string Mod = "1.3";
         private const string Revision = "";
         private const string Train = "T";
 
