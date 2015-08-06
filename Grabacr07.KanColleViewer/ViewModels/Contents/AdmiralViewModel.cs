@@ -22,7 +22,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents
             get
             {
                 if (Model == null) return false;
-                return App.ViewModelRoot.Ships.Count >= Model.MaxShipCount - 10;
+                return Application.Current.MainWindowViewModel.Ships.Count >= Model.MaxShipCount - 10;
             }
         }
 
@@ -31,7 +31,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents
             get
             {
                 if (Model == null) return false;
-                return App.ViewModelRoot.Ships.Count >= Model.MaxShipCount - 5;
+                return Application.Current.MainWindowViewModel.Ships.Count >= Model.MaxShipCount - 5;
             }
         }
 
@@ -40,7 +40,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents
             get
             {
                 if (Model == null) return false;
-                return App.ViewModelRoot.SlotItems.Count >= Model.MaxSlotItemCount - 40;
+                return Application.Current.MainWindowViewModel.SlotItems.Count >= Model.MaxSlotItemCount - 40;
             }
         }
 
@@ -49,7 +49,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents
             get
             {
                 if (Model == null) return false;
-                return App.ViewModelRoot.SlotItems.Count >= Model.MaxSlotItemCount - 20;
+                return Application.Current.MainWindowViewModel.SlotItems.Count >= Model.MaxSlotItemCount - 20;
             }
         }
 

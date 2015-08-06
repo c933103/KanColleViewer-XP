@@ -513,7 +513,7 @@ namespace Grabacr07.KanColleViewer.Models
             }
         }
 
-        private string _lastUpdateVersion = AppProductInfo.ModRelease.TrimEnd('d');
+        private string _lastUpdateVersion = ProductInfo.ModRelease.TrimEnd('d');
         public string LastUpdateVersion
         {
             get {

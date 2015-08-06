@@ -119,7 +119,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <ApplicationDefinition Include="Application.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
@@ -128,7 +128,6 @@
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Composition\PluginHost.cs" />
     <Compile Include="Models\AppSettingProxy.cs" />
-    <Compile Include="Models\ProductInfo.cs" />
     <Compile Include="Models\QualitySetting.cs" />
     <Compile Include="NAudio\CoreAudioApi\AudioCaptureClient.cs" />
     <Compile Include="NAudio\CoreAudioApi\AudioClient.cs" />
@@ -201,7 +200,7 @@
     <Compile Include="Models\BrowserZoomFactor.cs" />
     <Compile Include="Models\IZoomFactor.cs" />
     <Compile Include="Models\NotifierHost.cs" />
-    <Compile Include="Models\AppProductInfo.cs" />
+    <Compile Include="Models\ProductInfo.cs" />
     <Compile Include="Models\Data\Xml\XmlFileReader.cs" />
     <Compile Include="Models\Data\Xml\XmlFileWriter.cs" />
     <Compile Include="Models\Data\Xml\XmlSerializableDictionary.cs" />
@@ -523,8 +522,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
+    <Compile Include="Application.xaml.cs">
+      <DependentUpon>Application.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Win32\IViewObject.cs" />

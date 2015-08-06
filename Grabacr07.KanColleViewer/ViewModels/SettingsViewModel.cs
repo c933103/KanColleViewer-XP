@@ -214,7 +214,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 		{
 			if (Helper.IsInDesignMode) return;
 
-			this.Libraries = AppProductInfo.Libraries.Aggregate(
+			this.Libraries = ProductInfo.Libraries.Aggregate(
 				new List<BindableTextViewModel>(),
 				(list, lib) =>
 				{
@@ -294,12 +294,12 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
 		public void ClearZoomFactor()
 		{
-			App.ViewModelRoot.Messenger.Raise(new InteractionMessage { MessageKey = "WebBrowser.Zoom" });
+			Application.Current.MainWindowViewModel.Messenger.Raise(new InteractionMessage { MessageKey = "WebBrowser.Zoom" });
 		}
 
 		public void SetLocationLeft()
 		{
-			App.ViewModelRoot.Messenger.Raise(new SetWindowLocationMessage { MessageKey = "Window.Location", Left = 0.0 });
+			Application.Current.MainWindowViewModel.Messenger.Raise(new SetWindowLocationMessage { MessageKey = "Window.Location", Left = 0.0 });
 		}
 
 
