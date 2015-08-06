@@ -60,7 +60,7 @@ namespace Grabacr07.KanColleViewer
 		/// <summary>
 		/// 現在の <see cref="AppDomain"/> の <see cref="Application"/> オブジェクトを取得します。
 		/// </summary>
-		public static new Application Current => (Application)System.Windows.Application.Current;
+		public static Application Instance => (Application)Current;
 
 		/// <summary>
 		/// アプリケーションのメイン ウィンドウを制御する <see cref="MainWindowViewModel"/> オブジェクトを取得します。
@@ -112,6 +112,8 @@ new FrameworkPropertyMetadata { DefaultValue = 20 }
             this.MainWindow = new MainWindow { DataContext = this.MainWindowViewModel, };
             MainWindowViewModel.UpdateLayout(Settings.Current.LRSplit);
 
+            KanColleClient.Current.Proxy.UpstreamProxySettings = Settings.Current.ProxySettings;
+            KanColleClient.Current.Proxy.Startup();
             this.compositeDisposable.Add(KanColleClient.Current.Proxy.Shutdown);
 
             this.MainWindow.Show();

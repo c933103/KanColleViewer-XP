@@ -54,7 +54,7 @@
             </StackPanel>
 
             <Grid Visibility="{Binding ShowNavigator, Converter={StaticResource UniversalBooleanToVisibilityConverter}, ConverterParameter=Hidden:Visible}">
-                <contents:Homeport Margin="0,8" DataContext="{x:Static root:App.ViewModelRoot}">
+                <contents:Homeport Margin="0,8" DataContext="{Binding MainWindowViewModel, Source={x:Static root:Application.Instance}}">
                     <contents:Homeport.Style>
                         <Style TargetType="{x:Type contents:Homeport}">
                             <Setter Property="Visibility" Value="Visible" />
@@ -72,7 +72,7 @@
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Hidden" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Mode, Source={x:Static root:App.ViewModelRoot}}" Value="NotStarted">
+                                <DataTrigger Binding="{Binding MainWindowViewModel.Mode, Source={x:Static root:Application.Instance}}" Value="NotStarted">
                                     <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                             </Style.Triggers>

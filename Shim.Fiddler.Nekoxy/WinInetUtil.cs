@@ -77,7 +77,7 @@ namespace Nekoxy
         /// <returns>編集後プロキシ設定</returns>
         private static string GetProxyConfig(int listeningPort)
         {
-            return "http=localhost:" + listeningPort + ";https=localhost:" + listeningPort;
+            return "localhost:" + listeningPort; // + ";https=localhost:" + listeningPort;
         }
 
         /// <summary>
