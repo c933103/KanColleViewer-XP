@@ -40,21 +40,21 @@
 							Padding="10,0,20,14">
                 <StackPanel Margin="0,-9,0,0">
                     <TextBlock>
-						<Run Text="{x:Static models:AppProductInfo.Product}"
+						<Run Text="{x:Static models:ProductInfo.Product}"
 								FontFamily="Segoe UI Light"
 								FontSize="30"
 								Foreground="{DynamicResource ActiveForegroundBrushKey}" />
 						<LineBreak />
-						<Run Text="{x:Static models:AppProductInfo.Title}"
+						<Run Text="{x:Static models:ProductInfo.Title}"
 								FontSize="16" />
                     </TextBlock>
 
                     <TextBlock Margin="0,8,0,0" FontFamily="Segoe UI Light" FontSize="20" Foreground="{DynamicResource ActiveForegroundBrushKey}">
-                        <Run Text="Version " /><Run Text="{x:Static models:AppProductInfo.VersionString}" />
+                        <Run Text="Version " /><Run Text="{x:Static models:ProductInfo.VersionString}" />
                     </TextBlock>
 
                     <TextBlock Margin="0,8,0,0" FontFamily="Lucida Console" FontSize="12" Foreground="{DynamicResource ActiveForegroundBrushKey}">
-						<Run Text="Rel. " /><Run Text="{x:Static models:AppProductInfo.ModRelease}" />
+						<Run Text="Rel. " /><Run Text="{x:Static models:ProductInfo.ModRelease}" />
                     </TextBlock>
 
                     <Rectangle Height="1"
@@ -101,7 +101,7 @@
                                         <DataTrigger Value="False">
                                             <DataTrigger.Binding>
                                                 <MultiBinding Converter="{StaticResource MultiBindingEqualityConverter}">
-                                                    <Binding Source="{x:Static models:AppProductInfo.ModRelease}" Mode="OneTime" />
+                                                    <Binding Source="{x:Static models:ProductInfo.ModRelease}" Mode="OneTime" />
                                                     <Binding Source="{x:Static models:Settings.Current}" Path="LastUpdateVersion" Mode="OneWay" />
                                                 </MultiBinding>
                                             </DataTrigger.Binding>
@@ -120,13 +120,13 @@
 
                     <TextBlock FontFamily="Segoe UI"
 								TextWrapping="Wrap">
-						<Run Text="{x:Static models:AppProductInfo.Copyright}" />
+						<Run Text="{x:Static models:ProductInfo.Copyright}" />
                     </TextBlock>
 
                     <TextBlock FontFamily="Segoe UI"
 								Margin="0,10,0,0"
 								TextWrapping="Wrap">
-						<Run Text="{x:Static models:AppProductInfo.Product}" />
+						<Run Text="{x:Static models:ProductInfo.Product}" />
 						<Run Text="is" />
 						<Run Text="OSS"
 								ToolTip="Open Source Software" />

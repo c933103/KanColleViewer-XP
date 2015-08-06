@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Threading.Tasks;
 using Grabacr07.KanColleViewer.Models;
+using Grabacr07.KanColleViewer.Properties;
 using Grabacr07.KanColleViewer.ViewModels.Messages;
 using Grabacr07.KanColleWrapper;
 using Livet;
@@ -36,7 +37,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
                 switch (value) {
                     case Mode.NotStarted:
                         this.StatusBar = null;
-                        StatusService.Current.Set(Properties.Resources.StatusBar_NotStarted);
+						StatusService.Current.Set(Resources.StatusBar_NotStarted);
                         ThemeService.Current.ChangeAccent(Accent.Purple);
                         _browser.ShowNavigator = true;
                         break;
@@ -46,7 +47,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
                                 SelectedItem = TabItems.FirstOrDefault(x => x != StartContentViewModel.Instance);
                             TabItems.Remove(StartContentViewModel.Instance);
                         }));
-                        StatusService.Current.Set(Properties.Resources.StatusBar_Ready);
+                        StatusService.Current.Set(Resources.StatusBar_Ready);
                         ThemeService.Current.ChangeAccent(Accent.Blue);
                         _browser.ShowNavigator = false;
                         break;
@@ -144,11 +145,13 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
         #endregion
 
-		public override sealed bool CanClose => Models.Settings.Current.CanCloseWithoutConfirmation || base.CanClose;
+		public override sealed bool CanClose => base.CanClose
+												|| Models.Settings.Current.CanCloseWithoutConfirmation      // 設定で「確認なしで終了」が有効なら終了できる
+												|| Application.Instance.State != ApplicationState.Running; // アプリケーションが起動中か終了処理中なら終了できる
 
 public MainWindowViewModel()
 		{
-			this.Title = AppProductInfo.Title;
+			this.Title = ProductInfo.Title;
             this.CanClose = false;
 
             this.Settings = new SettingsViewModel();
@@ -164,7 +167,11 @@ public MainWindowViewModel()
 			});
 			this.CompositeDisposable.Add(new PropertyChangedEventListener(Models.Settings.Current)
 			{
-				{ nameof(Models.Settings.CanCloseWithoutConfirmation), (sender, args) => this.RaisePropertyChanged(nameof(this.CanClose)) },
+				{ nameof(Models.Settings.CanCloseWithoutConfirmation), (sender, args) => this.RaiseCanCloseChanged() },
+			});
+			this.CompositeDisposable.Add(new PropertyChangedEventListener(Application.Instance)
+			{
+				{ nameof(Application.State), (sender, args) => this.RaiseCanCloseChanged() },
 			});
 
             this._browser = new BrowserViewModel();
@@ -220,6 +227,11 @@ public MainWindowViewModel()
                 this.CanClose = true;
                 this.InvokeOnUIDispatcher(this.Close);
             }
+		}
+
+		private void RaiseCanCloseChanged()
+		{
+			this.RaisePropertyChanged(nameof(this.CanClose));
         }
 
         private void UpdateMode()

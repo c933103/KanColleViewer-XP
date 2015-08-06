@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="Grabacr07.KanColleViewer.Controls.ConditionIndicator"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Grabacr07.KanColleViewer.Controls"
+             mc:Ignorable="d" x:Name="control"
+             d:DesignHeight="50" d:DesignWidth="50">
+    <Viewbox DataContext="{Binding ElementName=control, Mode=OneTime}">
+        <Grid Width="30" Height="30">
+            <Ellipse Stroke="{Binding NormBrush}" StrokeThickness="3">
+                <Ellipse.Clip>
+                    <PathGeometry>
+                        <PathFigure StartPoint="15,15" IsClosed="True">
+                            <LineSegment Point="15,0" />
+                            <ArcSegment Size="15,15" Point="{Binding NormArcEnd}" SweepDirection="Counterclockwise" IsLargeArc="{Binding NormLargeArc}" />
+                        </PathFigure>
+                    </PathGeometry>
+                </Ellipse.Clip>
+            </Ellipse>
+            <Ellipse Stroke="Gold" StrokeThickness="3">
+                <Ellipse.Clip>
+                    <PathGeometry>
+                        <PathFigure StartPoint="15,15" IsClosed="True">
+                            <LineSegment Point="15,0" />
+                            <ArcSegment Size="15,15" Point="{Binding KiraArcEnd}" SweepDirection="Counterclockwise" IsLargeArc="{Binding KiraLargeArc}" />
+                        </PathFigure>
+                    </PathGeometry>
+                </Ellipse.Clip>
+            </Ellipse>
+            <Ellipse Stroke="YellowGreen" StrokeThickness="3">
+                <Ellipse.Clip>
+                    <PathGeometry>
+                        <PathFigure StartPoint="15,15" IsClosed="True">
+                            <LineSegment Point="15,0" />
+                            <ArcSegment Size="15,15" Point="{Binding KiraKiraArcEnd}" SweepDirection="Counterclockwise" IsLargeArc="{Binding KiraKiraLargeArc}" />
+                        </PathFigure>
+                    </PathGeometry>
+                </Ellipse.Clip>
+            </Ellipse>
+            <TextBlock Foreground="{Binding ConditionBrush}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Condition}" TextAlignment="Center" FontSize="{Binding CondFontSize}" FontWeight="Bold" />
+        </Grid>
+    </Viewbox>
+</UserControl>

@@ -80,6 +80,14 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\ConditionIndicator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\QuadSegmentProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Colors.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -150,6 +158,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls.Globalization\ResourceService.cs" />
+    <Compile Include="Controls\ConditionIndicator.xaml.cs">
+      <DependentUpon>ConditionIndicator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\QuadSegmentProgressBar.xaml.cs">
+      <DependentUpon>QuadSegmentProgressBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\BoolToIntSelector.cs" />
     <Compile Include="Converters\EnumToDescriptionsConverter.cs" />
     <Compile Include="Converters\MultiBindingEqualityConverter.cs" />

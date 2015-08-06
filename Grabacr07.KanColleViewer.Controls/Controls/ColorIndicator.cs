@@ -39,10 +39,29 @@ namespace Grabacr07.KanColleViewer.Controls
 			source.ChangeColor(value);
 		}
 
-		#endregion
+        #endregion
 
+        private double _threshold1 = 0.25, _threshold2 = 0.5, _threshold3 = 0.75;
 
-		private void ChangeColor(LimitedValue value)
+        public double Threshold1
+        {
+            get { return _threshold1; }
+            set { _threshold1 = value; ChangeColor(LimitedValue); }
+        }
+
+        public double Threshold2
+        {
+            get { return _threshold2; }
+            set { _threshold2 = value; ChangeColor(LimitedValue); }
+        }
+
+        public double Threshold3
+        {
+            get { return _threshold3; }
+            set { _threshold3 = value; ChangeColor(LimitedValue); }
+        }
+
+        private void ChangeColor(LimitedValue value)
 		{
 			this.Maximum = value.Maximum;
 			this.Minimum = value.Minimum;
@@ -52,13 +71,13 @@ namespace Grabacr07.KanColleViewer.Controls
 			var percentage = value.Maximum == 0 ? 0.0 : value.Current / (double)value.Maximum;
 
 			// 0.25 以下のとき、「大破」
-			if (percentage <= 0.25) color = Color.FromRgb(255, 32, 32);
+			if (percentage <= _threshold1) color = Color.FromRgb(255, 32, 32);
 
 			// 0.5 以下のとき、「中破」
-			else if (percentage <= 0.5) color = Color.FromRgb(240, 128, 32);
+			else if (percentage <= _threshold2) color = Color.FromRgb(240, 128, 32);
 
 			// 0.75 以下のとき、「小破」
-			else if (percentage <= 0.75) color = Color.FromRgb(240, 240, 0);
+			else if (percentage <= _threshold3) color = Color.FromRgb(240, 240, 0);
 
 			// 0.75 より大きいとき、「小破未満」
 			else color = Color.FromRgb(64, 200, 32);

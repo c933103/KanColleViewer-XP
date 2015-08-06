@@ -172,8 +172,7 @@
 												Grid.Column="0">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="23" />
-                                                    <ColumnDefinition Width="27" />
+                                                    <ColumnDefinition Width="35" />
                                                 </Grid.ColumnDefinitions>
 
                                                 <StackPanel Grid.Column="0" Grid.Row="0">
@@ -185,9 +184,7 @@
 														LimitedValue="{Binding HP, Mode=OneWay}" />
                                                 </StackPanel>
 
-                                                <kcvc:ConditionIcon Margin="8,0,3,0" Grid.Column="1" ConditionType="{Binding ConditionType, Mode=OneWay}" />
-
-                                                <TextBlock Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Text="{Binding Condition, Mode=OneWay}" Style="{DynamicResource EmphaticTextStyleKey}" />
+                                                <kcvc:ConditionIndicator Margin="5,0,0,0" Height="30" Width="30" Grid.Column="1" ConditionType="{Binding ConditionType, Mode=OneWay}" Condition="{Binding Condition, Mode=OneWay}" />
                                             </Grid>
 
                                             <Grid Grid.Row="2" Margin="0,12,0,0">
@@ -195,13 +192,15 @@
                                                     <ColumnDefinition Width="0.5*" />
                                                     <ColumnDefinition Width="0.5*" />
                                                 </Grid.ColumnDefinitions>
-                                                <kcvc:ColorIndicator Grid.Column="0"
+                                                <kcvc:ColorIndicator Threshold1="0.19" Threshold2="0.39" Threshold3="0.49"
+                                                    Grid.Column="0"
 													Grid.Row="0"
 													Width="Auto"
 													LimitedValue="{Binding Fuel, Mode=OneWay}"
 													Height="5"
 													Margin="0,0,5,0" />
-                                                <kcvc:ColorIndicator Grid.Column="1"
+                                                <kcvc:ColorIndicator Threshold1="0.19" Threshold2="0.39" Threshold3="0.49"
+                                                    Grid.Column="1"
 													Grid.Row="1"
 													Width="Auto"
 													LimitedValue="{Binding Bull, Mode=OneWay}"
