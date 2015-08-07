@@ -103,7 +103,7 @@ namespace Grabacr07.KanColleViewer.Models
 				return _Libraries ?? (_Libraries = new List<Library>
 				{
 					new Library("Reactive Extensions", new Uri("http://rx.codeplex.com/")),
-					new Library("Interactive Extensions", new Uri("http://rx.codeplex.com/")),
+					new Library(".NET Core Audio APIs", new Uri("https://netcoreaudio.codeplex.com/")),
 					new Library("Windows API Code Pack", new Uri("http://archive.msdn.microsoft.com/WindowsAPICodePack")),
 					new Library("Livet", new Uri("http://ugaya40.net/livet")),
 					new Library("DynamicJson", new Uri("http://dynamicjson.codeplex.com/")),

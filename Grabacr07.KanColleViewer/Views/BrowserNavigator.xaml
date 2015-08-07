@@ -10,9 +10,10 @@
 			 xmlns:metro2="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"
 			 xmlns:root="clr-namespace:Grabacr07.KanColleViewer"
              xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls"
+			 xmlns:viewModels="clr-namespace:Grabacr07.KanColleViewer.ViewModels"
 			 mc:Ignorable="d"
 			 d:DesignWidth="800"
-			 DataContext="{Binding Navigator}">
+			 d:DataContext="{d:DesignInstance viewModels:NavigatorViewModel}">
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />

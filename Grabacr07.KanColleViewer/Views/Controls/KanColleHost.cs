@@ -8,7 +8,9 @@ using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Navigation;
 using Grabacr07.KanColleViewer.Models;
+using Grabacr07.KanColleViewer.ViewModels;
 using MetroRadiance.Core;
+using MetroRadiance.Controls;
 using SHDocVw;
 using IServiceProvider = Grabacr07.KanColleViewer.Win32.IServiceProvider;
 using WebBrowser = System.Windows.Controls.WebBrowser;
@@ -58,6 +60,8 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 			{
 				newBrowser.LoadCompleted += instance.HandleLoadCompleted;
                 newBrowser.Navigating += NoTouchActionStylesheet_BrowserNavigating;
+                var events = WebBrowserHelper.GetAxWebbrowser2(newBrowser) as DWebBrowserEvents_Event;
+                if (events != null) events.NewWindow += instance.HandleWebBrowserNewWindow;
             }
 			if (instance.scrollViewer != null)
 			{
@@ -186,6 +190,15 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 			if (window != null) {
                 window.MinHeight = this.WebBrowser.Height + 60;
 			}
+		}
+
+		private void HandleWebBrowserNewWindow(string url, int flags, string targetFrameName, ref object postData, string headers, ref bool processed)
+		{
+			processed = true;
+
+			var window = new BrowserWindow { DataContext = new NavigatorViewModel(), };
+			window.Show();
+			window.WebBrowser.Navigate(url);
 		}
 
         #region Inject shim script for controlling Flash render mode
