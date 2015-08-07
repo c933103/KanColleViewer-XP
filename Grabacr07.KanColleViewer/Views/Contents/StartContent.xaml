@@ -10,7 +10,7 @@
 			 xmlns:root="clr-namespace:Grabacr07.KanColleViewer"
 			 xmlns:views="clr-namespace:Grabacr07.KanColleViewer.Views"
 			 xmlns:properties="clr-namespace:Grabacr07.KanColleViewer.Properties"
-			 xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls"
+			 xmlns:kcvc="http://schemes.grabacr.net/winfx/2015/kancolleviewer/controls"
 			 xmlns:settings="clr-namespace:Grabacr07.KanColleViewer.Views.Settings"
 			 xmlns:vm="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents"
 			 xmlns:models="clr-namespace:Grabacr07.KanColleViewer.Models"
@@ -24,7 +24,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <controls:AppIcon Grid.Column="1"
+        <kcvc:AppIcon Grid.Column="1"
 							Background="Transparent"
 							Height="200"
 							HorizontalAlignment="Right"

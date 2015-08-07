@@ -245,7 +245,6 @@
       <DependentUpon>Quests.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\QuestViewSource.cs" />
-    <Compile Include="Views\Controls\AppIcon.cs" />
     <Compile Include="Views\Contents\Shipyard.xaml.cs">
       <DependentUpon>Shipyard.xaml</DependentUpon>
     </Compile>
@@ -311,11 +310,6 @@
     <Page Include="Themes\Accents\Red.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic.AppIcon.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <DependentUpon>Generic.xaml</DependentUpon>
     </Page>
     <Page Include="Themes\Generic.KanColleHost.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -589,6 +583,41 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="readme.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Converters\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Licenses\Apache.txt">
+      <Link>Licenses\Apache.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Licenses\GPL.txt">
+      <Link>Licenses\GPL.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Licenses\LGPL.txt">
+      <Link>Licenses\LGPL.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Licenses\DesktopToast.txt">
+      <Link>Licenses\DesktopToast.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Licenses\Ms-PL.txt">
+      <Link>Licenses\Ms-PL.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Licenses\Nekoxy.txt">
+      <Link>Licenses\Nekoxy.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Licenses\NETCoreAudioAPIs.txt">
+      <Link>Licenses\NETCoreAudioAPIs.txt</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
