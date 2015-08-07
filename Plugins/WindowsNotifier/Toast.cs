@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.UI.Notifications;
+using System.Reflection;
+using DesktopToast;
 
 namespace Grabacr07.KanColleViewer.Plugins
 {
@@ -31,58 +30,44 @@ namespace Grabacr07.KanColleViewer.Plugins
 		}
 
 		#endregion
+#if DEBUG
+		public const string AppId = "Grabacr07.KanColleViewer.Debug";
+#else
+		public const string AppId = "Grabacr07.KanColleViewer"; 
+#endif
 
-		public const string AppId = "Grabacr07.KanColleViewer";
+		public event Action Activated;
 
-		private readonly ToastNotification toast;
+		public event Action ToastFailed;
 
-		public event TypedEventHandler<ToastNotification, object> Activated
-		{
-			add { this.toast.Activated += value; }
-			remove { this.toast.Activated -= value; }
-		}
-
-		public event TypedEventHandler<ToastNotification, ToastDismissedEventArgs> Dismissed
-		{
-			add { this.toast.Dismissed += value; }
-			remove { this.toast.Dismissed -= value; }
-		}
-
-		public event TypedEventHandler<ToastNotification, ToastFailedEventArgs> ToastFailed
-		{
-			add { this.toast.Failed += value; }
-			remove { this.toast.Failed -= value; }
-		}
+		private readonly ToastRequest request;
 
 		public Toast(string header, string body)
 		{
-			var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
-
-			var stringElements = toastXml.GetElementsByTagName("text");
-			if (stringElements.Length == 2)
-			{
-				stringElements[0].AppendChild(toastXml.CreateTextNode(header));
-				stringElements[1].AppendChild(toastXml.CreateTextNode(body));
-			}
-
-            Windows.Data.Xml.Dom.XmlElement audioElement = null;
-            var audioElements = toastXml.GetElementsByTagName("audio");
-            if (audioElements.Length == 1) {
-                audioElement = audioElements[0] as Windows.Data.Xml.Dom.XmlElement;
-            }
-            if(audioElement == null) {
-                audioElement = toastXml.CreateElement("audio");
-                toastXml.DocumentElement.AppendChild(audioElement);
-            }
-            audioElement.SetAttribute("src", "ms-winsoundevent:Notification.Reminder");
-            audioElement.SetAttribute("loop", "false");
-
-            this.toast = new ToastNotification(toastXml);
+            this.request = new ToastRequest {
+                ToastHeadline = header,
+                ToastBody = body,
+#if DEBUG
+                ShortcutFileName = "提督業も忙しい！ (debug).lnk",
+#else
+				ShortcutFileName = "提督業も忙しい！.lnk", 
+#endif
+                ShortcutTargetFilePath = Assembly.GetEntryAssembly().Location,
+                AppId = AppId,
+                ToastAudio = ToastAudio.Reminder
+            };
 		}
 
 		public void Show()
 		{
-			ToastNotificationManager.CreateToastNotifier(AppId).Show(this.toast);
+			ToastManager.ShowAsync(this.request)
+				.ContinueWith(t =>
+				{
+					if (t.Result == ToastResult.Activated)
+						this.Activated?.Invoke();
+					if (t.Result == ToastResult.Failed)
+						this.ToastFailed?.Invoke();
+				});
 		}
 	}
 }
