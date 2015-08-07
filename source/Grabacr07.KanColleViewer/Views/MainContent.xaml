@@ -1,0 +1,119 @@
+﻿<UserControl x:Class="Grabacr07.KanColleViewer.Views.MainContent"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+			 xmlns:livet="http://schemas.livet-mvvm.net/2011/wpf"
+			 xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+			 xmlns:metro2="clr-namespace:Grabacr07.Desktop.Metro.Controls;assembly=Desktop.Metro"
+			 xmlns:root="clr-namespace:Grabacr07.KanColleViewer"
+			 xmlns:properties="clr-namespace:Grabacr07.KanColleViewer.Properties"
+			 xmlns:views="clr-namespace:Grabacr07.KanColleViewer.Views"
+			 xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls"
+			 xmlns:contents="clr-namespace:Grabacr07.KanColleViewer.Views.Contents"
+			 xmlns:vm="clr-namespace:Grabacr07.KanColleViewer.ViewModels"
+			 xmlns:vmContents="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents"
+			 xmlns:vmFleets="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents.Fleets"
+			 xmlns:settings="clr-namespace:Grabacr07.KanColleViewer.Views.Settings"
+			 xmlns:models="clr-namespace:Grabacr07.KanColleViewer.Models"
+			 mc:Ignorable="d"
+			 d:DesignWidth="800"
+			 d:DesignHeight="400"
+			 d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
+			 Background="{DynamicResource ThemeBrushKey}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+						PanningMode="Both"
+                        Grid.Row="0" Grid.Column="0"
+                        Grid.RowSpan="{Binding HorizontalTab, FallbackValue=2, ConverterParameter=1:2, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static models:Settings.Current}}"
+                        Grid.ColumnSpan="{Binding HorizontalTab, FallbackValue=1, ConverterParameter=2:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static models:Settings.Current}}">
+            <metro:TabView ItemsSource="{Binding TabItems, Mode=OneWay}"
+							SelectedValue="{Binding SelectedItem, Mode=TwoWay}"
+                            Background="{DynamicResource ActiveBackgroundBrushKey}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel>
+                            <StackPanel.Style>
+                                <Style TargetType="{x:Type StackPanel}">
+                                    <Setter Property="Orientation" Value="Vertical" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HorizontalTab, Mode=OneWay, Source={x:Static models:Settings.Current}}" Value="True">
+                                            <Setter Property="Orientation" Value="Horizontal" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                        </StackPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </metro:TabView>
+		</ScrollViewer>
+
+        <ItemsControl ItemsSource="{Binding TabItems}"
+                      Grid.Row="{Binding HorizontalTab, FallbackValue=0, ConverterParameter=1:0, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static models:Settings.Current}}"
+                      Grid.Column="{Binding HorizontalTab, FallbackValue=1, ConverterParameter=0:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static models:Settings.Current}}"
+                      Grid.RowSpan="{Binding HorizontalTab, FallbackValue=2, ConverterParameter=1:2, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static models:Settings.Current}}"
+                      Grid.ColumnSpan="{Binding HorizontalTab, FallbackValue=1, ConverterParameter=2:1, Converter={StaticResource BoolToIntSelector}, Mode=OneWay, Source={x:Static models:Settings.Current}}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
+                    <ContentControl Content="{Binding}" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type vmContents:BrowserViewModel}">
+                    <contents:Browser />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vmContents:StartContentViewModel}">
+                    <contents:StartContent />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vmContents:OverviewViewModel}">
+                    <contents:Overview />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vmFleets:FleetsViewModel}">
+                    <contents:Fleets />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vmContents:ShipyardViewModel}">
+                    <contents:Shipyard />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vmContents:QuestsViewModel}">
+                    <contents:Quests />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vmContents:ExpeditionsViewModel}">
+                    <contents:Expeditions />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vmContents:ToolsViewModel}">
+                    <contents:Tools />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+                    <settings:Settings />
+                </DataTemplate>
+            </ItemsControl.Resources>
+            <ItemsControl.Style>
+                <Style TargetType="{x:Type ItemsControl}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HorizontalTab, Mode=OneWay, Source={x:Static models:Settings.Current}}" Value="True">
+                            <Setter Property="Padding" Value="0,3,0,0" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ItemsControl.Style>
+        </ItemsControl>
+    </Grid>
+</UserControl>
