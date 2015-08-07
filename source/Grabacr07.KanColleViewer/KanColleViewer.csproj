@@ -115,7 +115,7 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="Vannatech.CoreAudio">
-      <HintPath>..\assemblies\Vannatech.CoreAudio.dll</HintPath>
+      <HintPath>..\..\assemblies\Vannatech.CoreAudio.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -579,45 +579,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="license.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="readme.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Converters\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Licenses\Apache.txt">
-      <Link>Licenses\Apache.txt</Link>
+    <None Include="..\..\LICENSE.txt">
+      <Visible>False</Visible>
+      <Link>license.txt</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\Licenses\GPL.txt">
-      <Link>Licenses\GPL.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Licenses\LGPL.txt">
-      <Link>Licenses\LGPL.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Licenses\DesktopToast.txt">
-      <Link>Licenses\DesktopToast.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Licenses\Ms-PL.txt">
-      <Link>Licenses\Ms-PL.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Licenses\Nekoxy.txt">
-      <Link>Licenses\Nekoxy.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\Licenses\NETCoreAudioAPIs.txt">
-      <Link>Licenses\NETCoreAudioAPIs.txt</Link>
+    <None Include="..\..\licenses\*.*">
+      <Visible>False</Visible>
+      <Link>Licenses\%(FileName)%(Extension)</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
