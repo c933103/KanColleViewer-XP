@@ -178,6 +178,10 @@ ERROR, date = {0}, sender = {1},
                 if (fatal) MessageBox.Show(ex.ToString(), "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error);
                 Debug.WriteLine(ex);
             }
+
+			// とりあえずもう終了させるしかないもじゃ
+			// 救えるパターンがあるなら救いたいけど方法わからんもじゃ
+			Current.Shutdown();
         }
 
 

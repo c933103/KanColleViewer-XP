@@ -160,6 +160,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Vannatech.CoreAudio">
+      <HintPath>..\assemblies\Vannatech.CoreAudio.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -253,6 +256,9 @@
     <Compile Include="Views\Contents\StartContent.xaml.cs">
       <DependentUpon>StartContent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\BrowserWindow.xaml.cs">
+      <DependentUpon>BrowserWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Contents\StateDetailIndicator.xaml.cs">
       <DependentUpon>StateDetailIndicator.xaml</DependentUpon>
     </Compile>
@@ -285,7 +291,6 @@
       <DependentUpon>Quests.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Contents\QuestViewSource.cs" />
-    <Compile Include="Views\Controls\AppIcon.cs" />
     <Compile Include="Views\Contents\Shipyard.xaml.cs">
       <DependentUpon>Shipyard.xaml</DependentUpon>
     </Compile>
@@ -352,11 +357,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\Generic.AppIcon.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <DependentUpon>Generic.xaml</DependentUpon>
-    </Page>
     <Page Include="Themes\Generic.KanColleHost.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -367,6 +367,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\BrowserNavigator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BrowserWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -620,6 +624,41 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="readme.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Converters\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Licenses\Apache.txt">
+      <Link>Licenses\Apache.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Licenses\GPL.txt">
+      <Link>Licenses\GPL.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Licenses\LGPL.txt">
+      <Link>Licenses\LGPL.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Licenses\DesktopToast.txt">
+      <Link>Licenses\DesktopToast.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Licenses\Ms-PL.txt">
+      <Link>Licenses\Ms-PL.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Licenses\Nekoxy.txt">
+      <Link>Licenses\Nekoxy.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Licenses\NETCoreAudioAPIs.txt">
+      <Link>Licenses\NETCoreAudioAPIs.txt</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
