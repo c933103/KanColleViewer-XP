@@ -23,8 +23,6 @@
 				   Title="{Binding Title}"
 				   Width="1024"
 				   Height="945"
-				   MinWidth="640"
-				   MinHeight="480"
 				   Topmost="{Binding TopMost, Source={x:Static models:Settings.Current}}"
 				   WindowState="{Binding WindowState, Mode=OneWayToSource}"
 				   FontSize="12"

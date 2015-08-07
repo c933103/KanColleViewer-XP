@@ -148,6 +148,8 @@ namespace Grabacr07.KanColleViewer.Views.Controls
 				this.MinWidth = (browserSize.Width * (zoomFactor / dpi.ScaleX)) / dpi.ScaleX;
             }
             this.MinHeight = this.WebBrowser.Height;
+            Application.Current.MainWindow.MinWidth = this.MinWidth;
+            Application.Current.MainWindow.MinHeight = this.MinHeight;
         }
 
 		private static void ApplyZoomFactor(WebBrowser target, int zoomFactor)
