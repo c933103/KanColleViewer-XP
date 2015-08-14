@@ -16,7 +16,7 @@ namespace LynLogger.DataStore.Premitives
     {
         private IList<KeyValuePair<TKey, TValue>> data = new System.Collections.Generic.List<KeyValuePair<TKey, TValue>>();
 
-        public override IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.Dictionary).Concat(new TKey().Type).Concat(new TValue().Type);
+        public override IEnumerable<TypeIdentifier> Type => EnumerablesEx.AsEnumerable(TypeIdentifier.Dictionary).Concat(new TKey().Type).Concat(new TValue().Type);
         public int Count => data.Count;
 
         public DsDictionary() { }

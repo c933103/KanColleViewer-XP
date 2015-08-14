@@ -44,7 +44,15 @@ namespace LynLogger.DataStore.Extensions
         public static DsList<StoragePremitive> GetSerializationInfo<T>(this IEnumerable<T> list, LinkedList<object> _path)
             where T : IDSSerializable
         {
-            if (list == null) return null;
+            if(list == null) return null;
+            return new DsList<StoragePremitive>(list.Select(x => x.GetSerializationInfo(_path)));
+        }
+
+        public static DsList<StoragePremitive> GetSerializationInfo<T>(this IReadOnlyCollection<T> list, LinkedList<object> _path, bool emptyIsNull = false)
+            where T : IDSSerializable
+        {
+            if(list == null) return null;
+            if(emptyIsNull && list.Count == 0) return null;
             return new DsList<StoragePremitive>(list.Select(x => x.GetSerializationInfo(_path)));
         }
     }

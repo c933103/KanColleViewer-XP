@@ -29,7 +29,7 @@ namespace Grabacr07.KanColleWrapper
 		private IDisposable subscriber;
 
         public TimerNotifier() : this(true) { }
-        public TimerNotifier(bool connect) { if(connect) Connect(); }
+        public TimerNotifier(bool connect) { if(connect) Connect(); else GC.SuppressFinalize(this); }
 
         protected virtual void Tick() { }
         protected void Connect()
@@ -39,12 +39,15 @@ namespace Grabacr07.KanColleWrapper
             var subscription = timer.Subscribe(_ => Tick());
             if(System.Threading.Interlocked.CompareExchange(ref subscriber, subscription, null) != null) {
                 subscription.Dispose();
+            } else {
+                GC.ReRegisterForFinalize(this);
             }
         }
 
         protected void Disconnect()
         {
             System.Threading.Interlocked.Exchange(ref subscriber, null)?.Dispose();
+            GC.SuppressFinalize(this);
         }
 		
 		public virtual void Dispose()

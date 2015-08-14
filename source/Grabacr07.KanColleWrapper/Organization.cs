@@ -368,8 +368,8 @@ namespace Grabacr07.KanColleWrapper
 				.Repeat()
 				.Subscribe();
 
-			int? evacuationOfferedShipIds = null;
-			int? towOfferedShipIds = null;
+			Ship evacuationOfferedShip = null;
+            Ship towOfferedShip = null;
 
 			proxy.api_req_combined_battle_battleresult
 				.TryParse<kcsapi_combined_battle_battleresult>()
@@ -379,25 +379,27 @@ namespace Grabacr07.KanColleWrapper
 				{
 					if (this.CombinedFleet == null) return;
 					var ships = this.CombinedFleet.Fleets.SelectMany(f => f.Ships).ToArray();
-                    evacuationOfferedShipIds = x.api_escape.api_escape_idx.Select(idx => ships[idx - 1]).FirstOrDefault()?.Id;
-                    towOfferedShipIds = x.api_escape.api_tow_idx.Select(idx => ships[idx - 1]).FirstOrDefault()?.Id;
+                    evacuationOfferedShip = x.api_escape.api_escape_idx.Select(idx => ships[idx - 1]).FirstOrDefault();
+                    towOfferedShip = x.api_escape.api_tow_idx.Select(idx => ships[idx - 1]).FirstOrDefault();
                 });
 			proxy.api_req_combined_battle_goback_port
 				.Subscribe(_ =>
 				{
 					if (KanColleClient.Current.IsInSortie
-						&& evacuationOfferedShipIds != null
-						&& towOfferedShipIds != null)
+						&& evacuationOfferedShip != null
+						&& towOfferedShip != null)
 					{
-						this.evacuatedShipsIds.Add(evacuationOfferedShipIds.Value);
-						this.towShipIds.Add(towOfferedShipIds.Value);
-					}
+						this.evacuatedShipsIds.Add(evacuationOfferedShip.Id);
+						this.towShipIds.Add(towOfferedShip.Id);
+                        evacuationOfferedShip.Situation |= ShipSituation.Evacuation;
+                        towOfferedShip.Situation |= ShipSituation.Tow;
+                    }
 				});
 			proxy.api_get_member_ship_deck
 				.Subscribe(_ =>
 				{
-					evacuationOfferedShipIds = null;
-					towOfferedShipIds = null;
+					evacuationOfferedShip = null;
+					towOfferedShip = null;
 				});
 		}
 

@@ -38,7 +38,7 @@ namespace LynLogger.Views.History
         }
 
         //Turns out we have to do this, as the collection doesn't implement INotifyCollectionChange
-        public IEnumerable<KeyValuePair<long, ItemCreate>> ItemCreateLog2 => ItemCreateLog.Select(x => x);
+        public IEnumerable<KeyValuePair<long, ItemCreate>> ItemCreateLog2 => ItemCreateLog?.Select(x => x);
 
         public BindingBase ItemCreateLogBinding
         {

@@ -14,7 +14,7 @@ namespace LynLogger.DataStore.Premitives
     {
         private double value;
 
-        public override IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.Double);
+        public override IEnumerable<TypeIdentifier> Type => EnumerablesEx.AsEnumerable(TypeIdentifier.Double);
         public double Value => value;
 
         public DsDouble() { }

@@ -486,7 +486,7 @@
 				<ListView ItemsSource="{Binding Ships}"
 						  ItemContainerStyle="{DynamicResource GridViewItemContainerStyleKey}"
 						  ScrollViewer.PanningMode="Both"
-                          ScrollViewer.CanContentScroll="True"
+                          ScrollViewer.IsDeferredScrollingEnabled="True"
                           VirtualizingStackPanel.VirtualizationMode="Recycling">
 					<ListView.Resources>
 						<Style TargetType="{x:Type TextBlock}">

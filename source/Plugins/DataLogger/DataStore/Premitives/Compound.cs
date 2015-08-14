@@ -21,7 +21,7 @@ namespace LynLogger.DataStore.Premitives
 
         private IDictionary<ulong, StoragePremitive> fields = new System.Collections.Generic.Dictionary<ulong, StoragePremitive>();
 
-        public override IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.Compound);
+        public override IEnumerable<TypeIdentifier> Type => EnumerablesEx.AsEnumerable(TypeIdentifier.Compound);
 
         public Compound() { }
         public Compound(DSReader input)

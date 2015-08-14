@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LynLogger.DataStore.Serialization;
+using LynLogger.Utilities;
 
 namespace LynLogger.DataStore.MasterInfo
 {
@@ -13,14 +14,14 @@ namespace LynLogger.DataStore.MasterInfo
     {
         [Serialize(0)] public int Id { get; private set; }
         [Serialize(1)] public int EquiptId { get; private set; }
-        [Serialize(2)] public int EquiptCount { get; private set; }
+        [Serialize(2)] public int? EquiptCount { get; private set; }
         [Serialize(3)] public int Level { get; private set; }
         [Serialize(4)] public int AsControl { get; private set; }
         [Serialize(5)] public string EquiptName { get; private set; }
 
-        public int SlotAsControl => (int)(Math.Sqrt(EquiptCount) * AsControl);
+        public int? SlotAsControl => (int?)(NullablesEx.SqrtNaT(EquiptCount) * AsControl);
 
-        public EquiptInfo(SlotItemInfo info, int count, int id = 0)
+        public EquiptInfo(SlotItemInfo info, int? count, int id = 0)
         {
             if(info != null) {
                 Level = 0;
@@ -36,7 +37,7 @@ namespace LynLogger.DataStore.MasterInfo
             EquiptCount = count;
         }
 
-        public EquiptInfo(SlotItem si, int count, int id = 0)
+        public EquiptInfo(SlotItem si, int? count, int id = 0)
         {
             if(si != null) {
                 Id = si.Id;
@@ -52,7 +53,7 @@ namespace LynLogger.DataStore.MasterInfo
             EquiptCount = count;
         }
 
-        public EquiptInfo(ShipSlot ss, int id = 0, int count = 0)
+        public EquiptInfo(ShipSlot ss, int id = 0, int? count = null)
         {
             if(ss != null) {
                 Id = ss.Item.Id;
@@ -70,7 +71,7 @@ namespace LynLogger.DataStore.MasterInfo
         }
         public EquiptInfo(Premitives.StoragePremitive info, LinkedList<object> serializationPath) : base(info, serializationPath) { }
 
-        public EquiptInfo(int r, int c) : this(Grabacr07.KanColleWrapper.KanColleClient.Current.Master.SlotItems[r], c, r)
+        public EquiptInfo(int r, int? c) : this(Grabacr07.KanColleWrapper.KanColleClient.Current.Master.SlotItems[r], c, r)
         {
         }
 

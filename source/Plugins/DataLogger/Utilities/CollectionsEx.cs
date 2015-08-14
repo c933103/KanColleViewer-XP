@@ -7,8 +7,31 @@ using System.Threading.Tasks;
 
 namespace LynLogger.Utilities
 {
-    public static class CollectionsEx
+    public static class EnumerablesEx
     {
+        public static int? SumNaT(this IEnumerable<int?> source)
+        {
+            int acc = 0;
+            if(source == null) return null;
+            foreach(var val in source) {
+                if(!val.HasValue) return null;
+                acc += val.Value;
+            }
+            return acc;
+        }
+
+        public static int? SumNaT<T>(this IEnumerable<T> source, Func<T, int?> selector)
+        {
+            int acc = 0;
+            if(source == null) return null;
+            foreach(var ele in source) {
+                var val = selector?.Invoke(ele);
+                if(!val.HasValue) return null;
+                acc += val.Value;
+            }
+            return acc;
+        }
+
         public static IEnumerable<TResult> SelectWithPrevious<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TSource, TResult> projection)
         {
             using (var enumerator = source.GetEnumerator()) {
@@ -23,6 +46,8 @@ namespace LynLogger.Utilities
 
         public static IEnumerable<Tout> Zip<T1, T2, T3, T4, Tout>(IEnumerable<T1> i1, IEnumerable<T2> i2, IEnumerable<T3> i3, IEnumerable<T4> i4, Func<T1, T2, T3, T4, Tout> project)
         {
+            if(i1 == null || i2 == null || i3 == null || i4 == null) yield break;
+
             using (var e1 = i1.GetEnumerator())
             using (var e2 = i2.GetEnumerator())
             using (var e3 = i3.GetEnumerator())
@@ -39,6 +64,12 @@ namespace LynLogger.Utilities
             while (true) {
                 yield return start++;
             }
+        }
+
+        public static IEnumerable<int> Sequence(int start, int? count)
+        {
+            if(count.HasValue) return Sequence(start, count.Value);
+            return null;
         }
 
         public static IEnumerable<int> Sequence(int start, int count)

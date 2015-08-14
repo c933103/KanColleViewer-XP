@@ -14,7 +14,7 @@ namespace LynLogger.DataStore.Premitives
     {
         private long value;
 
-        public override IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.Int);
+        public override IEnumerable<TypeIdentifier> Type => EnumerablesEx.AsEnumerable(TypeIdentifier.Int);
         public long Value => value;
 
         public SignedInteger() { }

@@ -499,6 +499,11 @@ namespace Grabacr07.KanColleWrapper.Models
 		{
 			var max = this.HP.Maximum;
 			this.HP = this.HP.Update(max);
+            if(Condition < 40) {
+                this.RawData.api_cond = 40;
+                RaisePropertyChanged(nameof(Condition));
+                RaisePropertyChanged(nameof(ConditionType));
+            }
 		}
 
 		public override string ToString()

@@ -30,21 +30,20 @@ namespace Grabacr07.KanColleWrapper.Models
 		{
 			get { return this._RejuvenateTime; }
 			private set
-			{
-				if (this._RejuvenateTime != value)
-				{
-					this._RejuvenateTime = value;
-					this.notificated = false;
-					this.RaisePropertyChanged();
-					this.RaisePropertyChanged(nameof(this.IsRejuvenating));
-                    
+            {
+                if (this._RejuvenateTime != value) {
+                    this._RejuvenateTime = value;
+                    this.notificated = false;
+                    this.RaisePropertyChanged();
+                    this.RaisePropertyChanged(nameof(this.IsRejuvenating));
+
                     if (value.HasValue) {
                         Connect();
                     } else {
                         Disconnect();
                     }
                 }
-			}
+            }
 		}
 
 		/// <summary>
@@ -94,20 +93,12 @@ namespace Grabacr07.KanColleWrapper.Models
 			if (condition != this.minCondition)
 			{
 				this.minCondition = condition;
+                var diff = KanColleClient.Current.Settings.ReSortieCondition - condition - 1;
 
-				var rejuvnate = DateTimeOffset.Now; // 回復完了予測時刻
-
-				while (condition < KanColleClient.Current.Settings.ReSortieCondition)
-				{
-					rejuvnate = rejuvnate.AddMinutes(3);
-					condition += 3;
-					if (condition > 49) condition = 49;
-				}
-
-				this.RejuvenateTime = rejuvnate <= DateTimeOffset.Now
-					? (DateTimeOffset?)null
-					: rejuvnate;
-			}
+                this.RejuvenateTime = diff < 0
+                    ? (DateTimeOffset?)null
+                    : DateTimeOffset.Now.AddMinutes(diff + 3 - (diff % 3)); // 回復完了予測時刻
+            }
 		}
 
 

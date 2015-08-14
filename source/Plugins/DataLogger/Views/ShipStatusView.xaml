@@ -42,7 +42,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <ComboBox ItemsSource="{Binding Ships, Mode=OneWay}" SelectedItem="{Binding SelectedShip}" DisplayMemberPath="DisplayName" ScrollViewer.CanContentScroll="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+        <ComboBox ItemsSource="{Binding Ships, Mode=OneWay}" SelectedItem="{Binding SelectedShip}" DisplayMemberPath="DisplayName" ScrollViewer.IsDeferredScrollingEnabled="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
             <ComboBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel />

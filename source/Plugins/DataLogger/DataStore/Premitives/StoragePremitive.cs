@@ -12,7 +12,7 @@ namespace LynLogger.DataStore.Premitives
     [Serializable]
     public class StoragePremitive
     {
-        public virtual IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.Undefined);
+        public virtual IEnumerable<TypeIdentifier> Type => EnumerablesEx.AsEnumerable(TypeIdentifier.Undefined);
         public virtual void SerializeNonNull(DSWriter output) { throw new NotImplementedException(); }
 
         public static StoragePremitive Parse(DSReader input)

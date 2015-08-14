@@ -65,7 +65,7 @@ namespace LynLogger
             AppDomain.CurrentDomain.FirstChanceException += (s, e) => {
                 if (e.Exception is System.Security.SecurityException) return;
                 var stack = new System.Diagnostics.StackTrace(e.Exception);
-                if (stack.GetFrames().Any(x => x.GetMethod().DeclaringType.Assembly.GetName().Name == typeof(LynLoggerMain).Assembly.GetName().Name)) {
+                if (stack.GetFrames().Any(x => x.GetMethod().DeclaringType?.Assembly.GetName().Name == typeof(LynLoggerMain).Assembly.GetName().Name)) {
                     System.IO.File.AppendAllText("lynlogger.log", string.Format(@"
 ================================================================================
 First chance, Time={0}, Sender={1}
@@ -109,12 +109,18 @@ Second chance {2}, Time={0}, Sender={1}
             _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_practice/battle").Subscribe(BattleObserver)); //演习
             _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_practice/midnight_battle").Subscribe(BattleObserver)); //演习夜战
 
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/battle").Subscribe(BattleObserver)); //联合机动舰队
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/battle_water").Subscribe(BattleObserver)); //联合水打舰队
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/airbattle").Subscribe(BattleObserver)); //联合舰队空战
+            _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/midnight_battle").Subscribe(BattleObserver)); //联合舰队夜战
+
             MapStartNextObserver = new Observers.ApiMapStartNextObserver();
             _disposables.AddLast(KanColleClient.Current.Proxy.api_req_map_start.Subscribe(MapStartNextObserver));
             _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_map/next").Subscribe(MapStartNextObserver));
 
             BattleResultObserver = new Observers.ApiBattleResultObserver();
             _disposables.AddLast(KanColleClient.Current.Proxy.api_req_sortie_battleresult.TryParse<kcsapi_battleresult>().Subscribe(BattleResultObserver));
+            _disposables.AddLast(KanColleClient.Current.Proxy.api_req_combined_battle_battleresult.TryParse<kcsapi_combined_battle_battleresult>().Subscribe(BattleResultObserver));
             _disposables.AddLast(KanColleClient.Current.Proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_practice/battle_result").TryParse<kcsapi_battleresult>().Subscribe(BattleResultObserver));
 
             PracticeEnemyInfoObserver = new Observers.ApiPracticeEnemyInfoObserver();

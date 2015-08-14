@@ -65,8 +65,7 @@
 														<TextBlock Style="{DynamicResource DefaultTextStyleKey}">
 															<Run Text="{Binding Title, Mode=OneWay}"
 																 Style="{DynamicResource EmphaticTextElementStyleKey}" />
-															<Run Text=" " />
-															<Run Text="version" />
+															<Run Text=" version" />
 															<Run Text="{Binding Version, Mode=OneWay}" />
 															<Run Text=" / " />
 															<Run Text="{Binding Author, Mode=OneWay}" />

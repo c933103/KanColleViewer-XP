@@ -161,10 +161,10 @@
 														FontSize="14" /></TextBlock>
 
                                                 <TextBlock Grid.Column="1" Margin="8,0,0,0"
-													Style="{DynamicResource DefaultTextStyleKey}"><Run Text="Lv." /><Run Text=" "/><Run Text="{Binding Level, Mode=OneWay}"
+													Style="{DynamicResource DefaultTextStyleKey}"><Run Text="Lv. "/><Run Text="{Binding Level, Mode=OneWay}"
 														FontSize="18"
-														Style="{DynamicResource EmphaticTextElementStyleKey}" /><LineBreak /><Run Text="Next:"
-														FontSize="9" /><Run Text=" "/><Run Text="{Binding ExpForNextLevel, Mode=OneWay}"
+														Style="{DynamicResource EmphaticTextElementStyleKey}" /><LineBreak /><Run Text="Next: "
+														FontSize="9" /><Run Text="{Binding ExpForNextLevel, Mode=OneWay}"
 														FontSize="9" /></TextBlock>
                                             </Grid>
 
@@ -176,8 +176,8 @@
                                                 </Grid.ColumnDefinitions>
 
                                                 <StackPanel Grid.Column="0" Grid.Row="0">
-                                                    <TextBlock x:Name="HPText"><Run Text="HP:" /><Run Text=" "/><Run Text="{Binding HP.Current, Mode=OneWay}"
-															Style="{DynamicResource EmphaticTextElementStyleKey}" /><Run Text=" "/><Run Text="/" /><Run Text=" "/><Run Text="{Binding HP.Maximum, Mode=OneWay}" /></TextBlock>
+                                                    <TextBlock x:Name="HPText"><Run Text="HP: "/><Run Text="{Binding HP.Current, Mode=OneWay}"
+															Style="{DynamicResource EmphaticTextElementStyleKey}" /><Run Text=" / "/><Run Text="{Binding HP.Maximum, Mode=OneWay}" /></TextBlock>
                                                     <kcvc:ColorIndicator x:Name="HPIndicator"
 														Height="7"
 														Margin="0,3,0,0"

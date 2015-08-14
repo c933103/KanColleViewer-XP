@@ -94,7 +94,7 @@ namespace LynLogger.DataStore
 
                 register:
                 if (_onDataStoreCreate != null) _onDataStoreCreate(store);
-                _ds.Add(memberId, new WeakReference<Store>(store));
+                _ds[memberId] = new WeakReference<Store>(store);
             }
 
             Current = store;

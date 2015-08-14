@@ -19,18 +19,7 @@ namespace Grabacr07.KanColleWrapper.Models
 
 		private int _Id;
 
-		public int Id
-		{
-			get { return this._Id; }
-			private set
-			{
-				if (this._Id != value)
-				{
-					this._Id = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
+		public int Id => this._Id;
 
 		#endregion
 
@@ -162,14 +151,21 @@ namespace Grabacr07.KanColleWrapper.Models
 		internal RepairingDock(Homeport parent, kcsapi_ndock rawData) : base(false)
 		{
 			this.homeport = parent;
+            this._Id = rawData.api_id;
 			this.Update(rawData);
 		}
 
 
 		internal void Update(kcsapi_ndock rawData)
 		{
-			this.Id = rawData.api_id;
+			System.Diagnostics.Debug.Assert(this.Id == rawData.api_id);
+            var oldState = this.State;
 			this.State = (RepairingDockState)rawData.api_state;
+
+            if(oldState == RepairingDockState.Repairing && this.State == RepairingDockState.Unlocked) {
+                Finish();
+            }
+
 			this.ShipId = rawData.api_ship_id;
 			this.Ship = this.State == RepairingDockState.Repairing ? this.homeport.Organization.Ships[this.ShipId] : null;
 			this.CompleteTime = this.State == RepairingDockState.Repairing
@@ -179,7 +175,9 @@ namespace Grabacr07.KanColleWrapper.Models
 
 		internal void Finish()
 		{
-			this.State = RepairingDockState.Unlocked;
+            this.Ship?.Repair();
+
+            this.State = RepairingDockState.Unlocked;
 			this.ShipId = -1;
 			this.Ship = null;
 			this.CompleteTime = null;

@@ -14,7 +14,7 @@
         <converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
     </UserControl.Resources>
     <StackPanel DataContext="{Binding ElementName=controlDhv, Mode=OneTime}">
-        <ComboBox ItemsSource="{Binding DrillLog2, Mode=OneWay}" SelectedItem="{Binding KvDrill, Mode=OneWayToSource}" Margin="0,0,0,10">
+        <ComboBox ItemsSource="{Binding DrillLog2, Mode=OneWay}" SelectedItem="{Binding KvDrill, Mode=OneWayToSource}" Margin="0,0,0,10" ScrollViewer.IsDeferredScrollingEnabled="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock>
@@ -25,6 +25,11 @@
                     </TextBlock>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
         </ComboBox>
         <Expander Header="演习信息" IsExpanded="True" Margin="0,3">
             <StackPanel Margin="20,0,0,0">
@@ -35,60 +40,12 @@
                 <Rectangle Height="9" />
                 <UniformGrid Columns="2" DataContext="{Binding Drill.Battle, Mode=OneWay}">
                     <StackPanel>
-                        <TextBlock FontSize="16"><Run Text="我方舰队 (" /><Run Text=" "/><Run Text="{Binding OurFormation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" "/><Run Text=")" /></TextBlock>
-                        <ItemsControl ItemsSource="{Binding OurShips, Mode=OneTime}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Margin="0,8,0,0">
-                                        <TextBlock.ToolTip>
-                                            <ToolTip>
-                                                <StackPanel>
-                                                    <TextBlock FontWeight="Bold"><Run Text="基本战斗参数"/></TextBlock>
-                                                    <TextBlock><Run Text="火力"/><Run Text=" "/><Run Text="{Binding Parameter.Power, Mode=OneTime}"/><Run Text=" "/><Run Text="/ 雷装"/><Run Text=" "/><Run Text="{Binding Parameter.Torpedo, Mode=OneTime}"/><Run Text=" "/><Run Text="/ 对空"/><Run Text=" "/><Run Text="{Binding Parameter.AntiAir, Mode=OneTime}"/><Run Text=" "/><Run Text="/ 装甲"/><Run Text=" "/><Run Text="{Binding Parameter.Defense, Mode=OneTime}"/></TextBlock>
-                                                    <TextBlock FontWeight="Bold"><Run Text="近代化改修参数"/></TextBlock>
-                                                    <TextBlock><Run Text="火力"/><Run Text=" "/><Run Text="{Binding Enhancement.Power, Mode=OneTime}"/><Run Text=" "/><Run Text="/ 雷装"/><Run Text=" "/><Run Text="{Binding Enhancement.Torpedo, Mode=OneTime}"/><Run Text=" "/><Run Text="/ 对空"/><Run Text=" "/><Run Text="{Binding Enhancement.AntiAir, Mode=OneTime}"/><Run Text=" "/><Run Text="/ 装甲"/><Run Text=" "/><Run Text="{Binding Enhancement.Defense, Mode=OneTime}"/></TextBlock>
-                                                    <TextBlock FontWeight="Bold"><Run Text="装备信息"/></TextBlock>
-                                                    <ItemsControl ItemsSource="{Binding Equipts}">
-                                                        <ItemsControl.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <TextBlock><Run Text="[" /><Run Text=" "/><Run Text="{Binding Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]" /><Run Text=" "/><Run Text="{Binding EquiptName, Mode=OneTime}"/><Run Text=" "/><Run Text="★" /><Run Text=" "/><Run Text="{Binding Level, Mode=OneTime}"/><Run Text=" "/><Run Text=" x" /><Run Text=" "/><Run Text="{Binding EquiptCount, Mode=OneTime}"/></TextBlock>
-                                                            </DataTemplate>
-                                                        </ItemsControl.ItemTemplate>
-                                                    </ItemsControl>
-                                                </StackPanel>
-                                            </ToolTip>
-                                        </TextBlock.ToolTip><Run Text="["/><Run Text=" "/><Run Text="{Binding Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding ShipTypeName, Mode=OneTime}"/><Run Text=" "/><Run Text="{Binding ShipName, Mode=OneTime}"/><LineBreak /><Run Text="Lv."/><Run Text=" "/><Run Text="{Binding Lv, Mode=OneTime}" /><Run Text=" "/><Run Text=" HP:"/><Run Text=" "/><Run Text="{Binding CurrentHp, Mode=OneTime}" /><Run Text=" "/><Run Text="/"/><Run Text=" "/><Run Text="{Binding MaxHp, Mode=OneTime}" /></TextBlock>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                        <TextBlock FontSize="16"><Run Text="我方舰队 ( "/><Run Text="{Binding OurFormation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" )" /></TextBlock>
+                        <contents:FleetInfoPresenter DisplayEquiptDetail="True" Ships="{Binding OurShips, Mode=OneTime}" />
                     </StackPanel>
                     <StackPanel>
-                        <TextBlock FontSize="16"><Run Text="敌方舰队 (" /><Run Text=" "/><Run Text="{Binding EnemyFormation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" "/><Run Text=")" /></TextBlock>
-                        <ItemsControl ItemsSource="{Binding EnemyShips, Mode=OneTime}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Margin="0,8,0,0">
-                                        <TextBlock.ToolTip>
-                                            <ToolTip>
-                                                <StackPanel>
-                                                    <TextBlock FontWeight="Bold"><Run Text="基本战斗参数"/></TextBlock>
-                                                    <TextBlock><Run Text="火力"/><Run Text=" "/><Run Text="{Binding Parameter.Power, Mode=OneTime}"/><Run Text=" "/><Run Text="/ 雷装"/><Run Text=" "/><Run Text="{Binding Parameter.Torpedo, Mode=OneTime}"/><Run Text=" "/><Run Text="/ 对空"/><Run Text=" "/><Run Text="{Binding Parameter.AntiAir, Mode=OneTime}"/><Run Text=" "/><Run Text="/ 装甲"/><Run Text=" "/><Run Text="{Binding Parameter.Defense, Mode=OneTime}"/></TextBlock>
-                                                    <TextBlock FontWeight="Bold"><Run Text="近代化改修参数"/></TextBlock>
-                                                    <TextBlock><Run Text="火力"/><Run Text=" "/><Run Text="{Binding Enhancement.Power, Mode=OneTime}"/><Run Text=" "/><Run Text="/ 雷装"/><Run Text=" "/><Run Text="{Binding Enhancement.Torpedo, Mode=OneTime}"/><Run Text=" "/><Run Text="/ 对空"/><Run Text=" "/><Run Text="{Binding Enhancement.AntiAir, Mode=OneTime}"/><Run Text=" "/><Run Text="/ 装甲"/><Run Text=" "/><Run Text="{Binding Enhancement.Defense, Mode=OneTime}"/></TextBlock>
-                                                    <TextBlock FontWeight="Bold"><Run Text="装备信息"/></TextBlock>
-                                                    <ItemsControl ItemsSource="{Binding Equipts}">
-                                                        <ItemsControl.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <TextBlock><Run Text="{Binding EquiptName, Mode=OneTime}"/><Run Text=" "/><Run Text=" x" /><Run Text=" "/><Run Text="{Binding EquiptCount, Mode=OneTime}"/></TextBlock>
-                                                            </DataTemplate>
-                                                        </ItemsControl.ItemTemplate>
-                                                    </ItemsControl>
-                                                </StackPanel>
-                                            </ToolTip>
-                                        </TextBlock.ToolTip><Run Text="["/><Run Text=" "/><Run Text="{Binding Id, Mode=OneTime}"/><Run Text=" "/><Run Text="]"/><Run Text=" "/><Run Text="{Binding ShipTypeName, Mode=OneTime}"/><Run Text=" "/><Run Text="{Binding ShipName, Mode=OneTime}"/><LineBreak /><Run Text="Lv."/><Run Text=" "/><Run Text="{Binding Lv, Mode=OneTime}" /><Run Text=" "/><Run Text=" HP:"/><Run Text=" "/><Run Text="{Binding CurrentHp, Mode=OneTime}" /><Run Text=" "/><Run Text="/"/><Run Text=" "/><Run Text="{Binding MaxHp, Mode=OneTime}" /></TextBlock>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                        <TextBlock FontSize="16"><Run Text="敌方舰队 ( "/><Run Text="{Binding EnemyFormation, Converter={StaticResource EnumToDescriptionConverter}, Mode=OneTime}" /><Run Text=" )" /></TextBlock>
+                        <contents:FleetInfoPresenter DisplayEquiptDetail="False" Ships="{Binding EnemyShips, Mode=OneTime}" />
                     </StackPanel>
                 </UniformGrid>
             </StackPanel>

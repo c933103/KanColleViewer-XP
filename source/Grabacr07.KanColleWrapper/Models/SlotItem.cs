@@ -22,9 +22,19 @@ namespace Grabacr07.KanColleWrapper.Models
             }
         }
 
-		public int Level => this.RawData.api_level;
+		public int Level => this.RawData.api_alv == 0 ? this.RawData.api_level : this.RawData.api_alv;
 
-		public string LevelText => this.Level >= 10 ? "★max" : this.Level >= 1 ? ("★+" + this.Level) : "";
+		public string LevelText {
+            get
+            {
+                var level = this.RawData.api_alv;
+                if(level == 0) {
+                    level = this.RawData.api_level;
+                    if(level >= 10) return "★max";
+                }
+                return level > 0 ? "★+" + level : "";
+            }
+        }
 
 		public string NameWithLevel => $"{this.Info.Name}{(this.Level >= 1 ? (" " + this.LevelText) : "")}";
 

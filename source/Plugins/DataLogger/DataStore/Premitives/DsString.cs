@@ -14,7 +14,7 @@ namespace LynLogger.DataStore.Premitives
     {
         private string value = "";
 
-        public override IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.String);
+        public override IEnumerable<TypeIdentifier> Type => EnumerablesEx.AsEnumerable(TypeIdentifier.String);
         public string Value => value;
 
         public DsString() { }

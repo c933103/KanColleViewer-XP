@@ -25,14 +25,12 @@ namespace Grabacr07.KanColleViewer.Controls
         public static readonly DependencyProperty dpCondition = DependencyProperty.Register(nameof(Condition), typeof(int), typeof(ConditionIndicator), new PropertyMetadata(49, ConditionChanged));
         public static readonly DependencyProperty dpConditionType = DependencyProperty.Register(nameof(ConditionType), typeof(ConditionType), typeof(ConditionIndicator), new PropertyMetadata(ConditionType.Normal, ConditionTypeChanged));
 
-        private static readonly Brush _brushBrilliant = new SolidColorBrush(Color.FromRgb(255, 255, 64));
         private static readonly Brush _brushTired = new SolidColorBrush(Color.FromRgb(255, 200, 128));
         private static readonly Brush _brushOrangeTired = new SolidColorBrush(Color.FromRgb(255, 128, 32));
         private static readonly Brush _brushRedTired = new SolidColorBrush(Color.FromRgb(255, 32, 32));
 
         static ConditionIndicator()
         {
-            _brushBrilliant.Freeze();
             _brushOrangeTired.Freeze();
             _brushRedTired.Freeze();
             _brushTired.Freeze();

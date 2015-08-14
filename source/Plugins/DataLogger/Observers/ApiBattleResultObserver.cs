@@ -6,7 +6,7 @@ using System;
 
 namespace LynLogger.Observers
 {
-    class ApiBattleResultObserver : IObserver<SvData<kcsapi_battleresult>>
+    class ApiBattleResultObserver : IObserver<SvData<kcsapi_battleresult>>, IObserver<SvData<kcsapi_combined_battle_battleresult>>
     {
         private Action<BattleResult> _onBattleResult;
         public event Action<BattleResult> OnBattleResult
@@ -16,6 +16,12 @@ namespace LynLogger.Observers
         }
 
         public void OnNext(SvData<kcsapi_battleresult> value)
+        {
+            if(_onBattleResult == null) return;
+            _onBattleResult(new BattleResult(value.Data));
+        }
+
+        public void OnNext(SvData<kcsapi_combined_battle_battleresult> value)
         {
             if(_onBattleResult == null) return;
             _onBattleResult(new BattleResult(value.Data));

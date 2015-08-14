@@ -15,7 +15,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <ComboBox ItemsSource="{Binding Ships}" SelectedItem="{Binding SelectedShip}" DisplayMemberPath="DisplayName" ScrollViewer.CanContentScroll="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <ComboBox ItemsSource="{Binding Ships}" SelectedItem="{Binding SelectedShip}" DisplayMemberPath="DisplayName" ScrollViewer.IsDeferredScrollingEnabled="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel />

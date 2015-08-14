@@ -34,7 +34,7 @@ namespace LynLogger.DataStore.Serialization
     internal static class ConstantExpressions
     {
         internal static readonly Expression NullConstant = Expression.Constant(null, typeof(object));
-        internal static readonly Expression NullSerialization = Expression.Convert(NullConstant, typeof(Premitives.StoragePremitive));
+        internal static readonly Expression NullSerialization = Expression.Constant(null, typeof(Premitives.StoragePremitive));
         internal static readonly Expression UlongZero = Expression.Constant(0uL, typeof(ulong));
         internal static readonly Expression UlongOne = Expression.Constant(1uL, typeof(ulong));
     }
@@ -149,11 +149,16 @@ namespace LynLogger.DataStore.Serialization
             if(fieldType == typeof(string)) return typeof(Premitives.DsString);
             if(fieldType == typeof(byte[])) return typeof(Premitives.Blob);
             if(fieldType == typeof(decimal)) return typeof(Premitives.DsDecimal);
+            if(fieldType == typeof(decimal?)) return typeof(Premitives.DsDecimal);
 
             if(fieldType == typeof(double) || fieldType == typeof(float)) return typeof(Premitives.DsDouble);
+            if(fieldType == typeof(double?) || fieldType == typeof(float?)) return typeof(Premitives.DsDouble);
 
-            if(fieldType == typeof(sbyte) ||fieldType == typeof(short) ||fieldType == typeof(int) ||fieldType == typeof(long)) return typeof(Premitives.SignedInteger);
-            if(fieldType == typeof(byte) ||fieldType == typeof(ushort) ||fieldType == typeof(uint) || fieldType == typeof(ulong) || fieldType == typeof(bool)) return typeof(Premitives.UnsignedInteger);
+            if(fieldType == typeof(sbyte) || fieldType == typeof(short) || fieldType == typeof(int) || fieldType == typeof(long)) return typeof(Premitives.SignedInteger);
+            if(fieldType == typeof(sbyte?) || fieldType == typeof(short?) || fieldType == typeof(int?) || fieldType == typeof(long?)) return typeof(Premitives.SignedInteger);
+
+            if(fieldType == typeof(byte) || fieldType == typeof(ushort) || fieldType == typeof(uint) || fieldType == typeof(ulong) || fieldType == typeof(bool)) return typeof(Premitives.UnsignedInteger);
+            if(fieldType == typeof(byte?) || fieldType == typeof(ushort?) || fieldType == typeof(uint?) || fieldType == typeof(ulong?) || fieldType == typeof(bool?)) return typeof(Premitives.UnsignedInteger);
 
             if(typeof(IDSSerializable).IsAssignableFrom(fieldType)) return typeof(Premitives.StoragePremitive);
 

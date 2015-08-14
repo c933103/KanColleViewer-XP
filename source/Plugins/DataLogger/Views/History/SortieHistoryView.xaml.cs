@@ -40,7 +40,7 @@ namespace LynLogger.Views.History
         }
 
         //Turns out we have to do this, as the collection doesn't implement INotifyCollectionChange
-        public IEnumerable<KeyValuePair<long, SortieInfo>> SortieLog2 => SortieLog.Select(x => x);
+        public IEnumerable<KeyValuePair<long, SortieInfo>> SortieLog2 => SortieLog?.Select(x => x);
 
         public BindingBase SortieLogBinding
         {

@@ -14,7 +14,7 @@ namespace LynLogger.DataStore.Premitives
     {
         private ulong value;
 
-        public override IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.UInt);
+        public override IEnumerable<TypeIdentifier> Type => EnumerablesEx.AsEnumerable(TypeIdentifier.UInt);
         public ulong Value => value;
 
         public UnsignedInteger() { }

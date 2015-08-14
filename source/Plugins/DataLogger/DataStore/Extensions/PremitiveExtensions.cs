@@ -14,7 +14,7 @@ namespace LynLogger.DataStore.Extensions
         public static void Serialize(this StoragePremitive p, DSWriter w)
         {
             if(p == null) {
-                w.Write(CollectionsEx.AsEnumerable(TypeIdentifier.Null));
+                w.Write(EnumerablesEx.AsEnumerable(TypeIdentifier.Null));
             } else {
                 p.SerializeNonNull(w);
             }

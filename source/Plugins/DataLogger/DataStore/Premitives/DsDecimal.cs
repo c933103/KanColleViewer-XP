@@ -14,7 +14,7 @@ namespace LynLogger.DataStore.Premitives
     {
         private decimal value;
 
-        public override IEnumerable<TypeIdentifier> Type => CollectionsEx.AsEnumerable(TypeIdentifier.Decimal);
+        public override IEnumerable<TypeIdentifier> Type => EnumerablesEx.AsEnumerable(TypeIdentifier.Decimal);
         public decimal Value => value;
 
         public DsDecimal() { }

@@ -35,7 +35,7 @@ namespace LynLogger.Observers
                 BattleProcess result = new BattleProcess();
                 result.ZwRawData = json;
 
-                int fleetId;
+                int fleetId; // dock deck傻傻分不清楚
                 if(data.api_dock_id()) {
                     fleetId = Convert.ToInt32(data.api_dock_id);
                 } else {
@@ -43,18 +43,19 @@ namespace LynLogger.Observers
                 }
                 result.ZwOurShips = ConvertOurFleet(fleetId, data.api_nowhps, data.api_maxhps, data.api_fParam);
                 result.ZwEnemyShips = ConvertEnemyFleet(data.api_ship_ke, data.api_ship_lv, data.api_nowhps, data.api_maxhps, data.api_eParam, data.api_eKyouka, data.api_eSlot);
+                if(data.api_nowhps_combined()) { //联合舰队
+                    result.ZwOurEscort = ConvertOurFleet(fleetId + 1, data.api_nowhps_combined, data.api_maxhps_combined, data.api_fParam_combined);
+                }
 
                 if(data.api_formation()) {
-                    result.ZwOurFormation = (BattleProcess.Formation)(int)data.api_formation[0];
+                    result.ZwOurFormation = (BattleProcess.Formation)Convert.ToInt32(data.api_formation[0]);
                     result.ZwEnemyFormation = (BattleProcess.Formation)(int)data.api_formation[1];
                     result.ZwEncounter = (BattleProcess.EncounterForm)(int)data.api_formation[2];
                 }
                 if (data.api_flare_pos()) { //夜战
                     var r = new BattleProcess.NightWarInfo(result) {
-                        ZwOurShips = result.ZwOurShips,
-                        ZwEnemyShips = result.ZwEnemyShips,
                         ZwRawData = json,
-                        ZwBombard = ConvertBombards(result, data.api_hougeki),
+                        ZwBombard = ConvertBombards(result, data.api_hougeki, value.Request.PathAndQuery.Contains("api_req_combined_battle")),
                         ZwOurReconnInTouch = (int)data.api_touch_plane[0],
                         ZwEnemyReconnInTouch = (int)data.api_touch_plane[1]
                     };
@@ -82,17 +83,20 @@ namespace LynLogger.Observers
                     if (data.api_stage_flag2()) { //昼战 航空战
                         result.ZwAirWarfare2 = ConvertAirWarfare(result, data.api_kouku2);
                     } else if (data.api_hourai_flag()) { //昼战 炮击战
-                        if (data.api_opening_flag == 1) {
+                        if (data.api_opening_atack() && data.api_opening_atack != null) {
                             result.ZwOpeningTorpedoAttack = ConvertTorpedoInfo(result, data.api_opening_atack);
                         }
-                        if (data.api_hourai_flag[3] == 1) {
+                        if(data.api_hougeki1() && data.api_hougeki1 != null) {
+                            result.ZwBombardRound1 = ConvertBombards(result, data.api_hougeki1, (value.Request.PathAndQuery.Contains("api_req_combined_battle") && !value.Request.PathAndQuery.Contains("water")));
+                        }
+                        if(data.api_hougeki2() && data.api_hougeki2 != null) {
+                            result.ZwBombardRound2 = ConvertBombards(result, data.api_hougeki2, false);
+                        }
+                        if(data.api_hougeki3() && data.api_hougeki3 != null) {
+                            result.ZwBombardRound3 = ConvertBombards(result, data.api_hougeki3, (value.Request.PathAndQuery.Contains("api_req_combined_battle") && value.Request.PathAndQuery.Contains("water")));
+                        }
+                        if(data.api_raigeki() && data.api_raigeki != null) {
                             result.ZwClosingTorpedoAttack = ConvertTorpedoInfo(result, data.api_raigeki);
-                        }
-                        if (data.api_hourai_flag[1] == 1) {
-                            result.ZwBombardRound2 = ConvertBombards(result, data.api_hougeki2);
-                        }
-                        if (data.api_hourai_flag[0] == 1) {
-                            result.ZwBombardRound1 = ConvertBombards(result, data.api_hougeki1);
                         }
                         result.ZwSupportType = (BattleProcess.SupportInfo.Type)(int)(data.api_support_flag() ? data.api_support_flag : 0);
                         if (data.api_support_info() && (data.api_support_info != null)) {
@@ -173,7 +177,7 @@ namespace LynLogger.Observers
                 for(int j = 0; j < 5; j++) {
                     if(slots[i][j] <= 0) break;
                     int equiptId = (int)slots[i][j];
-                    equipts.Add(new EquiptInfo(KanColleClient.Current.Master.SlotItems[equiptId], ship.Slots?.Get(j) ?? DataStore.Store.Current?.SlotNums.GetWithFallback(shipId, null)?.GetWithFallback(j, 0) ?? 0));
+                    equipts.Add(new EquiptInfo(KanColleClient.Current.Master.SlotItems[equiptId], ship.Slots?.Get(j) ?? DataStore.Store.Current?.SlotNums.GetWithFallback(shipId, null)?.GetWithFallback(j, 0)));
                 }
 
                 r.Add(new BattleProcess.ShipInfo() {
@@ -213,7 +217,7 @@ namespace LynLogger.Observers
                 }
             }
             return new BattleProcess.AirWarfareInfo(holder) {
-                ZwEnemyCarrierShip      = new int[0],
+                ZwEnemyCarrierShip      = null,
                 ZwEnemyStage1Engaged    = 0,
                 ZwEnemyStage1Lost       = 0,
                 ZwEnemyReconnInTouch    = -1,
@@ -221,7 +225,7 @@ namespace LynLogger.Observers
                 ZwEnemyStage2Engaged    = 0,
                 ZwEnemyStage2Lost       = 0,
 
-                ZwOurCarrierShip        = new int[0],
+                ZwOurCarrierShip        = null,
                 ZwOurReconnInTouch      = -1,
                 ZwOurReconnInTouchName  = "",
                 ZwOurStage1Engaged      = 0,
@@ -233,9 +237,9 @@ namespace LynLogger.Observers
                 ZwEnemyShipBombed       = enemyBombed.ToArray(),
                 ZwEnemyShipDamages      = enemyDamage.ToArray(),
                 ZwEnemyShipTorpedoed    = enemyTorpedoed.ToArray(),
-                ZwOurShipBombed         = new bool[0],
-                ZwOurShipDamages        = new int[0],
-                ZwOurShipTorpedoed      = new bool[0]
+                ZwOurShipBombed         = null,
+                ZwOurShipDamages        = null,
+                ZwOurShipTorpedoed      = null
             };
         }
 
@@ -247,7 +251,7 @@ namespace LynLogger.Observers
                     if(data.api_plane_from[0].IsDefined(i) && data.api_plane_from[0][i] > 0) {
                         planeFrom.Add((int)data.api_plane_from[0][i]);
                     }
-                    if(data.api_plane_from[1].IsDefined(i) && data.api_plane_from[1][i] > 0) {
+                    if(data.api_plane_from.IsDefined(1) && data.api_plane_from[1].IsDefined(i) && data.api_plane_from[1][i] > 0) {
                         planeFrom.Add((int)data.api_plane_from[1][i]);
                     }
                 }
@@ -258,6 +262,10 @@ namespace LynLogger.Observers
             List<bool> enemyBombed = new List<bool>(6);
             List<bool> enemyTorpedoed = new List<bool>(6);
             List<int> enemyDamage = new List<int>(6);
+            List<bool> escortBombed = new List<bool>(6);
+            List<bool> escortTorpedoed = new List<bool>(6);
+            List<int> escortDamage = new List<int>(6);
+            
             if(data.api_stage3 != null) {
                 for(int i = 1; i < 7; i++) {
                     if(data.api_stage3.api_fdam() && data.api_stage3.api_fdam.IsDefined(i) && data.api_stage3.api_fdam[i] >= 0) {
@@ -265,10 +273,17 @@ namespace LynLogger.Observers
                         ourTorpedoed.Add(data.api_stage3.api_frai_flag[i] != 0);
                         ourDamage.Add((int)data.api_stage3.api_fdam[i]);
                     }
-                    if(data.api_stage3.api_edam.IsDefined(i) && data.api_stage3.api_edam[i] >= 0) {
+                    if(data.api_stage3.api_edam() && data.api_stage3.api_edam.IsDefined(i) && data.api_stage3.api_edam[i] >= 0) {
                         enemyBombed.Add(data.api_stage3.api_ebak_flag[i] != 0);
                         enemyTorpedoed.Add(data.api_stage3.api_erai_flag[i] != 0);
                         enemyDamage.Add((int)data.api_stage3.api_edam[i]);
+                    }
+                    if(data.api_stage3_combined() && data.api_stage3_combined != null && data.api_stage3_combined.api_fdam()) {
+                        if(data.api_stage3_combined.api_fdam.IsDefined(i) && data.api_stage3_combined.api_fdam[i] >= 0) {
+                            escortBombed.Add(data.api_stage3_combined.api_fbak_flag[i] != 0);
+                            escortTorpedoed.Add(data.api_stage3_combined.api_frai_flag[i] != 0);
+                            escortDamage.Add((int)data.api_stage3_combined.api_fdam[i]);
+                        }
                     }
                 }
             }
@@ -302,7 +317,7 @@ namespace LynLogger.Observers
                     ZwEnemyStage2Engaged    = 0,
                     ZwEnemyStage2Lost       = 0,
 
-                    ZwOurCarrierShip        = new int[0],
+                    ZwOurCarrierShip        = null,
                     ZwOurReconnInTouch      = -1,
                     ZwOurReconnInTouchName  = "",
                     ZwOurStage1Engaged      = (int)(data.api_stage1?.api_f_count        ?? 0),
@@ -314,9 +329,9 @@ namespace LynLogger.Observers
                     ZwEnemyShipBombed       = enemyBombed.ToArray(),
                     ZwEnemyShipDamages      = enemyDamage.ToArray(),
                     ZwEnemyShipTorpedoed    = enemyTorpedoed.ToArray(),
-                    ZwOurShipBombed         = new bool[0],
-                    ZwOurShipDamages        = new int[0],
-                    ZwOurShipTorpedoed      = new bool[0]
+                    ZwOurShipBombed         = null,
+                    ZwOurShipDamages        = null,
+                    ZwOurShipTorpedoed      = null
                 };
             } else {
                 r = new BattleProcess.AirWarfareInfo(holder) {
@@ -340,7 +355,11 @@ namespace LynLogger.Observers
                     ZwEnemyShipTorpedoed    = enemyTorpedoed.ToArray(),
                     ZwOurShipBombed         = ourBombed.ToArray(),
                     ZwOurShipDamages        = ourDamage.ToArray(),
-                    ZwOurShipTorpedoed      = ourTorpedoed.ToArray()
+                    ZwOurShipTorpedoed      = ourTorpedoed.ToArray(),
+
+                    ZwEscortShipBombed      = escortBombed?.ToArray(),
+                    ZwEscortShipTorpedoed   = escortTorpedoed?.ToArray(),
+                    ZwEscortShipDamages     = escortDamage?.ToArray()
                 };
                 if (data.api_stage2 != null && data.api_stage2.api_air_fire() && data.api_stage2.api_air_fire != null) {//对空CI
                     r.ZwCutInShipNo = (int)data.api_stage2.api_air_fire.api_idx;
@@ -351,7 +370,7 @@ namespace LynLogger.Observers
                     }
                     r.ZwCutInEquipts = ciEquipts.Select(x => new EquiptInfo(KanColleClient.Current.Master.SlotItems[x], x)).ToArray();
                 } else {
-                    r.ZwCutInEquipts = new EquiptInfo[0];
+                    r.ZwCutInEquipts = null;
                 }
                 if(r.ZwOurReconnInTouch < 0) {
                     r.ZwOurReconnInTouchName = "没有舰载机";
@@ -389,7 +408,7 @@ namespace LynLogger.Observers
             return r.ToArray();
         }
 
-        private BattleProcess.BombardInfo[] ConvertBombards(BattleProcess holder, dynamic data)
+        private BattleProcess.BombardInfo[] ConvertBombards(BattleProcess holder, dynamic data, bool isEscort)
         {
             List<BattleProcess.BombardInfo> r = new List<BattleProcess.BombardInfo>(12);
             for(int i = 1; data.api_at_list.IsDefined(i); i++) {
@@ -416,9 +435,11 @@ namespace LynLogger.Observers
                     attackType = (int)-data.api_sp_list[i];
                 }
 
+                var from = (int)data.api_at_list[i];
+                var ourShipOffset = isEscort ? 12 : 0;
                 r.Add(new BattleProcess.BombardInfo(holder) {
-                    ZwFrom = (int)data.api_at_list[i],
-                    ZwTo = tgts.ToArray(),
+                    ZwFrom = from < 7 ? from + ourShipOffset : from,
+                    ZwTo = tgts.Select(x => x < 7 ? x + ourShipOffset : x).ToArray(),
                     ZwDamage = dmgs.ToArray(),
                     ZwEquipts = sis.Select(x => new EquiptInfo(KanColleClient.Current.Master.SlotItems[x], x)).ToArray(),
                     ZwType = (BattleProcess.BombardInfo.AttackType)attackType
@@ -431,28 +452,28 @@ namespace LynLogger.Observers
         public void OnError(Exception error) { }
 
         private static readonly BattleProcess.AirWarfareInfo _dummyAirwarfare = new BattleProcess.AirWarfareInfo(null) {
-            ZwEnemyCarrierShip = new int[0],
+            ZwEnemyCarrierShip = null,
             ZwEnemyReconnInTouch = -1,
             ZwEnemyStage1Engaged = 0,
             ZwEnemyStage1Lost = 0,
             ZwEnemyStage2Engaged = 0,
             ZwEnemyStage2Lost = 0,
-            ZwOurCarrierShip = new int[0],
+            ZwOurCarrierShip = null,
             ZwOurReconnInTouch = -1,
             ZwOurStage1Engaged = 0,
             ZwOurStage1Lost = 0,
             ZwOurStage2Engaged = 0,
             ZwOurStage2Lost = 0,
             ZwOurAirspaceControl = BattleProcess.AirWarfareInfo.AirspaceControl.None,
-            ZwEnemyShipBombed = new bool[6],
-            ZwEnemyShipDamages = new int[6],
-            ZwEnemyShipTorpedoed = new bool[6],
-            ZwOurShipBombed = new bool[6],
-            ZwOurShipDamages = new int[6],
-            ZwOurShipTorpedoed = new bool[6],
+            ZwEnemyShipBombed = null,
+            ZwEnemyShipDamages = null,
+            ZwEnemyShipTorpedoed = null,
+            ZwOurShipBombed = null,
+            ZwOurShipDamages = null,
+            ZwOurShipTorpedoed = null,
             ZwOurReconnInTouchName = "没有舰载机",
             ZwEnemyReconnInTouchName = "没有舰载机",
-            ZwCutInEquipts = new EquiptInfo[0]
+            ZwCutInEquipts = null
         };
     }
 }
